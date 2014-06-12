@@ -129,6 +129,7 @@ public class questionniare_delegate extends Application {
     }
 
     public void initQuestions(){
+        AllHistoryAnswer = new ArrayList<QuestionAnswerData>();
         QM = new QuestionManagement(service,project,questionnaire_selected);
         questions = service.getQuestionnaireData(questionnaire_selected_id, questionnaire_time);
         QM.InitQuestionListData(questions);

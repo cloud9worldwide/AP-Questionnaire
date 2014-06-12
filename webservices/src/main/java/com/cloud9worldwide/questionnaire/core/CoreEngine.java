@@ -656,6 +656,7 @@ public class CoreEngine {
                                 tels,
                                 prifix_vip
                         );
+                        this.globals.setIsCustomerLocal(false);
                         return _data;
                     }else{
                         this.responseMessage = "Contact not found";
@@ -801,9 +802,11 @@ public class CoreEngine {
     public synchronized boolean saveContact(ContactData _data){
         if(isOnline()){
             //online
+            this.globals.setIsCustomerLocal(false);
             return save_contact_online(_data);
         }else{
             //offline
+            this.globals.setIsCustomerLocal(true);
             return save_contact_offline(_data);
         }
     }
@@ -1072,9 +1075,10 @@ public class CoreEngine {
             MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
 
 
-            if(_data.getIscustomerLocal()){
+            if(_data.getIscustomerLocal() && (_data.getCustomerId().length() < 6)){
                 //move customer local to server
                 ContactData _contact = null;
+
                 long _contact_id = Long.parseLong(_data.getCustomerId());
                 try {
                     _dbHelper.open();
@@ -1258,6 +1262,199 @@ public class CoreEngine {
             return true;
         }
     }
+
+
+    public synchronized boolean saveQuestionnaireData2(QuestionnaireAnswerData _data){
+        if(isOnline()){
+            MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
+
+            if(_data.getIscustomerLocal() && (_data.getCustomerId().length() < 6)){
+                //move customer local to server
+                ContactData _contact = null;
+
+                long _contact_id = Long.parseLong(_data.getCustomerId());
+                try {
+                    _dbHelper.open();
+
+                    Cursor _mobiles_cursor = _dbHelper.getMobiles(_contact_id);
+                    Cursor _address_work_cursor = _dbHelper.getAddressWork(_contact_id);
+                    Cursor _address_cursor = _dbHelper.getAddress(_contact_id);
+                    Cursor _contact_cursor = _dbHelper.getContact(_contact_id);
+                    Cursor _tels_cursor = _dbHelper.getTels(_contact_id);
+
+                    //prepare mobiles data
+                    ArrayList<String> _mobiles = new ArrayList<String>();
+                    if(_mobiles_cursor != null){
+                        _mobiles_cursor.moveToFirst();
+                        for (int i = 0; i < _mobiles_cursor.getCount(); i++) {
+                            _mobiles.add(_mobiles_cursor.getString(0));
+                            _mobiles_cursor.moveToNext();
+                        }
+                    }
+
+                    //prepare tels data
+                    ArrayList<String> _tels = new ArrayList<String>();
+                    if(_tels_cursor != null){
+                        _tels_cursor.moveToFirst();
+                        for (int i = 0; i < _tels_cursor.getCount(); i++) {
+                            _tels.add(_tels_cursor.getString(0));
+                            _tels_cursor.moveToNext();
+                        }
+                    }
+
+                    //prepare address work data
+                    AddressData _address_work;
+                    if(_address_work_cursor != null && _address_work_cursor.getCount() > 0) {
+                        _address_work_cursor.moveToFirst();
+                        String _house_id = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.HOUSE_ID));
+                        String _moo = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.MOO));
+                        String _village = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.VILLAGE));
+                        String _soi = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.SOI));
+                        String _road = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.ROAD));
+                        String _subdistrict = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.SUBDISTRICT));
+                        String _district = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.DISTRICT));
+                        String _province = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.PROVINCE));
+                        String _postalcode = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.POSTALCODE));
+                        String _country = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.COUNTRY));
+                        String _tel = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.TEL));
+                        String _tel_ext = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.TEL_EXT));
+                        String _floor = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.FLOOR));
+                        String _room = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.ROOM));
+                        _address_work = new AddressData(_house_id,_moo,_village,_soi,_road,_subdistrict,
+                                _district,_province,_postalcode,_country,_tel,_tel_ext,_floor,_room);
+                    }else{
+                        _address_work = new AddressData("","","","","","","","","","","","","","");
+                    }
+
+                    //prepare address data
+                    AddressData _address;
+                    if(_address_cursor != null && _address_cursor.getCount() > 0) {
+                        _address_cursor.moveToFirst();
+                        String _house_id = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.HOUSE_ID));
+                        String _moo = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.MOO));
+                        String _village = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.VILLAGE));
+                        String _soi = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.SOI));
+                        String _road = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.ROAD));
+                        String _subdistrict = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.SUBDISTRICT));
+                        String _district = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.DISTRICT));
+                        String _province = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.PROVINCE));
+                        String _postalcode = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.POSTALCODE));
+                        String _country = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.COUNTRY));
+                        String _tel = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.TEL));
+                        String _tel_ext = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.TEL_EXT));
+                        String _floor = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.FLOOR));
+                        String _room = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.ROOM));
+                        _address = new AddressData(_house_id,_moo,_village,_soi,_road,_subdistrict,
+                                _district,_province,_postalcode,_country,_tel,_tel_ext,_floor,_room);
+                    }else{
+                        _address = new AddressData("","","","","","","","","","","","","","");
+                    }
+
+                    if(_contact_cursor != null){
+                        _contact_cursor.moveToFirst();
+                        String _prefix = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.PREFIX));
+                        String _prefix_vip = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.PREFIX_VIP));
+                        String _fname = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.FNAME));
+                        String _lname = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.LNAME));
+                        String _nickname = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NICKNAME));
+                        String _birthdate = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.BIRTHDATE));
+                        String _email = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.EMAIL));
+                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip);
+                        _contact.setOffline("1");
+                    }
+                    _dbHelper.close();
+                }
+                catch (SQLException e)
+                {
+                    this.responseMessage = e.getMessage();
+                    Log.e(debugTag,this.responseMessage);
+                    _dbHelper.close();
+                    return  false;
+                }
+
+                if(_contact != null){
+                    //save local data to server
+                    if(this.save_contact_online(_contact)){
+                        String local_customer_id = _data.getCustomerId();
+                        _data.setCustomerId(String.valueOf(globals.getContactId()));
+                        _data.setIscustomerLocal(false);
+                        if(this.saveQuestionnaireData_online2(_data)){
+                            this.responseMessage = "save questionnaire data successful.";
+                            Log.i(debugTag,this.responseMessage);
+                            // if save to server successful , need remove local data
+                            this.remove_contact_local(local_customer_id);
+                            return true;
+                        }else{
+                            Log.e(debugTag,this.responseMessage);
+                            return false;
+                        }
+                    }
+                }else{
+                    this.responseMessage  = "Contact data not found in local storage";
+                    Log.e(debugTag,this.responseMessage);
+                    return  false;
+                }
+            } else {
+                if(this.saveQuestionnaireData_online2(_data)){
+                    this.responseMessage = "save questionnaire data successful.";
+                    Log.i(debugTag,this.responseMessage);
+                    return true;
+                }else {
+                    Log.e(debugTag,this.responseMessage);
+                    return false;
+                }
+            }
+
+            return true;
+        }else{
+            MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
+            _dbHelper.open();
+
+            //save questionnaire answer data
+            int isCustomerLocal = 0;
+            if(_data.getIscustomerLocal() == Boolean.TRUE){
+                isCustomerLocal = 1;
+            }else{
+
+            }
+            //int isCustomerLocal = (_data.getIscustomerLocal())? 1 : 0;
+            //long contactid = Long.getLong(_data.getCustomerId());
+
+
+            String contactid = String.valueOf(_data.getCustomerId());
+            long save_questionnaire_Id = _dbHelper.createQuestionnaireAnswer(contactid,globals.getStaffId(),_data.getProjectId(),
+                    _data.getQuestionnaireId(),_data.getTimedevice(),isCustomerLocal);
+
+            //save question answer data
+            ArrayList<QuestionAnswerData> _question_ans_all = _data.getAnswers();
+            for (int i = 0; i < _question_ans_all.size(); i++) {
+                QuestionAnswerData _question = _question_ans_all.get(i);
+                ArrayList<SaveAnswerData> _ans_all = _question.getAnswer();
+
+                for (int j = 0; j < _ans_all.size(); j++) {
+                    SaveAnswerData _ans = _ans_all.get(j);
+                    _dbHelper.createAnswer(save_questionnaire_Id,_question.getQuestionId(),_ans.getValue(),_ans.getFreetxt());
+                }
+
+            }
+
+            //save staff question answer data
+            ArrayList<QuestionAnswerData> _staff_question_ans_all = _data.getStaffanswers();
+            for (int i = 0; i < _staff_question_ans_all.size(); i++) {
+                QuestionAnswerData _question = _staff_question_ans_all.get(i);
+                ArrayList<SaveAnswerData> _ans_all = _question.getAnswer();
+
+                for (int j = 0; j < _ans_all.size(); j++) {
+                    SaveAnswerData _ans = _ans_all.get(j);
+                    _dbHelper.createStaffAnswer(save_questionnaire_Id, _question.getQuestionId(), _ans.getValue(), _ans.getFreetxt());
+                }
+
+            }
+
+            _dbHelper.close();
+            return true;
+        }
+    }
     private synchronized boolean saveQuestionnaireData_online(QuestionnaireAnswerData _data){
         //try {
             JSONObject jsonObj = new JSONObject();
@@ -1349,6 +1546,101 @@ public class CoreEngine {
        // {
        //     je.printStackTrace();
        //     this.responseMessage = je.getMessage();
+        //}
+
+        return false;
+    }
+    private synchronized boolean saveQuestionnaireData_online2(QuestionnaireAnswerData _data){
+        //try {
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put("customerid",_data.getCustomerId());
+            jsonObj.put("staffid",globals.getStaffId());
+            jsonObj.put("projectid",_data.getProjectId());
+            jsonObj.put("questionnaireid",_data.getQuestionnaireId());
+            jsonObj.put("tokenaccess",globals.getLoginTokenAccess());
+            jsonObj.put("timedevice",_data.getTimedevice());
+
+            ArrayList<QuestionAnswerData> _answers_all = _data.getAnswers();
+
+            JSONArray _answers_all_json = new JSONArray();
+            for (int i = 0; i < _answers_all.size(); i++) {
+                QuestionAnswerData _answer = _answers_all.get(i);
+                JSONObject _question_answer_json = new JSONObject();
+
+                JSONArray _ans_all_json = new JSONArray();
+                ArrayList<SaveAnswerData> _ans_all = _answer.getAnswer();
+                for (int j = 0; j < _ans_all.size(); j++) {
+                    SaveAnswerData _ans = _ans_all.get(j);
+                    JSONObject _ans_json = new JSONObject();
+                    _ans_json.put("value",_ans.getValue());
+                    _ans_json.put("freetxt",_ans.getFreetxt());
+                    _ans_all_json.put(j,_ans_json);
+                }
+
+                _question_answer_json.put("questionid",_answer.getQuestionId());
+                _question_answer_json.put("answer",_ans_all_json);
+
+                _answers_all_json.put(i,_question_answer_json);
+            }
+            //answer data all
+            jsonObj.put("answers",_answers_all_json);
+
+            ArrayList<QuestionAnswerData> _staff_answers_all = _data.getStaffanswers();
+            JSONArray _staff_answers_all_json = new JSONArray();
+            for (int i = 0; i < _staff_answers_all.size(); i++) {
+                QuestionAnswerData _answer = _staff_answers_all.get(i);
+
+                JSONObject _question_answer_json = new JSONObject();
+
+                JSONArray _ans_all_json = new JSONArray();
+                ArrayList<SaveAnswerData> _ans_all = _answer.getAnswer();
+                for (int j = 0; j < _ans_all.size(); j++) {
+                    SaveAnswerData _ans = _ans_all.get(j);
+                    JSONObject _ans_json = new JSONObject();
+                    _ans_json.put("value",_ans.getValue());
+                    _ans_json.put("freetxt",_ans.getFreetxt());
+                    _ans_all_json.put(j,_ans_json);
+                }
+
+                _question_answer_json.put("questionid",_answer.getQuestionId());
+                _question_answer_json.put("answer",_ans_all_json);
+
+                _staff_answers_all_json.put(i,_question_answer_json);
+            }
+            //staff answer data all
+            jsonObj.put("staffanswers",_staff_answers_all_json);
+
+            Log.d(debugTag,jsonObj.toString());
+            String r = "";
+            try {
+                r = SavequestionnaireMethod.execute2(this.mCtx,webserviceUrl,jsonObj.toString());
+            }catch (SavequestionnaireMethod.ApiException je){
+                je.printStackTrace();
+
+            }
+
+
+            JSONObject respObj = new JSONObject(r);
+            if(respObj.getBoolean("status")){
+                Log.d(debugTag, respObj.getJSONObject("result").getString("message") + " - OK");
+                return true;
+            }else{
+                Log.d(debugTag,respObj.getJSONObject("result").getString("message"));
+                this.responseMessage = respObj.getJSONObject("result").getString("message");
+                return false;
+            }
+
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+            this.responseMessage = e.getMessage();
+        }
+        //}
+        //catch (SavequestionnaireMethod.ApiException je)
+        // {
+        //     je.printStackTrace();
+        //     this.responseMessage = je.getMessage();
         //}
 
         return false;
@@ -1582,6 +1874,135 @@ public class CoreEngine {
                 cur_que = i+1;
                 //_pDialog.setMessage("Save data to server... ["+cur_que+"/"+all_que+"]");
                 if(this.saveQuestionnaireData(_questionnaire_answer_all.get(i))){
+                    //remove local data
+                    _dbHelper.deleteQuestionnaireAnswer(_questionnaire_answer_all.get(i).getSaveQuestionnaireId());
+                    _dbHelper.deleteAnswers(_questionnaire_answer_all.get(i).getSaveQuestionnaireId());
+                    _dbHelper.deleteStaffAnswers(_questionnaire_answer_all.get(i).getSaveQuestionnaireId());
+                }
+            }
+
+            _dbHelper.close();
+            return true;
+        }else{
+            this.responseMessage = "Not have internet connection";
+            return false;
+        }
+
+    }
+    public synchronized boolean sync_save_questionnaire2(ProgressDialog _pDialog){
+        if(isOnline()){
+            MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
+            _dbHelper.open();
+
+            ArrayList<QuestionnaireAnswerData> _questionnaire_answer_all = new ArrayList<QuestionnaireAnswerData>();
+
+
+            //Get all questionnaire in local
+            Cursor _questionnaire_answer_cursor_all = _dbHelper.getAllQuestionnaireAnswers();
+            if(_questionnaire_answer_cursor_all != null){
+                _questionnaire_answer_cursor_all.moveToFirst();
+                for (int i = 0; i < _questionnaire_answer_cursor_all.getCount(); i++) {
+                    QuestionnaireAnswerData _data = new QuestionnaireAnswerData();
+                    _data.setCustomerId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.CUSTOMER_ID)));
+                    int isCustomerLocal = _questionnaire_answer_cursor_all.getInt(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.OFFLINE_CUSTOMER));
+
+
+                    if(isCustomerLocal == 1){
+                        //save local customer to online customer
+                        String new_contact_id = save_contact_online(_data.getCustomerId());
+                        _data.setCustomerId(new_contact_id);
+                    }
+
+
+                    boolean isLocal = (isCustomerLocal == 1);
+                    _data.setIscustomerLocal(isLocal);
+                    _data.setProjectId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.PROJECT_ID)));
+                    _data.setTimedevice(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.TIMEDEVICE)));
+
+                    _data.setQuestionnaireId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.QUESTIONNAIRE_ID)));
+
+                    long _save_questionnaire_id = _questionnaire_answer_cursor_all.getLong(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.ROW_ID));
+
+                    //for delete local data after save to server successful
+                    _data.setSaveQuestionnaireId(_save_questionnaire_id);
+
+                    //Get all question answer data in local
+                    ArrayList<QuestionAnswerData> _question_answer_all = new ArrayList<QuestionAnswerData>();
+                    Cursor _questions_cursor_all = _dbHelper.getQuestions(_save_questionnaire_id);
+                    if(_questions_cursor_all != null){
+                        _questions_cursor_all.moveToFirst();
+                        for (int j = 0; j < _questions_cursor_all.getCount(); j++) {
+                            String _question_id = _questions_cursor_all.getString(0);
+                            Cursor _answers_cursor_all = _dbHelper.getAnswers(_save_questionnaire_id,_question_id);
+
+                            if(_answers_cursor_all != null){
+                                _answers_cursor_all.moveToFirst();
+
+                                ArrayList<SaveAnswerData> _save_ans_all = new ArrayList<SaveAnswerData>();
+                                for (int k = 0; k < _answers_cursor_all.getCount(); k++) {
+
+                                    _save_ans_all.add(new SaveAnswerData(
+                                                    _answers_cursor_all.getString(_answers_cursor_all.getColumnIndex(_dbHelper.ANS_VALUE)),
+                                                    _answers_cursor_all.getString(_answers_cursor_all.getColumnIndex(_dbHelper.ANS_FREETXT))
+                                            )
+                                    );
+                                    _answers_cursor_all.moveToNext();
+                                }
+                                QuestionAnswerData _question_answer = new QuestionAnswerData(_question_id,_save_ans_all);
+                                _question_answer_all.add(_question_answer);
+                            }
+                            _questions_cursor_all.moveToNext();
+                        }
+                    }
+                    _data.setAnswers(_question_answer_all);
+
+                    //Get all staff question answer data in local
+                    ArrayList<QuestionAnswerData> _staff_question_answer_all = new ArrayList<QuestionAnswerData>();
+                    Cursor _staff_questions_cursor_all = _dbHelper.getStaffQuestions(_save_questionnaire_id);
+                    if(_staff_questions_cursor_all != null){
+                        _staff_questions_cursor_all.moveToFirst();
+                        for (int j = 0; j < _staff_questions_cursor_all.getCount(); j++) {
+                            String _question_id = _staff_questions_cursor_all.getString(0);
+                            Cursor _answers_cursor_all = _dbHelper.getStaffAnswers(_save_questionnaire_id,_question_id);
+
+                            if(_answers_cursor_all != null){
+                                _answers_cursor_all.moveToFirst();
+
+                                ArrayList<SaveAnswerData> _save_ans_all = new ArrayList<SaveAnswerData>();
+                                for (int k = 0; k < _answers_cursor_all.getCount(); k++) {
+
+                                    _save_ans_all.add(new SaveAnswerData(
+                                                    _answers_cursor_all.getString(_answers_cursor_all.getColumnIndex(_dbHelper.ANS_VALUE)),
+                                                    _answers_cursor_all.getString(_answers_cursor_all.getColumnIndex(_dbHelper.ANS_FREETXT))
+                                            )
+                                    );
+                                    _answers_cursor_all.moveToNext();
+                                }
+                                QuestionAnswerData _question_answer = new QuestionAnswerData(_question_id,_save_ans_all);
+                                _staff_question_answer_all.add(_question_answer);
+                            }
+                            _questions_cursor_all.moveToNext();
+                        }
+                    }
+                    _data.setStaffanswers(_staff_question_answer_all);
+                    _questionnaire_answer_all.add(_data);
+                    _questionnaire_answer_cursor_all.moveToNext();
+                }
+            }
+
+
+            int all_que = _questionnaire_answer_all.size();
+            int cur_que = 0;
+            for (int i = 0; i < _questionnaire_answer_all.size(); i++) {
+                cur_que = i+1;
+                //_pDialog.setMessage("Save data to server... ["+cur_que+"/"+all_que+"]");
+                if(this.saveQuestionnaireData2(_questionnaire_answer_all.get(i))){
                     //remove local data
                     _dbHelper.deleteQuestionnaireAnswer(_questionnaire_answer_all.get(i).getSaveQuestionnaireId());
                     _dbHelper.deleteAnswers(_questionnaire_answer_all.get(i).getSaveQuestionnaireId());

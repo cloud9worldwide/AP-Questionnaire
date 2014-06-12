@@ -70,7 +70,7 @@ public class ProjectsActivity extends Activity implements OnClickListener {
                 @Override
                 public void run() {
                     // This is the delay
-                    delegate.service.sync_save_questionnaire(progress);
+                    delegate.service.sync_save_questionnaire2(progress);
                     uiHandler.post( onUi );
                 }
             };
