@@ -142,6 +142,9 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                             public void run() {
                                 // this will run on the main UI thread
                                 progress.dismiss();
+                                Intent i = new Intent(CustomerFinishedAnswerActivity.this,QuestionniareActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(i);
                                 finish();
                             }
                         };
@@ -156,8 +159,11 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                         new Thread( background ).start();
 
                     } else {
-                        this.setResult(1);
-
+                        //this.setResult(1);
+                        //finish();
+                        Intent i = new Intent(this,QuestionniareActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
                         finish();
                     }
                 }
@@ -168,7 +174,11 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 popup.dismiss();
             } else {
                 delegate.sendAnswer();
-                this.setResult(0);
+                //this.setResult(0);
+                //finish();
+                Intent i = new Intent(this,ProjectsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         } else if(v.getId() == R.id.btnMenu){
@@ -185,6 +195,9 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         if(data == null){
             startActivityForResult(new Intent(this, CustomerFinishedAnswerActivity.class),0);
         } else {
+            Intent intent = delegate.getCurentQuestionIntent();
+            delegate.nextQuestionPage(intent);
+            /*
             if(data.getQuestionType().equals("1")){
                 startActivityForResult(new Intent(this, Display01Activity.class),0);
             } else if(data.getQuestionType().equals("2")){
@@ -228,6 +241,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             } else if(data.getQuestionType().equals("21")) {
                 startActivityForResult(new Intent(this, Display21Activity.class), 0);
             }
+            */
         }
     }
 

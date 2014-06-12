@@ -342,10 +342,11 @@ public class Display20Activity extends Activity implements View.OnClickListener 
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    delegate.dataSubQuestion = null;
+                    //delegate.dataSubQuestion = null;
                 }
-                this.setResult(3);
-                finish();
+                //this.setResult(3);
+                //finish();
+                onBackPressed();
             } else {
                 //normal mode
                 nextPage();
@@ -397,18 +398,23 @@ public class Display20Activity extends Activity implements View.OnClickListener 
     }
 
     public void onBackPressed() {
-        if(delegate.dataSubQuestion ==null){
-            if(delegate.QM.move_back()){
-                this.setResult(3);
-                finish();
-            } else {
-                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            // back sub question
-            this.setResult(3);
-            finish();
+        if(delegate.checkPressBack(answer)){
+            delegate.backQuestionpage(this);
+        }else{
+            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
+//        if(delegate.dataSubQuestion ==null){
+//            if(delegate.QM.move_back()){
+//                this.setResult(3);
+//                finish();
+//            } else {
+//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
+//            }
+//        } else {
+//            // back sub question
+//            this.setResult(3);
+//            finish();
+//        }
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class QuestionAnswerData {
     private String questionId;
     private boolean isDefault = true;
-    private ArrayList<SaveAnswerData> answer;
+    private ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
 
     public QuestionAnswerData(String questionId, ArrayList<SaveAnswerData> answer) {
         this.questionId = questionId;

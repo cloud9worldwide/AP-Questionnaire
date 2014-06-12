@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.cloud9worldwide.questionnaire.core.CoreEngine;
 import com.cloud9worldwide.questionnaire.core.TCImageLoader;
+import com.cloud9worldwide.questionnaire.data.AnswerData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
 import com.cloud9worldwide.questionnaire.data.ContactSearchData;
 import com.cloud9worldwide.questionnaire.data.ProjectData;
@@ -411,16 +412,133 @@ public class questionniare_delegate extends Application {
 
     public void nextQuestionPage(Intent intent){
         QuestionTypeData question = this.QM.get_question();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        /*
         if(!question.isParent_question()) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         }
+        */
         startActivity(intent);
     }
-    public void backQuestionpage(Intent intent){
-
+    public Intent getCurentQuestionIntent(){
+        Intent newPage = new Intent();
+        if(QM.get_question().getQuestionType().equals("1")){
+            newPage = new Intent(this, Display01Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("2")){
+            newPage = new Intent(this, Display02Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("3")){
+            newPage = new Intent(this, Display03Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("4")){
+            newPage = new Intent(this, Display04Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("5")){
+            newPage = new Intent(this, Display05Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("6")){
+            newPage = new Intent(this, Display06Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("7")){
+            newPage = new Intent(this, Display07Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("8")){
+            newPage = new Intent(this, Display08Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("9")){
+            newPage = new Intent(this, Display09Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("10")){
+            newPage = new Intent(this, Display10Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("11")){
+            newPage = new Intent(this, Display11Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("12")){
+            newPage = new Intent(this, Display12Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("13")){
+            newPage = new Intent(this, Display13Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("14")){
+            newPage = new Intent(this, Display14Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("15")){
+            newPage = new Intent(this, Display15Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("16")){
+            newPage = new Intent(this, Display16Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("17")){
+            newPage = new Intent(this, Display17Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("18")){
+            newPage = new Intent(this, Display18Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("19")){
+            newPage = new Intent(this, Display19Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("20")){
+            newPage = new Intent(this, Display20Activity.class);
+        } else if(QM.get_question().getQuestionType().equals("21")) {
+            newPage = new Intent(this, Display21Activity.class);
+        }
+        return newPage;
     }
-    public boolean checkPressBack(){
+    public void backQuestionpage(Context ctx){
         if(dataSubQuestion != null){
+            //is sub question
+            dataSubQuestion = null;
+            Intent i = getCurentQuestionIntent();
+            nextQuestionPage(i);
+        }else{
+            QM.move_back();
+            Intent i = getCurentQuestionIntent();
+            nextQuestionPage(i);
+        }
+    }
+    public boolean checkPressBack(ArrayList<SaveAnswerData> _ans){
+        if(dataSubQuestion != null){
+            //isSub question
+            QuestionTypeData parent_question = QM.get_question();
+            QuestionTypeData sub_question = this.dataSubQuestion;
+            if(parent_question.isParent_question() && parent_question.getQuestion().getId() == sub_question.getParent_question_id()){
+                if(_ans.size() > 0) {
+
+                    ArrayList<AnswerData> all_parent_ans =  parent_question.getAnswers();
+                    for (int i = 0; i < all_parent_ans.size(); i++) {
+                        AnswerData parent_ans = all_parent_ans.get(i);
+                        if (parent_ans.getSubquestion_id() == sub_question.getQuestion().getId()){
+                            QuestionAnswerData checkAnswer = QM.get_answer();
+
+                            ArrayList<SaveAnswerData> old_answer = new ArrayList<SaveAnswerData>();
+                            if(checkAnswer != null) {
+                                old_answer = checkAnswer.getAnswer();
+                            }
+                            ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
+                            SaveAnswerData new_ans = new SaveAnswerData(String.valueOf(parent_ans.getId()),"");
+                            answer.add(new_ans);
+                            for (int j = 0; j < old_answer.size(); j++) {
+                                SaveAnswerData o_ans = old_answer.get(j);
+                                if(!o_ans.getValue().equals(new_ans.getValue())){
+                                    answer.add(o_ans);
+                                }
+                            }
+                            QM.save_answer(answer);
+                        }
+                    }
+                }
+                else
+                {
+                    //remove answer
+                    ArrayList<AnswerData> all_parent_ans =  parent_question.getAnswers();
+                    for (int i = 0; i < all_parent_ans.size(); i++) {
+                        AnswerData parent_ans = all_parent_ans.get(i);
+                        if (parent_ans.getSubquestion_id() == sub_question.getQuestion().getId()){
+                            QuestionAnswerData checkAnswer = QM.get_answer();
+                            ArrayList<SaveAnswerData> old_answer = new ArrayList<SaveAnswerData>();
+                            if(checkAnswer != null) {
+                                old_answer = checkAnswer.getAnswer();
+                            }
+
+                            ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
+                            SaveAnswerData new_ans = new SaveAnswerData(String.valueOf(parent_ans.getId()),"");
+                            //answer.add(new_ans);
+                            for (int j = 0; j < old_answer.size(); j++) {
+                                SaveAnswerData o_ans = old_answer.get(j);
+                                if(!o_ans.getValue().equals(new_ans.getValue())){
+                                    answer.add(o_ans);
+                                }
+                            }
+                            QM.save_answer(answer);
+                        }
+                    }
+                }
+            }
+
             return  true;
         }else{
             if(this.QM.getCurQuestionIndex() > 0){
