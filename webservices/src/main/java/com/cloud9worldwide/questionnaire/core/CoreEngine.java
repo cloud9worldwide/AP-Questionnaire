@@ -715,7 +715,7 @@ public class CoreEngine {
                     }
 
                     //prepare address work data
-                    AddressData _address_work;
+                    AddressData _address_work = new AddressData("","","","","","","","","","","","","","");
                     if(_address_work_cursor != null && _address_work_cursor.getCount() > 0) {
                         _address_work_cursor.moveToFirst();
                         String _house_id = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.HOUSE_ID));
@@ -731,7 +731,11 @@ public class CoreEngine {
                         String _tel = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.TEL));
                         String _tel_ext = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.TEL_EXT));
                         String _floor = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.FLOOR));
+                        if(_floor == null)
+                            _floor = "";
                         String _room = _address_work_cursor.getString(_address_work_cursor.getColumnIndex(_dbHelper.ROOM));
+                        if(_room == null)
+                            _room = "";
                         _address_work = new AddressData(_house_id,_moo,_village,_soi,_road,_subdistrict,
                                 _district,_province,_postalcode,_country,_tel,_tel_ext,_floor,_room);
                     }else{
@@ -739,7 +743,7 @@ public class CoreEngine {
                     }
 
                     //prepare address data
-                    AddressData _address;
+                    AddressData _address = new AddressData("","","","","","","","","","","","","","");
                     if(_address_cursor != null && _address_cursor.getCount() > 0) {
                         _address_cursor.moveToFirst();
                         String _house_id = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.HOUSE_ID));
@@ -755,7 +759,11 @@ public class CoreEngine {
                         String _tel = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.TEL));
                         String _tel_ext = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.TEL_EXT));
                         String _floor = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.FLOOR));
+                        if(_floor == null)
+                            _floor = "";
                         String _room = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.ROOM));
+                        if(_room == null)
+                            _room = "";
                         _address = new AddressData(_house_id,_moo,_village,_soi,_road,_subdistrict,
                                 _district,_province,_postalcode,_country,_tel,_tel_ext,_floor,_room);
                     }else{
