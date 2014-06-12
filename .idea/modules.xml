@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AP-Questionaire.iml" filepath="$PROJECT_DIR$/AP-Questionaire.iml" />
       <module fileurl="file://$PROJECT_DIR$/AP-Questionaire-dev.iml" filepath="$PROJECT_DIR$/AP-Questionaire-dev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AP-Questionnaire.iml" filepath="$PROJECT_DIR$/AP-Questionnaire.iml" />
       <module fileurl="file://$PROJECT_DIR$/QM/QM.iml" filepath="$PROJECT_DIR$/QM/QM.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/webservices/webservices.iml" filepath="$PROJECT_DIR$/webservices/webservices.iml" />

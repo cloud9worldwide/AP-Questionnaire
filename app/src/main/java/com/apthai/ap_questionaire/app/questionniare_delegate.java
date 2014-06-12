@@ -480,6 +480,9 @@ public class questionniare_delegate extends Application {
             nextQuestionPage(i);
         }
     }
+    public void test1(){
+
+    }
     public boolean checkPressBack(ArrayList<SaveAnswerData> _ans){
         if(dataSubQuestion != null){
             //isSub question
