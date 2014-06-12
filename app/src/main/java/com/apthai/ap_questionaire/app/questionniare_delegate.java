@@ -481,7 +481,7 @@ public class questionniare_delegate extends Application {
         }
     }
     public void test1(){
-
+        //test func ja
     }
     public boolean checkPressBack(ArrayList<SaveAnswerData> _ans){
         if(dataSubQuestion != null){
