@@ -357,6 +357,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 finish();
             } else {
                 //normal mode
+                delegate.dataSubQuestion = null;
                 nextPage();
             }
             btnNext.setEnabled(true);
@@ -427,7 +428,8 @@ public class Display18Activity extends Activity implements View.OnClickListener 
 
     public void nextPage(){
         delegate.QM.save_answer(answer);
-        startActivityForResult(delegate.nextPage(this),0);
+        //startActivityForResult(delegate.nextPage(this),0);
+        delegate.nextQuestionPage(delegate.nextPage(this));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -448,6 +450,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             }
         } else {
             // back sub question
+            delegate.dataSubQuestion = null;
             this.setResult(3);
             finish();
         }

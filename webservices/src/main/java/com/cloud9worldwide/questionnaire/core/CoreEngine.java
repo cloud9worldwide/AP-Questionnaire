@@ -1829,6 +1829,23 @@ public class CoreEngine {
         return  data;
     }
 
+    public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id,String _province_id){
+        ArrayList<ValTextData> data = new ArrayList<ValTextData>();
+        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
+        _dbHelper.open();
+        Cursor _cursor = _dbHelper.getSubDistrictByDistrict(_district_id,_province_id);
+        if(_cursor != null)
+            _cursor.moveToFirst();
+        for (int i = 0; i < _cursor.getCount(); i++) {
+            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1));
+            val.setText2(_cursor.getString(2));
+            data.add(val);
+            _cursor.moveToNext();
+        }
+        _dbHelper.close();
+        return  data;
+    }
 
     public synchronized void initCountryData(Context ctx){
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);

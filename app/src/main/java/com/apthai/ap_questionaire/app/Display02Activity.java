@@ -432,7 +432,8 @@ public class Display02Activity extends Activity implements OnClickListener {
     }
     public void nextPage(){
         delegate.QM.save_answer(answer);
-        startActivityForResult(delegate.nextPage(this),0);
+        //startActivityForResult(delegate.nextPage(this),0);
+        delegate.nextQuestionPage(delegate.nextPage(this));
     }
 
     @Override

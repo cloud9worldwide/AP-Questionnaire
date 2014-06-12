@@ -720,7 +720,9 @@ public class MySQLiteHelper {
         return this.db.query(TB_SUBDISTRICT, new String[]{SubDistrictID,SubDistrictName,PostCode},DistrictID + "= '"+_district_id+"' ",null,null,null,SubDistrictName);
     }
 
-
+    public Cursor getSubDistrictByDistrict(String _district_id,String _province_id){
+        return this.db.query(TB_SUBDISTRICT, new String[]{SubDistrictID,SubDistrictName,PostCode},DistrictID + "= '"+_district_id+"' AND "+ProvinceID + "= '"+_province_id+"' ",null,null,null,SubDistrictName);
+    }
 
 
     public long createTel(Long contactid,String tel){

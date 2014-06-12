@@ -328,7 +328,8 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                         public void run() {
                             // this will run on the main UI thread
                             progress.dismiss();
-                            startActivityForResult(_newPage,0);
+                            //startActivityForResult(_newPage,0);
+                            delegate.nextQuestionPage(_newPage);
                         }
                     };
                     Runnable background = new Runnable() {

@@ -408,10 +408,18 @@ public class Display01Activity extends Activity implements OnClickListener {
 
     public void nextPage(){
         delegate.QM.save_answer(answer);
-        startActivityForResult(delegate.nextPage(this),0);
+        //startActivityForResult(delegate.nextPage(this),0);
+        delegate.nextQuestionPage(delegate.nextPage(this));
     }
 
     public void onBackPressed() {
+        if(delegate.checkPressBack()){
+
+        }else{
+            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+        }
+
+        /*
         if(delegate.dataSubQuestion ==null){
             if(delegate.QM.move_back()){
                 this.setResult(3);
@@ -424,6 +432,7 @@ public class Display01Activity extends Activity implements OnClickListener {
             this.setResult(3);
             finish();
         }
+        */
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

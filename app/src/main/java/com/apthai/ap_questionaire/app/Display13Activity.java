@@ -294,7 +294,8 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
     public void nextPage(){
         delegate.QM.save_answer(answer);
-        startActivityForResult(delegate.nextPage(this),0);
+        //startActivityForResult(delegate.nextPage(this),0);
+        delegate.nextQuestionPage(delegate.nextPage(this));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

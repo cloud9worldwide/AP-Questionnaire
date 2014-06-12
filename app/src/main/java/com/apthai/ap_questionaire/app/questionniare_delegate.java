@@ -408,4 +408,28 @@ public class questionniare_delegate extends Application {
         int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
     }
+
+    public void nextQuestionPage(Intent intent){
+        QuestionTypeData question = this.QM.get_question();
+        if(!question.isParent_question()) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        }
+        startActivity(intent);
+    }
+    public void backQuestionpage(Intent intent){
+
+    }
+    public boolean checkPressBack(){
+        if(dataSubQuestion != null){
+            return  true;
+        }else{
+            if(this.QM.getCurQuestionIndex() > 0){
+                return true;
+            }
+            else
+            {
+                return  false;
+            }
+        }
+    }
 }
