@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.apthai.ap_questionaire.app.QuestionniareActivity"
+    android:gravity="center"
+    android:id="@+id/root_view"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/img_background"
+        android:layout_below="@+id/project_name" />
+    <TextView
+        android:text="@string/project_name"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:background="@drawable/box_title"
+        android:layout_height="50dp"
+        android:id="@+id/project_name" />
+    <ImageButton
+        android:layout_marginTop="3dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnMenu"
+        android:scaleType="center"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/menu"
+        android:layout_alignParentTop="true" />
+    <LinearLayout
+        android:id="@+id/sizeContent"
+        android:layout_width="1000dp"
+        android:layout_height="524dp"
+        android:background="@color/WHITE"
+        android:orientation="vertical"
+        android:layout_marginTop="125dp"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false"
+        android:clickable="false">
+
+        <ImageView
+            android:src="@drawable/logo_ap"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:id="@+id/img_logo_project"
+            android:padding="@dimen/activity_vertical_margin"
+            android:layout_gravity="center"
+             />
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="1dp"
+            android:id="@+id/lbl_line"
+            android:background="@color/line"
+            android:layout_alignBottom="@+id/question_title"
+            android:layout_gravity="center_horizontal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_activity_questionniare"
+            android:id="@+id/lbl_title"
+            android:gravity="center"
+            android:textSize="@dimen/txt_size_Large"
+            android:layout_below="@+id/lbl_line"
+            android:padding="@dimen/activity_vertical_margin"
+            android:layout_alignParentStart="true" />
+        <ScrollView
+            android:layout_alignBottom="@+id/lbl_line"
+            android:layout_alignTop="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center"
+            android:fillViewport="false">
+            <LinearLayout
+                android:id="@+id/AP_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</RelativeLayout>

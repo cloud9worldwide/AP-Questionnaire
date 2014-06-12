@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.apthai.ap_questionaire.app.CustomerListActivity"
+    android:id="@+id/root_view"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/img_background"
+        android:layout_below="@+id/project_name" />
+    <TextView
+        android:text="@string/project_name"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@drawable/box_title"
+        android:layout_height="50dp"
+        android:paddingTop="10dp"
+        android:id="@+id/project_name" />
+    <ImageButton
+        android:layout_marginTop="3dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnMenu"
+        android:scaleType="center"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/menu"
+        android:layout_alignParentTop="true" />
+    <LinearLayout
+        android:id="@+id/sizeContent"
+        android:layout_width="1000dp"
+        android:layout_height="524dp"
+        android:background="@color/WHITE"
+        android:orientation="vertical"
+        android:layout_marginTop="125dp"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false"
+        android:clickable="false">
+        <TextView
+            android:layout_marginTop="20dp"
+            android:text="@string/title_activity_customer_list"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="50dp"
+            android:id="@+id/question_title"
+            />
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="1dp"
+            android:id="@+id/lbl_line"
+            android:background="@color/line"
+            android:layout_alignBottom="@+id/question_title"
+            android:layout_gravity="center_horizontal" />
+        <ScrollView
+            android:layout_alignBottom="@+id/lbl_line"
+            android:layout_alignTop="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center"
+            android:fillViewport="false">
+            <LinearLayout
+                android:id="@+id/AP_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </ScrollView>
+        <RelativeLayout
+            android:id="@+id/footer"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/footer"
+            android:layout_below="@+id/scrollView">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_back"
+                android:id="@+id/btnBack"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@null" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_add"
+                android:id="@+id/btnAdd"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@null" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

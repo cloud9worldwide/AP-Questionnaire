@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.apthai.ap_questionaire.app.LoginActivity">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:src="@drawable/logo_ap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        />
+
+    <TextView
+        android:id="@+id/txtError"
+        android:layout_width="483dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/btn_forgot"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/RED"
+        android:gravity="center" />
+    <EditText
+        android:layout_below="@+id/txtError"
+        android:id="@+id/txtUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:background="@drawable/box_login"
+        android:hint="@string/username"
+        android:singleLine="true"
+        android:layout_centerInParent="true"
+         />
+
+    <EditText
+        android:id="@+id/txtPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUsername"
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/txtUsername"
+        android:background="@drawable/box_login"
+        android:alpha="1"
+        android:lines="1"
+        android:singleLine="true"
+        android:inputType="textPassword"
+        android:imeOptions="actionDone"
+        android:paddingLeft="10dp"
+        android:hint="@string/password" />
+
+    <ImageButton
+        android:id="@+id/btnLogin"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtPassword"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitCenter"
+        android:lines="1"
+        android:background="@null"
+         />
+
+    <TextView
+        android:id="@+id/btnForgot"
+        android:layout_width="283dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/btnLogin"
+        android:layout_marginTop="20dp"
+        android:text="@string/btn_forgot"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/ORANGE"
+        android:visibility="gone"
+        android:gravity="center" />
+
+
+
+</RelativeLayout>

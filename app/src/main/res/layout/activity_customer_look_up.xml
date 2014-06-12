@@ -1,0 +1,182 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.apthai.ap_questionaire.app.CustomerLookUpActivity"
+    android:id="@+id/root_view"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="matrix"
+        android:id="@+id/img_background"
+        android:adjustViewBounds="false"
+        android:layout_below="@+id/project_name" />
+    <TextView
+        android:text="@string/project_name"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@drawable/box_title"
+        android:layout_height="50dp"
+        android:paddingTop="10dp"
+        android:id="@+id/project_name" />
+    <ImageButton
+        android:layout_marginTop="3dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnMenu"
+        android:scaleType="center"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/menu"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/sizeContent"
+        android:layout_width="1000dp"
+        android:layout_height="524dp"
+        android:background="@color/WHITE"
+        android:orientation="vertical"
+        android:layout_marginTop="125dp"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false"
+        android:clickable="false">
+        <TextView
+            android:layout_marginTop="20dp"
+            android:text="@string/title_activity_customer_look_up"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="50dp"
+            android:id="@+id/question_title"
+            />
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="1dp"
+            android:id="@+id/lbl_line"
+            android:background="@color/line"
+            android:layout_alignBottom="@+id/question_title"
+            android:layout_gravity="center_horizontal" />
+        <ScrollView
+            android:layout_alignBottom="@+id/lbl_line"
+            android:layout_alignTop="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center"
+            android:fillViewport="false">
+            <LinearLayout
+                android:id="@+id/AP_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/layout_customer_lookup_name"
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal" >
+                <TextView
+                    android:text="@string/customer_look_up_hint_name"
+                    android:layout_width="150dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="50dp"
+                    android:id="@+id/lbl_customer_lookup_name"
+                    />
+                <EditText
+                    android:id="@+id/txt_FirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/box_login"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="1"
+                    android:singleLine="true"
+                    android:paddingLeft="10dp"
+                    android:hint="@string/customer_look_up_hint_name" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/latout_customer_lookup_surname"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                    <TextView
+                        android:text="@string/customer_look_up_hint_surname"
+                        android:id="@+id/lbl_customer_lookup_surname"
+                        android:layout_width="150dp"
+                        android:gravity="center_vertical"
+                        android:layout_height="50dp"
+                        />
+                    <EditText
+                        android:id="@+id/txt_LastName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/box_login"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:singleLine="true"
+                        android:paddingLeft="10dp"
+                        android:hint="@string/customer_look_up_hint_surname" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_customer_lookup_tel"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                    <TextView
+                        android:id="@+id/lbl_customer_lookup_tel"
+                        android:text="@string/customer_look_up_hint_tel"
+                        android:layout_width="150dp"
+                        android:gravity="center_vertical"
+                        android:layout_height="50dp"
+                        />
+                    <EditText
+                        android:id="@+id/txt_Tel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/box_login"
+                        android:alpha="1"
+                        android:singleLine="true"
+                        android:inputType="numberSigned"
+                        android:layout_alignParentBottom="true"
+                        android:paddingLeft="10dp"
+                        android:hint="@string/customer_look_up_hint_tel" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        <RelativeLayout
+            android:id="@+id/footer"
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/footer"
+            android:layout_below="@+id/scrollView">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_back"
+                android:id="@+id/btnBack"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@null" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_send"
+                android:id="@+id/btnSend"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@null" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

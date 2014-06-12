@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="header">#F6F6F6</color>
+    <color name="line">#D6D6D6</color>
+    <color name="GREEN">#A2CE18</color>
+
+    <color name="footer">#EDEDED</color>
+
+    <color name="RED">#FF0000</color>
+
+    <color name="ORANGE">#F58B17</color>
+
+
+    <color name="gray">#DDDDDD</color>
+    <color name="WHITE">#FFFFFF</color>
+    <color name="BLACK">#000000</color>
+
+
+</resources>

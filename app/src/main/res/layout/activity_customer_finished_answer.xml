@@ -1,0 +1,157 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.apthai.ap_questionaire.app.CustomerFinishedAnswerActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/img_background"
+        android:layout_below="@+id/project_name" />
+    <TextView
+        android:text="@string/project_name"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@drawable/box_title"
+        android:layout_height="50dp"
+        android:paddingTop="10dp"
+        android:id="@+id/project_name" />
+    <ImageButton
+        android:layout_marginTop="3dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnMenu"
+        android:scaleType="center"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/menu"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/sizeContent"
+        android:layout_width="1000dp"
+        android:layout_height="524dp"
+        android:background="@color/WHITE"
+        android:orientation="vertical"
+        android:layout_marginTop="125dp"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false"
+        android:clickable="false">
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="50dp"
+            android:id="@+id/question_title"
+            />
+
+        <ScrollView
+            android:layout_alignBottom="@+id/lbl_line"
+            android:layout_alignTop="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/scrollView"
+            android:layout_gravity="center"
+            android:fillViewport="false">
+            <LinearLayout
+                android:id="@+id/AP_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_icon"
+                    android:layout_marginBottom="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/icon_correct"/>
+                <TextView
+                    android:layout_below="@+id/img_icon"
+                    android:textColor="@color/GREEN"
+                    android:text= "@string/answer_finish"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="30dp"
+                    android:id="@+id/question"
+                    android:textSize="20dp" />
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="1dp"
+                    android:id="@+id/lbl_line1"
+                    android:layout_margin="30dp"
+                    android:background="@color/line"
+                    android:layout_alignBottom="@+id/question_title"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:text="@string/thanks1"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="5dp"
+                    android:id="@+id/thanks1"
+                    />
+                <TextView
+                    android:text="@string/customer_full_name"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:id="@+id/txtcustomer_name"
+                    />
+                <TextView
+                    android:textSize="16dp"
+                    android:layout_margin="5dp"
+                    android:text="@string/thanks2"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="20dp"
+                    android:id="@+id/thanks2"
+                    />
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_marginTop="30dp"
+
+                    android:layout_height="1dp"
+                    android:id="@+id/lbl_line2"
+                    android:background="@color/line"
+                    android:layout_alignBottom="@+id/question_title"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+        </ScrollView>
+        <RelativeLayout
+            android:id="@+id/footer"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/footer"
+            android:layout_below="@+id/scrollView">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_back"
+                android:id="@+id/btnBackHome"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@null" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_staff"
+                android:id="@+id/btnStaff"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@null" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
