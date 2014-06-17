@@ -36,6 +36,7 @@ public class MySQLiteHelper {
     public static final String BIRTHDATE = "birthdate";
     public static final String EMAIL = "email";
     public static final String MOBILE = "mobile";
+    public static final String NATIONALITY = "nationality";
 
     //Address fields
     public static final String HOUSE_ID = "house_id";
@@ -103,7 +104,8 @@ public class MySQLiteHelper {
             +LNAME + " TEXT, "
             +NICKNAME + " TEXT, "
             +BIRTHDATE + " TEXT, "
-            +EMAIL + " TEXT "
+            +EMAIL + " TEXT ,"
+            +NATIONALITY + " TEXT "
             +" );";
 
     public static final String CRATE_TABLE_MOBILES = "create table "+DATABASE_TABLE_MOBILES
@@ -518,7 +520,7 @@ public class MySQLiteHelper {
      * @param email
      * @return @rowid
      */
-    public long createContact(String prefix,String fname, String lname, String nickname,String birthdate, String email,String prefix_vip){
+    public long createContact(String prefix,String fname, String lname, String nickname,String birthdate, String email,String prefix_vip,String nationality){
         ContentValues initialValues = new ContentValues();
         initialValues.put(PREFIX, prefix);
         initialValues.put(PREFIX_VIP, prefix_vip);
@@ -527,6 +529,7 @@ public class MySQLiteHelper {
         initialValues.put(NICKNAME, nickname);
         initialValues.put(BIRTHDATE, birthdate);
         initialValues.put(EMAIL, email);
+        initialValues.put(NATIONALITY, nationality);
         return this.db.insert(DATABASE_TABLE_CONTACT, null, initialValues);
     }
     public long createMobile(Long contactid,String mobile){
@@ -605,7 +608,7 @@ public class MySQLiteHelper {
         Cursor mCursor =
 
                 this.db.query(true, DATABASE_TABLE_CONTACT, new String[] { ROW_ID,PREFIX,PREFIX_VIP,FNAME,
-                        LNAME, NICKNAME,BIRTHDATE,EMAIL}, ROW_ID + "=" + rowId, null, null, null, null, null);
+                        LNAME, NICKNAME,BIRTHDATE,EMAIL,NATIONALITY}, ROW_ID + "=" + rowId, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }

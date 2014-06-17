@@ -643,6 +643,10 @@ public class CoreEngine {
                         if(contactObj.has("prifix_vip"))
                             prifix_vip = contactObj.getString("prifix_vip");
 
+                        String nationality = "";
+                        if(contactObj.has("nationality"))
+                            nationality = contactObj.getString("nationality");
+
                         _data = new ContactData(
                                 contactObj.getString("prefix"),
                                 contactObj.getString("fname"),
@@ -654,7 +658,8 @@ public class CoreEngine {
                                 _address_work,
                                 _address,
                                 tels,
-                                prifix_vip
+                                prifix_vip,
+                                nationality
                         );
                         this.globals.setIsCustomerLocal(false);
                         return _data;
@@ -780,7 +785,8 @@ public class CoreEngine {
                         String _birthdate = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.BIRTHDATE));
                         String _email = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.EMAIL));
                         String _prefix_vip = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.PREFIX_VIP));
-                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip);
+                        String _nationality = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NATIONALITY));
+                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip,_nationality);
                         _contact.setOffline("1");
                     }
                     _dbHelper.close();
@@ -826,6 +832,7 @@ public class CoreEngine {
             jsonObj.put("birthdate",_data.getBirthdate());
             jsonObj.put("email",_data.getEmail());
             jsonObj.put("offine",_data.getOffline());
+            jsonObj.put("nationality",_data.getNationality());
 
             JSONArray mobile_js_arr = new JSONArray();
             ArrayList<String> _mobiles = _data.getMobiles();
@@ -933,7 +940,7 @@ public class CoreEngine {
         long _contactId = _dbHelper.createContact(
                 _data.getPrefix(),_data.getFname(),
                 _data.getLname(),_data.getNickname(),
-                _data.getBirthdate(),_data.getEmail(),_data.getPrefix_vip());
+                _data.getBirthdate(),_data.getEmail(),_data.getPrefix_vip(),_data.getNationality());
 
         if(_contactId > 0){
             ArrayList<String> _mobile = _data.getMobiles();
@@ -975,6 +982,7 @@ public class CoreEngine {
                 jsonObj.put("nickname",_data.getNickname());
                 jsonObj.put("birthdate",_data.getBirthdate());
                 jsonObj.put("email",_data.getEmail());
+                jsonObj.put("nationality",_data.getNationality());
 
                 JSONArray mobile_js_arr = new JSONArray();
                 ArrayList<String> _mobiles = _data.getMobiles();
@@ -1166,7 +1174,8 @@ public class CoreEngine {
                         String _nickname = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NICKNAME));
                         String _birthdate = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.BIRTHDATE));
                         String _email = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.EMAIL));
-                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip);
+                        String _nationality = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NATIONALITY));
+                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip,_nationality);
                         _contact.setOffline("1");
                     }
                     _dbHelper.close();
@@ -1359,7 +1368,8 @@ public class CoreEngine {
                         String _nickname = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NICKNAME));
                         String _birthdate = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.BIRTHDATE));
                         String _email = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.EMAIL));
-                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip);
+                        String _nationality = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NATIONALITY));
+                        _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip,_nationality);
                         _contact.setOffline("1");
                     }
                     _dbHelper.close();
@@ -1736,7 +1746,8 @@ public class CoreEngine {
                 String _nickname = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NICKNAME));
                 String _birthdate = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.BIRTHDATE));
                 String _email = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.EMAIL));
-                _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip);
+                String _nationality = _contact_cursor.getString(_contact_cursor.getColumnIndex(_dbHelper.NATIONALITY));
+                _contact = new ContactData(_prefix,_fname,_lname,_nickname,_birthdate,_email,_mobiles,_address_work,_address,_tels,_prefix_vip,_nationality);
                 _contact.setOffline("1");
             }
             _dbHelper.close();

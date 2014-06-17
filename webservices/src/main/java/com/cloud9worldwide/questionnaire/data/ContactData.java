@@ -22,6 +22,7 @@ public class ContactData {
     private AddressData addressWork;
     private AddressData address;
     private String offline;
+    private String nationality;
 
     public ContactData(String _prefix, String _fname, String _lname, String _nickname,
                        String _birthdate, String _email, ArrayList<String> _mobiles,
@@ -41,6 +42,7 @@ public class ContactData {
 
         this.tels = new ArrayList<String>();
         this.prefix_vip = "";
+        this.nationality = "";
     }
     public ContactData(String _prefix, String _fname, String _lname, String _nickname,
                        String _birthdate, String _email, ArrayList<String> _mobiles,
@@ -60,6 +62,36 @@ public class ContactData {
 
         this.tels = tels;
         this.prefix_vip = _prefix_vip;
+        this.nationality = "";
+    }
+
+    public ContactData(String _prefix, String _fname, String _lname, String _nickname,
+                       String _birthdate, String _email, ArrayList<String> _mobiles,
+                       AddressData _addressWork, AddressData _address,ArrayList<String> tels,String _prefix_vip,String _nationality){
+        this.prefix = _prefix;
+        this.fname = _fname;
+        this.lname = _lname;
+        this.nickname = _nickname;
+        this.birthdate = _birthdate;
+        this.email = _email;
+        this.mobiles = _mobiles;
+        this.addressWork = _addressWork;
+        this.address = _address;
+
+        this.contactId = "-1";
+        this.offline = "0";
+
+        this.tels = tels;
+        this.prefix_vip = _prefix_vip;
+        this.nationality = _nationality;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 
     public String getOffline() {
@@ -182,6 +214,7 @@ public class ContactData {
             obj.put("address",this.address.toString());
             obj.put("contactId",this.contactId);
             obj.put("offline",this.offline);
+            obj.put("nationality",this.nationality);
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -203,6 +236,7 @@ public class ContactData {
             obj.put("address",this.address.toString());
             obj.put("contactId",this.contactId);
             obj.put("offline",this.offline);
+            obj.put("nationality",this.nationality);
         }catch (JSONException e){
             e.printStackTrace();
         }
