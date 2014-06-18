@@ -325,7 +325,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("keyCode",keyCode+"");
+
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     Log.e("ACTION_UP",keyCode+"");
                     mobile1.clearFocus();
