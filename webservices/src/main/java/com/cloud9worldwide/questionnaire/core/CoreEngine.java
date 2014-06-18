@@ -847,7 +847,7 @@ public class CoreEngine {
             ArrayList<String> _tels = _data.getTels();
             for (int i = 0; i < _tels.size(); i++) {
                 JSONObject tel = new JSONObject();
-                tel.put("mobile",_tels.get(i));
+                tel.put("tel",_tels.get(i));
                 tels_js_arr.put(i,tel);
             }
             jsonObj.put("tels",tels_js_arr);
