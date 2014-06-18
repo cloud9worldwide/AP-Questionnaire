@@ -323,6 +323,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
 
+        //test
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
