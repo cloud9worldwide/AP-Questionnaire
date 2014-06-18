@@ -179,15 +179,35 @@
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.Display16Activity"
-            android:label="@string/title_activity_display16" >
+            android:label="@string/title_activity_display16"
+            android:screenOrientation="landscape" >
+
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.Display20Activity"
-            android:label="@string/title_activity_display20" >
+            android:label="@string/title_activity_display20"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.Display21Activity"
-            android:label="@string/title_activity_display21" >
+            android:label="@string/title_activity_display21"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.apthai.ap_questionaire.app.AddCustomerOneActivity"
+            android:label="@string/title_activity_add_customer_one"
+            android:screenOrientation="landscape" >
+        </activity>
+
+        <activity
+            android:name="com.apthai.ap_questionaire.app.AddCustomerENActivity"
+            android:label="@string/title_activity_add_customer_en"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.apthai.ap_questionaire.app.AddCustomerTHActivity"
+            android:label="@string/title_activity_add_customer_th"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

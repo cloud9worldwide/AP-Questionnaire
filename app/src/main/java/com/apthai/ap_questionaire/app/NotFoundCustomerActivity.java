@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +19,7 @@ import android.widget.TextView;
 import com.cloud9worldwide.questionnaire.data.ProjectData;
 
 
-public class NotFoundCustomerActivity extends Activity implements OnClickListener {
+public class NotFoundCustomerActivity extends Activity implements View.OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
     int total = 5;
@@ -35,7 +34,6 @@ public class NotFoundCustomerActivity extends Activity implements OnClickListene
     TextView lblRed, lblBlack;
 
     public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
         super.onWindowFocusChanged(hasFocus);
         setImage();
     }
@@ -105,12 +103,15 @@ public class NotFoundCustomerActivity extends Activity implements OnClickListene
     }
     public void onClick(View v) {
         if(v.getId() == R.id.btnAdd){
-            startActivityForResult(new Intent(this, AddCustomerActivity.class),0);
-//            startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
+            startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();
         } else if(v.getId() == R.id.btnMenu){
-            showPopup(this);
+            if(popup.isShowing()){
+                popup.dismiss();
+            } else {
+                showPopup(this);
+            }
         }
     }
     public void onBackPressed() {

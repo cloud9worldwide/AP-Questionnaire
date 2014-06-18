@@ -264,7 +264,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             }
         } else if (v.getId() == R.id.btnAdd) {
             delegate.customer_selected = null;
-            startActivityForResult(new Intent(this, AddCustomerActivity.class),0);
+            startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();
         } else {

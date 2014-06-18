@@ -133,6 +133,7 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="10dp"
                         android:layout_height="50dp"
+
                         android:id="@+id/lbl_add_customer_building"
                         />
                     <EditText
@@ -238,7 +239,6 @@
                         android:id="@+id/lblProvince"
                         />
                     <Spinner
-                        android:layout_marginTop="-5dp"
                         android:layout_width="250dp"
                         android:layout_height="35dp"
                         android:id="@+id/ddlProvince"
@@ -292,7 +292,7 @@
                         android:id="@+id/lblPostcode"
                         />
                     <TextView
-                        android:id="@+id/txtPostcode"
+                        android:id="@+id/txtPostcode2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"

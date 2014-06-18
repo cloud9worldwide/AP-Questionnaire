@@ -56,7 +56,7 @@ public class AddressData {
         this.tel = _tel;
         this.telExt = _telExt;
         this.floor = _floor;
-        this.road = _room;
+        this.room = _room;
     }
 
     public String getFloor() {

@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.ContactSearchData;
 
@@ -171,9 +170,6 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     public void onClick(View v) {
 
         if(v.getId() == R.id.btnSend){
-            btn_send.setEnabled(false);
-            Toast.makeText(this, "send",
-                    Toast.LENGTH_SHORT).show();
             if(popup.isShowing()){
                 popup.dismiss();
             } else {

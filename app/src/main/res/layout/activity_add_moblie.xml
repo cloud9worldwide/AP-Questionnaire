@@ -32,13 +32,22 @@
         android:layout_width="280dp"
         android:layout_height="35dp"
         android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/lbl_digit_mobile1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:alpha="1"
-            />
+            <EditText
+                android:id="@+id/txt_digit_mobile0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_digit"
+                android:alpha="1"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:maxLength="1"
+                android:windowSoftInputMode="stateVisible"
+                android:inputType="numberSigned"
+                android:imeOptions="actionNext"
+                android:selectAllOnFocus="true"
+                android:nextFocusDown="@+id/txt_digit_mobile1"
+                />
         <EditText
             android:id="@+id/txt_digit_mobile1"
             android:layout_width="wrap_content"
