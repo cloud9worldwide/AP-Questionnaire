@@ -237,11 +237,11 @@
                         android:paddingLeft="10dp"
                         android:id="@+id/lblProvince"
                         />
-                    <Spinner
-                        android:layout_marginTop="-5dp"
+                    <EditText
+
                         android:layout_width="250dp"
                         android:layout_height="35dp"
-                        android:id="@+id/ddlProvince"
+                        android:id="@+id/txtProvince"
                         android:background="@drawable/box_login"
                         android:paddingLeft="10dp"
                         />
@@ -265,7 +265,7 @@
                     <EditText
                         android:layout_width="250dp"
                         android:layout_height="35dp"
-                        android:id="@+id/ddlDistrict"
+                        android:id="@+id/txtDistrict"
                         android:background="@drawable/box_login"
                         android:paddingLeft="10dp"
                         />
@@ -276,10 +276,10 @@
                         android:paddingLeft="10dp"
                         android:layout_height="50dp"
                         android:id="@+id/lbl_add_customer_sub_district" />
-                    <Spinner
+                    <EditText
                         android:layout_width="250dp"
                         android:layout_height="35dp"
-                        android:id="@+id/ddlSubDistrict"
+                        android:id="@+id/txtSubDistrict"
                         android:background="@drawable/box_login"
                         android:paddingLeft="10dp"
                         />
@@ -291,8 +291,8 @@
                         android:paddingLeft="10dp"
                         android:id="@+id/lblPostcode"
                         />
-                    <TextView
-                        android:id="@+id/txtPostcode"
+                    <EditText
+                        android:id="@+id/txtPostcode2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"

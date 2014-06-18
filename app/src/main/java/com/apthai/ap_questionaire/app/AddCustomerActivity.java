@@ -251,7 +251,6 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
 
         footer = (RelativeLayout) findViewById(R.id.footer);
 
-
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
         project_name.setTextSize(30);
@@ -716,7 +715,6 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
 
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile1.clearFocus();
                     mobile2.requestFocus();
@@ -945,8 +943,8 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
 
     private void addItemPrefix() {
 
-        ArrayList<String> list;
-        ArrayAdapter<String> dataAdapter;
+        ArrayList<ValTextData> list;
+        ArrayAdapter<ValTextData> dataAdapter;
 
         datePicker.setOnClickListener(new OnClickListener() {
 
@@ -973,9 +971,10 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
             }
         });
 
-        list = new ArrayList<String>();
-        list.add("ไทย");
-        dataAdapter = new ArrayAdapter<String>(this,
+//        list = new ArrayList<ValTextData>();
+        list = delegate.service.getCountry();
+
+        dataAdapter = new ArrayAdapter<ValTextData>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddlOtherCountry.setAdapter(dataAdapter);
@@ -1533,7 +1532,6 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
             btnAddMobile.setVisibility(View.GONE);
         }
         updateMobile2();
-
     }
     public void updateMobile2(){
         String txt_mobile= "";

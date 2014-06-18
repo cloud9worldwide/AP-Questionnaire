@@ -105,4 +105,8 @@
     <string name="title_activity_add_customer_en">AddCustomerENActivity</string>
     <string name="title_activity_add_customer_th">AddCustomerTHActivity</string>
 
+
+    <string name="popup_mobile">โทรศัพท์มือถือ</string>
+    <string name="popup_phone">โทรศัพท์บ้าน</string>
+
 </resources>

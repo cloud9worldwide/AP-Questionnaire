@@ -100,7 +100,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     private void setObject() {
 
-
         if(customer_info == null){
             onBackPressed();
         } else {
@@ -174,12 +173,28 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                     }
                 }
             }
-
+            if(allMobile.equals("")){
+                allMobile = "-";
+            }
             txtMobile.setText(allMobile);
             txtMobile.setTypeface(delegate.font_type);
             txtMobile.setTextSize(25);
             txtTel = (TextView) findViewById(R.id.txtTel);
-            txtTel.setText(customer_info.getAddress().getTel());
+            String allTels = "";
+            if(customer_info.getTels() !=null){
+                for(int i = 0; i< customer_info.getTels().size(); i++){
+                    if(customer_info.getTels().get(i).length() !=0){
+                        if(!allTels.equals("")){
+                            allTels = allTels + ", ";
+                        }
+                        allTels = allTels + customer_info.getTels().get(i);
+                    }
+                }
+            }
+            if(allTels.equals("")){
+                allTels = "-";
+            }
+            txtTel.setText(allTels);
             txtTel.setTypeface(delegate.font_type);
             txtTel.setTextSize(25);
             txtEmail = (TextView) findViewById(R.id.txtEmail);

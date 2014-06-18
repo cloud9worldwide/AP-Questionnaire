@@ -189,6 +189,19 @@
             android:name="com.apthai.ap_questionaire.app.Display21Activity"
             android:label="@string/title_activity_display21" >
         </activity>
+        <activity
+            android:name="com.apthai.ap_questionaire.app.AddCustomerOneActivity"
+            android:label="@string/title_activity_add_customer_one" >
+        </activity>
+
+        <activity
+            android:name="com.apthai.ap_questionaire.app.AddCustomerENActivity"
+            android:label="@string/title_activity_add_customer_en" >
+        </activity>
+        <activity
+            android:name="com.apthai.ap_questionaire.app.AddCustomerTHActivity"
+            android:label="@string/title_activity_add_customer_th" >
+        </activity>
     </application>
 
 </manifest>

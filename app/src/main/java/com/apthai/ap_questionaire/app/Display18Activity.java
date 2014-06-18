@@ -195,7 +195,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     protected void onResume(){
         super.onResume();
         Log.e("Log", "resume");
-        /*
+/*
         if(delegate != null){
             if(delegate.dataSubQuestion !=null){
 
@@ -366,6 +366,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         } else if (v.getId() == R.id.btnBack){
             onBackPressed();
         } else {
+            delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
             LinearLayout btn = (LinearLayout) v;
             int count = btn.getChildCount();
             View obj = null;
