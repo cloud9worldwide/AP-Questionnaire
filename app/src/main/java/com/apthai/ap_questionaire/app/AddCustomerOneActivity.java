@@ -2,9 +2,11 @@ package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -70,16 +72,115 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     TextView lbl_prefix_extra1,lbl_prefix_extra2;
 
     ContactData new_customer;
+    ArrayList<String> listfix;
+    int indexPrefix, indexNationality, indexCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer_one);
 
-        setObject();
+//        setObject();
+        listfix = new ArrayList<String>();
+        listfix.add("คุณ");
+        listfix.add("นาย");
+        listfix.add("นาง");
+        listfix.add("นางสาว");
+        listfix.add("อื่นๆ");
+        indexPrefix= -1;
+        indexNationality= -1;
+        indexCountry= -1;
+        delegate = (questionniare_delegate) getApplicationContext();
+
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Please wait");
+        progress.setMessage("Loading customer information.");
+        progress.show();
+
+        final Handler uiHandler = new Handler();
+        final  Runnable onUi = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                progress.dismiss();
+                setObject();
+                getCustomerInfo();
+            }
+        };
+        Runnable background = new Runnable() {
+            @Override
+            public void run() {
+                // This is the delay
+                if(delegate.customer_selected !=null){
+                    new_customer = delegate.customer_selected;
+                    getCustomerInfoLong();
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e){
+
+                }
+                uiHandler.post( onUi );
+            }
+        };
+        new Thread( background ).start();
+
+    }
+    private void getCustomerInfoLong(){
+
+        for (int i = 0; i < listfix.size(); i++) {
+            if (listfix.get(i).equals(new_customer.getPrefix())) {
+                indexPrefix = i;
+                break;
+            }
+        }
+        for (int i = 0; i < delegate.service.getNationality().size(); i++) {
+            if (delegate.service.getNationality().get(i).equals(new_customer.getNationality())) {
+                indexNationality =i;
+                break;
+            }
+        }
+        for (int i = 0; i < delegate.service.getCountry().size(); i++) {
+            if (delegate.service.getCountry().get(i).equals(new_customer.getAddress().getCountry())) {
+                indexCountry = i;
+                break;
+            }
+        }
+    }
+    private void getCustomerInfo(){
+        if(delegate.customer_selected ==null){
+            AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
+            AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
+            new_customer = new ContactData("", "", "", "", "", "", null, null,null);
+            new_customer.setAddress(home);
+            new_customer.setAddressWork(work);
+        } else {
+
+
+
+            txtPrefix.setText(new_customer.getPrefix().toString());
+            if(indexPrefix != -1){
+                ddlPrefix.setSelection(indexPrefix);
+            }
+
+            txtFirstName.setText(new_customer.getFname());
+            txtLastName.setText(new_customer.getLname());
+            txtNickname.setText(new_customer.getNickname());
+            txtEmail.setText(new_customer.getEmail());
+            datePicker.setText(new_customer.getBirthdate());
+            updateMobile();
+
+            if(indexNationality != -1){
+                ddlNationality.setSelection(indexNationality);
+            }
+            if(indexCountry != -1){
+                ddlCountry.setSelection(indexCountry);
+            }
+
+        }
     }
     private void setObject() {
-        delegate = (questionniare_delegate) getApplicationContext();
+
 
         footer = (RelativeLayout) findViewById(R.id.footer);
 
@@ -145,6 +246,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lbl_add_customer_mobile4.setText("");
 
         phone_list = new ArrayList<String>();
+        phone_list.add("");
         phone_list.add("");
         phone_list.add("");
         phone_list.add("");
@@ -223,7 +325,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.e("keyCode",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
+                    Log.e("ACTION_UP",keyCode+"");
                     mobile1.clearFocus();
                     mobile2.requestFocus();
                     return true;
@@ -234,7 +338,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         mobile2.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.e("keyCode",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
+                    Log.e("ACTION_UP",keyCode+"");
                     mobile2.clearFocus();
                     mobile3.requestFocus();
                     return true;
@@ -506,16 +612,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         ArrayList<ValTextData> list;
         ArrayAdapter<ValTextData> dataAdapter;
 
-        final ArrayList<String> listfix;
         ArrayAdapter<String> dataAdapterfix;
 
         //PREFIX
-        listfix = new ArrayList<String>();
-        listfix.add("คุณ");
-        listfix.add("นาย");
-        listfix.add("นาง");
-        listfix.add("นางสาว");
-        listfix.add("อื่นๆ");
         dataAdapterfix = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, listfix);
         dataAdapterfix.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -572,9 +671,10 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
     private void packData(){
-        AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
-        AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
-        new_customer = new ContactData("", "", "", "", "", "", null, null,null);
+
+        AddressData home = new_customer.getAddress();
+        AddressData work = new_customer.getAddressWork();
+
         //mobile index0
         if (mobile1.getText().toString().length() > 0 && mobile2.getText().toString().length() > 0
                 && mobile3.getText().toString().length() > 0 && mobile4.getText().toString().length() > 0
@@ -599,9 +699,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
 
         if(!ddlCountry.getSelectedItem().toString().equals(txtPromp)){
-            home.setProvince(ddlCountry.getSelectedItem().toString());
+            home.setCountry(ddlCountry.getSelectedItem().toString());
         } else {
-            home.setProvince("");
+            home.setCountry("");
         }
         if(!ddlNationality.getSelectedItem().toString().equals(txtPromp)){
             new_customer.setNationality(ddlNationality.getSelectedItem().toString());
@@ -654,11 +754,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         } else if(v.getId() == R.id.btnNext){
             packData();
-//            if(ddlCountry.getSelectedItem().equals("Thailand")){
+            if(ddlCountry.getSelectedItem().equals("Thailand")){
                 startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
-//            } else {
-//                startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
-//            }
+            } else {
+                startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
+            }
         } else if (v.getId() == R.id.btnAddMobiles){
             showPopupAddMobile(this,"mobile",99);
         } else if(v.getId() == R.id.lbl_add_customer_mobile1){
@@ -700,6 +800,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     public void onBackPressed() {
         this.setResult(3);
         finish();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode ==2 || resultCode == 0 || resultCode == 1){
+            this.setResult(resultCode);
+            finish();
+        }
     }
 
     public void showPopup(final Activity context) {
@@ -1048,7 +1155,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     public void addMobileinPage(String mobile_number , String type){
         boolean statusAdd =false;
         if(type.equals("mobile")){
-
             int index=0;
             for (int i =1;i<mobile_list.size();i++){
                 if(mobile_list.get(i).length()==0){
@@ -1060,17 +1166,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             if(statusAdd){
                 mobile_list.set(index, mobile_number);
             }
-            statusAdd = true;
-
-            for (int i =1;i<mobile_list.size();i++){
-                if(mobile_list.get(i).length()==0){
-                    statusAdd = false;
-                }
-            }
-            if(statusAdd){
-                btnAddMobile.setVisibility(View.INVISIBLE);
-            }
-
         } else {
             //phone mode
             int index=0;
@@ -1084,23 +1179,33 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             if(statusAdd){
                 phone_list.set(index, mobile_number);
             }
-            statusAdd = true;
-
-            for (int i =1;i<phone_list.size();i++){
-                if(phone_list.get(i).length()==0){
-                    statusAdd = false;
-                }
-            }
-            if(statusAdd){
-                btnAddPhone.setVisibility(View.INVISIBLE);
-            }
         }
         updateMobile();
 
     }
     public void updateMobile(){
+        boolean statusAdd =false;
         Log.e("mobile_list", mobile_list.toString());
         Log.e("phone_list", phone_list.toString());
+
+        statusAdd = true;
+        for (int i =1;i<phone_list.size();i++){
+            if(phone_list.get(i).length()==0){
+                statusAdd = false;
+            }
+        }
+        if(statusAdd){
+            btnAddPhone.setVisibility(View.INVISIBLE);
+        }
+        statusAdd = true;
+        for (int i =1;i<mobile_list.size();i++){
+            if(mobile_list.get(i).length()==0){
+                statusAdd = false;
+            }
+        }
+        if(statusAdd){
+            btnAddMobile.setVisibility(View.INVISIBLE);
+        }
 
         if(mobile_list.size()>1){
             lbl_add_customer_mobile1.setText(mobile_list.get(1));

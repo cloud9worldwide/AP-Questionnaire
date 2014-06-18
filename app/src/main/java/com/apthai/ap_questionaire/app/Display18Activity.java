@@ -124,6 +124,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         } else{
             data = delegate.QM.get_question();
         }
+        Log.e("data", data.getAnswers().toString());
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -366,7 +367,8 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         } else if (v.getId() == R.id.btnBack){
             onBackPressed();
         } else {
-            delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
+            delegate.QM.save_answer(answer);
             LinearLayout btn = (LinearLayout) v;
             int count = btn.getChildCount();
             View obj = null;
@@ -376,6 +378,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 String tag = obj.getTag().toString();
                 if(tag.equals("99")){
                     AnswerData selected = data.getAnswers().get(indexSelected);
+
                     ImageView image = (ImageView) obj;
                     if(answer.size()>0){
                         boolean isSeleted = true;

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -87,6 +88,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             public void run() {
                 // This is the delay
                 customer_info = delegate.service.getContactInfo(customerIndex);
+                customer_info.setContactId(delegate.service.globals.getContactId());
                 try {
                     Thread.sleep(2000);
                 }catch (Exception e){
@@ -389,8 +391,9 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
+                Log.e("customer_info",customer_info.toString());
                 delegate.customer_selected = customer_info;
-                startActivityForResult(new Intent(this, AddCustomerActivity.class),0);
+                startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
             }
         } else if(v.getId() == R.id.root_view){
             if(popup.isShowing()){

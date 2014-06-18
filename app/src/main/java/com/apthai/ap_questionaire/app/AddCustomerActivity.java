@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -713,6 +715,16 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
             }
         });
 
+         TextWatcher inputTextWatcher = new TextWatcher() {
+            public void afterTextChanged(Editable s) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("onTextChanged",start +","+ before +","+count);
+//                Log.d(TAG, s.charAt(count-1) + " character to send");;
+            }
+        };
+        mobile1.addTextChangedListener(inputTextWatcher);
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){

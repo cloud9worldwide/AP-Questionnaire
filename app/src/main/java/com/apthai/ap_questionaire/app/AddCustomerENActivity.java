@@ -50,7 +50,33 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer_en);
         setObject();
+        getCustomerInfo();
     }
+
+    private void getCustomerInfo(){
+        if(delegate.customer_selected.getContactId().equals("")){
+//new customer
+        } else {
+            AddressData home = new_customer.getAddress();
+            AddressData work = new_customer.getAddressWork();
+
+            txtHomeId.setText(home.getHouseId().toString());
+            txtMoo.setText(home.getMoo().toString());
+            txtBuilding.setText(home.getVillage().toString());
+            txtFloor.setText(home.getFloor().toString());
+            txtRoom.setText(home.getRoom().toString());
+            txtSoi.setText(home.getSoi().toString());
+            txtRoad.setText(home.getRoad().toString());
+            txtProvince.setText(home.getProvince().toString());
+            txtDistrict.setText(home.getDistrict().toString());
+            txtSubDistrict.setText(home.getSubdistrict().toString());
+            txtPostcode.setText(home.getPostalcode().toString());
+            txtWork.setText(work.getVillage().toString());
+            txtWorkDistrict.setText(work.getDistrict().toString());
+        }
+
+    }
+
     private void setObject(){
         delegate = (questionniare_delegate) getApplicationContext();
         ctx = this;
