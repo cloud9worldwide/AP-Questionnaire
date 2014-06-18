@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -87,6 +88,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             public void run() {
                 // This is the delay
                 customer_info = delegate.service.getContactInfo(customerIndex);
+                customer_info.setContactId(delegate.service.globals.getContactId());
                 try {
                     Thread.sleep(2000);
                 }catch (Exception e){
@@ -99,7 +101,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     }
 
     private void setObject() {
-
 
         if(customer_info == null){
             onBackPressed();
@@ -174,12 +175,28 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                     }
                 }
             }
-
+            if(allMobile.equals("")){
+                allMobile = "-";
+            }
             txtMobile.setText(allMobile);
             txtMobile.setTypeface(delegate.font_type);
             txtMobile.setTextSize(25);
             txtTel = (TextView) findViewById(R.id.txtTel);
-            txtTel.setText(customer_info.getAddress().getTel());
+            String allTels = "";
+            if(customer_info.getTels() !=null){
+                for(int i = 0; i< customer_info.getTels().size(); i++){
+                    if(customer_info.getTels().get(i).length() !=0){
+                        if(!allTels.equals("")){
+                            allTels = allTels + ", ";
+                        }
+                        allTels = allTels + customer_info.getTels().get(i);
+                    }
+                }
+            }
+            if(allTels.equals("")){
+                allTels = "-";
+            }
+            txtTel.setText(allTels);
             txtTel.setTypeface(delegate.font_type);
             txtTel.setTextSize(25);
             txtEmail = (TextView) findViewById(R.id.txtEmail);
@@ -374,8 +391,9 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
+                Log.e("customer_info",customer_info.toString());
                 delegate.customer_selected = customer_info;
-                startActivityForResult(new Intent(this, AddCustomerActivity.class),0);
+                startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
             }
         } else if(v.getId() == R.id.root_view){
             if(popup.isShowing()){
