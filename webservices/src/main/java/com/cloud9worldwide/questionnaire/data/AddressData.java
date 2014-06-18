@@ -37,6 +37,8 @@ public class AddressData {
         this.country = _country;
         this.tel = _tel;
         this.telExt = _telExt;
+        this.floor = "";
+        this.room = "";
     }
     public AddressData(String _houseId, String _moo, String _village, String _soi,
                        String _road, String _subdistrict, String _district, String _province, String _postalcode,
