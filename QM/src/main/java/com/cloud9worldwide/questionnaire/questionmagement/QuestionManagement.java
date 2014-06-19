@@ -139,9 +139,19 @@ public class QuestionManagement {
         QuestionTypeData curQuestion = this.get_question();
         for (int i = 0; i < AnsListData.size(); i++) {
             if(curQuestion.getQuestion().getId() == Integer.parseInt(AnsListData.get(i).getQuestionId())){
-                QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(curQuestion.getQuestion().getId()),_save_ans_ist);
-                question_ans.setDefault(false);
-                this.AnsListData.set(i, question_ans);
+                if(_save_ans_ist.size() > 0){
+                    QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(curQuestion.getQuestion().getId()),_save_ans_ist);
+                    question_ans.setDefault(false);
+                    this.AnsListData.set(i, question_ans);
+                }else{
+                    SaveAnswerData save_ans = new SaveAnswerData("-1","");
+                    ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
+                    _ans_list.add(save_ans);
+                    QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(curQuestion.getQuestion().getId()),_ans_list);
+                    question_ans.setDefault(true);
+                    this.AnsListData.set(i, question_ans);
+                }
+
                 return true;
             }
         }
@@ -266,16 +276,50 @@ public class QuestionManagement {
     }
     public synchronized boolean pack_question_ans_data(){
         if(!this.already_pack_question){
+
+
+
             //get all sub question ans , except default ans
             ArrayList<QuestionAnswerData> sub_ans_list = this.SubAnsListData;
             for (int i = 0; i < sub_ans_list.size(); i++) {
                 QuestionAnswerData tmp = sub_ans_list.get(i);
                 if(!tmp.isDefault()){
-                    AnsListData.add(tmp);
+                    ArrayList<SaveAnswerData> _ans_tmp = tmp.getAnswer();
+                    ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
+                    for (int j = 0; j < _ans_tmp.size(); j++) {
+                        SaveAnswerData t = _ans_tmp.get(j);
+                        if(!t.getValue().equals("-1")){
+                            _new_ans_tmp.add(t);
+                        }
+                    }
+                    if(_new_ans_tmp.size() > 0){
+                        tmp.setAnswer(_new_ans_tmp);
+                        AnsListData.add(tmp);
+                    }
+
                 }
             }
 
-            this.QnAnsData.setAnswers(AnsListData);
+            ArrayList<QuestionAnswerData> _newAnsListData = new ArrayList<QuestionAnswerData>();
+            for (int i = 0; i < AnsListData.size(); i++) {
+                QuestionAnswerData tmp = AnsListData.get(i);
+                if(!tmp.isDefault()){
+                    ArrayList<SaveAnswerData> _ans_tmp = tmp.getAnswer();
+                    ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
+                    for (int j = 0; j < _ans_tmp.size(); j++) {
+                        SaveAnswerData t = _ans_tmp.get(j);
+                        if(!t.getValue().equals("-1")){
+                            _new_ans_tmp.add(t);
+                        }
+                    }
+                    if(_new_ans_tmp.size() > 0){
+                        tmp.setAnswer(_new_ans_tmp);
+                        _newAnsListData.add(tmp);
+                    }
+                }
+            }
+
+            this.QnAnsData.setAnswers(_newAnsListData);
             this.already_pack_question = true;
             this.SubAnsListData = new ArrayList<QuestionAnswerData>();
         }

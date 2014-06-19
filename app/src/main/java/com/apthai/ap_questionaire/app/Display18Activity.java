@@ -368,7 +368,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             onBackPressed();
         } else {
 
-            delegate.QM.save_answer(answer);
+            //delegate.QM.save_answer(answer);
             LinearLayout btn = (LinearLayout) v;
             int count = btn.getChildCount();
             View obj = null;
@@ -408,11 +408,24 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                                 image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconInActiveUrl()));
                             }
 
+                            answer.remove(index);
+                            if(data.getParent_question_id() > 0){
+                                //is sub question, will save @ save_answer(answers, quesiton inx)
+                                delegate.RemoveQuestionHistory(data.getQuestion().getId().toString());
+                                delegate.QM.save_answer(answer,data.getQuestion().getId());
+                            }else{
+                                // not is sub question
+                                delegate.RemoveQuestionHistory(data.getQuestion().getId().toString());
+                                delegate.QM.save_answer(answer);
+                            }
+
+
                             if(isParent){
                                 //remove sub question
-                                delegate.QM.clear_sub_answer(data.getAnswers().get(indexSelected).getId());
+                                //delegate.RemoveQuestionHistory("s");
+                                //delegate.QM.clear_sub_answer(data.getAnswers().get(indexSelected).getId());
                             }
-                            answer.remove(index);
+
                         }
                     } else {
                         if(data.getAnswers().get(i).getIconActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconActiveUrl())==null){
@@ -470,7 +483,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     public void parentSelected(int indexSelected){
 
         QuestionTypeData dataSubQuestion =  delegate.QM.get_sub_question(data.getAnswers().get(indexSelected).getId());
-
+        delegate.QM.save_answer(answer);
         delegate.dataSubQuestion = dataSubQuestion;
         Intent newPage = new Intent();
 
@@ -517,8 +530,10 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             } else if(dataSubQuestion.getQuestionType().equals("21")){
                 newPage = new Intent(this, Display21Activity.class);
             }
-        startActivityForResult(newPage,0);
+            //newPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //newPage.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
+            delegate.nextQuestionPage(newPage);
     }
 
 }

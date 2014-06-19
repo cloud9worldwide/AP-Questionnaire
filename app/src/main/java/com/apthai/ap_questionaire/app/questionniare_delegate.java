@@ -377,7 +377,12 @@ public class questionniare_delegate extends Application {
     public synchronized ArrayList<SaveAnswerData> getHistory(){
         ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
         if(this.AllHistoryAnswer != null) {
-            String _q_id = QM.get_question().getQuestion().getId().toString();
+            String _q_id;
+            if(QM.get_question().isParent_question() && dataSubQuestion != null){
+                _q_id = dataSubQuestion.getQuestion().getId().toString();
+            }else{
+                _q_id = QM.get_question().getQuestion().getId().toString();
+            }
             for (int i = 0; i < this.AllHistoryAnswer.size(); i++) {
                 QuestionAnswerData q_ans = this.AllHistoryAnswer.get(i);
 
@@ -397,6 +402,17 @@ public class questionniare_delegate extends Application {
         AllHistoryAnswer = questionnaireAnswer;
         return questionnaireAnswer;
     }
+    public synchronized boolean RemoveQuestionHistory(String _q_id){
+        if(this.AllHistoryAnswer != null) {
+            for (int i = 0; i < this.AllHistoryAnswer.size(); i++) {
+                QuestionAnswerData q_ans = this.AllHistoryAnswer.get(i);
+                if (q_ans.getQuestionId().equals(_q_id)) {
+                    this.AllHistoryAnswer.remove(i);
+                }
+            }
+        }
+        return true;
+    }
 
 
 
@@ -412,7 +428,7 @@ public class questionniare_delegate extends Application {
     }
 
     public void nextQuestionPage(Intent intent){
-        QuestionTypeData question = this.QM.get_question();
+        //QuestionTypeData question = this.QM.get_question();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         /*
