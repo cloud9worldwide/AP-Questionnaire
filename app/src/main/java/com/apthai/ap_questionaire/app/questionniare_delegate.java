@@ -33,6 +33,8 @@ import java.io.FileNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by koy on 08/04/2014.
@@ -497,8 +499,14 @@ public class questionniare_delegate extends Application {
             nextQuestionPage(i);
         }
     }
-    public void test1(){
-        //test func ja
+    public boolean emailValidator(String email)
+    {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
     }
     public boolean checkPressBack(ArrayList<SaveAnswerData> _ans){
         if(dataSubQuestion != null){
@@ -570,4 +578,7 @@ public class questionniare_delegate extends Application {
             }
         }
     }
+
+    //getFreeTxtType 1:number, 2:string, 3:EMAIL, 4=Date;
+    //MaxChar work case 1 and 2 only;
 }

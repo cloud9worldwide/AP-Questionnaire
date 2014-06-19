@@ -109,4 +109,6 @@
     <string name="popup_mobile">โทรศัพท์มือถือ</string>
     <string name="popup_phone">โทรศัพท์บ้าน</string>
 
+    <string name="email_not_correct">E-MAIL IS INVALID</string>
+
 </resources>

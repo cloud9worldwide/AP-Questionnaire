@@ -156,8 +156,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             new_customer.setAddressWork(work);
         } else {
 
-
-
             txtPrefix.setText(new_customer.getPrefix().toString());
             if(indexPrefix != -1){
                 ddlPrefix.setSelection(indexPrefix);
@@ -180,8 +178,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
     }
     private void setObject() {
-
-
         footer = (RelativeLayout) findViewById(R.id.footer);
 
         project_name = (TextView) findViewById(R.id.project_name);
