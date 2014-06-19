@@ -27,6 +27,7 @@ public class AnswerData {
 
     private String FreeTxtType;
     private String FreeTxtMaxChar;
+    private String ValidateTxt;
     private boolean hassubquestion;
     private int subquestion_id = -1;
 
@@ -75,6 +76,12 @@ public class AnswerData {
                 this.FreeTxtMaxChar = "0";
             }
 
+
+            if(this.isFreeTxt && _answer.has("validatetxt")){
+                this.ValidateTxt = _answer.getString("validatetxt");
+            }else {
+                this.ValidateTxt = "";
+            }
             //check has sub question
             if(_answer.has("hassubquestion") && _answer.has("subquestion_id")){
                 this.hassubquestion = Boolean.parseBoolean(_answer.getString("hassubquestion"));
@@ -93,6 +100,10 @@ public class AnswerData {
 
     public int getId() {
         return id;
+    }
+
+    public String getValidateTxt() {
+        return ValidateTxt;
     }
 
     public String getTitle() {
@@ -126,6 +137,7 @@ public class AnswerData {
             obj.put("iconInActiveUrl",this.iconInActiveUrl);
             obj.put("imageUrl",this.imageUrl);
             obj.put("itemOrder",this.itemOrder);
+            obj.put("ValidateTxt",this.ValidateTxt);
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -144,6 +156,7 @@ public class AnswerData {
             obj.put("iconInActiveUrl",this.iconInActiveUrl);
             obj.put("imageUrl",this.imageUrl);
             obj.put("itemOrder",this.itemOrder);
+            obj.put("ValidateTxt",this.ValidateTxt);
         }catch (JSONException e){
             e.printStackTrace();
         }
