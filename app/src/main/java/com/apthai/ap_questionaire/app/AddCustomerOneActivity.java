@@ -128,20 +128,25 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
     private void getCustomerInfoLong(){
 
+
         for (int i = 0; i < listfix.size(); i++) {
+
             if (listfix.get(i).equals(new_customer.getPrefix())) {
+
                 indexPrefix = i;
                 break;
             }
         }
-        for (int i = 0; i < delegate.service.getNationality().size(); i++) {
-            if (delegate.service.getNationality().get(i).equals(new_customer.getNationality())) {
+        ArrayList<ValTextData> list =delegate.service.getNationality();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).toString().equals(new_customer.getNationality())) {
                 indexNationality =i;
                 break;
             }
         }
+        list =delegate.service.getCountry();
         for (int i = 0; i < delegate.service.getCountry().size(); i++) {
-            if (delegate.service.getCountry().get(i).equals(new_customer.getAddress().getCountry())) {
+            if (list.get(i).toString().equals(new_customer.getAddress().getCountry())) {
                 indexCountry = i;
                 break;
             }
@@ -166,7 +171,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             txtNickname.setText(new_customer.getNickname());
             txtEmail.setText(new_customer.getEmail());
             datePicker.setText(new_customer.getBirthdate());
-            updateMobile();
+
 
             if(indexNationality != -1){
                 ddlNationality.setSelection(indexNationality);
@@ -174,6 +179,58 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             if(indexCountry != -1){
                 ddlCountry.setSelection(indexCountry);
             }
+            mobile_list = new_customer.getMobiles();
+
+            String mobile = mobile_list.get(0);
+            mobile = mobile.replace("-", "");
+            switch (mobile.length()) {
+                case 10:
+                    mobile10.setText(mobile.substring(9, 10));
+                case 9:
+                    mobile9.setText(mobile.substring(8, 9));
+                case 8:
+                    mobile8.setText(mobile.substring(7, 8));
+                case 7:
+                    mobile7.setText(mobile.substring(6, 7));
+                case 6:
+                    mobile6.setText(mobile.substring(5, 6));
+                case 5:
+                    mobile5.setText(mobile.substring(4, 5));
+                case 4:
+                    mobile4.setText(mobile.substring(3, 4));
+                case 3:
+                    mobile3.setText(mobile.substring(2, 3));
+                case 2:
+                    mobile2.setText(mobile.substring(1, 2));
+                case 1:
+                    mobile1.setText(mobile.substring(0, 1));
+            }
+
+            phone_list = new_customer.getTels();
+            String tel = phone_list.get(0);
+            tel = tel.replace("-", "");
+            int length = tel.length();
+            switch (length) {
+                case 9:
+                    home9.setText(tel.substring(8, 9));
+                case 8:
+                    home8.setText(tel.substring(7, 8));
+                case 7:
+                    home7.setText(tel.substring(6, 7));
+                case 6:
+                    home6.setText(tel.substring(5, 6));
+                case 5:
+                    home5.setText(tel.substring(4, 5));
+                case 4:
+                    home4.setText(tel.substring(3, 4));
+                case 3:
+                    home3.setText(tel.substring(2, 3));
+                case 2:
+                    home2.setText(tel.substring(1, 2));
+                case 1:
+                    home1.setText(tel.substring(0, 1));
+            }
+            updateMobile();
 
         }
     }
@@ -751,7 +808,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         } else if(v.getId() == R.id.btnNext){
             packData();
-            if(ddlCountry.getSelectedItem().equals("Thailand")){
+            if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
                 startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
             } else {
                 startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);

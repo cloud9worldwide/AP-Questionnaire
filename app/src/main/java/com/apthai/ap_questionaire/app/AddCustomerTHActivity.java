@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,6 +51,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
 
     ContactData new_customer;
     private Context ctx;
+    int status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         delegate = (questionniare_delegate) getApplicationContext();
         ctx = this;
         new_customer = delegate.customer_selected;
+        status= 0;
 
         footer = (RelativeLayout) findViewById(R.id.footer);
 
@@ -133,9 +136,78 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                 }
             }
         });
+
+        getCustomerInfo();
+
     }
 
-    private void setItemSpinner(){
+    private void getCustomerInfo(){
+
+        if(delegate.customer_selected.getContactId().equals("")){
+
+        } else {
+            AddressData home = new_customer.getAddress();
+            AddressData work = new_customer.getAddressWork();
+
+            txtHomeId.setText(home.getHouseId().toString());
+            txtMoo.setText(home.getMoo().toString());
+            txtBuilding.setText(home.getVillage().toString());
+            txtFloor.setText(home.getFloor().toString());
+            txtRoom.setText(home.getRoom().toString());
+            txtSoi.setText(home.getSoi().toString());
+            txtRoad.setText(home.getRoad().toString());
+//            txtProvince.setText(home.getProvince().toString());
+//            txtDistrict.setText(home.getDistrict().toString());
+//            txtSubDistrict.setText(home.getSubdistrict().toString());
+            txtPostcode.setText(home.getPostalcode().toString());
+            txtWork.setText(work.getVillage().toString());
+            txtWorkDistrict.setText(work.getDistrict().toString());
+
+            ArrayList<ValTextData> list;
+            list= delegate.service.getProvinces();
+            String indexSelect="999";
+
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getText().equals(home.getProvince().toString())) {
+                    indexSelect = list.get(i).getValue().toString();
+                    Log.e("list.get(i)",list.get(i).getValue());
+                    ddlProvince.setSelection(i);
+
+                    break;
+                }
+            }
+            Log.e("indexSelect",indexSelect);
+//            if(!indexSelect.equals("999")){
+//
+//                list= delegate.service.getDistrictByProvince(indexSelect);
+//                Log.e("list",list.toString());
+//
+//                Log.e("server dis",new_customer.getAddress().getDistrict());
+//                Log.e("getText",list.get(0).getText());
+//                indexSelect="999";
+//                for (int i = 0; i < list.size(); i++) {
+//                    if (list.get(i).getText().equals(new_customer.getAddress().getDistrict())) {
+//                        indexSelect = list.get(i).getValue();
+//                        ddlDistrict.setSelection(i);
+//                        setddlSubDistrict(indexSelect);
+//                        break;
+//                    }
+//                }
+//
+//                if(!indexSelect.equals("999")){
+//                    list = delegate.service.getSubDistrictByDistrict(indexSelect);
+//                    for (int i = 0; i < list.size(); i++) {
+//                        if (list.get(i).getText().equals(new_customer.getAddress().getSubdistrict())) {
+//                            ddlSubDistrict.setSelection(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+        }
+    }
+
+    private synchronized void setItemSpinner(){
         ArrayList<ValTextData> list;
         ArrayAdapter<ValTextData> dataAdapter;
 
@@ -150,7 +222,10 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         ddlProvince.setAdapter(_provinceAdapter);
 
         ddlProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            public synchronized void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                if(status==0){
+                    status=1;
+                }
                 setddlDistrict(province.get(arg2).getValue());
             }
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -158,44 +233,52 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         });
 
     }
-    public synchronized void setddlDistrict(String provinceID) {
+    public synchronized void setddlDistrict(final String provinceID) {
         final ArrayList<ValTextData> district = delegate.service.getDistrictByProvince(provinceID);
         provinceAdapter _provinceAdapter = new provinceAdapter(this, R.layout.dropdownlist, district);
         ddlDistrict.setAdapter(_provinceAdapter);
         ddlDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            public synchronized void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                if(status==1){
+                    status=2;
+                    ArrayList<ValTextData> list;
+                    list= delegate.service.getDistrictByProvince(provinceID);
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getText().equals(new_customer.getAddress().getDistrict())) {
+                            ddlDistrict.setSelection(i);
+                            break;
+                        }
+                    }
+                }
                 setddlSubDistrict(district.get(arg2).getValue());
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
-        for (int i = 0; i < delegate.service.getDistrictByProvince(provinceID).size(); i++) {
-            if (delegate.service.getDistrictByProvince(provinceID).get(i).getText().equals(new_customer.getAddress().getDistrict())) {
-                ddlDistrict.setSelection(i);
-                break;
-            }
-        }
     }
 
-    public synchronized void setddlSubDistrict(String districtID) {
+    public synchronized void setddlSubDistrict(final String districtID) {
         final ArrayList<ValTextData> subDistrict = delegate.service.getSubDistrictByDistrict(districtID);
         provinceAdapter _provinceAdapter = new provinceAdapter(this, R.layout.dropdownlist, subDistrict);
         ddlSubDistrict.setAdapter(_provinceAdapter);
         ddlSubDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            public synchronized void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                if(status==2){
+                    status=3;
+                    ArrayList<ValTextData> list;
+                    list= delegate.service.getSubDistrictByDistrict(districtID);
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getText().equals(new_customer.getAddress().getSubdistrict())) {
+                            ddlSubDistrict.setSelection(i);
+                            break;
+                        }
+                    }
+                }
                 txtPostcode.setText(subDistrict.get(arg2).getText2());
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
-            for (int i = 0; i < delegate.service.getSubDistrictByDistrict(districtID).size(); i++) {
-                if (delegate.service.getSubDistrictByDistrict(districtID).get(i).getText().equals(new_customer.getAddress().getSubdistrict())) {
-                    ddlSubDistrict.setSelection(i);
-                    break;
-                }
-            }
 
     }
 
@@ -278,7 +361,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             packData();
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();
-        } else if(v.getId() == R.id.popup){
+        } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
         }
 
@@ -295,7 +378,6 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         }
     }
     private void packData(){
-
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
 
@@ -355,7 +437,6 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         }else{
             home.setPostalcode("");
         }
-
 
         if(txtWork.getText().toString().length()>0){
             work.setVillage(txtWork.getText().toString());

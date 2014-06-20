@@ -55,22 +55,13 @@ public class Display02Activity extends Activity implements OnClickListener {
     Drawable thumb;
     RelativeLayout footer;
 
+    int mYear, mMonth, mDay;
+    String freetxtEmail;
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
@@ -78,17 +69,6 @@ public class Display02Activity extends Activity implements OnClickListener {
                 img_background,
                 delegate.imgDefault);
 
-        //setObject();
-        //setTableLayout();
-        /*
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -127,8 +107,6 @@ public class Display02Activity extends Activity implements OnClickListener {
             data = delegate.QM.get_question();
         }
 
-
-
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
         progress.setMessage("Loading....");
@@ -143,6 +121,7 @@ public class Display02Activity extends Activity implements OnClickListener {
                 progress.dismiss();
                 setObject();
                 setTableLayout();
+                setImage();
 
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
@@ -195,16 +174,6 @@ public class Display02Activity extends Activity implements OnClickListener {
     }
     private void setObject(){
 
-        /*
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
-
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
         btnNext.setClickable(true);
@@ -228,6 +197,7 @@ public class Display02Activity extends Activity implements OnClickListener {
         project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
+        freetxtEmail="";
     }
 
     private void setTableLayout(){
