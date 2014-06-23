@@ -764,10 +764,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
 
         if(txtPrefix.getVisibility() == View.VISIBLE){
-            new_customer.setPrefix(txtPrefix.getText().toString());
+            new_customer.setPrefix_vip(txtPrefix.getText().toString());
         } else {
-            new_customer.setPrefix(ddlPrefix.getSelectedItem().toString());
+            new_customer.setPrefix_vip("");
         }
+        new_customer.setPrefix(ddlPrefix.getSelectedItem().toString());
 
         new_customer.setFname(txtFirstName.getText().toString());
         new_customer.setLname(txtLastName.getText().toString());

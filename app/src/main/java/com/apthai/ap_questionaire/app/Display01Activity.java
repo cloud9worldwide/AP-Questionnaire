@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -51,9 +52,8 @@ public class Display01Activity extends Activity implements OnClickListener {
     QuestionTypeData data;
     questionniare_delegate delegate;
     TextView question_title,project_name;
-    ImageButton btn_back;
+    ImageButton btn_back,btnNext;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext;
     ImageView img_background;
 
     SeekBar navigatorBar;
@@ -61,7 +61,6 @@ public class Display01Activity extends Activity implements OnClickListener {
     Drawable thumb;
     RelativeLayout footer;
     int mYear, mMonth, mDay;
-    String freetxtEmail;
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
@@ -73,6 +72,7 @@ public class Display01Activity extends Activity implements OnClickListener {
                 String.valueOf(img_background.getHeight()),
                 img_background,delegate.imgDefault);
     }
+
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
         navigatorBar.setMax(delegate.getMax());
@@ -144,7 +144,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                     }else{
                         answer = checkAnswer.getAnswer();
                     }
-                    Log.e("Ans",answer.toString());
                 }else {
                     //is parent question
                     if(data.getParent_question_id() > 0){
@@ -197,7 +196,6 @@ public class Display01Activity extends Activity implements OnClickListener {
         project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
-        freetxtEmail="";
     }
 
     private void setTableLayout(){
@@ -236,7 +234,6 @@ public class Display01Activity extends Activity implements OnClickListener {
 
             lp = new LinearLayout.LayoutParams(delegate.pxToDp(50), delegate.pxToDp(50));
             lp.gravity =Gravity.CENTER_VERTICAL;
-//            lp.setMargins(0,delegate.pxToDp(15),0,0);
 
             image.setLayoutParams(lp);
             btn.setTag(i);
@@ -276,13 +273,15 @@ public class Display01Activity extends Activity implements OnClickListener {
                     final EditText addEdit;
                     addDate = new TextView (this);
                     addEdit = new EditText(this);
+                    addDate.setTag(97);
+                    addEdit.setTag(97);
 
                     int widthTextBox = delegate.dpToPx(240);
                     int heightTextBox = delegate.dpToPx(40);
 
                     if(textType ==4){
                         addDate.setPadding(delegate.pxToDp(15), 0, 0, 0);
-                        addDate.setTag(97);
+
                         if(getFreeText.length()>0){
                             addDate.setText(getFreeText);
                         }
@@ -292,7 +291,7 @@ public class Display01Activity extends Activity implements OnClickListener {
                         addDate.setTextSize(25);
                         lp = new LinearLayout.LayoutParams(widthTextBox, heightTextBox);
                         addDate.setLayoutParams(lp);
-//                        btn.addView(addDate);
+
                     } else {
 
                         addEdit.setPadding(delegate.pxToDp(15), 0, 0, 0);
@@ -305,16 +304,20 @@ public class Display01Activity extends Activity implements OnClickListener {
                             int maxChar = Integer.parseInt(data.getAnswers().get(i).getFreeTxtMaxChar());
                             if (textType == 1) {
                                 addEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
-                                addEdit.setMaxEms(maxChar);
+                                if(maxChar !=0){
+                                    InputFilter[] FilterArray = new InputFilter[1];
+                                    FilterArray[0] = new InputFilter.LengthFilter(maxChar);
+                                    addEdit.setFilters(FilterArray);
+                                }
                             } else if (textType == 2) {
-                                addEdit.setMaxEms(maxChar);
+                                if(maxChar !=0){
+                                    InputFilter[] FilterArray = new InputFilter[1];
+                                    FilterArray[0] = new InputFilter.LengthFilter(maxChar);
+                                    addEdit.setFilters(FilterArray);
+                                }
                             } else if (textType == 3) {
                                 addEdit.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                             }
-//                            else if(textType==4) {
-//                                addEdit.setEnabled(false);
-//                                addEdit.setOnClickListener(this);
-//                            }
 
                             addEdit.setWidth(widthTextBox);
                             addEdit.setHeight(heightTextBox);
@@ -351,9 +354,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                                             } else {
                                                 answer.set(index, _ans);
                                             }
-                                            if (Integer.parseInt(data.getAnswers().get(indexAnswer).getFreeTxtType()) == 3) {
-                                                freetxtEmail = addEdit.getText().toString();
-                                            }
                                         } else {
                                             boolean isSeleted = false;
                                             int index = 0;
@@ -371,7 +371,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                                     }
                                 });
                             }
-//                            btn.addView(addEdit);
                         }
                     }
                     //out
@@ -387,11 +386,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                         txtError.setGravity(Gravity.CENTER_VERTICAL);
                         txtError.setHeight(delegate.pxToDp(15));
                         btn2.addView(txtError);
-//                        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(50));
-//                        lp.gravity = Gravity.CENTER_VERTICAL;
-//                        lp.weight = 1;
-//                        lp.setMargins(delegate.pxToDp(20), 0, 0, 0);
-//                        btn.setLayoutParams(lp);
                         if(textType ==4){
                             btn2.addView(addDate);
                         } else {
@@ -446,7 +440,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                 onBackPressed();
             } else {
                 //normal mode
-                Log.e(TAG,answer.toString());
                 nextPage();
             }
             btnNext.setEnabled(true);
@@ -465,7 +458,6 @@ public class Display01Activity extends Activity implements OnClickListener {
             obj = btn.getChildAt(i);
             final int indexSelected =Integer.parseInt(parent.getTag().toString());
             String tag = obj.getTag().toString();
-            Log.e("tag view",tag);
             if(tag.equals("99")){
                 AnswerData selected = data.getAnswers().get(indexSelected);
                 ImageView image = (ImageView) obj;
@@ -473,7 +465,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                     boolean isSeleted = true;
                     int index=0;
                     for(int j=0;j<answer.size();j++){
-
                         if(selected.getId() == Integer.parseInt(answer.get(j).getValue())){
                             isSeleted = false;
                             index = j;
@@ -494,30 +485,24 @@ public class Display01Activity extends Activity implements OnClickListener {
                     }
                 } else {
                     image.setImageResource(R.drawable.checkbox_selected);
-                    SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+                    SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),"");
                     answer.add(_ans);
                     if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
                         showCalendar(selected.getId());
                     }
                 }
+                break;
             }
         }
     }
 
     public void nextPage(){
-        Log.e("answer", answer.toString());
-
-
-        if(freetxtEmail.length() !=0){
-            if(delegate.emailValidator(freetxtEmail)){
-                delegate.QM.save_answer(answer);
-                delegate.nextQuestionPage(delegate.nextPage(this));
-            } else {
-                Toast.makeText(this, getString(R.string.email_not_correct), Toast.LENGTH_SHORT).show();
-            }
-        } else {
+        String error_msg = delegate.validate(answer,data.getAnswers());
+        if(error_msg.equals("NO")){
             delegate.QM.save_answer(answer);
             delegate.nextQuestionPage(delegate.nextPage(this));
+        } else {
+            Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
         }
     }
 

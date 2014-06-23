@@ -48,15 +48,15 @@ public class questionniare_delegate extends Application {
     private String questionnaire_selected_id, questionnaire_time;
     public ProjectData project;
     public int index_question;
-    public  ArrayList<QuestionTypeData> questions;
-    ArrayList<QuestionAnswerData> _answers,_staff_answers;
+    public ArrayList<QuestionTypeData> questions;
+    ArrayList<QuestionAnswerData> _answers, _staff_answers;
 
     public QuestionTypeData dataSubQuestion;
 
     public long timesleep = 100;
 
     TCImageLoader imageLoader;
-    int imgDefault, imgDefaultQuestion, imgDefaultIcon,imgDefaultIconSelect;
+    int imgDefault, imgDefaultQuestion, imgDefaultIcon, imgDefaultIconSelect;
 
     public QuestionnaireData questionnaire_selected;
 
@@ -64,18 +64,18 @@ public class questionniare_delegate extends Application {
 
     public QuestionManagement QM;
     public Context ctx;
-    public void saveUserNamePassword(Context context){
+
+    public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.commit();
     }
 
-    public  synchronized  boolean testja()
-    {
-        return  false;
+    public synchronized boolean testja() {
+        return false;
     }
 
-//    public void addAnswers(QuestionAnswerData answerData){
+    //    public void addAnswers(QuestionAnswerData answerData){
 //        if(isCustomerMode){
 //            _answers.add(answerData);
 //            Log.e("print",_answers.toString());
@@ -84,36 +84,38 @@ public class questionniare_delegate extends Application {
 //            Log.e("print",_staff_answers.toString());
 //        }
 //    }
-    private void printAnswer(QuestionAnswerData answerData){
-        ArrayList<SaveAnswerData> save  = new ArrayList<SaveAnswerData>();
+    private void printAnswer(QuestionAnswerData answerData) {
+        ArrayList<SaveAnswerData> save = new ArrayList<SaveAnswerData>();
         save = answerData.getAnswer();
-        for(int j=0;j<save.size();j++){
-            Log.e("print ans", "order "+ j + " : " +save.get(j).getValue());
+        for (int j = 0; j < save.size(); j++) {
+            Log.e("print ans", "order " + j + " : " + save.get(j).getValue());
         }
     }
-    private void printAllAnswer(){
-        for(int f =0; f<_answers.size(); f++){
-            ArrayList<SaveAnswerData> save  = _answers.get(f).getAnswer();
-            for(int j=0;j<save.size();j++){
-                Log.e("print ans", "order "+ f + " : " +save.get(j).getValue());
+
+    private void printAllAnswer() {
+        for (int f = 0; f < _answers.size(); f++) {
+            ArrayList<SaveAnswerData> save = _answers.get(f).getAnswer();
+            for (int j = 0; j < save.size(); j++) {
+                Log.e("print ans", "order " + f + " : " + save.get(j).getValue());
             }
         }
     }
-    private void printAllStaffAnswer(){
-        for(int f =0; f<_staff_answers.size(); f++){
-            ArrayList<SaveAnswerData> save  = _staff_answers.get(f).getAnswer();
-            for (int j=0;j<save.size();j++) {
-                Log.e("staff ans", "order "+ f + " : " + save.get(j).getValue());
+
+    private void printAllStaffAnswer() {
+        for (int f = 0; f < _staff_answers.size(); f++) {
+            ArrayList<SaveAnswerData> save = _staff_answers.get(f).getAnswer();
+            for (int j = 0; j < save.size(); j++) {
+                Log.e("staff ans", "order " + f + " : " + save.get(j).getValue());
             }
         }
     }
     //keep
     //service.sync_save_questionnaire()
 
-    public void sendAnswer(){
-        if(QM.pack_staff_question_ans_data()){
+    public void sendAnswer() {
+        if (QM.pack_staff_question_ans_data()) {
             service.saveQuestionnaireData(QM.get_questionnaire_ans_data());
-        }else {
+        } else {
             //cannot pack staff
         }
 
@@ -130,45 +132,51 @@ public class questionniare_delegate extends Application {
         service.globals.setContactId("-1");
     }
 
-    public void initQuestions(){
+    public void initQuestions() {
         AllHistoryAnswer = new ArrayList<QuestionAnswerData>();
-        QM = new QuestionManagement(service,project,questionnaire_selected);
+        QM = new QuestionManagement(service, project, questionnaire_selected);
         questions = service.getQuestionnaireData(questionnaire_selected_id, questionnaire_time);
         QM.InitQuestionListData(questions);
     }
-    public void initQuestionsStaff(){
+
+    public void initQuestionsStaff() {
         QM.pack_question_ans_data();
         questions = service.getStaffQuestionnaireData(questionnaire_selected_id, questionnaire_time);
         QM.InitStaffQuestionListData(questions);
     }
-    public Spanned getTitleSequence(){
-        Integer show_index = QM.getCurQuestionIndex() +1;
+
+    public Spanned getTitleSequence() {
+        Integer show_index = QM.getCurQuestionIndex() + 1;
         return Html.fromHtml("QUESTION <b>" + show_index + "</b> OF <b>" + QM.get_questions().size() + "</b>");
     }
+
     public String getPercent() {
-        double percent = ((QM.getCurQuestionIndex() +0.0)/ QM.get_questions().size()) *100.0;
-        return (int)percent +"%";
+        double percent = ((QM.getCurQuestionIndex() + 0.0) / QM.get_questions().size()) * 100.0;
+        return (int) percent + "%";
     }
-    public int getMax(){
+
+    public int getMax() {
         return QM.get_questions().size();
     }
-    public int getProcessed(){
-        return QM.getCurQuestionIndex() ;
+
+    public int getProcessed() {
+        return QM.getCurQuestionIndex();
     }
 
     public QuestionTypeData getQuestions() {
-        if(questions.size() == index_question){
+        if (questions.size() == index_question) {
             return null;
         }
         return questions.get(index_question);
     }
 
-    public void nextIndex_question(){
+    public void nextIndex_question() {
         index_question++;
         Log.e("s question", index_question + "");
     }
-    public boolean backIndex_question(){
-        if(index_question==0){
+
+    public boolean backIndex_question() {
+        if (index_question == 0) {
             return false;
         } else {
             index_question--;
@@ -179,25 +187,30 @@ public class questionniare_delegate extends Application {
 
     }
 
-    public void setIndex_question(int index){
+    public void setIndex_question(int index) {
         index_question = index;
     }
-    public int getIndex_question(){
+
+    public int getIndex_question() {
         return index_question;
     }
 
-    public void setQuestionnaire_selected_id(String id){
-        questionnaire_selected_id =id;
+    public void setQuestionnaire_selected_id(String id) {
+        questionnaire_selected_id = id;
     }
-    public String getQuestionnaire_selected_id(){
+
+    public String getQuestionnaire_selected_id() {
         return questionnaire_selected_id;
     }
-    public void setQuestionnaire_time(String time){
-        questionnaire_time=time;
+
+    public void setQuestionnaire_time(String time) {
+        questionnaire_time = time;
     }
-    public String getQuestionnaire_time(){
+
+    public String getQuestionnaire_time() {
         return questionnaire_time;
     }
+
     public void setCustomer_list(ArrayList<ContactSearchData> customer_list) {
         this.customer_list = customer_list;
     }
@@ -224,8 +237,8 @@ public class questionniare_delegate extends Application {
                 "fonts/DB_Ozone_X.otf");
 
         ctx = this;
-        if(questionnaire_selected !=null){
-            QM = new QuestionManagement(service,project,questionnaire_selected);
+        if (questionnaire_selected != null) {
+            QM = new QuestionManagement(service, project, questionnaire_selected);
         }
     }
 
@@ -257,21 +270,22 @@ public class questionniare_delegate extends Application {
         }
         return "";
     }
-    public Uri readImageFileOnSDFileName(String rFileName){
+
+    public Uri readImageFileOnSDFileName(String rFileName) {
         File root = new File(Environment.getExternalStorageDirectory(), "Questionnaire");
         if (!root.exists()) {
             return null;
 //            return Uri.parse("android.resource://your.package.here/drawable-xhdpi/no_image_icon.png");
         }
-        File imgPath = new File(root,"downloadimgs/");
+        File imgPath = new File(root, "downloadimgs/");
         String fileName = this.md5(rFileName);
 
-        Uri temp =Uri.parse(imgPath.getAbsolutePath()+ "/" + fileName + ".jpg");
+        Uri temp = Uri.parse(imgPath.getAbsolutePath() + "/" + fileName + ".jpg");
         File checkFile = new File(temp.getPath());
         if (!checkFile.exists()) {
             return null;
         }
-        if(checkFile.exists()){
+        if (checkFile.exists()) {
             Log.e("is found", "yes");
         } else {
             Log.e("is found", "no");
@@ -279,92 +293,95 @@ public class questionniare_delegate extends Application {
 
         return temp;
     }
-    public Bitmap readImageFileOnSD(String rFileName, int width, int height){
+
+    public Bitmap readImageFileOnSD(String rFileName, int width, int height) {
         File root = new File(Environment.getExternalStorageDirectory(), "Questionnaire");
         if (!root.exists()) {
             return null;
         }
-        File imgPath = new File(root,"downloadimgs");
+        File imgPath = new File(root, "downloadimgs");
         String fileName = this.md5(rFileName);
-        File imgFile = new File(imgPath, fileName+".jpg");
-        if(imgFile.canRead()){
-            Bitmap bitmap = decodeFile(imgFile,width,height);
+        File imgFile = new File(imgPath, fileName + ".jpg");
+        if (imgFile.canRead()) {
+            Bitmap bitmap = decodeFile(imgFile, width, height);
 //            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             return bitmap;
         }
         return null;
     }
-    private Bitmap decodeFile(File f, int width, int height){
+
+    private Bitmap decodeFile(File f, int width, int height) {
         try {
             //Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
 
-            o.inDither=false;                     //Disable Dithering mode
-            o.inPurgeable=true;                   //Tell to gc that whether it needs free memory, the Bitmap can be cleared
-            o.inInputShareable=true;              //Which kind of reference will be used to recover the Bitmap data after being clear, when it will be used in the future
-            o.inTempStorage=new byte[32 * 1024];
+            o.inDither = false;                     //Disable Dithering mode
+            o.inPurgeable = true;                   //Tell to gc that whether it needs free memory, the Bitmap can be cleared
+            o.inInputShareable = true;              //Which kind of reference will be used to recover the Bitmap data after being clear, when it will be used in the future
+            o.inTempStorage = new byte[32 * 1024];
 
-            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //Find the correct scale value. It should be the power of 2.
-            int scale=1;
-            while(o.outWidth/scale/2>=width && o.outHeight/scale/2>=height)
-                scale*=2;
+            int scale = 1;
+            while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
+                scale *= 2;
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize=scale;
+            o2.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) {
+        }
         return null;
     }
 
-    public Intent nextPage (Context context){
+    public Intent nextPage(Context context) {
         Intent newPage = new Intent();
 
-        if(QM.move_next()){
-            if(QM.get_question().getQuestionType().equals("1")){
+        if (QM.move_next()) {
+            if (QM.get_question().getQuestionType().equals("1")) {
                 newPage = new Intent(this, Display01Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("2")){
+            } else if (QM.get_question().getQuestionType().equals("2")) {
                 newPage = new Intent(this, Display02Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("3")){
+            } else if (QM.get_question().getQuestionType().equals("3")) {
                 newPage = new Intent(this, Display03Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("4")){
+            } else if (QM.get_question().getQuestionType().equals("4")) {
                 newPage = new Intent(this, Display04Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("5")){
+            } else if (QM.get_question().getQuestionType().equals("5")) {
                 newPage = new Intent(this, Display05Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("6")){
+            } else if (QM.get_question().getQuestionType().equals("6")) {
                 newPage = new Intent(this, Display06Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("7")){
+            } else if (QM.get_question().getQuestionType().equals("7")) {
                 newPage = new Intent(this, Display07Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("8")){
+            } else if (QM.get_question().getQuestionType().equals("8")) {
                 newPage = new Intent(this, Display08Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("9")){
+            } else if (QM.get_question().getQuestionType().equals("9")) {
                 newPage = new Intent(this, Display09Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("10")){
+            } else if (QM.get_question().getQuestionType().equals("10")) {
                 newPage = new Intent(this, Display10Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("11")){
+            } else if (QM.get_question().getQuestionType().equals("11")) {
                 newPage = new Intent(this, Display11Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("12")){
+            } else if (QM.get_question().getQuestionType().equals("12")) {
                 newPage = new Intent(this, Display12Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("13")){
+            } else if (QM.get_question().getQuestionType().equals("13")) {
                 newPage = new Intent(this, Display13Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("14")){
+            } else if (QM.get_question().getQuestionType().equals("14")) {
                 newPage = new Intent(this, Display14Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("15")){
+            } else if (QM.get_question().getQuestionType().equals("15")) {
                 newPage = new Intent(this, Display15Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("16")){
+            } else if (QM.get_question().getQuestionType().equals("16")) {
                 newPage = new Intent(this, Display16Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("17")){
+            } else if (QM.get_question().getQuestionType().equals("17")) {
                 newPage = new Intent(this, Display17Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("18")){
+            } else if (QM.get_question().getQuestionType().equals("18")) {
                 newPage = new Intent(this, Display18Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("19")){
+            } else if (QM.get_question().getQuestionType().equals("19")) {
                 newPage = new Intent(this, Display19Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("20")){
+            } else if (QM.get_question().getQuestionType().equals("20")) {
                 newPage = new Intent(this, Display20Activity.class);
-            } else if(QM.get_question().getQuestionType().equals("21")){
+            } else if (QM.get_question().getQuestionType().equals("21")) {
                 newPage = new Intent(this, Display21Activity.class);
             }
         } else {
@@ -372,17 +389,16 @@ public class questionniare_delegate extends Application {
         }
 
 
-
         return newPage;
     }
 
-    public synchronized ArrayList<SaveAnswerData> getHistory(){
+    public synchronized ArrayList<SaveAnswerData> getHistory() {
         ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
-        if(this.AllHistoryAnswer != null) {
+        if (this.AllHistoryAnswer != null) {
             String _q_id;
-            if(QM.get_question().isParent_question() && dataSubQuestion != null){
+            if (QM.get_question().isParent_question() && dataSubQuestion != null) {
                 _q_id = dataSubQuestion.getQuestion().getId().toString();
-            }else{
+            } else {
                 _q_id = QM.get_question().getQuestion().getId().toString();
             }
             for (int i = 0; i < this.AllHistoryAnswer.size(); i++) {
@@ -395,17 +411,20 @@ public class questionniare_delegate extends Application {
         }
         return answer;
     }
+
     private ArrayList<QuestionAnswerData> AllHistoryAnswer = null;
-    public synchronized ArrayList<QuestionAnswerData> getQuestionnaireHistory(){
+
+    public synchronized ArrayList<QuestionAnswerData> getQuestionnaireHistory() {
         ArrayList<QuestionAnswerData> questionnaireAnswer = new ArrayList<QuestionAnswerData>();
-        if(service.isOnline() && !service.globals.getIsCustomerLocal()){
-            questionnaireAnswer =  service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()));
+        if (service.isOnline() && !service.globals.getIsCustomerLocal()) {
+            questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()));
         }
         AllHistoryAnswer = questionnaireAnswer;
         return questionnaireAnswer;
     }
-    public synchronized boolean RemoveQuestionHistory(String _q_id){
-        if(this.AllHistoryAnswer != null) {
+
+    public synchronized boolean RemoveQuestionHistory(String _q_id) {
+        if (this.AllHistoryAnswer != null) {
             for (int i = 0; i < this.AllHistoryAnswer.size(); i++) {
                 QuestionAnswerData q_ans = this.AllHistoryAnswer.get(i);
                 if (q_ans.getQuestionId().equals(_q_id)) {
@@ -417,19 +436,19 @@ public class questionniare_delegate extends Application {
     }
 
 
-
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
     }
+
     public int pxToDp(int px) {
         DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
         int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
     }
 
-    public void nextQuestionPage(Intent intent){
+    public void nextQuestionPage(Intent intent) {
         //QuestionTypeData question = this.QM.get_question();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -440,67 +459,69 @@ public class questionniare_delegate extends Application {
         */
         startActivity(intent);
     }
-    public Intent getCurentQuestionIntent(){
+
+    public Intent getCurentQuestionIntent() {
         Intent newPage = new Intent();
-        if(QM.get_question().getQuestionType().equals("1")){
+        if (QM.get_question().getQuestionType().equals("1")) {
             newPage = new Intent(this, Display01Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("2")){
+        } else if (QM.get_question().getQuestionType().equals("2")) {
             newPage = new Intent(this, Display02Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("3")){
+        } else if (QM.get_question().getQuestionType().equals("3")) {
             newPage = new Intent(this, Display03Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("4")){
+        } else if (QM.get_question().getQuestionType().equals("4")) {
             newPage = new Intent(this, Display04Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("5")){
+        } else if (QM.get_question().getQuestionType().equals("5")) {
             newPage = new Intent(this, Display05Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("6")){
+        } else if (QM.get_question().getQuestionType().equals("6")) {
             newPage = new Intent(this, Display06Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("7")){
+        } else if (QM.get_question().getQuestionType().equals("7")) {
             newPage = new Intent(this, Display07Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("8")){
+        } else if (QM.get_question().getQuestionType().equals("8")) {
             newPage = new Intent(this, Display08Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("9")){
+        } else if (QM.get_question().getQuestionType().equals("9")) {
             newPage = new Intent(this, Display09Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("10")){
+        } else if (QM.get_question().getQuestionType().equals("10")) {
             newPage = new Intent(this, Display10Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("11")){
+        } else if (QM.get_question().getQuestionType().equals("11")) {
             newPage = new Intent(this, Display11Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("12")){
+        } else if (QM.get_question().getQuestionType().equals("12")) {
             newPage = new Intent(this, Display12Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("13")){
+        } else if (QM.get_question().getQuestionType().equals("13")) {
             newPage = new Intent(this, Display13Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("14")){
+        } else if (QM.get_question().getQuestionType().equals("14")) {
             newPage = new Intent(this, Display14Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("15")){
+        } else if (QM.get_question().getQuestionType().equals("15")) {
             newPage = new Intent(this, Display15Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("16")){
+        } else if (QM.get_question().getQuestionType().equals("16")) {
             newPage = new Intent(this, Display16Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("17")){
+        } else if (QM.get_question().getQuestionType().equals("17")) {
             newPage = new Intent(this, Display17Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("18")){
+        } else if (QM.get_question().getQuestionType().equals("18")) {
             newPage = new Intent(this, Display18Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("19")){
+        } else if (QM.get_question().getQuestionType().equals("19")) {
             newPage = new Intent(this, Display19Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("20")){
+        } else if (QM.get_question().getQuestionType().equals("20")) {
             newPage = new Intent(this, Display20Activity.class);
-        } else if(QM.get_question().getQuestionType().equals("21")) {
+        } else if (QM.get_question().getQuestionType().equals("21")) {
             newPage = new Intent(this, Display21Activity.class);
         }
         return newPage;
     }
-    public void backQuestionpage(Context ctx){
-        if(dataSubQuestion != null){
+
+    public void backQuestionpage(Context ctx) {
+        if (dataSubQuestion != null) {
             //is sub question
             dataSubQuestion = null;
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
-        }else{
+        } else {
             QM.move_back();
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
         }
     }
-    public boolean emailValidator(String email)
-    {
+
+    public boolean emailValidator(String email) {
         Pattern pattern;
         Matcher matcher;
         final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -508,56 +529,55 @@ public class questionniare_delegate extends Application {
         matcher = pattern.matcher(email);
         return matcher.matches();
     }
-    public boolean checkPressBack(ArrayList<SaveAnswerData> _ans){
-        if(dataSubQuestion != null){
+
+    public boolean checkPressBack(ArrayList<SaveAnswerData> _ans) {
+        if (dataSubQuestion != null) {
             //isSub question
             QuestionTypeData parent_question = QM.get_question();
             QuestionTypeData sub_question = this.dataSubQuestion;
-            if(parent_question.isParent_question() && parent_question.getQuestion().getId() == sub_question.getParent_question_id()){
-                if(_ans.size() > 0) {
+            if (parent_question.isParent_question() && parent_question.getQuestion().getId() == sub_question.getParent_question_id()) {
+                if (_ans.size() > 0) {
 
-                    ArrayList<AnswerData> all_parent_ans =  parent_question.getAnswers();
+                    ArrayList<AnswerData> all_parent_ans = parent_question.getAnswers();
                     for (int i = 0; i < all_parent_ans.size(); i++) {
                         AnswerData parent_ans = all_parent_ans.get(i);
-                        if (parent_ans.getSubquestion_id() == sub_question.getQuestion().getId()){
+                        if (parent_ans.getSubquestion_id() == sub_question.getQuestion().getId()) {
                             QuestionAnswerData checkAnswer = QM.get_answer();
 
                             ArrayList<SaveAnswerData> old_answer = new ArrayList<SaveAnswerData>();
-                            if(checkAnswer != null) {
+                            if (checkAnswer != null) {
                                 old_answer = checkAnswer.getAnswer();
                             }
                             ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
-                            SaveAnswerData new_ans = new SaveAnswerData(String.valueOf(parent_ans.getId()),"");
+                            SaveAnswerData new_ans = new SaveAnswerData(String.valueOf(parent_ans.getId()), "");
                             answer.add(new_ans);
                             for (int j = 0; j < old_answer.size(); j++) {
                                 SaveAnswerData o_ans = old_answer.get(j);
-                                if(!o_ans.getValue().equals(new_ans.getValue())){
+                                if (!o_ans.getValue().equals(new_ans.getValue())) {
                                     answer.add(o_ans);
                                 }
                             }
                             QM.save_answer(answer);
                         }
                     }
-                }
-                else
-                {
+                } else {
                     //remove answer
-                    ArrayList<AnswerData> all_parent_ans =  parent_question.getAnswers();
+                    ArrayList<AnswerData> all_parent_ans = parent_question.getAnswers();
                     for (int i = 0; i < all_parent_ans.size(); i++) {
                         AnswerData parent_ans = all_parent_ans.get(i);
-                        if (parent_ans.getSubquestion_id() == sub_question.getQuestion().getId()){
+                        if (parent_ans.getSubquestion_id() == sub_question.getQuestion().getId()) {
                             QuestionAnswerData checkAnswer = QM.get_answer();
                             ArrayList<SaveAnswerData> old_answer = new ArrayList<SaveAnswerData>();
-                            if(checkAnswer != null) {
+                            if (checkAnswer != null) {
                                 old_answer = checkAnswer.getAnswer();
                             }
 
                             ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
-                            SaveAnswerData new_ans = new SaveAnswerData(String.valueOf(parent_ans.getId()),"");
+                            SaveAnswerData new_ans = new SaveAnswerData(String.valueOf(parent_ans.getId()), "");
                             //answer.add(new_ans);
                             for (int j = 0; j < old_answer.size(); j++) {
                                 SaveAnswerData o_ans = old_answer.get(j);
-                                if(!o_ans.getValue().equals(new_ans.getValue())){
+                                if (!o_ans.getValue().equals(new_ans.getValue())) {
                                     answer.add(o_ans);
                                 }
                             }
@@ -567,18 +587,45 @@ public class questionniare_delegate extends Application {
                 }
             }
 
-            return  true;
-        }else{
-            if(this.QM.getCurQuestionIndex() > 0){
+            return true;
+        } else {
+            if (this.QM.getCurQuestionIndex() > 0) {
                 return true;
-            }
-            else
-            {
-                return  false;
+            } else {
+                return false;
             }
         }
     }
 
     //getFreeTxtType 1:number, 2:string, 3:EMAIL, 4=Date;
     //MaxChar work case 1 and 2 only;
+    public String validate(ArrayList<SaveAnswerData> answer, ArrayList<AnswerData> choice) {
+        String error_msg = "NO";
+        for (int i = 0; i < answer.size(); i++) {
+            for (int j = 0; j < choice.size(); j++) {
+                if (answer.get(i).getValue().toString().equals(String.valueOf(choice.get(j).getId()))) {
+                    if (choice.get(j).getIsFreeTxt()) {
+                        if (choice.get(j).getFreeTxtType().toString().equals("1")) {
+                            if (answer.get(i).getFreetxt().toString().length() == 0) {
+                                error_msg = "Please ans";
+                            }
+                        } else if (choice.get(j).getFreeTxtType().toString().equals("2")) {
+                            if (answer.get(i).getFreetxt().toString().length() == 0) {
+                                error_msg = "Please ans";
+                            }
+                        } else if (choice.get(j).getFreeTxtType().toString().equals("3")) {
+                            if (emailValidator(answer.get(i).getFreetxt().toString()) || answer.get(i).getFreetxt().toString().length() != 0) {
+                                error_msg = getString(R.string.email_not_correct);
+                            }
+                        } else if (choice.get(j).getFreeTxtType().toString().equals("4")) {
+                            if (answer.get(i).getFreetxt().toString().length() == 0) {
+                                error_msg = "Please ans";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return error_msg;
+    }
 }
