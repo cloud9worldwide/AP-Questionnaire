@@ -11,17 +11,16 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -61,12 +60,13 @@ public class Display07Activity extends Activity implements View.OnClickListener 
     RelativeLayout footer;
     int mYear, mMonth, mDay;
     EditText activeEdittext;
+    int indexSelected;
+    LinearLayout layoutSelected;
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
@@ -175,6 +175,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         };
         new Thread( background ).start();
     }
+
     private void setObject(){
 
         btnNext = (ImageButton) findViewById(R.id.btnNext);
@@ -204,19 +205,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         lbl_question.setTextSize(35);
         lbl_question.setTypeface(delegate.font_type);
         lbl_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
-
-        final View activityRootView = findViewById(R.id.root_view);
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
-                if (heightDiff > 100) { // if more than 100 pixels, its probably a keyboard...
-                    footer.setVisibility(View.GONE);
-                } else {
-                    footer.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        indexSelected=99;
     }
 
     private void setTableLayout(){
@@ -234,10 +223,10 @@ public class Display07Activity extends Activity implements View.OnClickListener 
 
             LinearLayout.LayoutParams lp;
 
-            LinearLayout btn = new LinearLayout(this);
+            final LinearLayout btn = new LinearLayout(this);
             btn.setOrientation(LinearLayout.HORIZONTAL);
 
-            final ImageView image = new ImageView(this);
+            ImageView image = new ImageView(this);
             image.setTag(99);
             lp = new LinearLayout.LayoutParams(delegate.pxToDp(50), delegate.pxToDp(50));
             image.setLayoutParams(lp);
@@ -253,6 +242,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                 }
             }
             if(isSelected){
+
                 image.setImageResource(R.drawable.radiobtn_selected);
             } else {
                 image.setImageResource(R.drawable.radiobtn_unselect);
@@ -300,7 +290,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                     } else {
 
                         addEdit.setPadding(delegate.pxToDp(15), 0, 0, 0);
-                        addEdit.setTag(97);
                         if(getFreeText.length()>0){
                             addEdit.setText(getFreeText);
                         }
@@ -332,113 +321,55 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                             addEdit.setSingleLine();
                             addEdit.setHint(R.string.Please_enter_txtbox_in_question);
                             if (textType != 4) {
-                                addEdit.setOnEditorActionListener( new EditText.OnEditorActionListener() {
-                                    @Override
-                                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                        Log.e("actionId",actionId +"");
-                                        Log.e("event",event +"");
+                                addEdit.addTextChangedListener(new TextWatcher() {
+                                    public void afterTextChanged(Editable s) {
+                                    }
 
-                                        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                                                actionId == EditorInfo.IME_ACTION_DONE||
-                                                actionId == EditorInfo.IME_ACTION_NEXT
-//                                                || event.getAction() == KeyEvent.ACTION_DOWN &&
-//                                                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER
-                                                ) {
-//                                            if (!event.isShiftPressed()) {
-                                                // the user is done typing.
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    }
 
-                                                AnswerData selected = data.getAnswers().get(indexAnswer);
-                                                if (addEdit.getText().length() != 0) {
-                                                    image.setImageResource(R.drawable.radiobtn_selected);
-                                                    SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()), addEdit.getText().toString());
-                                                    boolean isSeleted = true;
-                                                    int index = 0;
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                        AnswerData selected = data.getAnswers().get(indexAnswer);
+                                        if (s.length() != 0) {
+                                            if(indexSelected ==indexAnswer){
+                                                if(answer.size() ==0){
 
-                                                    for (int j = 0; j < answer.size(); j++) {
-                                                        Log.e(TAG, "selected : " + selected.getId() + ", " + answer.get(j).getValue());
-                                                        if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
-                                                            isSeleted = false;
-                                                            index = j;
-                                                        }
-                                                    }
-                                                    if (isSeleted) {
-                                                        answer.add(_ans);
-                                                    } else {
-                                                        answer.set(index, _ans);
-                                                    }
+                                                    SaveAnswerData _ans = new SaveAnswerData(String.valueOf(data.getAnswers().get(indexAnswer).getId()), addEdit.getText().toString());
+                                                    answer.add(_ans);
                                                 } else {
-                                                    boolean isSeleted = false;
-                                                    int index = 0;
-                                                    for (int j = 0; j < answer.size(); j++) {
-                                                        if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
-                                                            isSeleted = true;
-                                                            index = j;
-                                                        }
-                                                    }
-                                                    if (isSeleted) {
-                                                        answer.remove(index);
-                                                    }
-                                                    image.setImageResource(R.drawable.radiobtn_unselect);
+                                                    SaveAnswerData _ans = new SaveAnswerData(answer.get(0).getValue(), addEdit.getText().toString());
+                                                    answer.set(0, _ans);
                                                 }
+                                            } else {
+                                                ImageView thisRadio = (ImageView) btn.findViewWithTag(99);
+                                                thisRadio.setImageResource(R.drawable.radiobtn_selected);
 
+                                                answer.clear();
+                                                SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()), addEdit.getText().toString());
+                                                answer.add(_ans);
 
-                                                return true; // consume.
-//                                            }
+                                                if(indexSelected !=99){
+                                                    ImageView oldRadio = (ImageView) layoutSelected.findViewWithTag(99);
+                                                    oldRadio.setImageResource(R.drawable.radiobtn_unselect);
+                                                    LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
+                                                    EditText txtbox = (EditText) findTxtBox.findViewWithTag(97);
+                                                    txtbox.setText("");
+                                                }
+                                                indexSelected= indexAnswer;
+                                                layoutSelected = btn;
+                                            }
+
+                                        } else {
+                                            if(answer.size()!=0){
+                                                if(indexSelected ==indexAnswer){
+                                                    ImageView oldRadio = (ImageView) layoutSelected.findViewWithTag(99);
+                                                    oldRadio.setImageResource(R.drawable.radiobtn_unselect);
+                                                    indexSelected=99;
+                                                }
+                                            }
                                         }
-                                        return false; // pass on to other listeners.
                                     }
                                 });
-
-//                                addEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                                    @Override
-//                                    public void onFocusChange(View v, boolean hasFocus) {
-//                                        if (!hasFocus) {
-//
-//                                    }
-//                                });
-//                                addEdit.addTextChangedListener(new TextWatcher() {
-//                                    public void afterTextChanged(Editable s) {
-//                                    }
-//
-//                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                                    }
-//
-//                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                                        AnswerData selected = data.getAnswers().get(indexAnswer);
-//                                        if (s.length() != 0) {
-//                                            image.setImageResource(R.drawable.radiobtn_selected);
-//                                            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()), addEdit.getText().toString());
-//                                            boolean isSeleted = true;
-//                                            int index = 0;
-//
-//                                            for (int j = 0; j < answer.size(); j++) {
-//                                                Log.e(TAG, "selected : " + selected.getId() + ", " + answer.get(j).getValue());
-//                                                if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
-//                                                    isSeleted = false;
-//                                                    index = j;
-//                                                }
-//                                            }
-//                                            if (isSeleted) {
-//                                                answer.add(_ans);
-//                                            } else {
-//                                                answer.set(index, _ans);
-//                                            }
-//                                        } else {
-//                                            boolean isSeleted = false;
-//                                            int index = 0;
-//                                            for (int j = 0; j < answer.size(); j++) {
-//                                                if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
-//                                                    isSeleted = true;
-//                                                    index = j;
-//                                                }
-//                                            }
-//                                            if (isSeleted) {
-//                                                answer.remove(index);
-//                                            }
-//                                            image.setImageResource(R.drawable.radiobtn_unselect);
-//                                        }
-//                                    }
-//                                });
                             }
                         }
                     }
@@ -447,9 +378,11 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                     if(data.getAnswers().get(i).getIsFreeTxt()) {
                         LinearLayout btn2 = new LinearLayout(this);
                         btn2.setOrientation(LinearLayout.VERTICAL);
+                        btn2.setTag(96);
                         TextView txtError = new TextView(this);
                         txtError.setText(data.getAnswers().get(i).getValidateTxt());
                         txtError.setTextSize(15);
+                        txtError.setTag(95);
                         txtError.setTextColor(Color.RED);
                         txtError.setTypeface(delegate.font_type);
                         txtError.setGravity(Gravity.CENTER_VERTICAL);
@@ -475,6 +408,10 @@ public class Display07Activity extends Activity implements View.OnClickListener 
             lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), 0, delegate.pxToDp(10));
 
             btn.setLayoutParams(lp);
+            if(isSelected){
+                indexSelected = i;
+                layoutSelected=btn;
+            }
             linearLayout.addView(btn);
         }
         content_view.addView(linearLayout);
@@ -517,27 +454,29 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         } else if (v.getId() == R.id.btnBack){
             onBackPressed();
         } else {
-            LinearLayout btn = (LinearLayout) v;
-            int count = btn.getChildCount();
-            View obj = null;
+            if(indexSelected !=Integer.parseInt(v.getTag().toString())){
+                LinearLayout btn = (LinearLayout) v;
+                indexSelected =Integer.parseInt(v.getTag().toString());
+                ImageView selectRadio = (ImageView)btn.findViewWithTag(99);
+                selectRadio.setImageResource(R.drawable.radiobtn_selected);
+                AnswerData selected = data.getAnswers().get(indexSelected);
 
-            for(int i=0; i<count; i++) {
-                obj = btn.getChildAt(i);
-                int indexSelected =Integer.parseInt(v.getTag().toString());
-                String tag = obj.getTag().toString();
-                if(tag.equals("99")){
-                    AnswerData selected = data.getAnswers().get(indexSelected);
-                    answer.clear();
-                    SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),"");
-                    answer.add(_ans);
-                    if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
-                        showCalendar(selected.getId());
-                    } else {
-                        content_view.removeAllViews();
-                        setTableLayout();
-                    }
-                    break;
+                if(answer.size()!=0){
+                    ImageView oldRadio = (ImageView) layoutSelected.findViewWithTag(99);
+                    oldRadio.setImageResource(R.drawable.radiobtn_unselect);
+                    LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
+                    EditText txtbox = (EditText) findTxtBox.findViewWithTag(97);
+                    txtbox.setText("");
                 }
+
+                answer.clear();
+                SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),"");
+                answer.add(_ans);
+                if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
+                    showCalendar(selected.getId());
+                }
+                layoutSelected = btn;
+                indexSelected =Integer.parseInt(v.getTag().toString());
             }
         }
     }
@@ -552,9 +491,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
             Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
 
     @Override
     public void onBackPressed() {
