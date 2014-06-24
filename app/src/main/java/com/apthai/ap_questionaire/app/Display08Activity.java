@@ -73,18 +73,6 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                 String.valueOf(img_background.getHeight()),
                 img_background,delegate.imgDefault);
 
-        /*
-        setObject();
-        setTableLayout();
-
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);

@@ -77,18 +77,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 img_background,
                 delegate.imgDefault);
 
-        /*
-        setObject();
-        setTableLayout();
-
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -192,45 +180,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         new Thread( background ).start();
     }
 
-
-    protected void onResume(){
-        super.onResume();
-        Log.e("Log", "resume");
-/*
-        if(delegate != null){
-            if(delegate.dataSubQuestion !=null){
-
-                Log.e("answer",answer.toString());
-                Log.e("data",delegate.dataSubQuestion.toString());
-                for (int i=0; i<answer.size(); i++){
-                    Log.e("answer",answer.get(i).getValue());
-                    Log.e("data",delegate.dataSubQuestion.getQuestion().getId().toString());
-                    if(answer.get(i).getValue().equals(delegate.dataSubQuestion.getQuestion().getId().toString())){
-                        answer.remove(i);
-                        delegate.dataSubQuestion = null;
-                        content_view.removeAllViews();
-                        setTableLayout();
-                        break;
-                    }
-                }
-            }
-        }
-        */
-    }
-
     private void setObject(){
-        /*
-        data = delegate.QM.get_question();
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
-
-
 
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);

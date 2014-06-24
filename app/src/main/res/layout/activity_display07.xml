@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.apthai.ap_questionaire.app.Display07Activity">
+    tools:context="com.apthai.ap_questionaire.app.Display07Activity"
+    android:id="@+id/root_view">
 
     <ImageView
         android:layout_width="match_parent"

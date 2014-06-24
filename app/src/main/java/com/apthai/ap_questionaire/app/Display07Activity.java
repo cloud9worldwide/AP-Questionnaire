@@ -1,22 +1,29 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,6 +39,7 @@ import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 import com.cloud9worldwide.questionnaire.data.SaveAnswerData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Display07Activity extends Activity implements View.OnClickListener {
 
@@ -51,19 +59,12 @@ public class Display07Activity extends Activity implements View.OnClickListener 
     TextView txt_process,lbl_question;
     Drawable thumb;
     RelativeLayout footer;
+    int mYear, mMonth, mDay;
+    EditText activeEdittext;
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
         delegate = (questionniare_delegate)getApplicationContext();
         img_background = (ImageView) findViewById(R.id.img_background);
@@ -71,17 +72,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,delegate.imgDefault);
-        //setObject();
-        //setTableLayout();
-        /*
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
 
     public void setNavigator(){
@@ -135,6 +125,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                 progress.dismiss();
                 setObject();
                 setTableLayout();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
@@ -185,16 +176,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         new Thread( background ).start();
     }
     private void setObject(){
-        /*
-        data = delegate.QM.get_question();
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
 
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
@@ -224,6 +205,18 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         lbl_question.setTypeface(delegate.font_type);
         lbl_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
 
+        final View activityRootView = findViewById(R.id.root_view);
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+                if (heightDiff > 100) { // if more than 100 pixels, its probably a keyboard...
+                    footer.setVisibility(View.GONE);
+                } else {
+                    footer.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void setTableLayout(){
@@ -259,7 +252,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                     getFreeText = answer.get(j).getFreetxt().toString();
                 }
             }
-            Log.e("answer",answer.toString());
             if(isSelected){
                 image.setImageResource(R.drawable.radiobtn_selected);
             } else {
@@ -279,47 +271,202 @@ public class Display07Activity extends Activity implements View.OnClickListener 
             btn.addView(name);
 
             if(data.getAnswers().get(i).getIsFreeTxt()){
-                final EditText addEdit = new EditText(this);
-                final int indexAnswer = i;
-                addEdit.setPadding(delegate.pxToDp(20), 0, 0, 0);
-                addEdit.setTag(97);
+                if(data.getAnswers().get(i).getFreeTxtType().length()!=0) {
+                    int textType = Integer.parseInt(data.getAnswers().get(i).getFreeTxtType());
+                    final int indexAnswer = i;
+                    final TextView addDate;
+                    final EditText addEdit;
+                    addDate = new TextView (this);
+                    addEdit = new EditText(this);
+                    addDate.setTag(97);
+                    addEdit.setTag(97);
 
-                if(getFreeText.length()>0){
-                    addEdit.setText(getFreeText);
-                }
-                addEdit.setTypeface(delegate.font_type);
-                addEdit.setBackgroundResource(R.drawable.box_login);
-                addEdit.setTextSize(25);
-                addEdit.setSingleLine();
-                addEdit.setHint(R.string.Please_enter_txtbox_in_question);
-                addEdit.addTextChangedListener(new TextWatcher() {
-                    public void afterTextChanged(Editable s) {}
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if(s.length() != 0) {
-                            image.setImageResource(R.drawable.radiobtn_selected);
-                            AnswerData selected = data.getAnswers().get(indexAnswer);
-                            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()) , addEdit.getText().toString());
+                    int widthTextBox = delegate.dpToPx(240);
+                    int heightTextBox = delegate.dpToPx(40);
 
-                            boolean isSeleted = true;
-                            int index=0;
+                    if(textType ==4){
+                        addDate.setPadding(delegate.pxToDp(15), 0, 0, 0);
 
-                            for(int j=0;j<answer.size();j++){
-                                Log.e(TAG, "selected : " + selected.getId() + ", " +answer.get(j).getValue());
-                                if(selected.getId() == Integer.parseInt(answer.get(j).getValue())){
-                                    isSeleted = false;
-                                    index = j;
+                        if(getFreeText.length()>0){
+                            addDate.setText(getFreeText);
+                        }
+                        addDate.setTypeface(delegate.font_type);
+                        addDate.setGravity(Gravity.CENTER_VERTICAL);
+                        addDate.setBackgroundResource(R.drawable.box_login);
+                        addDate.setTextSize(25);
+                        lp = new LinearLayout.LayoutParams(widthTextBox, heightTextBox);
+                        addDate.setLayoutParams(lp);
+
+                    } else {
+
+                        addEdit.setPadding(delegate.pxToDp(15), 0, 0, 0);
+                        addEdit.setTag(97);
+                        if(getFreeText.length()>0){
+                            addEdit.setText(getFreeText);
+                        }
+
+                        if(data.getAnswers().get(i).getFreeTxtType().length()!=0) {
+                            int maxChar = Integer.parseInt(data.getAnswers().get(i).getFreeTxtMaxChar());
+                            if (textType == 1) {
+                                addEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                if(maxChar !=0){
+                                    InputFilter[] FilterArray = new InputFilter[1];
+                                    FilterArray[0] = new InputFilter.LengthFilter(maxChar);
+                                    addEdit.setFilters(FilterArray);
                                 }
+                            } else if (textType == 2) {
+                                if(maxChar !=0){
+                                    InputFilter[] FilterArray = new InputFilter[1];
+                                    FilterArray[0] = new InputFilter.LengthFilter(maxChar);
+                                    addEdit.setFilters(FilterArray);
+                                }
+                            } else if (textType == 3) {
+                                addEdit.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                             }
-                            if(isSeleted) {
-                                answer.add(_ans);
-                            } else {
-                                answer.set(index,_ans);
+
+                            addEdit.setWidth(widthTextBox);
+                            addEdit.setHeight(heightTextBox);
+                            addEdit.setTypeface(delegate.font_type);
+                            addEdit.setBackgroundResource(R.drawable.box_login);
+                            addEdit.setTextSize(25);
+                            addEdit.setSingleLine();
+                            addEdit.setHint(R.string.Please_enter_txtbox_in_question);
+                            if (textType != 4) {
+                                addEdit.setOnEditorActionListener( new EditText.OnEditorActionListener() {
+                                    @Override
+                                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                        Log.e("actionId",actionId +"");
+                                        Log.e("event",event +"");
+
+                                        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                                                actionId == EditorInfo.IME_ACTION_DONE||
+                                                actionId == EditorInfo.IME_ACTION_NEXT
+//                                                || event.getAction() == KeyEvent.ACTION_DOWN &&
+//                                                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                                                ) {
+//                                            if (!event.isShiftPressed()) {
+                                                // the user is done typing.
+
+                                                AnswerData selected = data.getAnswers().get(indexAnswer);
+                                                if (addEdit.getText().length() != 0) {
+                                                    image.setImageResource(R.drawable.radiobtn_selected);
+                                                    SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()), addEdit.getText().toString());
+                                                    boolean isSeleted = true;
+                                                    int index = 0;
+
+                                                    for (int j = 0; j < answer.size(); j++) {
+                                                        Log.e(TAG, "selected : " + selected.getId() + ", " + answer.get(j).getValue());
+                                                        if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
+                                                            isSeleted = false;
+                                                            index = j;
+                                                        }
+                                                    }
+                                                    if (isSeleted) {
+                                                        answer.add(_ans);
+                                                    } else {
+                                                        answer.set(index, _ans);
+                                                    }
+                                                } else {
+                                                    boolean isSeleted = false;
+                                                    int index = 0;
+                                                    for (int j = 0; j < answer.size(); j++) {
+                                                        if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
+                                                            isSeleted = true;
+                                                            index = j;
+                                                        }
+                                                    }
+                                                    if (isSeleted) {
+                                                        answer.remove(index);
+                                                    }
+                                                    image.setImageResource(R.drawable.radiobtn_unselect);
+                                                }
+
+
+                                                return true; // consume.
+//                                            }
+                                        }
+                                        return false; // pass on to other listeners.
+                                    }
+                                });
+
+//                                addEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                                    @Override
+//                                    public void onFocusChange(View v, boolean hasFocus) {
+//                                        if (!hasFocus) {
+//
+//                                    }
+//                                });
+//                                addEdit.addTextChangedListener(new TextWatcher() {
+//                                    public void afterTextChanged(Editable s) {
+//                                    }
+//
+//                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                                    }
+//
+//                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                                        AnswerData selected = data.getAnswers().get(indexAnswer);
+//                                        if (s.length() != 0) {
+//                                            image.setImageResource(R.drawable.radiobtn_selected);
+//                                            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()), addEdit.getText().toString());
+//                                            boolean isSeleted = true;
+//                                            int index = 0;
+//
+//                                            for (int j = 0; j < answer.size(); j++) {
+//                                                Log.e(TAG, "selected : " + selected.getId() + ", " + answer.get(j).getValue());
+//                                                if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
+//                                                    isSeleted = false;
+//                                                    index = j;
+//                                                }
+//                                            }
+//                                            if (isSeleted) {
+//                                                answer.add(_ans);
+//                                            } else {
+//                                                answer.set(index, _ans);
+//                                            }
+//                                        } else {
+//                                            boolean isSeleted = false;
+//                                            int index = 0;
+//                                            for (int j = 0; j < answer.size(); j++) {
+//                                                if (selected.getId() == Integer.parseInt(answer.get(j).getValue())) {
+//                                                    isSeleted = true;
+//                                                    index = j;
+//                                                }
+//                                            }
+//                                            if (isSeleted) {
+//                                                answer.remove(index);
+//                                            }
+//                                            image.setImageResource(R.drawable.radiobtn_unselect);
+//                                        }
+//                                    }
+//                                });
                             }
                         }
                     }
-                });
-                btn.addView(addEdit);
+                    //out
+
+                    if(data.getAnswers().get(i).getIsFreeTxt()) {
+                        LinearLayout btn2 = new LinearLayout(this);
+                        btn2.setOrientation(LinearLayout.VERTICAL);
+                        TextView txtError = new TextView(this);
+                        txtError.setText(data.getAnswers().get(i).getValidateTxt());
+                        txtError.setTextSize(15);
+                        txtError.setTextColor(Color.RED);
+                        txtError.setTypeface(delegate.font_type);
+                        txtError.setGravity(Gravity.CENTER_VERTICAL);
+                        txtError.setHeight(delegate.pxToDp(15));
+                        btn2.addView(txtError);
+                        if(textType ==4){
+                            btn2.addView(addDate);
+                        } else {
+                            btn2.addView(addEdit);
+                        }
+                        lp = new LinearLayout.LayoutParams(widthTextBox, delegate.pxToDp(55));
+                        lp.gravity = Gravity.CENTER_VERTICAL;
+                        lp.setMargins(delegate.pxToDp(20), 5, 0, 5);
+                        btn2.setLayoutParams(lp);
+                        btn.addView(btn2);
+                    }
+                }
             }
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(50));
             lp.gravity = Gravity.CENTER_VERTICAL;
@@ -360,10 +507,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
                 onBackPressed();
             } else {
                 //normal mode
@@ -386,37 +530,39 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                     answer.clear();
                     SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),"");
                     answer.add(_ans);
-                    content_view.removeAllViews();
-                    setTableLayout();
+                    if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
+                        showCalendar(selected.getId());
+                    } else {
+                        content_view.removeAllViews();
+                        setTableLayout();
+                    }
+                    break;
                 }
             }
         }
     }
 
     public void nextPage(){
-        delegate.QM.save_answer(answer);
-        //startActivityForResult(delegate.nextPage(this),0);
-        delegate.nextQuestionPage(delegate.nextPage(this));
+        Log.e("answer", answer.toString());
+        String error_msg = delegate.validate(answer,data.getAnswers());
+        if(error_msg.equals("NO")){
+            delegate.QM.save_answer(answer);
+            delegate.nextQuestionPage(delegate.nextPage(this));
+        } else {
+            Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
+        }
     }
 
+
+
+
+    @Override
     public void onBackPressed() {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -424,6 +570,51 @@ public class Display07Activity extends Activity implements View.OnClickListener 
             this.setResult(resultCode);
             finish();
         }
+    }
+
+    public void showCalendar(final int indexCalendar){
+        Calendar mcurrentDate = Calendar.getInstance();
+        mYear = mcurrentDate.get(Calendar.YEAR);
+        mMonth = mcurrentDate.get(Calendar.MONTH);
+        mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog mDatePicker = new DatePickerDialog(ctx, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                mDay = selectedday;
+                mMonth = selectedmonth + 1;
+                mYear = selectedyear;
+                for(int j=0;j<answer.size();j++){
+                    if(indexCalendar == Integer.parseInt(answer.get(j).getValue())){
+                        answer.set(j,new SaveAnswerData(String.valueOf(indexCalendar),mYear + "-" + mMonth + "-" + mDay));
+                        content_view.removeAllViews();
+                        setTableLayout();
+                        break;
+                    }
+                }
+                Log.e("DATE",mYear + "-" + mMonth + "-" + mDay);
+            }
+        }, mYear, mMonth, mDay);
+        mDatePicker.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int j=0;j<answer.size();j++) {
+                            if (indexCalendar == Integer.parseInt(answer.get(j).getValue())) {
+                                if(answer.get(j).getFreetxt().length()==0){
+                                    answer.remove(j);
+                                }
+                                content_view.removeAllViews();
+                                setTableLayout();
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        mDatePicker.setTitle("Select date");
+        mDatePicker.show();
     }
 
 }

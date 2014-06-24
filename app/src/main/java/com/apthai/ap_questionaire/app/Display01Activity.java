@@ -170,7 +170,6 @@ public class Display01Activity extends Activity implements OnClickListener {
             }
         };
         new Thread( background ).start();
-
     }
 
     private void setObject(){
