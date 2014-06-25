@@ -143,7 +143,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                             //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
                             delegate.service.updateQuestionnaire(ringProgressDialog);
                             //ringProgressDialog.setMessage("Downloading...All images Data");
-                            delegate.service.startDownloadImages(ringProgressDialog);
+
                             try {
                                 Thread.sleep(3000);
                             }catch (Exception e) {
@@ -151,6 +151,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                             ringProgressDialog.dismiss();
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         } else {
+                            delegate.service.startDownloadImages(ringProgressDialog);
                             try {
                                 Thread.sleep(3000);
                             }catch (Exception e){

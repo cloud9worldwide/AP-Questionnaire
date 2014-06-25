@@ -79,6 +79,7 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         project_name.setTextSize(30);
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
+        popup = new PopupWindow(this);
     }
 
 

@@ -465,15 +465,12 @@ public class Display09Activity extends Activity implements View.OnClickListener 
             onBackPressed();
         } else {
             LinearLayout btn = (LinearLayout) v;
-
             AnswerData selected = data.getAnswers().get(Integer.parseInt(v.getTag().toString()));
-
             if(indexSelected !=Integer.parseInt(v.getTag().toString())){
-                indexSelected = Integer.parseInt(v.getTag().toString());
                 ImageView selectRadio = (ImageView)btn.findViewWithTag(99);
                 selectRadio.setImageResource(R.drawable.radiobtn_selected);
 
-                if(answer.size()!=0){
+                if(indexSelected !=99){
                     AnswerData choiceInfo =data.getAnswers().get(indexSelected);
                     if(choiceInfo.getIsFreeTxt()){
                         if(choiceInfo.getFreeTxtType().equals("4")){
@@ -491,9 +488,12 @@ public class Display09Activity extends Activity implements View.OnClickListener 
                 answer.clear();
                 SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),"");
                 answer.add(_ans);
-                if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
-                    showCalendar(selected.getId());
+                if(indexSelected !=99){
+                    if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
+                        showCalendar(selected.getId());
+                    }
                 }
+
                 layoutSelected = btn;
                 indexSelected =Integer.parseInt(v.getTag().toString());
             } else {

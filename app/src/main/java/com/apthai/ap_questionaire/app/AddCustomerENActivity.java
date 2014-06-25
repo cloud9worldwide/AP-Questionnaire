@@ -231,7 +231,6 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
-//        AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
 
         if(txtHomeId.getText().toString().length()>0){
             home.setHouseId(txtHomeId.getText().toString());
@@ -346,7 +345,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             packData();
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();
-        } else if(v.getId() == R.id.popup){
+        } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
         }
 

@@ -27,9 +27,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     questionniare_delegate delegate;
     static PopupWindow popup;
 
-
     private Context ctx;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
