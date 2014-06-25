@@ -52,38 +52,20 @@ public class Display10Activity extends Activity implements View.OnClickListener 
     TextView txt_process,lbl_question;
     Drawable thumb;
     RelativeLayout footer;
+    int mYear, mMonth, mDay;
+    int indexSelected;
+    LinearLayout layoutSelected;
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,delegate.imgDefault);
 
-        /*
-        setObject();
-        setTableLayout();
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -136,6 +118,7 @@ public class Display10Activity extends Activity implements View.OnClickListener 
                 progress.dismiss();
                 setObject();
                 setTableLayout();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {

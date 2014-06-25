@@ -59,7 +59,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
     Drawable thumb;
     RelativeLayout footer;
     int mYear, mMonth, mDay;
-    EditText activeEdittext;
     int indexSelected;
     LinearLayout layoutSelected;
 
@@ -333,7 +332,6 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                                         if (s.length() != 0) {
                                             if(indexSelected ==indexAnswer){
                                                 if(answer.size() ==0){
-
                                                     SaveAnswerData _ans = new SaveAnswerData(String.valueOf(data.getAnswers().get(indexAnswer).getId()), addEdit.getText().toString());
                                                     answer.add(_ans);
                                                 } else {
@@ -351,9 +349,19 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                                                 if(indexSelected !=99){
                                                     ImageView oldRadio = (ImageView) layoutSelected.findViewWithTag(99);
                                                     oldRadio.setImageResource(R.drawable.radiobtn_unselect);
-                                                    LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
-                                                    EditText txtbox = (EditText) findTxtBox.findViewWithTag(97);
-                                                    txtbox.setText("");
+                                                    AnswerData choiceInfo =data.getAnswers().get(indexSelected);
+                                                    if(choiceInfo.getIsFreeTxt()){
+                                                        if(choiceInfo.getFreeTxtType().equals("4")){
+                                                            LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
+                                                            TextView txtbox = (TextView) findTxtBox.findViewWithTag(97);
+                                                            txtbox.setText("");
+                                                        } else {
+                                                            LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
+                                                            EditText txtbox = (EditText) findTxtBox.findViewWithTag(97);
+                                                            txtbox.setText("");
+                                                        }
+                                                    }
+
                                                 }
                                                 indexSelected= indexAnswer;
                                                 layoutSelected = btn;
@@ -454,19 +462,28 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         } else if (v.getId() == R.id.btnBack){
             onBackPressed();
         } else {
+            LinearLayout btn = (LinearLayout) v;
+
+            AnswerData selected = data.getAnswers().get(Integer.parseInt(v.getTag().toString()));
+
             if(indexSelected !=Integer.parseInt(v.getTag().toString())){
-                LinearLayout btn = (LinearLayout) v;
-                indexSelected =Integer.parseInt(v.getTag().toString());
+                indexSelected = Integer.parseInt(v.getTag().toString());
                 ImageView selectRadio = (ImageView)btn.findViewWithTag(99);
                 selectRadio.setImageResource(R.drawable.radiobtn_selected);
-                AnswerData selected = data.getAnswers().get(indexSelected);
 
                 if(answer.size()!=0){
-                    ImageView oldRadio = (ImageView) layoutSelected.findViewWithTag(99);
-                    oldRadio.setImageResource(R.drawable.radiobtn_unselect);
-                    LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
-                    EditText txtbox = (EditText) findTxtBox.findViewWithTag(97);
-                    txtbox.setText("");
+                    AnswerData choiceInfo =data.getAnswers().get(indexSelected);
+                    if(choiceInfo.getIsFreeTxt()){
+                        if(choiceInfo.getFreeTxtType().equals("4")){
+                            LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
+                            TextView txtbox = (TextView) findTxtBox.findViewWithTag(97);
+                            txtbox.setText("");
+                        } else {
+                            LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
+                            EditText txtbox = (EditText) findTxtBox.findViewWithTag(97);
+                            txtbox.setText("");
+                        }
+                    }
                 }
 
                 answer.clear();
@@ -477,6 +494,10 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                 }
                 layoutSelected = btn;
                 indexSelected =Integer.parseInt(v.getTag().toString());
+            } else {
+                if(Integer.parseInt(data.getAnswers().get(indexSelected).getFreeTxtType()) ==4){
+                    showCalendar(selected.getId());
+                }
             }
         }
     }
