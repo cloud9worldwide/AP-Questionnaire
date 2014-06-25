@@ -258,9 +258,10 @@ public class CoreEngine {
                                 if (_cursor.getCount() > 0) {
                                     //Log.d(debugTag, "have questionnaire ");
                                     _cursor.moveToFirst();
+
                                     String jsonFile = _cursor.getString(_cursor.getColumnIndex("questionnaireid"))
                                             +"_"
-                                            +_cursor.getString(_cursor.getColumnIndex("timestamp"))
+                                            +_questionnaire.getString("timestamp")
                                             +".json";
 
                                     Log.d(debugTag, jsonFile);
