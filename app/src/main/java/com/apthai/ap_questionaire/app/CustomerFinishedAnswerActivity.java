@@ -96,7 +96,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
@@ -128,7 +127,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 } else {
                     delegate.sendAnswer();
 
-                    this.setResult(1);
+//                    this.setResult(1);
                     if (delegate.service.isOnline()) {
                         final ProgressDialog progress = new ProgressDialog(this);
                         progress.setTitle("Please wait");
@@ -159,8 +158,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                         new Thread( background ).start();
 
                     } else {
-                        //this.setResult(1);
-                        //finish();
                         Intent i = new Intent(this,QuestionniareActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
@@ -174,8 +171,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 popup.dismiss();
             } else {
                 delegate.sendAnswer();
-                //this.setResult(0);
-                //finish();
                 Intent i = new Intent(this,ProjectsActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
@@ -190,6 +185,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
 
         }
     }
+
     public void nextPage(){
         QuestionTypeData data = delegate.getQuestions();
         if(data == null){
@@ -197,51 +193,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         } else {
             Intent intent = delegate.getCurentQuestionIntent();
             delegate.nextQuestionPage(intent);
-            /*
-            if(data.getQuestionType().equals("1")){
-                startActivityForResult(new Intent(this, Display01Activity.class),0);
-            } else if(data.getQuestionType().equals("2")){
-                startActivityForResult(new Intent(this, Display02Activity.class),0);
-            } else if(data.getQuestionType().equals("3")) {
-                startActivityForResult(new Intent(this, Display03Activity.class), 0);
-            } else if(data.getQuestionType().equals("4")) {
-                startActivityForResult(new Intent(this, Display04Activity.class), 0);
-            } else if(data.getQuestionType().equals("5")) {
-                startActivityForResult(new Intent(this, Display05Activity.class), 0);
-            } else if(data.getQuestionType().equals("6")) {
-                startActivityForResult(new Intent(this, Display06Activity.class), 0);
-            } else if(data.getQuestionType().equals("7")) {
-                startActivityForResult(new Intent(this, Display07Activity.class), 0);
-            } else if(data.getQuestionType().equals("8")) {
-                startActivityForResult(new Intent(this, Display08Activity.class), 0);
-            } else if(data.getQuestionType().equals("9")) {
-                startActivityForResult(new Intent(this, Display09Activity.class), 0);
-            } else if(data.getQuestionType().equals("10")) {
-                startActivityForResult(new Intent(this, Display10Activity.class), 0);
-            } else if(data.getQuestionType().equals("11")) {
-                startActivityForResult(new Intent(this, Display11Activity.class), 0);
-            } else if(data.getQuestionType().equals("12")) {
-                startActivityForResult(new Intent(this, Display12Activity.class), 0);
-            } else if(data.getQuestionType().equals("13")) {
-                startActivityForResult(new Intent(this, Display13Activity.class), 0);
-            } else if(data.getQuestionType().equals("14")) {
-                startActivityForResult(new Intent(this, Display14Activity.class), 0);
-            } else if(data.getQuestionType().equals("15")) {
-                startActivityForResult(new Intent(this, Display15Activity.class), 0);
-            } else if(data.getQuestionType().equals("16")) {
-                startActivityForResult(new Intent(this, Display16Activity.class), 0);
-            } else if(data.getQuestionType().equals("17")) {
-                startActivityForResult(new Intent(this, Display17Activity.class), 0);
-            } else if(data.getQuestionType().equals("18")) {
-                startActivityForResult(new Intent(this, Display18Activity.class), 0);
-            } else if(data.getQuestionType().equals("19")) {
-                startActivityForResult(new Intent(this, Display19Activity.class), 0);
-            } else if(data.getQuestionType().equals("20")) {
-                startActivityForResult(new Intent(this, Display20Activity.class), 0);
-            } else if(data.getQuestionType().equals("21")) {
-                startActivityForResult(new Intent(this, Display21Activity.class), 0);
-            }
-            */
         }
     }
 
@@ -256,6 +207,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             finish();
         }
     }
+
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -270,8 +222,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
         popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
 
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
-
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
@@ -285,7 +235,9 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 if (popup.isShowing()) {
                     popup.dismiss();
                 }
-                setResult(0);
+                Intent i = new Intent(CustomerFinishedAnswerActivity.this,ProjectsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });
@@ -307,11 +259,12 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                     popup.dismiss();
                 }
                 delegate.service.Logout();
-                setResult(2);
+                Intent i = new Intent(CustomerFinishedAnswerActivity.this, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });
     }
-
 
 }

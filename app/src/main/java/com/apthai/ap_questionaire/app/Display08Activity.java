@@ -334,10 +334,13 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                                                 if(answer.size() ==0){
                                                     SaveAnswerData _ans = new SaveAnswerData(String.valueOf(data.getAnswers().get(indexAnswer).getId()), addEdit.getText().toString());
                                                     answer.add(_ans);
+                                                    ImageView thisRadio = (ImageView) btn.findViewWithTag(99);
+                                                    thisRadio.setImageResource(R.drawable.radiobtn_selected);
                                                 } else {
                                                     SaveAnswerData _ans = new SaveAnswerData(answer.get(0).getValue(), addEdit.getText().toString());
                                                     answer.set(0, _ans);
                                                 }
+                                                layoutSelected = btn;
                                             } else {
                                                 ImageView thisRadio = (ImageView) btn.findViewWithTag(99);
                                                 thisRadio.setImageResource(R.drawable.radiobtn_selected);

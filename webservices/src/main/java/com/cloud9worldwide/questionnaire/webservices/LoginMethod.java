@@ -1,6 +1,7 @@
 package com.cloud9worldwide.questionnaire.webservices;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by cloud9 on 3/11/14.
@@ -30,12 +31,14 @@ public class LoginMethod {
             String _data = params[1];
             WebserviceHelper client = new WebserviceHelper(_webserviceUrl);
             client.AddParam("cmd", command);
+            Log.e("KOY cmd",command);
 
             String str1 = "\\\"";
             String str2 = "\"";
             _data = _data.replaceAll(str1,str2);
 
             client.AddParam("data", _data);
+            Log.e("_data",_data);
             try {
                 client.Execute(WebserviceHelper.RequestMethod.POST);
             } catch (Exception e) {

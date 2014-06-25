@@ -509,15 +509,19 @@ public class questionniare_delegate extends Application {
     }
 
     public void backQuestionpage(Context ctx) {
+
         if (dataSubQuestion != null) {
             //is sub question
+
             dataSubQuestion = null;
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
+            startActivity(i);
         } else {
             QM.move_back();
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
+            startActivity(i);
         }
     }
 
