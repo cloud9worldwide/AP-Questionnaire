@@ -424,6 +424,21 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                 layoutSelected=btn;
             }
             linearLayout.addView(btn);
+            //for beautiful
+            if(i==total-1  && total % column !=0){
+                Log.e("index i total colunm",i +"," + total +"," + column);
+                for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
+                    Log.e("addcolumn",addcolum +"");
+                    LinearLayout btn2 = new LinearLayout(this);
+                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(50));
+                    lp.gravity = Gravity.CENTER_VERTICAL;
+
+                    lp.weight = 1;
+                    lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), 0, delegate.pxToDp(10));
+                    btn2.setLayoutParams(lp);
+                    linearLayout.addView(btn2);
+                }
+            }
         }
         content_view.addView(linearLayout);
     }
@@ -467,6 +482,9 @@ public class Display08Activity extends Activity implements View.OnClickListener 
         } else {
             LinearLayout btn = (LinearLayout) v;
             AnswerData selected = data.getAnswers().get(Integer.parseInt(v.getTag().toString()));
+            Log.e("indexSelected " ,indexSelected +"");
+            Log.e("real",v.getTag().toString());
+
             if(indexSelected !=Integer.parseInt(v.getTag().toString())){
                 ImageView selectRadio = (ImageView)btn.findViewWithTag(99);
                 selectRadio.setImageResource(R.drawable.radiobtn_selected);
@@ -484,6 +502,9 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                             txtbox.setText("");
                         }
                     }
+
+                    ImageView selectRadio2 = (ImageView)layoutSelected.findViewWithTag(99);
+                    selectRadio2.setImageResource(R.drawable.radiobtn_unselect);
                 }
 
                 answer.clear();
