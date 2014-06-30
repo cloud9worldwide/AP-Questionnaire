@@ -51,6 +51,7 @@ public class questionniare_delegate extends Application {
     public ArrayList<QuestionTypeData> questions;
 
     public QuestionTypeData dataSubQuestion;
+    public boolean skip_save_subans = false;
 
     public long timesleep = 100;
 
@@ -341,6 +342,7 @@ public class questionniare_delegate extends Application {
             questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()));
         }
         AllHistoryAnswer = questionnaireAnswer;
+        Log.e("AllHistoryAnswer",AllHistoryAnswer.toString());
         return questionnaireAnswer;
     }
 
@@ -436,12 +438,12 @@ public class questionniare_delegate extends Application {
             dataSubQuestion = null;
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
-            startActivity(i);
+            //startActivity(i);
         } else {
             QM.move_back();
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
-            startActivity(i);
+            //startActivity(i);
         }
     }
 
@@ -457,6 +459,9 @@ public class questionniare_delegate extends Application {
     public boolean checkPressBack(ArrayList<SaveAnswerData> _ans) {
         if (dataSubQuestion != null) {
             //isSub question
+            if(skip_save_subans)
+                return true;
+
             QuestionTypeData parent_question = QM.get_question();
             QuestionTypeData sub_question = this.dataSubQuestion;
             if (parent_question.isParent_question() && parent_question.getQuestion().getId() == sub_question.getParent_question_id()) {

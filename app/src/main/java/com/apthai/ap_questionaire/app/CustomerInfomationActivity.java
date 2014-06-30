@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,24 +41,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     TextView txtUpdate,question_title,title;
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(delegate ==null){
-            setImage();
-        }
-    }
-
     private void setImage(){
-
         img_background = (ImageView) findViewById(R.id.img_background);
 
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,R.drawable.logo_ap);
-
-        //setObject();
 
     }
 
@@ -81,6 +71,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
+                setImage();
             }
         };
         Runnable background = new Runnable() {
@@ -171,7 +162,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                         if(!allMobile.equals("")){
                             allMobile = allMobile + ", ";
                         }
-                        allMobile = allMobile + customer_info.getMobiles().get(i);
+                        allMobile = allMobile + numberformat(customer_info.getMobiles().get(i));
                     }
                 }
             }
@@ -189,7 +180,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                         if(!allTels.equals("")){
                             allTels = allTels + ", ";
                         }
-                        allTels = allTels + customer_info.getTels().get(i);
+                        allTels = allTels + numberformat(customer_info.getTels().get(i));
                     }
                 }
             }
@@ -465,5 +456,16 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 finish();
             }
         });
+    }
+    public String numberformat(String phone){
+        if(phone.length()==10){
+            //mobile mode
+            return PhoneNumberUtils.formatNumber(phone);
+        } else if(phone.length()==9){
+            //home mode
+            return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+        }
+        //do not anythings
+        return phone;
     }
 }

@@ -161,11 +161,10 @@ public class Display02Activity extends Activity implements OnClickListener {
 
                     if(checkAnswer == null){
                         answer = delegate.getHistory();
-                    }else{
+                    } else {
                         answer = checkAnswer.getAnswer();
                     }
                 }
-
                 try {
                     Thread.sleep(delegate.timesleep);
                 }catch (Exception e){
@@ -456,6 +455,7 @@ public class Display02Activity extends Activity implements OnClickListener {
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                 }
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -463,6 +463,9 @@ public class Display02Activity extends Activity implements OnClickListener {
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else {
             seletedAnswer(v, "");

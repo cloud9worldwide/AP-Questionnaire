@@ -59,19 +59,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
-
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
 
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
@@ -80,20 +68,13 @@ public class Display15Activity extends Activity implements View.OnClickListener 
                 img_background,
                 delegate.imgDefault);
 
-        //setObject();
         img_question = (ImageView) findViewById(R.id.img_question);
-
-        img_question.setImageURI(delegate.readImageFileOnSDFileName(data.getQuestion().getImageUrl()));
-
-        /*
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
+        img_question.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        if(data.getQuestion().getImageUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getQuestion().getImageUrl())==null){
+            img_question.setImageResource(delegate.imgDefaultQuestion);
         } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
+            img_question.setImageURI(delegate.readImageFileOnSDFileName(data.getQuestion().getImageUrl()));
         }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -144,7 +125,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
-                //setTableLayout();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
@@ -196,16 +177,6 @@ public class Display15Activity extends Activity implements View.OnClickListener 
     }
 
     private void setObject(){
-        /*
-        data = delegate.QM.get_question();
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
 
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
@@ -316,10 +287,8 @@ public class Display15Activity extends Activity implements View.OnClickListener 
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -328,6 +297,9 @@ public class Display15Activity extends Activity implements View.OnClickListener 
 
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else if (v.getId() == R.id.btn_minus){
             if(indexChoich!=0){
@@ -371,18 +343,6 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
     public void showPopup(final Activity context) {

@@ -142,6 +142,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                         if (delegate.service.checkUpdateQuestionnaire()) {
                             //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
                             delegate.service.updateQuestionnaire(ringProgressDialog);
+                            delegate.service.startDownloadImages(ringProgressDialog);
                             //ringProgressDialog.setMessage("Downloading...All images Data");
 
                             try {

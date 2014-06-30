@@ -74,6 +74,8 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_back_home.setOnClickListener(this);
 
         if(!delegate.QM.isStaffQustion()){
+
+            thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
             customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
             btn_back_home.setEnabled(false);
             btn_back_home.setVisibility(View.GONE);

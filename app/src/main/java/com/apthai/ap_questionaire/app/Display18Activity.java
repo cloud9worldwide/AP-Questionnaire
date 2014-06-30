@@ -57,19 +57,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
@@ -129,6 +117,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 isParent = delegate.QM.get_question().isParent_question();
                 setObject();
                 setTableLayout();
+                setImage();
                 if(delegate.dataSubQuestion == null){
                     setNavigator();
                 } else {
@@ -303,10 +292,8 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -315,6 +302,11 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
+
             onBackPressed();
         } else {
 
@@ -345,11 +337,12 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                             } else {
                                 image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconActiveUrl()));
                             }
-
                             SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
-                            answer.add(_ans);
+                            //answer.add(_ans);
                             if(isParent){
                                 parentSelected(indexSelected);
+                            }else{
+                                answer.add(_ans);
                             }
                         } else {
                             if(data.getAnswers().get(indexSelected).getIconInActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconInActiveUrl())==null){
@@ -358,7 +351,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                                 image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconInActiveUrl()));
                             }
 
-                            answer.remove(index);
+                            //answer.remove(index);
                             if(data.getParent_question_id() > 0){
                                 //is sub question, will save @ save_answer(answers, quesiton inx)
                                 delegate.RemoveQuestionHistory(data.getQuestion().getId().toString());
@@ -371,9 +364,9 @@ public class Display18Activity extends Activity implements View.OnClickListener 
 
 
                             if(isParent){
-                                //remove sub question
-                                //delegate.RemoveQuestionHistory("s");
-                                //delegate.QM.clear_sub_answer(data.getAnswers().get(indexSelected).getId());
+                                parentSelected(indexSelected);
+                            }else{
+                                answer.remove(index);
                             }
 
                         }
@@ -383,11 +376,12 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                         } else {
                             image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconActiveUrl()));
                         }
-
                         SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
-                        answer.add(_ans);
+                        //answer.add(_ans);
                         if(isParent){
                             parentSelected(indexSelected);
+                        }else{
+                            answer.add(_ans);
                         }
                     }
                 }

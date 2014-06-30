@@ -57,38 +57,13 @@ public class Display17Activity extends Activity implements View.OnClickListener 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,
                 delegate.imgDefault);
-
-        /*
-        setObject();
-        setTableLayout();
-
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -140,6 +115,7 @@ public class Display17Activity extends Activity implements View.OnClickListener 
                 progress.dismiss();
                 setObject();
                 setTableLayout();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
@@ -190,16 +166,7 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         new Thread( background ).start();
     }
     private void setObject(){
-        /*
-        data = delegate.QM.get_question();
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
+
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
 
@@ -232,11 +199,9 @@ public class Display17Activity extends Activity implements View.OnClickListener 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
         int column =4;
-        for(int i =0, c = 0, r = 0; i < total; i++, c++){
+        for(int i =0, c = 0; i < total; i++, c++){
             if (c == column) {
-
                 c = 0;
-                r++;
                 content_view.addView(linearLayout);
                 linearLayout = new LinearLayout(this);
             }
@@ -329,10 +294,8 @@ public class Display17Activity extends Activity implements View.OnClickListener 
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -340,6 +303,9 @@ public class Display17Activity extends Activity implements View.OnClickListener 
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else {
             LinearLayout btn = (LinearLayout) v;
@@ -365,7 +331,6 @@ public class Display17Activity extends Activity implements View.OnClickListener 
 
     public void nextPage(){
         delegate.QM.save_answer(answer);
-        //startActivityForResult(delegate.nextPage(this),0);
         delegate.nextQuestionPage(delegate.nextPage(this));
     }
 
@@ -382,18 +347,6 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
 }

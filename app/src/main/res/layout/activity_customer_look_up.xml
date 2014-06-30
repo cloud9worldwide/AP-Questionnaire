@@ -7,11 +7,9 @@
     >
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="matrix"
+        android:layout_width="1280dp"
+        android:layout_height="800dp"
         android:id="@+id/img_background"
-        android:adjustViewBounds="false"
         android:layout_below="@+id/project_name" />
     <TextView
         android:text="@string/project_name"

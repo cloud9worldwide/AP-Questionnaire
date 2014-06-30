@@ -456,6 +456,7 @@ public class Display06Activity extends Activity implements View.OnClickListener 
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                 }
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -463,6 +464,9 @@ public class Display06Activity extends Activity implements View.OnClickListener 
             }
             btnNext.setEnabled(true);
         } else if(v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else {
             seletedAnswer(v, "");

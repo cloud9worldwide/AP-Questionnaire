@@ -60,36 +60,13 @@ public class Display13Activity extends Activity implements View.OnClickListener 
     private QuestionAnswerData checkAnswer = null;
 
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,
                 delegate.imgDefault);
-
-        //setObject();
-        //setDropdownlist();
-        /*
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -140,6 +117,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
                 progress.dismiss();
                 setObject();
                 setDropdownlist();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
@@ -282,6 +260,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
                 }
                 //this.setResult(3);
                 //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -289,6 +268,9 @@ public class Display13Activity extends Activity implements View.OnClickListener 
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         }
     }

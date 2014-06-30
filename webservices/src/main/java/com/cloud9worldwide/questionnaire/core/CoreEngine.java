@@ -1273,7 +1273,6 @@ public class CoreEngine {
         }
     }
 
-
     public synchronized boolean saveQuestionnaireData2(QuestionnaireAnswerData _data){
         if(isOnline()){
             MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
@@ -2371,7 +2370,7 @@ public class CoreEngine {
 
     public ArrayList<ValTextData> getCountry(){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        data.add(0,new ValTextData("0","Thailand"));
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getAllCountry();
@@ -2387,7 +2386,7 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getNationality(){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        data.add(0,new ValTextData("0","Thailand"));
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getAllNationality();

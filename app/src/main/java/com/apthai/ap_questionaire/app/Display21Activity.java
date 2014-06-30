@@ -56,38 +56,13 @@ public class Display21Activity extends Activity implements View.OnClickListener 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
-
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,
                 delegate.imgDefault);
-
-        /*
-        setObject();
-
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
         navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
@@ -139,6 +114,7 @@ public class Display21Activity extends Activity implements View.OnClickListener 
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
@@ -190,16 +166,6 @@ public class Display21Activity extends Activity implements View.OnClickListener 
     }
 
     private void setObject(){
-        /*
-        data = delegate.QM.get_question();
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
 
@@ -232,7 +198,6 @@ public class Display21Activity extends Activity implements View.OnClickListener 
                 txtbox.setText(answer.get(0).getFreetxt());
             }
         }
-
     }
 
     @Override
@@ -259,25 +224,24 @@ public class Display21Activity extends Activity implements View.OnClickListener 
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
             answer.clear();
-            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(delegate.getQuestions().getAnswers().get(0).getId()), txtbox.getText().toString());
+            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(data.getAnswers().get(0).getId()), txtbox.getText().toString());
             answer.add(_ans);
-
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
                 nextPage();
             }
             btnNext.setEnabled(true);
-
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         }
     }
@@ -301,18 +265,7 @@ public class Display21Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            this.setResult(3);
-//            finish();
-//        }
+
     }
 
 }

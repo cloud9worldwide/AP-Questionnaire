@@ -43,10 +43,13 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
     TextView lbl_firstname, lbl_lastname, lbl_tel;
     private Context ctx;
+
     public void onWindowFocusChanged(boolean hasFocus) {
         // TODO Auto-generated method stub
         super.onWindowFocusChanged(hasFocus);
-        setImage();
+        if(delegate ==null){
+            setImage();
+        }
     }
     private void setImage(){
         setObject();
@@ -61,6 +64,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_look_up);
+        setImage();
         ctx = this;
     }
 

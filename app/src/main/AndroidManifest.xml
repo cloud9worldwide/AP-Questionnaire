@@ -15,7 +15,9 @@
         android:theme="@style/Theme.NoTitle" >
         <activity
             android:name="com.apthai.ap_questionaire.app.LoginActivity"
-            android:label="@string/app_name" android:windowSoftInputMode="stateAlwaysHidden" android:clickable="true"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:clickable="true"
             android:focusableInTouchMode="true"
             android:screenOrientation="landscape" >
         </activity>
@@ -58,8 +60,7 @@
             android:name="com.apthai.ap_questionaire.app.CustomerLookUpActivity"
             android:label="@string/title_activity_customer_look_up"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateVisible|adjustResize" android:clickable="true"
-            android:focusableInTouchMode="true" >
+             >
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.NotFoundCustomerActivity"

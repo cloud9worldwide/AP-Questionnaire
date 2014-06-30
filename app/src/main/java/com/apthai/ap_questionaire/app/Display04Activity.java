@@ -449,12 +449,16 @@ public class Display04Activity extends Activity implements View.OnClickListener 
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                 }
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
                 nextPage();
             }
         } else if(v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else {
             seletedAnswer(v, "");
