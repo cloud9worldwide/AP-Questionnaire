@@ -100,7 +100,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         } else{
             data = delegate.QM.get_question();
         }
-        Log.e("data", data.getAnswers().toString());
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -139,7 +138,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                     }else{
                         answer = checkAnswer.getAnswer();
                     }
-                    Log.e("Ans",answer.toString());
+
                 }else {
                     //is parent question
                     if(data.getParent_question_id() > 0){
@@ -264,7 +263,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         }
         content_view.addView(linearLayout);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -409,19 +407,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            delegate.dataSubQuestion = null;
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
     public void parentSelected(int indexSelected){
@@ -474,9 +459,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             } else if(dataSubQuestion.getQuestionType().equals("21")){
                 newPage = new Intent(this, Display21Activity.class);
             }
-            //newPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //newPage.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
             delegate.nextQuestionPage(newPage);
     }
 

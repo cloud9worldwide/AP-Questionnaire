@@ -17,6 +17,15 @@ public class QuestionTypeData {
     private QuestionData question = null;
     private ArrayList<AnswerData> answers = null;
     private boolean parent_question = false;
+    private int questionOrder = -1;
+
+    public int getQuestionOrder() {
+        return questionOrder;
+    }
+
+    public void setQuestionOrder(int questionOrder) {
+        this.questionOrder = questionOrder;
+    }
 
     public boolean isParent_question() {
         return parent_question;

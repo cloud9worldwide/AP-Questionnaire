@@ -360,7 +360,9 @@ public class QuestionManagement {
     }
     public synchronized QuestionAnswerData get_answer(){
         QuestionAnswerData _ans = this.AnsListData.get(CurQuestionIndex);
-        if(_ans.isDefault())
+         if(this.get_question().getQuestion().getId() != Integer.parseInt(_ans.getQuestionId()))
+             return null;
+         if(_ans.isDefault())
             return null;
         else
             return _ans;

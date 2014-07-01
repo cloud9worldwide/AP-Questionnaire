@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,47 +122,52 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                if (!delegate.QM.isStaffQustion()) {
-                    delegate.initQuestionsStaff();
-                    nextPage();
+                Log.e("among question",""+delegate.QM.CheckQuestionNotAns().size());
+                if(delegate.QM.CheckQuestionNotAns().size()!=0){
+                    Intent newPage = new Intent(this, DoNotAnswerListActivity.class);
+                    delegate.nextQuestionPage(newPage);
+                    startActivityForResult(newPage,0);
                 } else {
-                    delegate.sendAnswer();
-
-//                    this.setResult(1);
-                    if (delegate.service.isOnline()) {
-                        final ProgressDialog progress = new ProgressDialog(this);
-                        progress.setTitle("Please wait");
-                        progress.setMessage("Sync local data to server.");
-                        progress.setCancelable(false);
-                        progress.show();
-
-                        final Handler uiHandler = new Handler();
-                        final  Runnable onUi = new Runnable() {
-                            @Override
-                            public void run() {
-                                // this will run on the main UI thread
-                                progress.dismiss();
-                                Intent i = new Intent(CustomerFinishedAnswerActivity.this,QuestionniareActivity.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(i);
-                                finish();
-                            }
-                        };
-                        Runnable background = new Runnable() {
-                            @Override
-                            public void run() {
-                                // This is the delay
-                                delegate.service.sync_save_questionnaire(progress);
-                                uiHandler.post( onUi );
-                            }
-                        };
-                        new Thread( background ).start();
-
+                    if (!delegate.QM.isStaffQustion()) {
+                        delegate.initQuestionsStaff();
+                        nextPage();
                     } else {
-                        Intent i = new Intent(this,QuestionniareActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                        finish();
+                        delegate.sendAnswer();
+                        if (delegate.service.isOnline()) {
+                            final ProgressDialog progress = new ProgressDialog(this);
+                            progress.setTitle("Please wait");
+                            progress.setMessage("Sync local data to server.");
+                            progress.setCancelable(false);
+                            progress.show();
+
+                            final Handler uiHandler = new Handler();
+                            final Runnable onUi = new Runnable() {
+                                @Override
+                                public void run() {
+                                    // this will run on the main UI thread
+                                    progress.dismiss();
+                                    Intent i = new Intent(CustomerFinishedAnswerActivity.this, QuestionniareActivity.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            };
+                            Runnable background = new Runnable() {
+                                @Override
+                                public void run() {
+                                    // This is the delay
+                                    delegate.service.sync_save_questionnaire(progress);
+                                    uiHandler.post(onUi);
+                                }
+                            };
+                            new Thread(background).start();
+
+                        } else {
+                            Intent i = new Intent(this, QuestionniareActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                            finish();
+                        }
                     }
                 }
 

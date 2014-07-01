@@ -1,18 +1,28 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
+
+import java.util.ArrayList;
 
 
 public class DoNotAnswerListActivity extends Activity implements View.OnClickListener {
@@ -24,6 +34,9 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
     ImageView img_background;
     static PopupWindow popup;
     RelativeLayout root_view;
+    LinearLayout content_view,linearLayout;
+    int total;
+    ArrayList<QuestionTypeData> data;
 
     private void setImage(){
         setObject();
@@ -52,20 +65,48 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
 
         question_title = (TextView) findViewById(R.id.question_title);
         question_title.setTypeface(delegate.font_type);
-        question_title.setTextSize(25);
+        question_title.setTextSize(35);
         question_title.setText(R.string.title_dont_answer);
 
         root_view = (RelativeLayout) findViewById(R.id.root_view);
         root_view.setOnClickListener(this);
         popup = new PopupWindow(this);
 
+        content_view = (LinearLayout)this.findViewById(R.id.AP_content);
+        content_view.removeAllViews();
 
+        data = delegate.QM.CheckQuestionNotAns();
+        total = data.size();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_not_answer_list);
+        setImage();
+        setTableLayout();
+
+    }
+    private void setTableLayout(){
+
+        for(int i =0, c = 0; i < total; i++, c++) {
+            LinearLayout.LayoutParams lp;
+            TextView questionTitle = new TextView(this);
+            String txtShown = "(" + data.get(i).getQuestionOrder() + ") " + data.get(i).getQuestion().getTitle();
+            questionTitle.setText(txtShown);
+            questionTitle.setTextSize(30);
+            questionTitle.setTypeface(delegate.font_type);
+            questionTitle.setGravity(Gravity.CENTER);
+            questionTitle.setTag(i);
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(55));
+            lp.gravity = Gravity.CENTER_VERTICAL;
+            lp.weight = 1;
+            lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), 0, delegate.pxToDp(10));
+            questionTitle.setLayoutParams(lp);
+            questionTitle.setOnClickListener(this);
+            content_view.addView(questionTitle);
+        }
+
     }
 
 
@@ -90,7 +131,102 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
     }
 
     public void onClick(View v) {
+        if(v.getId() == R.id.btnMenu){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                showPopup(this);
+            }
+        } else if(v.getId() == R.id.btnNext){
+            delegate.initQuestionsStaff();
+            nextPage();
+        } else {
+            final int indexSelected =Integer.parseInt(v.getTag().toString());
+            Log.e("indexSelected",indexSelected +"");
+            delegate.QM.redo_question_not_ansAtIndex(indexSelected);
 
+            Intent newPage = new Intent();
+            if(delegate.QM.get_question().getQuestionType().equals("1")){
+                newPage = new Intent(this, Display01Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("2")){
+                newPage = new Intent(this, Display02Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("3")){
+                newPage = new Intent(this, Display03Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("4")){
+                newPage = new Intent(this, Display04Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("5")){
+                newPage = new Intent(this, Display05Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("6")){
+                newPage = new Intent(this, Display06Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("7")){
+                newPage = new Intent(this, Display07Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("8")){
+                newPage = new Intent(this, Display08Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("9")){
+                newPage = new Intent(this, Display09Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("10")){
+                newPage = new Intent(this, Display10Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("11")){
+                newPage = new Intent(this, Display11Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("12")){
+                newPage = new Intent(this, Display12Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("13")){
+                newPage = new Intent(this, Display13Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("14")){
+                newPage = new Intent(this, Display14Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("15")){
+                newPage = new Intent(this, Display15Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("16")){
+                newPage = new Intent(this, Display16Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("17")){
+                newPage = new Intent(this, Display17Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("18")){
+                newPage = new Intent(this, Display18Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("19")){
+                newPage = new Intent(this, Display19Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("20")){
+                newPage = new Intent(this, Display20Activity.class);
+            } else if(delegate.QM.get_question().getQuestionType().equals("21")){
+                newPage = new Intent(this, Display21Activity.class);
+            }
+
+            final Intent _newPage = newPage;
+            if(delegate.service.isOnline()) {
+                final ProgressDialog progress = new ProgressDialog(this);
+                progress.setTitle("Please wait");
+                progress.setMessage("Loading....");
+                progress.setCancelable(false);
+                progress.show();
+
+                final Handler uiHandler = new Handler();
+                final Runnable onUi = new Runnable() {
+                    @Override
+                    public void run() {
+                        // this will run on the main UI thread
+                        progress.dismiss();
+                        //startActivityForResult(_newPage,0);
+                        delegate.nextQuestionPage(_newPage);
+                    }
+                };
+                Runnable background = new Runnable() {
+                    @Override
+                    public void run() {
+                        delegate.getQuestionnaireHistory();
+                        //delay
+                        try {
+                            Thread.sleep(500);
+                        } catch (Exception e) {
+
+                        }
+                        uiHandler.post(onUi);
+                    }
+                };
+                new Thread(background).start();
+
+            }else{
+                startActivityForResult(_newPage,0);
+            }
+        }
     }
 
     public void showPopup(final Activity context) {
@@ -142,5 +278,14 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
                 finish();
             }
         });
+    }
+    public void nextPage(){
+        QuestionTypeData data = delegate.getQuestions();
+        if(data == null){
+            startActivityForResult(new Intent(this, CustomerFinishedAnswerActivity.class),0);
+        } else {
+            Intent intent = delegate.getCurentQuestionIntent();
+            delegate.nextQuestionPage(intent);
+        }
     }
 }
