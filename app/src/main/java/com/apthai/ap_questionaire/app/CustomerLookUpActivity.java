@@ -17,7 +17,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,9 +29,7 @@ import java.util.ArrayList;
 public class CustomerLookUpActivity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    int total = 5;
     ImageButton btn_menu, btn_send, btn_back;
-    LinearLayout linearLayout, content_view;
     questionniare_delegate delegate;
     EditText txtFirstName,txtLastName,txtTel;
     TextView project_name,question_title;
@@ -44,13 +41,6 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     TextView lbl_firstname, lbl_lastname, lbl_tel;
     private Context ctx;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(delegate ==null){
-            setImage();
-        }
-    }
     private void setImage(){
         setObject();
         img_background = (ImageView) findViewById(R.id.img_background);

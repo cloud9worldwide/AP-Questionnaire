@@ -104,12 +104,11 @@
     <string name="title_activity_add_customer_one">AddCustomerOneActivity</string>
     <string name="title_activity_add_customer_en">AddCustomerENActivity</string>
     <string name="title_activity_add_customer_th">AddCustomerTHActivity</string>
-
-
     <string name="popup_mobile">โทรศัพท์มือถือ</string>
     <string name="popup_phone">โทรศัพท์บ้าน</string>
-
     <string name="email_not_correct">E-MAIL IS INVALID</string>
     <string name="cancel">cancel</string>
+    <string name="title_activity_do_not_answer_list">DoNotAnswerListActivity</string>
+    <string name="title_dont_answer">คำถามที่ลูกค้ายังไม่ได้ตอบ</string>
 
 </resources>

@@ -1,8 +1,10 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,18 +76,40 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 setImage();
             }
         };
+        final  Runnable onUi2 = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                progress.dismiss();
+                new AlertDialog.Builder(CustomerInfomationActivity.this)
+                        .setTitle("Connection Lost")
+                        .setMessage("Please enter customer info again.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(1);
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        };
         Runnable background = new Runnable() {
             @Override
             public void run() {
                 // This is the delay
                 customer_info = delegate.service.getContactInfo(customerIndex);
-                customer_info.setContactId(delegate.service.globals.getContactId());
-                try {
-                    Thread.sleep(2000);
-                }catch (Exception e){
+                if(customer_info !=null){
+                    customer_info.setContactId(delegate.service.globals.getContactId());
+                    try {
+                        Thread.sleep(2000);
+                    }catch (Exception e){
 
+                    }
+                    uiHandler.post( onUi );
+                }else{
+                    uiHandler.post( onUi2 );
                 }
-                uiHandler.post( onUi );
             }
         };
         new Thread( background ).start();
