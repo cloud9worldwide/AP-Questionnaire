@@ -162,7 +162,7 @@
                         android:background="@drawable/box_large"
                         android:alpha="1"
                         android:paddingLeft="10dp"
-                        android:imeOptions="actionNext"
+
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true"
@@ -184,7 +184,6 @@
                         android:alpha="1"
                         android:lines="1"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/customer_look_up_hint_surname" />
@@ -205,7 +204,6 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_nickname" />
 
@@ -236,7 +234,6 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_email" />
 
@@ -275,7 +272,6 @@
                             android:layout_marginLeft="5dp"
                             android:gravity="center"
                             android:maxLength="1"
-
                             android:inputType="number"
                             />
                         <EditText

@@ -94,7 +94,6 @@
                         android:gravity="center_vertical"
                         android:layout_height="50dp"
                         android:paddingLeft="10dp"
-                        android:imeOptions="actionNext"
                         android:id="@+id/lblHomeID"
                         />
                     <EditText
@@ -105,7 +104,6 @@
                         android:alpha="1"
                         android:lines="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_homeid" />
                     <TextView
@@ -123,7 +121,7 @@
                         android:background="@drawable/box_small"
                         android:alpha="1"
                         android:lines="1"
-                        android:imeOptions="actionNext"
+
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_moo" />
@@ -143,7 +141,7 @@
                         android:alpha="1"
                         android:paddingLeft="10dp"
                         android:lines="1"
-                        android:imeOptions="actionNext"
+
                         android:singleLine="true"
                         android:hint="@string/add_customer_building" />
                     <TextView
@@ -162,7 +160,7 @@
                         android:alpha="1"
                         android:lines="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
+
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_floor" />
                     <TextView
@@ -180,7 +178,7 @@
                         android:background="@drawable/box_small"
                         android:alpha="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
+
                         android:lines="1"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_room" />
@@ -209,7 +207,7 @@
                         android:lines="1"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
-                        android:imeOptions="actionNext"
+
                         android:hint="@string/add_customer_soi" />
                     <TextView
                         android:text="@string/add_customer_road"
@@ -224,7 +222,6 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"
                         android:alpha="1"
-                        android:imeOptions="actionNext"
                         android:lines="1"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
@@ -238,7 +235,7 @@
                         android:id="@+id/lblProvince"
                         />
                     <EditText
-
+                        android:singleLine="true"
                         android:layout_width="250dp"
                         android:layout_height="35dp"
                         android:id="@+id/txtProvince"
@@ -263,6 +260,7 @@
                         android:id="@+id/lbl_add_customer_district"
                         />
                     <EditText
+                        android:singleLine="true"
                         android:layout_width="250dp"
                         android:layout_height="35dp"
                         android:id="@+id/txtDistrict"
@@ -277,6 +275,7 @@
                         android:layout_height="50dp"
                         android:id="@+id/lbl_add_customer_sub_district" />
                     <EditText
+                        android:singleLine="true"
                         android:layout_width="250dp"
                         android:layout_height="35dp"
                         android:id="@+id/txtSubDistrict"
@@ -292,7 +291,8 @@
                         android:id="@+id/lblPostcode"
                         />
                     <EditText
-                        android:id="@+id/txtPostcode2"
+                        android:singleLine="true"
+                        android:id="@+id/txtPostcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"
@@ -319,7 +319,6 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"
                         android:alpha="1"
-                        android:imeOptions="actionNext"
                         android:paddingLeft="10dp"
                         android:lines="1"
                         android:singleLine="true"
@@ -339,7 +338,6 @@
                         android:background="@drawable/box_large"
                         android:alpha="1"
                         android:lines="1"
-                        android:imeOptions="actionNext"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_district" />
@@ -350,7 +348,6 @@
                         android:orientation="horizontal">
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
 

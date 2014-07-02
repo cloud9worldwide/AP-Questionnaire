@@ -59,15 +59,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     EditText home1, home2, home3, home4, home5, home6, home7, home8, home9;
     EditText mobile1, mobile2, mobile3, mobile4, mobile5, mobile6, mobile7, mobile8, mobile9,mobile10;
 
-    TextView txt_header,lblPrefix,lbl_add_customer_name, lbl_add_customer_surname, lblNickname,
-            lbl_add_customer_birthday, lblEmail,lbl_add_customer_tel_home_BKK_line1, lbl_add_customer_tel_home_line2,
-            lbl_digit_tel_home_BKK1, lbl_digit_tel_home_BKK2, lbl_add_customer_tel_home_other_line1,
-            lbl_add_customer_tel_home_other_line2, lbl_digit_tel_home_other1, lbl_add_customer_mobile,
-            lbl_digit_mobile1, lblWork, lbl_add_customer_district_work, lblCountry, lblHomeID, lbl_add_customer_moo,
-            lbl_add_customer_building, lbl_add_customer_floor, lbl_add_customer_room, lbl_add_customer_soi,
-            lbl_add_customer_road, lblProvince, lbl_add_customer_district, lbl_add_customer_sub_district,
-            lblPostcode;
-
+    TextView txt_header;
     TextView lbl_add_customer_phone1, lbl_add_customer_phone2, lbl_add_customer_phone3, lbl_add_customer_phone4;
     TextView lbl_add_customer_mobile1, lbl_add_customer_mobile2, lbl_add_customer_mobile3, lbl_add_customer_mobile4;
     TextView lbl_prefix_extra1,lbl_prefix_extra2;
@@ -321,7 +313,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
     private void setKeyListener(){
         txtFirstName.setOnKeyListener(new View.OnKeyListener() {
+
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.e("keyCode",keyCode+"");
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
                     txtFirstName.clearFocus();
                     txtLastName.requestFocus();
@@ -366,10 +360,10 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         //test
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
+                Log.e("keyCode",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    Log.e("ACTION_UP",keyCode+"");
                     mobile1.clearFocus();
+                    mobile2.setText(" ");
                     mobile2.requestFocus();
                     return true;
                 }
@@ -381,8 +375,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 Log.e("keyCode",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    Log.e("ACTION_UP",keyCode+"");
                     mobile2.clearFocus();
+                    mobile3.setText(" ");
                     mobile3.requestFocus();
                     return true;
                 }
@@ -394,6 +388,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile3.clearFocus();
+                    mobile4.setText(" ");
                     mobile4.requestFocus();
                     return true;
                 }
@@ -405,6 +400,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile4.clearFocus();
+                    mobile5.setText(" ");
                     mobile5.requestFocus();
                     return true;
                 }
