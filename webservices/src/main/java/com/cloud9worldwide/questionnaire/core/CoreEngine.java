@@ -509,18 +509,24 @@ public class CoreEngine {
                         this.responseMessage = "Server error";
                         return null;
                     }
+
                     JSONObject respObj = new JSONObject(r);
                     if(respObj.getBoolean("status")) {
                         JSONArray _arr_json = respObj.getJSONArray("result");
                         for (int i = 0; i < _arr_json.length(); i++) {
                             JSONObject _json = _arr_json.getJSONObject(i);
+
+                            Boolean isOp = false;
+                            if(_json.getString("isOpporpunity").equals("YES")){
+                                isOp = true;
+                            }
                             ContactSearchData _sData = new ContactSearchData(
                                     _json.getString("contactid"),
                                     _json.getString("fname"),
                                     _json.getString("lname"),
                                     _json.getString("unitnumber"),
                                     _json.getString("lastvisit"),
-                                    _json.getBoolean("isOpporpunity")
+                                    isOp
                             );
                             _data.add(_sData);
                         }

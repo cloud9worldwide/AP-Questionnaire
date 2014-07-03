@@ -15,12 +15,10 @@
         android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
-        android:paddingTop="10dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -35,7 +33,7 @@
         android:layout_height="524dp"
         android:background="@color/WHITE"
         android:orientation="vertical"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="@dimen/marginTop_content"
         android:layout_centerHorizontal="true"
         android:baselineAligned="false"
         android:clickable="false">
@@ -68,7 +66,6 @@
                 android:baselineAligned="false"
                 android:orientation="vertical"
                 android:layout_height="524dp">
-
                 <TextView
                     android:layout_marginTop="20dp"
                     android:text="@string/title_activity_customer_look_up"
@@ -93,7 +90,6 @@
                     android:id="@+id/scrollView"
                     android:layout_gravity="center"
                     android:fillViewport="false">
-
                     <LinearLayout
                         android:id="@+id/AP_content"
                         android:layout_width="match_parent"
@@ -240,7 +236,6 @@
                 </ScrollView>
                 <RelativeLayout
                     android:id="@+id/footer"
-
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
@@ -249,7 +244,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/btn_back"
+                        android:src="@drawable/back_btn"
                         android:id="@+id/btnBack"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
@@ -257,7 +252,7 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/btn_next"
+                        android:src="@drawable/next_btn_"
                         android:id="@+id/btnNext"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"

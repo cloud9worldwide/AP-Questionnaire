@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,7 +29,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +54,7 @@ public class Display01Activity extends Activity implements OnClickListener {
     ArrayList<SaveAnswerData> answer;
     ImageView img_background;
 
-    SeekBar navigatorBar;
+    TextView navigatorBar;
     TextView txt_process;
     Drawable thumb;
     RelativeLayout footer;
@@ -74,26 +72,10 @@ public class Display01Activity extends Activity implements OnClickListener {
     }
 
     public void setNavigator(){
-        navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-        navigatorBar.setMax(delegate.getMax());
-        navigatorBar.setProgress(0);
-        navigatorBar.setProgress(delegate.getProcessed());
-        navigatorBar.setEnabled(false);
-        navigatorBar.setVisibility(View.VISIBLE);
-        thumb = getResources().getDrawable(R.drawable.icon_navigator);
-        thumb.setBounds(new Rect(0,0, thumb.getIntrinsicWidth(),thumb.getIntrinsicHeight()));
-        navigatorBar.setThumb(thumb);
-
-        txt_process = new TextView(this);
-        txt_process.setText(delegate.getPercent());
-
-        txt_process.setWidth(thumb.getIntrinsicWidth());
-        txt_process.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.setMargins((thumb.getBounds().left + (int) navigatorBar.getX()) -8 , (int)navigatorBar.getY()+5, 0, 0);
-        txt_process.setLayoutParams(params);
-        footer = (RelativeLayout) findViewById(R.id.footer);
-        footer.addView(txt_process);
+        navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+        navigatorBar.setText(delegate.getTitleSequence());
+        navigatorBar.setTypeface(delegate.font_type);
+        navigatorBar.setTextSize(20);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +110,7 @@ public class Display01Activity extends Activity implements OnClickListener {
                     setNavigator();
                 } else {
                     question_title.setText("คำถามย่อย");
-                    navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
+                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
                     navigatorBar.setVisibility(View.GONE);
                 }
             }
@@ -183,10 +165,10 @@ public class Display01Activity extends Activity implements OnClickListener {
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
 
-        question_title = (TextView) findViewById(R.id.question_title);
-        question_title.setText(delegate.getTitleSequence());
-        question_title.setTypeface(delegate.font_type);
-        question_title.setTextSize(20);
+//        question_title = (TextView) findViewById(R.id.question_title);
+//        question_title.setText(delegate.getTitleSequence());
+//        question_title.setTypeface(delegate.font_type);
+//        question_title.setTextSize(20);
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
@@ -207,7 +189,8 @@ public class Display01Activity extends Activity implements OnClickListener {
         question.setTextSize(35);
         question.setTypeface(delegate.font_type);
         question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
-        question.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.1f));
+        question.setGravity(Gravity.CENTER);
+        question.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.1f));
         linearLayout.addView(question);
         content_view.addView(linearLayout);
 

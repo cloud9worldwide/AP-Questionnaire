@@ -14,12 +14,10 @@
         android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
-        android:paddingTop="10dp"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -27,7 +25,6 @@
         android:layout_alignParentStart="true"
         android:src="@drawable/menu"
         android:layout_alignParentTop="true" />
-
     <LinearLayout
         android:id="@+id/sizeContent"
         android:layout_width="1200dp"
@@ -363,7 +360,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_back"
+            android:src="@drawable/back_btn"
             android:id="@+id/btnBack"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
@@ -371,7 +368,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_send"
+            android:src="@drawable/send_btn_"
             android:id="@+id/btnSend"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

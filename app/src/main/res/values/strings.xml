@@ -34,7 +34,7 @@
     <string name="not_found_customer_detail">คุณสามารถเพิ่มลูกค้าใหม่ได้โดยการกดปุ่ม "Add" ข้างล่าง</string>
     <string name="title_activity_add_customer">AddCustomerActivity</string>
     <string name="add_customer_prefix">คำนำหน้า</string>
-    <string name="add_customer_prefix_extra">พิเศษ</string>
+    <string name="add_customer_prefix_extra">ยศ/ตำแหน่ง</string>
     <string name="add_customer_name">ชื่อ</string>
     <string name="add_customer_surname">นามสกุล</string>
     <string name="add_customer_nickname">ชื่อเล่น</string>

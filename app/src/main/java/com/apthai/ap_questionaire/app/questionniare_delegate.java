@@ -14,6 +14,8 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.cloud9worldwide.questionnaire.core.CoreEngine;
 import com.cloud9worldwide.questionnaire.core.TCImageLoader;
@@ -64,6 +66,8 @@ public class questionniare_delegate extends Application {
 
     public QuestionManagement QM;
     public Context ctx;
+
+    public ViewGroup.LayoutParams layoutImage;
 
     public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -157,6 +161,7 @@ public class questionniare_delegate extends Application {
         imgDefaultIconSelect = R.drawable.no_image_icon_selected;
         font_type = Typeface.createFromAsset(getAssets(),
                 "fonts/DB_Ozone_X.otf");
+        layoutImage = new LinearLayout.LayoutParams(60, 60);
 
         ctx = this;
         if (questionnaire_selected != null) {

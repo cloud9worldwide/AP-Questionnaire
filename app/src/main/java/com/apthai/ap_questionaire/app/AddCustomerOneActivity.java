@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.PhoneNumberUtils;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -27,6 +28,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
@@ -62,11 +64,17 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     TextView txt_header;
     TextView lbl_add_customer_phone1, lbl_add_customer_phone2, lbl_add_customer_phone3, lbl_add_customer_phone4;
     TextView lbl_add_customer_mobile1, lbl_add_customer_mobile2, lbl_add_customer_mobile3, lbl_add_customer_mobile4;
-    TextView lbl_prefix_extra1,lbl_prefix_extra2;
+
 
     ContactData new_customer;
     ArrayList<String> listfix;
     int indexPrefix, indexNationality, indexCountry;
+
+    TextView lblPrefix,lbl_prefix_extra2,lbl_add_customer_name,lbl_add_customer_surname,lblNickname;
+    TextView lblEmail,lbl_add_customer_mobile_line1,lbl_add_customer_mobile_line2,lbl_add_customer_tel_home_other_line1;
+    TextView lbl_add_customer_tel_home_other_line2,lbl_add_customer_birthday,lblCountry,lblNationality;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +221,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         }
     }
+
     private void setObject() {
+
         footer = (RelativeLayout) findViewById(R.id.footer);
 
         project_name = (TextView) findViewById(R.id.project_name);
@@ -221,8 +231,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         project_name.setTextSize(30);
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
-
-//        txtPromp = "Thailand";
 
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_header.setTypeface(delegate.font_type);
@@ -288,7 +296,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lbl_add_customer_phone3.setText("");
         lbl_add_customer_phone4.setText("");
 
-        lbl_prefix_extra1  = (TextView) findViewById(R.id.lbl_prefix_extra1);
         lbl_prefix_extra2 = (TextView) findViewById(R.id.lbl_prefix_extra2);
 
         setItemSpinner();
@@ -312,6 +319,19 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         });
     }
     private void setKeyListener(){
+
+        txtPrefix.setOnKeyListener(new View.OnKeyListener() {
+
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+                    txtPrefix.clearFocus();
+                    txtFirstName.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         txtFirstName.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -360,10 +380,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         //test
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("keyCode",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile1.clearFocus();
-                    mobile2.setText(" ");
                     mobile2.requestFocus();
                     return true;
                 }
@@ -373,10 +391,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         mobile2.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("keyCode",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile2.clearFocus();
-                    mobile3.setText(" ");
                     mobile3.requestFocus();
                     return true;
                 }
@@ -388,7 +404,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile3.clearFocus();
-                    mobile4.setText(" ");
                     mobile4.requestFocus();
                     return true;
                 }
@@ -400,7 +415,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     mobile4.clearFocus();
-                    mobile5.setText(" ");
                     mobile5.requestFocus();
                     return true;
                 }
@@ -606,6 +620,46 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         txtEmail.setTypeface(delegate.font_type);
         txtEmail.setTextSize(25);
 
+        lblPrefix = (TextView) findViewById(R.id.lblPrefix);
+        lbl_prefix_extra2 = (TextView) findViewById(R.id.lbl_prefix_extra2);
+        lbl_add_customer_name = (TextView) findViewById(R.id.lbl_add_customer_name);
+        lbl_add_customer_surname = (TextView) findViewById(R.id.lbl_add_customer_surname);
+        lblNickname = (TextView) findViewById(R.id.lblNickname);
+        lblEmail = (TextView) findViewById(R.id.lblEmail);
+        lbl_add_customer_mobile_line1 = (TextView) findViewById(R.id.lbl_add_customer_mobile_line1);
+        lbl_add_customer_mobile_line2 = (TextView) findViewById(R.id.lbl_add_customer_mobile_line2);
+        lbl_add_customer_tel_home_other_line1 = (TextView) findViewById(R.id.lbl_add_customer_tel_home_other_line1);
+        lbl_add_customer_tel_home_other_line2 = (TextView) findViewById(R.id.lbl_add_customer_tel_home_other_line2);
+        lbl_add_customer_birthday = (TextView) findViewById(R.id.lbl_add_customer_birthday);
+        lblCountry = (TextView) findViewById(R.id.lblCountry);
+        lblNationality = (TextView) findViewById(R.id.lblNationality);
+
+        lblPrefix.setTypeface(delegate.font_type);
+        lblPrefix.setTextSize(25);
+        lbl_prefix_extra2.setTypeface(delegate.font_type);
+        lbl_prefix_extra2.setTextSize(25);
+        lbl_add_customer_name.setTypeface(delegate.font_type);
+        lbl_add_customer_name.setTextSize(25);
+        lbl_add_customer_surname.setTypeface(delegate.font_type);
+        lbl_add_customer_surname.setTextSize(25);
+        lblNickname.setTypeface(delegate.font_type);
+        lblNickname.setTextSize(25);
+        lblEmail.setTypeface(delegate.font_type);
+        lblEmail.setTextSize(25);
+        lbl_add_customer_mobile_line1.setTypeface(delegate.font_type);
+        lbl_add_customer_mobile_line1.setTextSize(20);
+        lbl_add_customer_mobile_line2.setTypeface(delegate.font_type);
+        lbl_add_customer_mobile_line2.setTextSize(15);
+        lbl_add_customer_tel_home_other_line1.setTypeface(delegate.font_type);
+        lbl_add_customer_tel_home_other_line1.setTextSize(20);
+        lbl_add_customer_tel_home_other_line2.setTypeface(delegate.font_type);
+        lbl_add_customer_tel_home_other_line2.setTextSize(15);
+        lbl_add_customer_birthday.setTypeface(delegate.font_type);
+        lbl_add_customer_birthday.setTextSize(25);
+        lblCountry.setTypeface(delegate.font_type);
+        lblCountry.setTextSize(25);
+        lblNationality.setTypeface(delegate.font_type);
+        lblNationality.setTextSize(25);
     }
     private void setObjectTelephone(){
 
@@ -655,6 +709,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
     }
+
     private void setItemSpinner(){
         ArrayList<ValTextData> list;
         ArrayAdapter<ValTextData> dataAdapter;
@@ -670,11 +725,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if(arg2 == listfix.size()-1){
                     //koy
-                    lbl_prefix_extra1.setVisibility(View.VISIBLE);
                     lbl_prefix_extra2.setVisibility(View.VISIBLE);
                     txtPrefix.setVisibility(View.VISIBLE);
                 } else {
-                    lbl_prefix_extra1.setVisibility(View.GONE);
                     lbl_prefix_extra2.setVisibility(View.GONE);
                     txtPrefix.setVisibility(View.GONE);
                 }
@@ -768,6 +821,34 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         delegate.customer_selected = new_customer;
     }
+    private boolean validate() {
+        boolean status = true;
+
+        if(txtFirstName.getText().toString().length() ==0){
+            lbl_add_customer_name.setText(Html.fromHtml(getString(R.string.add_customer_name) +"<font color=\"#FF0000\"> *</font>"));
+            status = false;
+        } else {
+            lbl_add_customer_name.setText(getString(R.string.add_customer_name));
+        }
+        if(txtLastName.getText().toString().length() ==0){
+            lbl_add_customer_surname.setText(Html.fromHtml(getString(R.string.add_customer_surname) +"<font color=\"#FF0000\"> *</font>"));
+            status = false;
+        } else {
+            lbl_add_customer_surname.setText(getString(R.string.add_customer_surname));
+        }
+
+        if (mobile1.getText().toString().length() > 0 && mobile2.getText().toString().length() > 0
+                && mobile3.getText().toString().length() > 0 && mobile4.getText().toString().length() > 0
+                && mobile5.getText().toString().length() > 0 && mobile6.getText().toString().length() > 0
+                && mobile7.getText().toString().length() > 0 && mobile8.getText().toString().length() > 0
+                && mobile9.getText().toString().length() > 0 && mobile10.getText().toString().length() > 0) {
+            lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
+        } else {
+            lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+        }
+
+        return status;
+    }
 
     public void onClick(View v) {
         if (popup.isShowing()) {
@@ -793,12 +874,17 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 popupAddMobile.dismiss();
             }
         } else if(v.getId() == R.id.btnNext){
-            packData();
-            if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
-                startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
+            if(validate()){
+                packData();
+                if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
+                    startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
+                } else {
+                    startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
+                }
             } else {
-                startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
+                Toast.makeText(this, "Please enter request fill.", Toast.LENGTH_SHORT).show();
             }
+
         } else if (v.getId() == R.id.btnAddMobiles){
             showPopupAddMobile(this,"mobile",99);
         } else if(v.getId() == R.id.lbl_add_customer_mobile1){
@@ -1071,6 +1157,16 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 updateMobile();
 
                 popupAddMobile.dismiss();
+            }
+        });
+        m00.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP){
+                    m00.clearFocus();
+                    m01.requestFocus();
+                    return true;
+                }
+                return false;
             }
         });
 

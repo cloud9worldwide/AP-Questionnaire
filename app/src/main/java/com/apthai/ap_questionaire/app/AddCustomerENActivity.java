@@ -285,8 +285,6 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
                 return false;
             }
         });
-//        EditText txtDistrict, txtSubDistrict,txtPostcode;
-//        EditText txtWork, txtWorkDistrict;
         txtDistrict.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {

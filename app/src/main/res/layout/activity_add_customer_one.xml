@@ -14,12 +14,10 @@
         android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
-        android:paddingTop="10dp"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -109,19 +107,12 @@
                         android:layout_width="120dp"
                         android:paddingLeft="10dp"
                         android:orientation="vertical"
-                        android:layout_height="40dp">
-                        <TextView
-                            android:text="@string/add_customer_prefix"
-                            android:layout_width="120dp"
-                            android:gravity="bottom"
-                            android:layout_height="20dp"
-                            android:id="@+id/lbl_prefix_extra1"
-                            />
+                        android:layout_height="35dp">
                         <TextView
                             android:text="@string/add_customer_prefix_extra"
                             android:layout_width="120dp"
-                            android:gravity="top"
-                            android:layout_height="20dp"
+                            android:gravity="center_vertical"
+                            android:layout_height="35dp"
                             android:id="@+id/lbl_prefix_extra2"
                             />
                     </LinearLayout>
@@ -297,7 +288,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             android:nextFocusDown="@id/txt_digit_mobile4"
                             />
                         <TextView
@@ -318,7 +309,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             android:nextFocusDown="@id/txt_digit_mobile5"
                             />
                         <EditText
@@ -331,7 +322,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             android:nextFocusDown="@id/txt_digit_mobile6"
                             />
 
@@ -345,7 +336,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             android:nextFocusDown="@id/txt_digit_mobile7"
                             />
                         <TextView
@@ -366,7 +357,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             android:nextFocusDown="@id/txt_digit_mobile8"
                             />
                         <EditText
@@ -379,7 +370,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             android:nextFocusDown="@id/txt_digit_mobile9"
                             />
                         <EditText
@@ -392,7 +383,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_mobile10"
@@ -404,7 +395,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                     </LinearLayout>
 
@@ -444,7 +435,7 @@
                             android:gravity="center"
                             android:selectAllOnFocus="true"
                             android:maxLength="1"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_tel_home2"
@@ -456,7 +447,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <TextView
                             android:id="@+id/lbl_digit_tel_home2"
@@ -476,7 +467,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_tel_home4"
@@ -488,7 +479,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_tel_home5"
@@ -500,7 +491,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <TextView
                             android:id="@+id/lbl_digit_tel_home3"
@@ -520,7 +511,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_tel_home7"
@@ -532,7 +523,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_tel_home8"
@@ -544,7 +535,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                         <EditText
                             android:id="@+id/txt_digit_tel_home9"
@@ -556,7 +547,7 @@
                             android:gravity="center"
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
-                            android:inputType="numberSigned"
+                            android:inputType="number"
                             />
                     </LinearLayout>
 
@@ -607,7 +598,6 @@
                             android:layout_height="20dp"
                             >
                             <TextView
-
                                 android:layout_width="120dp"
                                 android:gravity="bottom"
                                 android:layout_height="20dp"
@@ -750,7 +740,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_back"
+            android:src="@drawable/back_btn"
             android:id="@+id/btnBack"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
@@ -758,7 +748,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_next"
+            android:src="@drawable/next_btn_"
             android:id="@+id/btnNext"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

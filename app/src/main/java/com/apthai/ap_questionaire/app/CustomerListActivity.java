@@ -208,11 +208,14 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             time.setLayoutParams(lp);
             btn.addView(time);
             TextView opatulity = new TextView(this);
-            opatulity.setText(obj.getIsOpporpunity().toString());
+            String op = "NO";
+            if(obj.getIsOpporpunity()){
+                op = "YES";
+            }
+            opatulity.setText(op);
             opatulity.setTypeface(delegate.font_type);
             opatulity.setGravity(Gravity.CENTER_VERTICAL);
             opatulity.setTextSize(20);
-
             opatulity.setLayoutParams(lp);
             btn.addView(opatulity);
             ImageView arrow = new ImageView(this);
