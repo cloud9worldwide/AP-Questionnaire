@@ -210,15 +210,14 @@ public class Display17Activity extends Activity implements View.OnClickListener 
 
             LinearLayout.LayoutParams lp;
 
-            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.pxToDp(125));
-
             ImageView image = new ImageView(this);
             image.setTag(99);
-            image.setLayoutParams(lp);
-
             image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            btn.setTag(i);
+            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage,delegate.sizeImage);
+            imageLayout.gravity = Gravity.CENTER;
+            image.setLayoutParams(imageLayout);
 
+            btn.setTag(i);
             btn.setOnClickListener(this);
 
             boolean isSelected = false;

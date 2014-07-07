@@ -14,8 +14,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.cloud9worldwide.questionnaire.core.CoreEngine;
 import com.cloud9worldwide.questionnaire.core.TCImageLoader;
@@ -67,7 +65,7 @@ public class questionniare_delegate extends Application {
     public QuestionManagement QM;
     public Context ctx;
 
-    public ViewGroup.LayoutParams layoutImage;
+    public int sizeImage;
 
     public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -161,7 +159,7 @@ public class questionniare_delegate extends Application {
         imgDefaultIconSelect = R.drawable.no_image_icon_selected;
         font_type = Typeface.createFromAsset(getAssets(),
                 "fonts/DB_Ozone_X.otf");
-        layoutImage = new LinearLayout.LayoutParams(60, 60);
+        sizeImage = 80;
 
         ctx = this;
         if (questionnaire_selected != null) {
@@ -252,8 +250,15 @@ public class questionniare_delegate extends Application {
 
             //Find the correct scale value. It should be the power of 2.
             int scale = 1;
-            while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
-                scale *= 2;
+            Log.e("scale ",scale +"");
+            if(width !=0 && height !=0){
+                while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height){
+                    scale *= 2;
+                    Log.e("scale ",scale +"");
+                }
+            }
+
+
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();

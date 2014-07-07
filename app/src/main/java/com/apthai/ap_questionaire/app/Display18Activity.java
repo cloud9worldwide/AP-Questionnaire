@@ -212,11 +212,13 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             LinearLayout btn = new LinearLayout(this);
             btn.setOrientation(LinearLayout.VERTICAL);
 
-
             ImageView image = new ImageView(this);
             image.setTag(99);
             image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            image.setLayoutParams(delegate.layoutImage);
+            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage,delegate.sizeImage);
+            imageLayout.gravity = Gravity.CENTER;
+            image.setLayoutParams(imageLayout);
+
             btn.setTag(i);
             btn.setOnClickListener(this);
             boolean isSelected = false;

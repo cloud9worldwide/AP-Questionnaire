@@ -11,10 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/img_background"
-        android:layout_below="@+id/project_name" />
+        android:scaleType="fitXY" />
 
     <TextView
-        android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
         android:background="@drawable/box_title"
@@ -29,29 +28,13 @@
         android:background="@color/WHITE"
         android:layout_alignParentEnd="false"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:layout_alignParentStart="false">
-        <TextView
-            android:layout_marginTop="20dp"
-            android:text="@string/question_title"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="50dp"
-            android:id="@+id/question_title"
-            />
-        <TextView
-            android:layout_width="400dp"
-            android:layout_height="1dp"
-            android:id="@+id/lbl_line"
-            android:background="@color/line"
-            android:layout_alignBottom="@+id/question_title"
-            android:layout_gravity="center_horizontal" />
+        android:layout_marginTop="@dimen/marginTop_content"
+        android:layout_centerHorizontal="true">
 
         <ScrollView
-            android:layout_alignBottom="@+id/lbl_line"
             android:layout_alignTop="@+id/footer"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="450dp"
             android:layout_centerVertical="true"
             android:id="@+id/scrollView"
             android:layout_gravity="center">
@@ -75,7 +58,6 @@
         </ScrollView>
         <RelativeLayout
             android:id="@+id/footer"
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="75dp"
@@ -87,7 +69,6 @@
                 android:src="@drawable/btn_back"
                 android:id="@+id/btnBack"
                 android:layout_centerVertical="true"
-                android:clickable="false"
                 android:layout_marginLeft="10dp"
                 android:background="@null" />
             <ImageButton
@@ -98,23 +79,18 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:clickable="false"
                 android:background="@null" />
-            <SeekBar
-                android:progressDrawable="@drawable/navigator_processed"
-                android:thumb="@drawable/icon_navigator"
+            <TextView
                 android:id="@+id/navigatorBar"
+                android:text="test"
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@+id/btnBack"
-                android:layout_alignTop="@+id/btnBack"
                 android:layout_toLeftOf="@+id/btnNext"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="-10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
-
+                />
         </RelativeLayout>
     </LinearLayout>
 

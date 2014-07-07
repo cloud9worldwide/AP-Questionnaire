@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -43,11 +46,31 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
     private void setImage(){
         setObject();
+
+        View rootView = getWindow().getDecorView().getRootView();
+
+//        rootView.setBackground(this.getResources().getDrawable(R.drawable.img_love_mom_app_bg));
+
+
+
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,delegate.imgDefault);
+
+//        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
+//                String.valueOf(img_background.getWidth()),
+//                String.valueOf(img_background.getHeight()),
+//                img_background,delegate.imgDefault);
+        img_background.setVisibility(View.GONE);
+//        img_background = (ImageView)rootView;
+//        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
+//                String.valueOf(img_background.getWidth()),
+//                String.valueOf(img_background.getHeight()),
+//                img_background,delegate.imgDefault);
+
+
+            Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+            Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+            rootView.setBackground(imageDraw);
+
     }
 
     @Override
