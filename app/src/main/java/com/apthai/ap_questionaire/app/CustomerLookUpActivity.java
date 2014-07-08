@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,28 +49,14 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         setObject();
 
         View rootView = getWindow().getDecorView().getRootView();
-
 //        rootView.setBackground(this.getResources().getDrawable(R.drawable.img_love_mom_app_bg));
 
-
-
         img_background = (ImageView) findViewById(R.id.img_background);
-
-//        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-//                String.valueOf(img_background.getWidth()),
-//                String.valueOf(img_background.getHeight()),
-//                img_background,delegate.imgDefault);
         img_background.setVisibility(View.GONE);
-//        img_background = (ImageView)rootView;
-//        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-//                String.valueOf(img_background.getWidth()),
-//                String.valueOf(img_background.getHeight()),
-//                img_background,delegate.imgDefault);
 
-
-            Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-            Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-            rootView.setBackground(imageDraw);
+        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+        rootView.setBackground(imageDraw);
 
     }
 
@@ -77,6 +64,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_look_up);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setImage();
         ctx = this;
     }

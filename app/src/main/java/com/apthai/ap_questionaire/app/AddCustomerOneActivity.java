@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,7 +67,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     TextView lbl_add_customer_phone1, lbl_add_customer_phone2, lbl_add_customer_phone3, lbl_add_customer_phone4;
     TextView lbl_add_customer_mobile1, lbl_add_customer_mobile2, lbl_add_customer_mobile3, lbl_add_customer_mobile4;
 
-
     ContactData new_customer;
     ArrayList<String> listfix;
     int indexPrefix, indexNationality, indexCountry;
@@ -73,13 +74,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     TextView lblPrefix,lbl_prefix_extra2,lbl_add_customer_name,lbl_add_customer_surname,lblNickname;
     TextView lblEmail,lbl_add_customer_mobile_line1,lbl_add_customer_mobile_line2,lbl_add_customer_tel_home_other_line1;
     TextView lbl_add_customer_tel_home_other_line2,lbl_add_customer_birthday,lblCountry,lblNationality;
-
-
+    String focus_mobile_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer_one);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "Thailand", "", "");
         AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
@@ -223,7 +224,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
 
     private void setObject() {
-
+        focus_mobile_number ="";
         footer = (RelativeLayout) findViewById(R.id.footer);
 
         project_name = (TextView) findViewById(R.id.project_name);
@@ -886,10 +887,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
 
         } else if (v.getId() == R.id.btnAddMobiles){
-            showPopupAddMobile(this,"mobile",99);
+//            showPopupAddMobile(this,"mobile",99);
+            showPopupAddMobile2(this,"mobile",99);
         } else if(v.getId() == R.id.lbl_add_customer_mobile1){
             if(mobile_list.get(1).length()!=0) {
-                showPopupAddMobile(this, "mobile", 1);
+                showPopupAddMobile2(this, "mobile", 1);
+//                showPopupAddMobile(this, "mobile", 1);
             }
         } else if(v.getId() == R.id.lbl_add_customer_mobile2){
             if(mobile_list.get(2).length()!=0){
@@ -904,10 +907,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 showPopupAddMobile(this,"mobile",4);
             }
         } else if (v.getId() == R.id.btnAddPhone){
-            showPopupAddMobile(this,"phone",99);
+//            showPopupAddMobile(this,"phone",99);
+            showPopupAddMobile2(this,"phone",99);
         } else if(v.getId() == R.id.lbl_add_customer_phone1){
             if(phone_list.get(1).length()!=0){
-                showPopupAddMobile(this,"phone",1);
+                showPopupAddMobile2(this,"phone",1);
+//                showPopupAddMobile(this,"phone",1);
             }
         } else if(v.getId() == R.id.lbl_add_customer_phone2){
             if(phone_list.get(2).length()!=0){
@@ -1380,12 +1385,247 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     public String numberformat(String phone){
         if(phone.length()==10){
             //mobile mode
-            return PhoneNumberUtils.formatNumber(phone);
+            return phone.substring(0,3) +"-"+phone.substring(3,6)+"-"+phone.substring(6,10);
         } else if(phone.length()==9){
             //home mode
-            return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+            if(phone.substring(0,2).equals("02")){
+                return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+            }
+            return phone.substring(0,3) +"-"+phone.substring(3,6)+"-"+phone.substring(6,9);
         }
         //do not anythings
         return phone;
+    }
+    public void showPopupAddMobile2(final Activity context, final String type, final int index) {
+        RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup_mobile);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.activity_add_moblie2, viewGroup);
+        popupAddMobile = new PopupWindow(context);
+        popupAddMobile.setFocusable(true);
+        popupAddMobile.setContentView(layout);
+        popupAddMobile.setWidth(delegate.pxToDp(500));
+        popupAddMobile.setHeight(delegate.pxToDp(150));
+        popupAddMobile.setBackgroundDrawable(null);
+        popupAddMobile.showAtLocation(layout, Gravity.CENTER, 0, 0);
+        View view_instance = (View) layout.findViewById(R.id.popup_mobile);
+        focus_mobile_number ="";
+
+        final EditText txt_digit_mobile = (EditText) layout.findViewById(R.id.txt_digit_mobile);
+
+        final TextView lbl = (TextView) layout.findViewById(R.id.lbl_add_customer_mobile);
+
+        lbl.setTypeface(delegate.font_type);
+        lbl.setTextSize(25);
+
+        final TextView lbl_error = (TextView) layout.findViewById(R.id.error_add_mobile);
+        lbl_error.setTypeface(delegate.font_type);
+        lbl_error.setTextSize(25);
+
+        final Button btn_ok = (Button) layout.findViewById(R.id.btn_ok);
+        final Button btn_cancel = (Button) layout.findViewById(R.id.btn_cancel);
+        final Button btn_delete = (Button) layout.findViewById(R.id.btn_delete);
+        btn_delete.setTypeface(delegate.font_type);
+        btn_delete.setTextSize(25);
+        btn_ok.setTypeface(delegate.font_type);
+        btn_ok.setTextSize(25);
+        btn_cancel.setTypeface(delegate.font_type);
+        btn_cancel.setTextSize(25);
+        if (index != 99) {
+            btn_delete.setVisibility(View.VISIBLE);
+        } else {
+            btn_delete.setVisibility(View.GONE);
+        }
+        //add on condition
+        if (type.equals("mobile")) {
+            lbl.setText(getString(R.string.popup_mobile));
+        } else {
+            lbl.setText(getString(R.string.popup_phone));
+        }
+
+        if (index != 99) {
+            //edit mode
+            String txtmobile = "";
+
+            if (type.equals("mobile")) {
+                //mobile mode
+                txtmobile = mobile_list.get(index);
+                txtmobile = txtmobile.replace("-", "");
+                if(txtmobile.length() ==10){
+                    String new_format_mobile = "";
+                    for(int i = 0; i<txtmobile.length(); i++){
+                        if(i==2 || i==5){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1) + "  -  ";
+                        } else if(i==9){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1);
+                        } else {
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1)+"  ";
+                        }
+                    }
+                    txt_digit_mobile.setText(new_format_mobile);
+                }
+            } else {
+                //phone modes
+                txtmobile = phone_list.get(index);
+                txtmobile = txtmobile.replace("-", "");
+                if(txtmobile.length() ==9){
+                    String new_format_mobile = "";
+                    for(int i = 0; i<txtmobile.length(); i++){
+                        if(i==1 || i==4){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1) + "  -  ";
+                        } else if(i==8){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1);
+                        } else {
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1)+"  ";
+                        }
+                    }
+                    txt_digit_mobile.setText(new_format_mobile);
+                }
+            }
+        }
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if((type.equals("mobile") && txt_digit_mobile.getText().length()==34) || (type.equals("phone") && txt_digit_mobile.getText().length()==31)){
+                        InputMethodManager imm = (InputMethodManager)getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(txt_digit_mobile.getWindowToken(), 0);
+                        lbl_error.setVisibility(View.INVISIBLE);
+                        String string_phone = txt_digit_mobile.getText().toString().replace(" ", "").replace("-","");
+                    if(index !=99){
+                        //edit
+                        if(type.equals("mobile")){
+                            mobile_list.set(index, string_phone);
+                        } else {
+                            phone_list.set(index, string_phone);
+                        }
+                    } else {
+                        addMobileinPage(string_phone,type);
+                    }
+
+                    updateMobile();
+                        popupAddMobile.dismiss();
+
+
+                } else {
+                    lbl_error.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupAddMobile.dismiss();
+            }
+        });
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mobile_list.set(index, "");
+                if (type.equals("mobile")) {
+                    mobile_list.remove(index);
+                    mobile_list.add("");
+                } else {
+                    phone_list.remove(index);
+                    phone_list.add("");
+                }
+
+                if (type.equals("mobile")) {
+                    btnAddMobile.setVisibility(View.VISIBLE);
+                } else {
+                    btnAddPhone.setVisibility(View.VISIBLE);
+                }
+                updateMobile();
+
+                popupAddMobile.dismiss();
+            }
+        });
+        txt_digit_mobile.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Log.e("length",txt_digit_mobile.getText().length()+"");
+                if(txt_digit_mobile.getText().length() !=0){
+                    txt_digit_mobile.setSelection(txt_digit_mobile.getText().length());
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String check;
+                if(type.equals("mobile") && txt_digit_mobile.getText().length()<=34){
+                    if(focus_mobile_number.length() > txt_digit_mobile.getText().length()) {
+                        if (txt_digit_mobile.getText().toString().length() == 34) {
+                            focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 1);
+                            txt_digit_mobile.setText(focus_mobile_number);
+                        } else {
+                            if (focus_mobile_number.length() == 12 || focus_mobile_number.length() == 24) {
+                                focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 6);
+                            } else {
+                                focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 3);
+                            }
+                            txt_digit_mobile.setText(focus_mobile_number);
+                        }
+
+                    } else {
+                        if(txt_digit_mobile.getText().length()<2){
+                            check ="";
+                        } else {
+                            check = txt_digit_mobile.getText().charAt(txt_digit_mobile.getText().toString().length()-1)+"";
+                        }
+                        if (!check.equals(" ") && txt_digit_mobile.getText().toString().length() != 34 &&txt_digit_mobile.getText().length()!=0) {
+                            if (focus_mobile_number.length() == 6 || focus_mobile_number.length() == 18) {
+                                focus_mobile_number = txt_digit_mobile.getText().toString() + "  -  ";
+                            } else {
+                                focus_mobile_number = txt_digit_mobile.getText().toString() + "  ";
+                            }
+                            txt_digit_mobile.setText(focus_mobile_number);
+                        } else if (txt_digit_mobile.getText().toString().length() == 34) {
+                            focus_mobile_number = txt_digit_mobile.getText().toString();
+                        }
+                    }
+                } else if(type.equals("phone") && txt_digit_mobile.getText().length()<=31){
+                    if(focus_mobile_number.length() > txt_digit_mobile.getText().length()) {
+                        if (txt_digit_mobile.getText().toString().length() == 31) {
+                            focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 1);
+                            txt_digit_mobile.setText(focus_mobile_number);
+                        } else {
+                            if (focus_mobile_number.length() == 9 || focus_mobile_number.length() == 21) {
+                                focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 6);
+                            } else {
+                                focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 3);
+                            }
+                            txt_digit_mobile.setText(focus_mobile_number);
+                        }
+
+                    } else {
+                        if(txt_digit_mobile.getText().length()<2){
+                            check ="";
+                        } else {
+                            check = txt_digit_mobile.getText().charAt(txt_digit_mobile.getText().toString().length()-1)+"";
+                        }
+                        if (!check.equals(" ") && txt_digit_mobile.getText().toString().length() != 31 &&txt_digit_mobile.getText().length()!=0) {
+                            if (focus_mobile_number.length() == 3 || focus_mobile_number.length() == 15) {
+                                focus_mobile_number = txt_digit_mobile.getText().toString() + "  -  ";
+                            } else {
+                                focus_mobile_number = txt_digit_mobile.getText().toString() + "  ";
+                            }
+                            txt_digit_mobile.setText(focus_mobile_number);
+                        } else if (txt_digit_mobile.getText().toString().length() == 31) {
+                            focus_mobile_number = txt_digit_mobile.getText().toString();
+                        }
+                    }
+                } else {
+                    txt_digit_mobile.setText(focus_mobile_number);
+                }
+
+            }
+        });
     }
 }
