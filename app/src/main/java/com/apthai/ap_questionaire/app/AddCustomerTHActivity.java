@@ -492,19 +492,19 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         } else {
             lblHomeId.setText(getString(R.string.add_customer_homeid));
         }
-        if(!ddlProvince.getSelectedItem().toString().equals(txtPromp)){
+        if(ddlProvince.getSelectedItem().toString().equals(txtPromp)){
             lblProvince.setText(Html.fromHtml(getString(R.string.add_customer_province) + "<font color=\"#FF0000\"> *</font>"));
             status = false;
         }else{
             lblProvince.setText(getString(R.string.add_customer_province));
         }
-        if(!ddlDistrict.getSelectedItem().toString().equals(txtPromp)){
+        if(ddlDistrict.getSelectedItem().toString().equals(txtPromp)){
             lblDistrict.setText(Html.fromHtml(getString(R.string.add_customer_district) + "<font color=\"#FF0000\"> *</font>"));
             status = false;
         }else{
             lblDistrict.setText(getString(R.string.add_customer_district));
         }
-        if(!ddlSubDistrict.getSelectedItem().toString().equals(txtPromp)){
+        if(ddlSubDistrict.getSelectedItem().toString().equals(txtPromp)){
             lblSubDistrict.setText(Html.fromHtml(getString(R.string.add_customer_sub_district) + "<font color=\"#FF0000\"> *</font>"));
             status = false;
         }else{

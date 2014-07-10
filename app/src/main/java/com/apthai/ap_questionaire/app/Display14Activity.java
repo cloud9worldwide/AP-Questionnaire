@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +12,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +38,7 @@ public class Display14Activity extends Activity implements View.OnClickListener 
     LinearLayout linearLayout, content_view;
     QuestionTypeData data;
     questionniare_delegate delegate;
-    TextView question_title, project_name, txt_question, txtResult;
+    TextView project_name, txt_question, txtResult;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
     ImageButton btnNext,btn_plus,btn_minus, btnBack;
@@ -50,7 +47,7 @@ public class Display14Activity extends Activity implements View.OnClickListener 
     ArrayList<String> choich;
     int indexChoich;
 
-    SeekBar navigatorBar;
+    TextView navigatorBar;
     TextView txt_process;
     Drawable thumb;
     RelativeLayout footer;
@@ -58,17 +55,7 @@ public class Display14Activity extends Activity implements View.OnClickListener 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
@@ -78,28 +65,11 @@ public class Display14Activity extends Activity implements View.OnClickListener 
 
     }
     public void setNavigator(){
-        navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-        navigatorBar.setMax(delegate.getMax());
-        navigatorBar.setProgress(0);
-        navigatorBar.setProgress(delegate.getProcessed());
-        navigatorBar.setEnabled(false);
-        navigatorBar.setVisibility(View.VISIBLE);
-        thumb = getResources().getDrawable(R.drawable.icon_navigator);
-        thumb.setBounds(new Rect(0,0, thumb.getIntrinsicWidth(),thumb.getIntrinsicHeight()));
-        navigatorBar.setThumb(thumb);
-
-        txt_process = new TextView(this);
-        txt_process.setText(delegate.getPercent());
-
-        txt_process.setWidth(thumb.getIntrinsicWidth());
-        txt_process.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins((thumb.getBounds().left + (int) navigatorBar.getX()) -8 , (int)navigatorBar.getY()+5, 0, 0);
-        txt_process.setLayoutParams(params);
-        footer = (RelativeLayout) findViewById(R.id.footer);
-        footer.addView(txt_process);
+        navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+        navigatorBar.setText(delegate.getTitleSequence());
+        navigatorBar.setTypeface(delegate.font_type);
+        navigatorBar.setTextSize(20);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,9 +101,8 @@ public class Display14Activity extends Activity implements View.OnClickListener 
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
-                    question_title.setText("คำถามย่อย");
-                    navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-                    navigatorBar.setVisibility(View.GONE);
+                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+                    navigatorBar.setText("คำถามย่อย");
                 }
             }
         };
@@ -183,11 +152,6 @@ public class Display14Activity extends Activity implements View.OnClickListener 
 
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
-
-        question_title = (TextView) findViewById(R.id.question_title);
-        question_title.setText(delegate.getTitleSequence());
-        question_title.setTypeface(delegate.font_type);
-        question_title.setTextSize(20);
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());

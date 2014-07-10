@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,14 +38,14 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     LinearLayout linearLayout, content_view;
     QuestionTypeData data;
     questionniare_delegate delegate;
-    TextView question_title, project_name, txt_question;
+    TextView project_name, txt_question;
     int selected =0;
     ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
     ImageButton btnNext, btnBack;
     static PopupWindow popup;
     ImageView img_background;
 
-    SeekBar navigatorBar;
+    TextView navigatorBar;
     TextView txt_process;
     Drawable thumb;
     RelativeLayout footer;
@@ -67,26 +65,10 @@ public class Display18Activity extends Activity implements View.OnClickListener 
 
     }
     public void setNavigator(){
-        navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-        navigatorBar.setMax(delegate.getMax());
-        navigatorBar.setProgress(0);
-        navigatorBar.setProgress(delegate.getProcessed());
-        navigatorBar.setEnabled(false);
-        navigatorBar.setVisibility(View.VISIBLE);
-        thumb = getResources().getDrawable(R.drawable.icon_navigator);
-        thumb.setBounds(new Rect(0,0, thumb.getIntrinsicWidth(),thumb.getIntrinsicHeight()));
-        navigatorBar.setThumb(thumb);
-
-        txt_process = new TextView(this);
-        txt_process.setText(delegate.getPercent());
-
-        txt_process.setWidth(thumb.getIntrinsicWidth());
-        txt_process.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins((thumb.getBounds().left + (int) navigatorBar.getX()) -8 , (int)navigatorBar.getY()+5, 0, 0);
-        txt_process.setLayoutParams(params);
-        footer = (RelativeLayout) findViewById(R.id.footer);
-        footer.addView(txt_process);
+        navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+        navigatorBar.setText(delegate.getTitleSequence());
+        navigatorBar.setTypeface(delegate.font_type);
+        navigatorBar.setTextSize(20);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,9 +103,8 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                     setNavigator();
                 } else {
                     isParent = delegate.dataSubQuestion.isParent_question();
-                    question_title.setText("คำถามย่อย");
-                    navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-                    navigatorBar.setVisibility(View.GONE);
+                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+                    navigatorBar.setText("คำถามย่อย");
                 }
             }
         };
@@ -175,11 +156,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
 
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
-
-        question_title = (TextView) findViewById(R.id.question_title);
-        question_title.setText(delegate.getTitleSequence());
-        question_title.setTextSize(20);
-        question_title.setTypeface(delegate.font_type);
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
@@ -322,7 +298,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 String tag = obj.getTag().toString();
                 if(tag.equals("99")){
                     AnswerData selected = data.getAnswers().get(indexSelected);
-
                     ImageView image = (ImageView) obj;
                     if(answer.size()>0){
                         boolean isSeleted = true;

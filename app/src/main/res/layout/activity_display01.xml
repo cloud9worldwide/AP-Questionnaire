@@ -51,7 +51,6 @@
                     </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
         <RelativeLayout
             android:id="@+id/footer"
             android:orientation="vertical"
@@ -62,7 +61,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_back"
+                android:src="@drawable/back_btn"
                 android:id="@+id/btnBack"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
@@ -70,7 +69,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_next"
+                android:src="@drawable/next_btn_"
                 android:id="@+id/btnNext"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -78,7 +77,6 @@
                 android:background="@null" />
             <TextView
                 android:id="@+id/navigatorBar"
-                android:text="test"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

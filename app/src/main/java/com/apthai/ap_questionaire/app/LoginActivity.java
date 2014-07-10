@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -34,6 +35,8 @@ public class LoginActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         ctx = this;
         delegate = (questionniare_delegate)getApplicationContext();
 
@@ -46,9 +49,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
         txtUsername = (EditText) findViewById(R.id.txtUsername);
-        //txtUsername.setInputType(0);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
-        //txtPassword.setInputType(0);
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnForgot = (TextView) findViewById(R.id.btnForgot);
 
@@ -137,7 +138,6 @@ public class LoginActivity extends Activity implements OnClickListener {
             Runnable background = new Runnable() {
                 @Override
                 public void run() {
-                    // This is the delay
                     if (delegate.service.Login(txtUsername.getText().toString() , txtPassword.getText().toString()) == true) {
                         if (delegate.service.checkUpdateQuestionnaire()) {
                             //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
@@ -166,7 +166,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                         ringProgressDialog.dismiss();
                         uiHandler.post( onUi );
                     }
-                    //
                 }
             };
 

@@ -123,7 +123,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     new_customer = delegate.customer_selected;
                     getCustomerInfoLong();
                 }
-//                getCustomerInfoLong();
                 try {
                     Thread.sleep(1000);
                 } catch (Exception e){
@@ -157,7 +156,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 break;
             }
         }
-//        Log.e("indexNationality indexCountry",indexNationality +" "+ indexCountry);
     }
     private void getCustomerInfo(){
         if(delegate.customer_selected ==null){
@@ -845,6 +843,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 && mobile9.getText().toString().length() > 0 && mobile10.getText().toString().length() > 0) {
             lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
         } else {
+            status = false;
             lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
         }
 
@@ -1545,8 +1544,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                Log.e("length",txt_digit_mobile.getText().length()+"");
                 if(txt_digit_mobile.getText().length() !=0){
                     txt_digit_mobile.setSelection(txt_digit_mobile.getText().length());
                 }

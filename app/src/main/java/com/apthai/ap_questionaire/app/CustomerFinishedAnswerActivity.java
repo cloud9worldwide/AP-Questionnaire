@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -30,14 +33,19 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
 
     private Context ctx;
 
+    private void setImage(){
+        setObject();
+        View rootView = getWindow().getDecorView().getRootView();
+        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+        rootView.setBackground(imageDraw);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_finished_answer);
-
         ctx = this;
-
-        setObject();
+        setImage();
     }
 
     private void setObject() {
@@ -80,7 +88,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
             btn_back_home.setEnabled(false);
             btn_back_home.setVisibility(View.GONE);
-            btn_staff.setImageResource(R.drawable.btn_staff);
+            btn_staff.setImageResource(R.drawable.for_btn_);
         } else {
             btn_back_home.setImageResource(R.drawable.btn_projects);
             btn_staff.setImageResource(R.drawable.btn_questionniare);

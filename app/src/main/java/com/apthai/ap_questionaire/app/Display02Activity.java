@@ -48,7 +48,7 @@ public class Display02Activity extends Activity implements OnClickListener {
     LinearLayout linearLayout, content_view;
     QuestionTypeData data;
     questionniare_delegate delegate;
-    TextView question_title,project_name;
+    TextView project_name;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
     ImageButton btnNext, btnBack;
@@ -113,9 +113,8 @@ public class Display02Activity extends Activity implements OnClickListener {
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
-                    question_title.setText("คำถามย่อย");
                     navigatorBar = (TextView) findViewById(R.id.navigatorBar);
-                    navigatorBar.setVisibility(View.GONE);
+                    navigatorBar.setText("คำถามย่อย");
                 }
             }
         };

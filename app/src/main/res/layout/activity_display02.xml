@@ -12,14 +12,12 @@
         android:layout_height="match_parent"
         android:id="@+id/img_background"
         android:scaleType="fitXY" />
-
     <TextView
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
-
     <LinearLayout
         android:gravity="center"
         android:id="@+id/sizeContent"
@@ -66,7 +64,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_back"
+                android:src="@drawable/back_btn"
                 android:id="@+id/btnBack"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
@@ -74,7 +72,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_next"
+                android:src="@drawable/next_btn_"
                 android:id="@+id/btnNext"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -82,7 +80,6 @@
                 android:background="@null" />
             <TextView
                 android:id="@+id/navigatorBar"
-                android:text="test"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

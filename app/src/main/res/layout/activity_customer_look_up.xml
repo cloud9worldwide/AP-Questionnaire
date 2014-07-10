@@ -94,7 +94,6 @@
                     android:paddingLeft="10dp"
                     android:hint="@string/customer_look_up_hint_name" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/latout_customer_lookup_surname"
                     android:layout_marginTop="20dp"
@@ -120,7 +119,6 @@
                         android:paddingLeft="10dp"
                         android:hint="@string/customer_look_up_hint_surname" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/layout_customer_lookup_tel"
                     android:layout_marginTop="20dp"
@@ -151,7 +149,6 @@
         </ScrollView>
         <RelativeLayout
             android:id="@+id/footer"
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="75dp"
