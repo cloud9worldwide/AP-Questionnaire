@@ -40,7 +40,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     RelativeLayout root_view;
     ImageView img_background;
 
-    TextView txtUpdate,question_title,title;
+    TextView question_title,title;
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
 
     private void setImage(){
@@ -234,10 +234,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
             root_view = (RelativeLayout) findViewById(R.id.root_view);
             root_view.setOnClickListener(this);
-
-            txtUpdate = (TextView) findViewById(R.id.txtUpdate);
-            txtUpdate.setTypeface(delegate.font_type);
-            txtUpdate.setTextSize(25);
 
             question_title = (TextView) findViewById(R.id.question_title);
             question_title.setTypeface(delegate.font_type);

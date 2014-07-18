@@ -166,7 +166,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             new_customer.setNationality("Thailand");
             new_customer.setAddressWork(work);
         } else {
-            txtPrefix.setText(new_customer.getPrefix().toString());
+
+            txtPrefix.setText(new_customer.getPrefix_vip().toString());
             if(indexPrefix != -1){
                 ddlPrefix.setSelection(indexPrefix);
             }
@@ -356,6 +357,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         txtNickname.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
                     txtNickname.clearFocus();
                     txtEmail.requestFocus();
@@ -366,7 +368,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         });
         txtEmail.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+                Log.e("keyCode",keyCode+"");
+                if ((keyCode == KeyEvent.KEYCODE_TAB ||keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_UP){
                     InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(txtEmail.getWindowToken(), 0);
@@ -845,6 +848,17 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         } else {
             status = false;
             lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+        }
+
+        if(txtEmail.getText().toString().length() !=0){
+            if(delegate.emailValidator(txtEmail.getText().toString())){
+                lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email)));
+            } else {
+                lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email) +"<font color=\"#FF0000\"> *</font>"));
+                status = false;
+            }
+        } else {
+            lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email)));
         }
 
         return status;
@@ -1610,6 +1624,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                         if (!check.equals(" ") && txt_digit_mobile.getText().toString().length() != 31 &&txt_digit_mobile.getText().length()!=0) {
                             if (focus_mobile_number.length() == 3 || focus_mobile_number.length() == 15) {
                                 focus_mobile_number = txt_digit_mobile.getText().toString() + "  -  ";
+                            } else if(focus_mobile_number.equals("0  2")){
+
                             } else {
                                 focus_mobile_number = txt_digit_mobile.getText().toString() + "  ";
                             }

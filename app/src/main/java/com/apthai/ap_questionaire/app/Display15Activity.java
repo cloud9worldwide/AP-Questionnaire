@@ -188,7 +188,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
 
         choich = new ArrayList<String>();
 
-        indexChoich = 0;
+        indexChoich = -1;
 
         for(int i =0; i < total; i++) {
             if(answer.size() ==1){
@@ -199,8 +199,13 @@ public class Display15Activity extends Activity implements View.OnClickListener 
             choich.add(data.getAnswers().get(i).getTitle().toString());
         }
 
-        txtResult.setText(choich.get(indexChoich));
-        if(indexChoich==0){
+        if(indexChoich == -1){
+            txtResult.setText(getResources().getString(R.string.default_display_14_15));
+        } else {
+            txtResult.setText(choich.get(indexChoich));
+        }
+
+        if(indexChoich <= 0){
             btn_minus.setEnabled(false);
             btn_minus.setImageResource(R.drawable.btn_minus_no_active);
         } else {
@@ -252,8 +257,13 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
             answer.clear();
-            AnswerData selected = data.getAnswers().get(indexChoich);
-            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+            SaveAnswerData _ans;
+            if(indexChoich ==-1){
+                _ans = new SaveAnswerData("-1",null);
+            } else {
+                AnswerData selected = data.getAnswers().get(indexChoich);
+                _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+            }
             answer.add(_ans);
 
             if(delegate.dataSubQuestion !=null){
@@ -292,8 +302,10 @@ public class Display15Activity extends Activity implements View.OnClickListener 
                 btn_plus.setEnabled(false);
                 btn_plus.setImageResource(R.drawable.btn_plus_no_active);
             }
-            btn_minus.setEnabled(true);
-            btn_minus.setImageResource(R.drawable.btn_minus);
+            if(indexChoich !=0){
+                btn_minus.setEnabled(true);
+                btn_minus.setImageResource(R.drawable.btn_minus);
+            }
         }
     }
 

@@ -178,6 +178,10 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
     private void setDropdownlist(){
         ArrayList<String> list = new ArrayList<String>();
+        if(answer.size()<1){
+            list.add(getResources().getString(R.string.default_display_13));
+        }
+
         for(int i =0; i < total; i++) {
             list.add(data.getAnswers().get(i).getTitle().toString());
         }
@@ -186,6 +190,17 @@ public class Display13Activity extends Activity implements View.OnClickListener 
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ddl.setAdapter(dataAdapter);
+        if(answer.size()>=1){
+            for(int i =0; i < total; i++) {
+                if(answer.size() ==1){
+                    if(Integer.parseInt(answer.get(0).getValue()) == data.getAnswers().get(i).getId()){
+                        ddl.setSelection(i);
+                    }
+                }
+            }
+        } else {
+            ddl.setSelection(0);
+        }
     }
 
     @Override
@@ -212,18 +227,21 @@ public class Display13Activity extends Activity implements View.OnClickListener 
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
             answer.clear();
-            AnswerData selected = data.getAnswers().get(ddl.getSelectedItemPosition());
-            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+            SaveAnswerData _ans;
+            if(ddl.getSelectedItemPosition()==0){
+                _ans = new SaveAnswerData("-1",null);
+            } else {
+                AnswerData selected = data.getAnswers().get(ddl.getSelectedItemPosition());
+                _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+            }
+
             answer.add(_ans);
 
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
                 delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
@@ -241,7 +259,6 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
     public void nextPage(){
         delegate.QM.save_answer(answer);
-        //startActivityForResult(delegate.nextPage(this),0);
         delegate.nextQuestionPage(delegate.nextPage(this));
     }
 
@@ -258,18 +275,6 @@ public class Display13Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
 }

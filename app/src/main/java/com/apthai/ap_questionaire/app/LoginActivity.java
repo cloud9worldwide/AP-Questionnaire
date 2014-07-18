@@ -161,7 +161,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                             ringProgressDialog.dismiss();
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         }
-
                     } else {
                         ringProgressDialog.dismiss();
                         uiHandler.post( onUi );

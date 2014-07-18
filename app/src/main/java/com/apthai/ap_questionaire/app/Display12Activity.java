@@ -135,7 +135,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
                     checkAnswer = delegate.QM.get_answer();
                     if(checkAnswer == null){
                         answer = delegate.getHistory();
-                    }else{
+                    } else {
                         answer = checkAnswer.getAnswer();
                     }
                     Log.e("Ans",answer.toString());

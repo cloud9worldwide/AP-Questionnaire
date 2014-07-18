@@ -109,6 +109,10 @@
     <string name="email_not_correct">E-MAIL IS INVALID</string>
     <string name="cancel">cancel</string>
     <string name="title_activity_do_not_answer_list">DoNotAnswerListActivity</string>
+    <string name="default_display_13">กรุณาเลือกคำตอบด้วยค่ะ</string>
     <string name="title_dont_answer">คำถามที่ลูกค้ายังไม่ได้ตอบ</string>
+    <string name="default_display_14_15">คลิก - + เพื่อตอบ</string>
+    <string name="default_display_16">กรุณาเลือกคำถามด้านล่างค่ะ</string>
+
 
 </resources>

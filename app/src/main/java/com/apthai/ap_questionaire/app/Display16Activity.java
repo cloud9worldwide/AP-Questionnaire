@@ -183,18 +183,28 @@ public class Display16Activity extends Activity implements View.OnClickListener 
 
         int middle = total/2;
 
-        indexChoich = 0;
+        indexChoich = -1;
 
-        for(int i =0; i < total; i++) {
-            if(answer.size() ==1){
-                if(Integer.parseInt(answer.get(0).getValue()) == data.getAnswers().get(i).getId()){
-                    indexChoich = i;
+        if(answer.size()==0){
+            txtResult.setText(getResources().getString(R.string.default_display_16));
+            for(int i =0; i < total; i++) {
+                choich.add(data.getAnswers().get(i).getTitle().toString());            }
+        } else {
+            for(int i =0; i < total; i++) {
+                if(answer.size() ==1 && !answer.get(0).getValue().equals("-1")){
+                    if(Integer.parseInt(answer.get(0).getValue()) == data.getAnswers().get(i).getId()){
+                        indexChoich = i;
+                    }
                 }
+                choich.add(data.getAnswers().get(i).getTitle().toString());
             }
-            choich.add(data.getAnswers().get(i).getTitle().toString());
-        }
+            if(indexChoich == -1){
+                txtResult.setText(getResources().getString(R.string.default_display_16));
+            } else {
+                txtResult.setText(choich.get(indexChoich));
+            }
 
-        txtResult.setText(choich.get(indexChoich));
+        }
 
         lbl_min = (TextView) findViewById(R.id.min_rank);
         lbl_middle = (TextView) findViewById(R.id.middle_rank);
@@ -230,7 +240,10 @@ public class Display16Activity extends Activity implements View.OnClickListener 
                 txtResult.setText(choich.get(progress));
             }
         });
-        mySeekBar.setProgress(indexChoich);
+        if(indexChoich !=-1){
+            mySeekBar.setProgress(indexChoich);
+        }
+
 
         pack.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
@@ -260,8 +273,13 @@ public class Display16Activity extends Activity implements View.OnClickListener 
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
             answer.clear();
-            AnswerData selected = data.getAnswers().get(indexChoich);
-            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+            SaveAnswerData _ans;
+            if(indexChoich ==-1){
+                _ans = new SaveAnswerData("-1",null);
+            } else {
+                AnswerData selected = data.getAnswers().get(indexChoich);
+                _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+            }
             answer.add(_ans);
 
             if(delegate.dataSubQuestion !=null){

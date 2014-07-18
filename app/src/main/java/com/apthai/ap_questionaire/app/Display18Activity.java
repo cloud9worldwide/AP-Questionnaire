@@ -217,6 +217,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 if(data.getAnswers().get(i).getIconInActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconInActiveUrl())==null){
                     image.setImageResource(delegate.imgDefaultIcon);
                 } else {
+                    Log.e("image url",data.getAnswers().get(i).getIconInActiveUrl());
                     image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconInActiveUrl()));
                 }
             }

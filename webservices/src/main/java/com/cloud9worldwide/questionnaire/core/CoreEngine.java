@@ -387,6 +387,7 @@ public class CoreEngine {
                             _qcursor.getString(_qcursor.getColumnIndex("questionnairetype")),
                             _qcursor.getString(_qcursor.getColumnIndex("logo")),
                             _qcursor.getString(_qcursor.getColumnIndex("timestamp")));
+
                     _pData.addQuestionnaire(_qData);
                     _qcursor.moveToNext();
                 }
@@ -2051,6 +2052,7 @@ public class CoreEngine {
         ArrayList<QuestionTypeData> _data = new ArrayList<QuestionTypeData>();
         String _fileName = _questionnaire_id+"_"+_timestamp+".json";
         String _json_str = this._qnFS.readFileOnSD(_fileName);
+
         try {
             JSONObject _json_obj = new JSONObject(_json_str);
             JSONArray _questionlist = _json_obj.getJSONObject("result").getJSONArray("questionlist");

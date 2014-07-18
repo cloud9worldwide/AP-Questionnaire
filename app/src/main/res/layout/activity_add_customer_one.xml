@@ -198,7 +198,6 @@
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_nickname" />
-
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/layout_customer_add_line3"
