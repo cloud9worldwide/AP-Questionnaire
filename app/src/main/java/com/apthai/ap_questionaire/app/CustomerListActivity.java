@@ -99,12 +99,8 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.pxToDp(75));
         lp.weight = 1;
         lp.gravity = Gravity.CENTER_VERTICAL;
-        lp.setMargins(delegate.pxToDp(20), 0, delegate.pxToDp(20), 0);
+        lp.setMargins(delegate.dpToPx(20), 0, delegate.dpToPx(20), 0);
 
-        LinearLayout.LayoutParams lp_arrow;
-        lp_arrow = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp_arrow.setMargins(delegate.pxToDp(20), 0, delegate.pxToDp(20), 0);
-        lp_arrow.gravity = Gravity.CENTER_VERTICAL;
         //set question
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -295,23 +291,20 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(122));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+v.getHeight());
 
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 if (popup.isShowing()) {
                     popup.dismiss();
@@ -320,19 +313,11 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
                 finish();
             }
         });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-            }
-        });
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 if (popup.isShowing()) {
                     popup.dismiss();

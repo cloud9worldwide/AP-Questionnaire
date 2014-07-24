@@ -72,7 +72,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         btnForgot.setAlpha(0);
         btnForgot.setOnClickListener(this);
 
-
         /*
         txtUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -177,7 +176,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     }
     private void startAnimateLogo(){
-        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -200);
+
+        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delegate.dpToPx(-175));
         anim.setFillAfter(true);
         anim.setDuration(1000);
 

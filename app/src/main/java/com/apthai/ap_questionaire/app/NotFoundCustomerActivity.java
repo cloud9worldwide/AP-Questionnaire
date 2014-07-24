@@ -141,7 +141,7 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
 
         home.setOnClickListener(new View.OnClickListener() {

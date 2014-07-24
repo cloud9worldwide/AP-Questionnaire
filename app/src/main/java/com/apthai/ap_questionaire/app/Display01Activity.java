@@ -6,7 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -64,11 +67,10 @@ public class Display01Activity extends Activity implements OnClickListener {
     private QuestionAnswerData checkAnswer = null;
 
     private void setImage(){
-        img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,delegate.imgDefault);
+        View rootView = getWindow().getDecorView().getRootView();
+        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+        rootView.setBackground(imageDraw);
     }
 
     public void setNavigator(){
@@ -81,6 +83,7 @@ public class Display01Activity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display01);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;

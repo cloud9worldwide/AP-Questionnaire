@@ -511,7 +511,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
 
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

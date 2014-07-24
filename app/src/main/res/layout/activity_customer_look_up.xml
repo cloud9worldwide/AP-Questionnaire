@@ -32,12 +32,12 @@
     <LinearLayout
         android:id="@+id/sizeContent"
         android:layout_width="1000dp"
-        android:layout_height="524dp"
+        android:layout_height="wrap_content"
         android:background="@color/WHITE"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/marginTop_content"
         android:layout_centerHorizontal="true"
-        android:baselineAligned="false"
+
         android:clickable="false">
         <TextView
             android:layout_marginTop="20dp"
@@ -62,7 +62,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/scrollView"
             android:layout_gravity="center"
-            android:fillViewport="false">
+            >
             <LinearLayout
                 android:id="@+id/AP_content"
                 android:layout_width="match_parent"

@@ -64,13 +64,16 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_look_up);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setImage();
         ctx = this;
     }
 
     private void setObject(){
         delegate = (questionniare_delegate)getApplicationContext();
+//        ScrollView sv = (ScrollView)findViewById(R.id.scrollView);
+//        sv.setEnabled(false);
 
         btn_menu = (ImageButton) findViewById(R.id.btnMenu);
         btn_send = (ImageButton) findViewById(R.id.btnSend);
@@ -270,7 +273,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

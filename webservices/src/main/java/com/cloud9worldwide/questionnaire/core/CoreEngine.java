@@ -347,6 +347,7 @@ public class CoreEngine {
             return true;
         }else{
             this.logoutMessage = "Not have internet connection";
+//            return true;
             return false;
         }
     }

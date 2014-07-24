@@ -1283,59 +1283,7 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
         }
     }
 
-    public void showPopup(final Activity context) {
-        RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
-        popup = new PopupWindow(context);
-        popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
-        popup.setBackgroundDrawable(null);
 
-        ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
-
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
-        final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
-        final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
-                setResult(0);
-                finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-            }
-        });
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
-                delegate.service.Logout();
-                setResult(2);
-                finish();
-            }
-        });
-    }
     public void showPopupAddMobile(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup_mobile);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1832,5 +1780,57 @@ public class AddCustomerActivity extends Activity implements OnClickListener {
 //        } else {//something}
 //        }
 //    }
+public void showPopup(final Activity context) {
+    RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
+    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
+    popup = new PopupWindow(context);
+    popup.setContentView(layout);
+    popup.setWidth(delegate.pxToDp(180));
+    popup.setHeight(delegate.pxToDp(118));
+    popup.setBackgroundDrawable(null);
 
+    ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
+    popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+
+    //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
+    final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
+    final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
+    final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
+    home.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
+            settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
+            logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
+            if (popup.isShowing()) {
+                popup.dismiss();
+            }
+            setResult(0);
+            finish();
+        }
+    });
+    settings.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            home.setBackgroundColor(getResources().getColor(R.color.WHITE));
+            settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
+            logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
+        }
+    });
+    logout.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            home.setBackgroundColor(getResources().getColor(R.color.WHITE));
+            settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
+            logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
+            if (popup.isShowing()) {
+                popup.dismiss();
+            }
+            delegate.service.Logout();
+            setResult(2);
+            finish();
+        }
+    });
+}
 }

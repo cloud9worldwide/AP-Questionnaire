@@ -942,9 +942,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
     }
     public void onBackPressed() {
+        delegate.customer_selected = null;
         this.setResult(3);
         finish();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode ==2 || resultCode == 0 || resultCode == 1){
@@ -968,7 +970,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

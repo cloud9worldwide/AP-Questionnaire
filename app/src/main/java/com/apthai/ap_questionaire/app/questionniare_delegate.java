@@ -66,6 +66,7 @@ public class questionniare_delegate extends Application {
     public Context ctx;
 
     public int sizeImage;
+    public float scale;
 
     public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -369,8 +370,8 @@ public class questionniare_delegate extends Application {
     }
 
     public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        float scale = getResources().getDisplayMetrics().density;
+        int px = (int) (dp * scale + 0.5f);
         return px;
     }
 

@@ -68,6 +68,7 @@ public class Display21Activity extends Activity implements View.OnClickListener 
         Drawable imageDraw =  new BitmapDrawable(imageBitmap);
         rootView.setBackground(imageDraw);
     }
+
     public void setNavigator(){
         navigatorBar = (TextView) findViewById(R.id.navigatorBar);
         navigatorBar.setText(delegate.getTitleSequence());

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -83,6 +84,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display15);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
 
@@ -342,7 +344,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         popup.showAtLocation(layout, Gravity.NO_GRAVITY, delegate.pxToDp(40), delegate.pxToDp(120));
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

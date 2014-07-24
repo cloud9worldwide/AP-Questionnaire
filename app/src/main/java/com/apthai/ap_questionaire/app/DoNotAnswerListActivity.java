@@ -254,7 +254,7 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,6 +293,20 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
         } else {
             Intent intent = delegate.getCurentQuestionIntent();
             delegate.nextQuestionPage(intent);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.setResult(3);
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode ==2 || resultCode == 0|| resultCode == 1){
+            this.setResult(resultCode);
+            finish();
         }
     }
 }

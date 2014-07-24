@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.os.Handler;
 
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 
@@ -130,9 +129,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                Log.e("among question",""+delegate.QM.CheckQuestionNotAns().size());
                 if (delegate.QM.isStaffQustion()) {
-                    delegate.sendAnswer();
                     delegate.sendAnswer();
                     if (delegate.service.isOnline()) {
                         final ProgressDialog progress = new ProgressDialog(this);
@@ -178,8 +175,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                         nextPage();
                     }
                 }
-
-
             }
         } else if(v.getId() == R.id.btnBackHome){
             if (popup.isShowing()) {
@@ -239,7 +234,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.ContactData;
 
@@ -243,7 +244,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             title.setTypeface(delegate.font_type);
             title.setTextSize(30);
 
-//        lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email
             lbl_Fname = (TextView) findViewById(R.id.lbl_Fname);
             lbl_Lname = (TextView) findViewById(R.id.lbl_Lname);
             lbl_address = (TextView) findViewById(R.id.lbl_address);
@@ -266,6 +266,11 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             lbl_email.setTextSize(25);
         }
 
+        if(delegate.service.isOnline()) {
+            btnEdit.setVisibility(View.VISIBLE);
+        } else {
+            btnEdit.setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -379,12 +384,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                     startActivityForResult(_newPage,0);
                 }
 
-
-
-//                delegate.setIndex_question(0);
-//                Log.e(TAG, delegate.questions.get(delegate.index_question).getQuestionType());
-
-
             }
         } else if(v.getId() == R.id.btnBack){
             if(popup.isShowing()){
@@ -402,9 +401,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
-                Log.e("customer_info",customer_info.toString());
-                delegate.customer_selected = customer_info;
-                startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
+                if(delegate.service.isOnline()){
+                    Log.e("customer_info",customer_info.toString());
+                    delegate.customer_selected = customer_info;
+                    startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
+                } else {
+                    Toast.makeText(this, R.string.is_offine, Toast.LENGTH_SHORT).show();
+                }
             }
         } else if(v.getId() == R.id.root_view){
             if(popup.isShowing()){
@@ -412,6 +415,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             }
         }
     }
+
     public void onBackPressed() {
         this.setResult(3);
         finish();
@@ -439,7 +443,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
+        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

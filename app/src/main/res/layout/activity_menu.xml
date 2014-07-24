@@ -9,12 +9,11 @@
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/popup_left"
-        />
+        android:src="@drawable/popup_left2" />
     <RelativeLayout
         android:layout_marginTop="10dp"
         android:id="@+id/menu_home"
-        android:layout_marginLeft="35dp"
+        android:layout_marginLeft="32dp"
         android:gravity="center_vertical"
         android:layout_width="110dp"
         android:layout_height="35dp">
@@ -36,30 +35,8 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_below="@+id/menu_home"
-        android:id="@+id/menu_settings"
-        android:layout_marginLeft="35dp"
-        android:gravity="center_vertical"
-        android:layout_width="110dp"
-        android:layout_height="35dp">
-        <TextView
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_settings"/>
-        <ImageView
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/menu_setting"
-            />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_below="@+id/menu_settings"
         android:id="@+id/menu_logout"
-        android:layout_marginLeft="35dp"
+        android:layout_marginLeft="32dp"
         android:gravity="center_vertical"
         android:layout_width="110dp"
         android:layout_height="35dp">

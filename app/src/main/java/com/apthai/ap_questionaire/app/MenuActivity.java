@@ -18,7 +18,7 @@ public class MenuActivity extends Activity {
     }
     private void setObject(){
         menu_home = (RelativeLayout) findViewById(R.id.menu_home);
-        menu_settings = (RelativeLayout) findViewById(R.id.menu_settings);
+        menu_settings = (RelativeLayout) findViewById(R.id.menu_home);
         menu_logout = (RelativeLayout) findViewById(R.id.menu_logout);
 
 //        menu_home.setOnClickListener(parentView);
