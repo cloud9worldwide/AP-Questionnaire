@@ -187,7 +187,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
-                if (txtFirstName.getText().toString().length() == 0 && txtLastName.getText().toString().length() == 0 && txtTel.getText().toString().length() == 0) {
+                if (txtFirstName.getText().toString().trim().length() == 0 && txtLastName.getText().toString().trim().length() == 0 && txtTel.getText().toString().length() == 0) {
                     startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
                 } else {
                     final ProgressDialog progress = new ProgressDialog(this);
@@ -212,7 +212,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                     Runnable background = new Runnable() {
                         @Override
                         public void run() {
-                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString(), txtLastName.getText().toString(), txtTel.getText().toString());
+                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString().trim(), txtLastName.getText().toString().trim(), txtTel.getText().toString());
                             delegate.setCustomer_list(new ArrayList<ContactSearchData>());
                             if (searchData != null) {
                                 if (searchData.size() != 0) {

@@ -375,12 +375,12 @@ public class CoreEngine {
                     _cursor.getString(2),
                     _cursor.getString(3),
                     _cursor.getString(4));
-            //Log.d(debugTag,_pData.getName()+" ,"+_cursor.getString(1)+" ,"+_cursor.getString(2)+" ,"+_cursor.getString(3));
+            Log.d(debugTag,_pData.getName()+" ,"+_cursor.getString(1)+" ,"+_cursor.getString(2)+" ,"+_cursor.getString(3));
 
             Cursor _qcursor = _sqlHelper.getAllQuestionnaireByProject(_pData.getId());
             if(_qcursor != null) {
                 _qcursor.moveToFirst();
-                //Log.d(debugTag, "_qcursor ::" + _qcursor.getString(_qcursor.getColumnIndex("timestamp")));
+                Log.d(debugTag, "_qcursor ::" + _qcursor.getString(_qcursor.getColumnIndex("timestamp")));
 
                 for (int j = 0; j < _qcursor.getCount(); j++) {
                     QuestionnaireData _qData = new QuestionnaireData(

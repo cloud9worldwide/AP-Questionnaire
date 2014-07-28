@@ -430,16 +430,21 @@ public class Display06Activity extends Activity implements View.OnClickListener 
     public void onClick(View v) {
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
-            if(delegate.dataSubQuestion !=null){
-                //sub question mode
-                if(answer.size()!=0){
-                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+            String error_msg = delegate.validate(answer,data.getAnswers());
+            if(error_msg.equals("NO")){
+                if(delegate.dataSubQuestion !=null){
+                    //sub question mode
+                    if(answer.size()!=0){
+                        delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+                    }
+                    delegate.skip_save_subans = false;
+                    onBackPressed();
+                } else {
+                    delegate.QM.save_answer(answer);
+                    delegate.nextQuestionPage(delegate.nextPage(this));
                 }
-                delegate.skip_save_subans = false;
-                onBackPressed();
             } else {
-                //normal mode
-                nextPage();
+                Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
             }
             btnNext.setEnabled(true);
         } else if(v.getId() == R.id.btnBack){

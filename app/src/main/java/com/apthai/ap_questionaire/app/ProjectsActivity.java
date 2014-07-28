@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -213,10 +214,22 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode==2){
             this.setResult(resultCode);
             finish();
         }
+    }
+
+    protected void onResume() {
+        super.onResume();
+        Log.e("Resume", "Resume");
+//        if(delegate.isBack == 2 || delegate.isBack == 0 || delegate.isBack == 1){
+//            this.setResult(delegate.isBack);
+//            delegate.isBack = 9;
+//            finish();
+//        }
+
     }
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);

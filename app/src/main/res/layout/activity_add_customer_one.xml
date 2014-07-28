@@ -289,7 +289,7 @@
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
                             android:inputType="number"
-                            android:nextFocusDown="@id/txt_digit_mobile4"
+
                             />
                         <TextView
                             android:id="@+id/lbl_digit_mobile2"
@@ -310,7 +310,7 @@
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
                             android:inputType="number"
-                            android:nextFocusDown="@id/txt_digit_mobile5"
+
                             />
                         <EditText
                             android:id="@+id/txt_digit_mobile5"
@@ -323,7 +323,7 @@
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
                             android:inputType="number"
-                            android:nextFocusDown="@id/txt_digit_mobile6"
+
                             />
 
                         <EditText
@@ -337,7 +337,7 @@
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
                             android:inputType="number"
-                            android:nextFocusDown="@id/txt_digit_mobile7"
+
                             />
                         <TextView
                             android:id="@+id/lbl_digit_mobile3"
@@ -358,7 +358,7 @@
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
                             android:inputType="number"
-                            android:nextFocusDown="@id/txt_digit_mobile8"
+
                             />
                         <EditText
                             android:id="@+id/txt_digit_mobile8"
@@ -371,7 +371,7 @@
                             android:maxLength="1"
                             android:selectAllOnFocus="true"
                             android:inputType="number"
-                            android:nextFocusDown="@id/txt_digit_mobile9"
+
                             />
                         <EditText
                             android:id="@+id/txt_digit_mobile9"

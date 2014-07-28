@@ -41,6 +41,10 @@ public class LoginActivity extends Activity implements OnClickListener {
         delegate = (questionniare_delegate)getApplicationContext();
 
         setObject();
+        if(delegate.service.getLoginStatus()){
+            Intent i = new Intent(this, ProjectsActivity.class);
+            startActivityForResult(i,0);
+        }
         startAnimateLogo();
 //        txtUsername.setText("admin");
 //        txtPassword.setText("password");

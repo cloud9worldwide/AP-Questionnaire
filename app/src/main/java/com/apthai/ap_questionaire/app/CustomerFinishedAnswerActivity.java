@@ -43,12 +43,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_finished_answer);
+        delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
         setImage();
     }
 
     private void setObject() {
-        delegate = (questionniare_delegate)getApplicationContext();
+
 
         popup = new PopupWindow(this);
 

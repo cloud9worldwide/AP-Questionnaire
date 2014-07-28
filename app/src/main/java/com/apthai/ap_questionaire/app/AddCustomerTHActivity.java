@@ -270,7 +270,6 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).getText().equals(home.getProvince().toString())) {
                     indexSelect = list.get(i).getValue().toString();
-                    Log.e("list.get(i)",list.get(i).getValue());
                     ddlProvince.setSelection(i);
 
                     break;

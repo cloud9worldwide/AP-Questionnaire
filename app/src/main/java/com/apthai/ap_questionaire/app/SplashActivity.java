@@ -61,8 +61,11 @@ public class SplashActivity extends Activity {
                 }
 
                 if(delegate.service.getLoginStatus()){
-                    Intent i = new Intent(SplashActivity.this, ProjectsActivity.class);
+                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivityForResult(i,0);
+
+//                    Intent i = new Intent(SplashActivity.this, ProjectsActivity.class);
+//                    startActivityForResult(i,0);
                 } else {
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivityForResult(i,0);

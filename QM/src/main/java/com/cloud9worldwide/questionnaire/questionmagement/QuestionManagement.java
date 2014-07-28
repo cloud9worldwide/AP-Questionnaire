@@ -325,6 +325,9 @@ public class QuestionManagement {
         }
         return true;
     }
+    public void revisitMode(){
+        staffQustion = true;
+    }
     public synchronized boolean InitStaffQuestionListData(ArrayList<QuestionTypeData> _data){
         if(this.already_pack_question) {
             this.InitQuestionListData(_data);

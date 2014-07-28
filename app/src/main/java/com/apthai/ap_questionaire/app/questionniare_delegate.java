@@ -556,7 +556,7 @@ public class questionniare_delegate extends Application {
                                 error_msg = "Please ans";
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("3")) {
-                            if (emailValidator(answer.get(i).getFreetxt().toString()) || answer.get(i).getFreetxt().toString().length() == 0) {
+                            if (!emailValidator(answer.get(i).getFreetxt().toString())|| answer.get(i).getFreetxt().toString().length() == 0) {
                                 error_msg = getString(R.string.email_not_correct);
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("4")) {

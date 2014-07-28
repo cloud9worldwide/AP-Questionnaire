@@ -247,6 +247,15 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:src="@drawable/btn_revisit"
+                        android:id="@+id/btnReVisit"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/btnNext"
+                        android:background="@null" />
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/next_btn_"
                         android:id="@+id/btnNext"
                         android:layout_alignParentRight="true"

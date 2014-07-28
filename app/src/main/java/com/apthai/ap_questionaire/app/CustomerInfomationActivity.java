@@ -30,7 +30,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     final String TAG = this.getClass().getSimpleName();
     int total = 5;
-    ImageButton btn_menu, btn_next, btn_back;
+    ImageButton btn_menu, btn_next, btn_back, btn_reVisit;
     LinearLayout linearLayout, content_view, btnEdit;
     questionniare_delegate delegate;
     String customerIndex;
@@ -231,6 +231,9 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             btn_back = (ImageButton) findViewById(R.id.btnBack);
             btn_back.setOnClickListener(this);
 
+            btn_reVisit = (ImageButton) findViewById(R.id.btnReVisit);
+            btn_reVisit.setOnClickListener(this);
+
             popup = new PopupWindow(this);
 
             root_view = (RelativeLayout) findViewById(R.id.root_view);
@@ -268,8 +271,10 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
         if(delegate.service.isOnline()) {
             btnEdit.setVisibility(View.VISIBLE);
+            btn_reVisit.setVisibility(View.VISIBLE);
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
+            btn_reVisit.setVisibility(View.INVISIBLE);
         }
 
     }
@@ -390,6 +395,15 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 popup.dismiss();
             } else {
                 onBackPressed();
+            }
+        } else if(v.getId() ==R.id.btnReVisit){
+            if(popup.isShowing()){
+                popup.dismiss();
+            } else {
+                //method revisit
+                Toast.makeText(this, "wait a moment plz", Toast.LENGTH_SHORT).show();
+//                delegate.QM.revisitMode();
+//                startActivityForResult(new Intent(this, CustomerFinishedAnswerActivity.class),0);
             }
         } else if(v.getId() == R.id.btnMenu){
             if(popup.isShowing()){
