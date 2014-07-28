@@ -171,7 +171,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, 20, 0, 20);
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
@@ -226,18 +226,18 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             TextView name = new TextView(this);
             name.setText(data.getAnswers().get(i).getTitle().toString());
             name.setTypeface(delegate.font_type);
-            name.setPadding(0, 20, 0, 20);
+            name.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
             name.setGravity(Gravity.CENTER);
             name.setTextSize(25);
             name.setTag(98);
 
             btn.addView(image);
-            name.setHeight(80);
+            name.setHeight(delegate.dpToPx(80));
             btn.addView(name);
             LinearLayout.LayoutParams lp;
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             lp.weight = 1;
-            lp.setMargins(10, 10, 10, 10);
+            lp.setMargins(delegate.dpToPx(10), delegate.dpToPx(10), delegate.dpToPx(10), delegate.dpToPx(10));
 
             btn.setLayoutParams(lp);
 

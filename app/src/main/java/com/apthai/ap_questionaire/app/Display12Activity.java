@@ -191,7 +191,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
         lbl_question.setText(data.getQuestion().getTitle());
         lbl_question.setTextSize(35);
         lbl_question.setTypeface(delegate.font_type);
-        lbl_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        lbl_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
         indexSelected=99;
 
         LinearLayout layoutprogressBar = (LinearLayout) findViewById(R.id.layoutprogressBar);
@@ -222,7 +222,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
 
             ImageView image = new ImageView(this);
             image.setTag(99);
-            lp = new LinearLayout.LayoutParams(delegate.pxToDp(50), delegate.pxToDp(50));
+            lp = new LinearLayout.LayoutParams(delegate.dpToPx(50), delegate.dpToPx(50));
             image.setLayoutParams(lp);
             btn.setTag(i);
 
@@ -245,12 +245,12 @@ public class Display12Activity extends Activity implements View.OnClickListener 
             name.setText(data.getAnswers().get(i).getTitle().toString());
             name.setTextSize(30);
             name.setTypeface(delegate.font_type);
-            name.setPadding(delegate.pxToDp(20), 0, 0, 0);
+            name.setPadding(delegate.dpToPx(20), 0, 0, 0);
             name.setTag(98);
             name.setGravity(Gravity.CENTER_VERTICAL);
 
             btn.addView(image);
-            name.setHeight(delegate.pxToDp(45));
+            name.setHeight(delegate.dpToPx(45));
             btn.addView(name);
 
             if(data.getAnswers().get(i).getIsFreeTxt()){
@@ -268,7 +268,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
                     int heightTextBox = delegate.dpToPx(40);
 
                     if(textType ==4){
-                        addDate.setPadding(delegate.pxToDp(15), 0, 0, 0);
+                        addDate.setPadding(delegate.dpToPx(15), 0, 0, 0);
 
                         if(getFreeText.length()>0){
                             addDate.setText(getFreeText);
@@ -282,7 +282,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
 
                     } else {
 
-                        addEdit.setPadding(delegate.pxToDp(15), 0, 0, 0);
+                        addEdit.setPadding(delegate.dpToPx(15), 0, 0, 0);
                         if(getFreeText.length()>0){
                             addEdit.setText(getFreeText);
                         }
@@ -391,26 +391,26 @@ public class Display12Activity extends Activity implements View.OnClickListener 
                         txtError.setTextColor(Color.RED);
                         txtError.setTypeface(delegate.font_type);
                         txtError.setGravity(Gravity.CENTER_VERTICAL);
-                        txtError.setHeight(delegate.pxToDp(15));
+                        txtError.setHeight(delegate.dpToPx(15));
                         btn2.addView(txtError);
                         if(textType ==4){
                             btn2.addView(addDate);
                         } else {
                             btn2.addView(addEdit);
                         }
-                        lp = new LinearLayout.LayoutParams(widthTextBox, delegate.pxToDp(55));
+                        lp = new LinearLayout.LayoutParams(widthTextBox, delegate.dpToPx(55));
                         lp.gravity = Gravity.CENTER_VERTICAL;
-                        lp.setMargins(delegate.pxToDp(20), 5, 0, 5);
+                        lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(5), 0, delegate.dpToPx(5));
                         btn2.setLayoutParams(lp);
                         btn.addView(btn2);
                     }
                 }
             }
-            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(50));
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
             lp.gravity = Gravity.CENTER_VERTICAL;
 
             lp.weight = 1;
-            lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), 0, delegate.pxToDp(10));
+            lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
 
             btn.setLayoutParams(lp);
             if(isSelected){
@@ -424,11 +424,11 @@ public class Display12Activity extends Activity implements View.OnClickListener 
                 for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
                     Log.e("addcolumn",addcolum +"");
                     LinearLayout btn2 = new LinearLayout(this);
-                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(50));
+                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
                     lp.gravity = Gravity.CENTER_VERTICAL;
 
                     lp.weight = 1;
-                    lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), 0, delegate.pxToDp(10));
+                    lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
                     btn2.setLayoutParams(lp);
                     linearLayout.addView(btn2);
                 }

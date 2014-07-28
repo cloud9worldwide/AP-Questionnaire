@@ -133,7 +133,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
-int icon_size = delegate.dpToPx(300);
+        int icon_size = delegate.dpToPx(0);
 
         int column =4 ;
 //        if(total >10){
@@ -178,7 +178,7 @@ int icon_size = delegate.dpToPx(300);
             btn.addView(image);
             btn.addView(name);
             LinearLayout.LayoutParams lp;
-            lp = new LinearLayout.LayoutParams(icon_size,icon_size);
+            lp = new LinearLayout.LayoutParams(icon_size,LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.weight = 1;
             lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(20), delegate.dpToPx(20), delegate.dpToPx(20));
 
@@ -240,22 +240,20 @@ int icon_size = delegate.dpToPx(300);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
         popup.setWidth(delegate.dpToPx(175));
-        popup.setHeight(delegate.dpToPx(122));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+v.getHeight());
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 if (popup.isShowing()) {
                     popup.dismiss();
@@ -268,7 +266,6 @@ int icon_size = delegate.dpToPx(300);
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 if (popup.isShowing()) {
                     popup.dismiss();

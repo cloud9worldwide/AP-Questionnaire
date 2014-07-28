@@ -168,85 +168,12 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, 20, 0, 20);
-//        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
     }
 
-//    private void setTableLayout(){
-//        linearLayout = new LinearLayout(this);
-//        int column =4;
-//        for(int i =0, c = 0; i < total; i++, c++){
-//            if (c == column) {
-//                c = 0;
-//                content_view.addView(linearLayout);
-//                linearLayout = new LinearLayout(this);
-//            }
-//            LinearLayout btn = new LinearLayout(this);
-//            btn.setOrientation(LinearLayout.VERTICAL);
-//
-//            LinearLayout.LayoutParams lp;
-//
-//            ImageView image = new ImageView(this);
-//            image.setTag(99);
-//            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage,delegate.sizeImage);
-//            imageLayout.gravity = Gravity.CENTER;
-//            image.setLayoutParams(imageLayout);
-//
-//            btn.setTag(i);
-//            btn.setOnClickListener(this);
-//
-//            boolean isSelected = false;
-//
-//            for(int j=0;j<answer.size();j++) {
-//                if(Integer.parseInt(answer.get(j).getValue()) == data.getAnswers().get(i).getId()){
-//                    isSelected = true;
-//                }
-//            }
-//
-//            if(isSelected){
-//                if(data.getAnswers().get(i).getIconActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconActiveUrl())==null){
-//                    image.setImageResource(delegate.imgDefaultIconSelect);
-//                } else {
-//                    image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconActiveUrl()));
-//                }
-//            } else {
-//                if(data.getAnswers().get(i).getIconInActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconInActiveUrl())==null){
-//                    image.setImageResource(delegate.imgDefaultIcon);
-//                } else {
-//                    Log.e("image url",data.getAnswers().get(i).getIconInActiveUrl());
-//                    image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconInActiveUrl()));
-//                }
-//            }
-//
-//            TextView name = new TextView(this);
-//            name.setText(data.getAnswers().get(i).getTitle().toString());
-//            name.setTypeface(delegate.font_type);
-//            name.setPadding(0, 20, 0, 20);
-////            name.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
-//            name.setGravity(Gravity.CENTER);
-//            name.setTextSize(25);
-//            name.setTag(98);
-//
-//            btn.addView(image);
-//            name.setHeight(80);
-////            name.setHeight(delegate.pxToDp(70));
-//            btn.addView(name);
-//
-//            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-////            lp.gravity = Gravity.CENTER;
-//            lp.weight = 1;
-////            lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(20), delegate.pxToDp(20), delegate.pxToDp(20));
-//            lp.setMargins(10, 10, 10, 10);
-//            btn.setLayoutParams(lp);
-//
-//            linearLayout.addView(btn);
-//        }
-//        content_view.addView(linearLayout);
-//    }
     private void setTableLayout(){
     linearLayout = new LinearLayout(this);
     int column =4;
@@ -296,18 +223,18 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         TextView name = new TextView(this);
         name.setText(data.getAnswers().get(i).getTitle().toString());
         name.setTypeface(delegate.font_type);
-        name.setPadding(0, 20, 0, 20);
+        name.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
         name.setGravity(Gravity.CENTER);
         name.setTextSize(25);
         name.setTag(98);
 
         btn.addView(image);
-        name.setHeight(80);
+        name.setHeight(delegate.dpToPx(80));
         btn.addView(name);
         LinearLayout.LayoutParams lp;
         lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         lp.weight = 1;
-        lp.setMargins(10, 10, 10, 10);
+        lp.setMargins(delegate.dpToPx(10), delegate.dpToPx(10), delegate.dpToPx(10), delegate.dpToPx(10));
 
         btn.setLayoutParams(lp);
 

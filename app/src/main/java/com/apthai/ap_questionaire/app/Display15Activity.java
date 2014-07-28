@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -177,7 +176,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         txtResult = (TextView) findViewById(R.id.txtResult);
         txtResult.setTextSize(30);
@@ -330,51 +329,6 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void showPopup(final Activity context) {
-        RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
-        popup = new PopupWindow(context);
-        popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(300));
-        popup.setHeight(delegate.pxToDp(300));
-        popup.setBackgroundDrawable(null);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY, delegate.pxToDp(40), delegate.pxToDp(120));
-        View view_instance = (View)layout.findViewById(R.id.popup);
-        final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                setResult(0);
-                finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-            }
-        });
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                delegate.service.Logout();
-                setResult(2);
-                finish();
-            }
-        });
     }
 
 }

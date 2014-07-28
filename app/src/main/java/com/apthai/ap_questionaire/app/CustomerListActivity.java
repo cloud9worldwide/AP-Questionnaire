@@ -65,6 +65,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     private void setObject() {
         delegate = (questionniare_delegate)getApplicationContext();
+        delegate.isBack = 9;
         customer_list = delegate.getCustomer_list();
         total = customer_list.size();
 
@@ -96,10 +97,15 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     private void setTableLayout(){
         LinearLayout.LayoutParams lp;
-        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.pxToDp(75));
+        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.dpToPx(50));
         lp.weight = 1;
         lp.gravity = Gravity.CENTER_VERTICAL;
         lp.setMargins(delegate.dpToPx(20), 0, delegate.dpToPx(20), 0);
+        LinearLayout.LayoutParams lp2;
+        lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.dpToPx(50));
+        lp2.weight = 1;
+        lp2.gravity = Gravity.CENTER_VERTICAL;
+        lp2.setMargins(delegate.dpToPx(20), 0, delegate.dpToPx(20), 0);
 
         //set question
         linearLayout = new LinearLayout(this);
@@ -145,7 +151,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         header_opatulity.setTypeface(delegate.font_type, Typeface.BOLD);
         header_opatulity.setTextSize(20);
         header_opatulity.setGravity(Gravity.CENTER);
-        header_opatulity.setLayoutParams(lp);
+        header_opatulity.setLayoutParams(lp2);
         linearLayout.addView(header_opatulity);
 
         content_view.addView(linearLayout);
@@ -171,33 +177,33 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             surname.setTypeface(delegate.font_type);
             surname.setGravity(Gravity.CENTER_VERTICAL);
             surname.setTextSize(25);
-
             surname.setLayoutParams(lp);
             btn.addView(surname);
+
             TextView unitnumber = new TextView(this);
             unitnumber.setText(obj.getUnitNumber());
             unitnumber.setTypeface(delegate.font_type);
             unitnumber.setTextSize(20);
             unitnumber.setGravity(Gravity.CENTER_VERTICAL);
-
             unitnumber.setLayoutParams(lp);
             btn.addView(unitnumber);
+
             TextView contact_id = new TextView(this);
             contact_id.setText(obj.getContactId());
             contact_id.setTypeface(delegate.font_type);
             contact_id.setGravity(Gravity.CENTER_VERTICAL);
             contact_id.setTextSize(20);
-
             contact_id.setLayoutParams(lp);
             btn.addView(contact_id);
+
             TextView time = new TextView(this);
             time.setText(obj.getLastVisit());
             time.setTypeface(delegate.font_type);
-            time.setGravity(Gravity.CENTER_VERTICAL);
-            time.setTextSize(20);
-
+            time.setGravity(Gravity.CENTER);
+            time.setTextSize(18);
             time.setLayoutParams(lp);
             btn.addView(time);
+
             TextView opatulity = new TextView(this);
             String op = "NO";
             if(obj.getIsOpporpunity()){
@@ -205,9 +211,9 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             }
             opatulity.setText(op);
             opatulity.setTypeface(delegate.font_type);
-            opatulity.setGravity(Gravity.CENTER_VERTICAL);
+            opatulity.setGravity(Gravity.CENTER);
             opatulity.setTextSize(20);
-            opatulity.setLayoutParams(lp);
+            opatulity.setLayoutParams(lp2);
             btn.addView(opatulity);
 
             btn.setTag(i);
@@ -285,6 +291,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             finish();
         }
     }
+
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -292,11 +299,11 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         popup = new PopupWindow(context);
         popup.setContentView(layout);
         popup.setWidth(delegate.dpToPx(175));
-        popup.setHeight(delegate.dpToPx(122));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+v.getHeight());
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
@@ -306,22 +313,15 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 setResult(0);
                 finish();
             }
         });
-
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
                 setResult(2);
                 finish();

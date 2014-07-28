@@ -32,6 +32,16 @@ public class TCImageLoader implements ComponentCallbacks2 {
         int memoryClass = am.getMemoryClass() * 1024 * 1024;
         cache = new TCLruCache(memoryClass);
     }
+    public Bitmap display2(String url) {
+
+        Bitmap image = cache.get(url);
+//        if (image != null) {
+//            return image;
+//        }
+
+        return image;
+    }
+
 
     public void display(String url,String width,String height, ImageView imageview, int defaultresource) {
         imageview.setImageResource(defaultresource);

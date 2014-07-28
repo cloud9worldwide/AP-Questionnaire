@@ -167,12 +167,12 @@ public class Display14Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         txtResult = (TextView) findViewById(R.id.txtResult);
         txt_question.setTextSize(30);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         btn_plus = (ImageButton) findViewById(R.id.btn_plus);
         btn_plus.setOnClickListener(this);

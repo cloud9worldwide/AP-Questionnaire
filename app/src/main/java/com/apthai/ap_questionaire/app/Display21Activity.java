@@ -63,8 +63,19 @@ public class Display21Activity extends Activity implements View.OnClickListener 
 //                String.valueOf(img_background.getHeight()),
 //                img_background,
 //                delegate.imgDefault);
+
+//        View rootView = getWindow().getDecorView().getRootView();
+//        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+//        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+//        rootView.setBackground(imageDraw);
+
+
+
         View rootView = getWindow().getDecorView().getRootView();
-        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
+        if (imageBitmap == null) {
+            imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        }
         Drawable imageDraw =  new BitmapDrawable(imageBitmap);
         rootView.setBackground(imageDraw);
     }
@@ -170,7 +181,7 @@ public class Display21Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         txtbox = (EditText) findViewById(R.id.txtbox);
         txtbox.setTypeface(delegate.font_type);

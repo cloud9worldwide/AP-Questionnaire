@@ -169,7 +169,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         ddl = (Spinner) findViewById(R.id.ddl);
 

@@ -416,6 +416,18 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("Resume","Resume");
+        if(delegate.isBack == 2 || delegate.isBack == 0 || delegate.isBack == 1){
+            this.setResult(delegate.isBack);
+            delegate.isBack = 9;
+            finish();
+        }
+
+    }
+
     public void onBackPressed() {
         this.setResult(3);
         finish();
@@ -433,48 +445,30 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_home);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 setResult(0);
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
                 setResult(2);
                 finish();

@@ -170,7 +170,7 @@ public class Display19Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         btn_left = (ImageButton) findViewById(R.id.btnLeft);
 //        btn_left.setOnClickListener(this);
@@ -180,8 +180,8 @@ public class Display19Activity extends Activity implements View.OnClickListener 
         content_view = (LinearLayout) findViewById(R.id.picture);
         content_view.removeAllViews();
 
-        pictureWidth = delegate.pxToDp(250);
-        pictureHeight =delegate.pxToDp(250);
+        pictureWidth = delegate.dpToPx(250);
+        pictureHeight =delegate.dpToPx(250);
 
 //        btn_left.setVisibility(View.INVISIBLE);
 //        if(total < 3){
@@ -239,15 +239,17 @@ public class Display19Activity extends Activity implements View.OnClickListener 
             }
 
             if(isSelected){
-                btn.setBackgroundColor(Color.rgb(247,156,49));
+                btn.setBackgroundResource(R.color.ORANGE);
             } else {
                 btn.setBackgroundColor(Color.TRANSPARENT);
             }
+            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage19,delegate.sizeImage19);
+            image.setLayoutParams(imageLayout);
 
             btn.addView(image);
-            btn.setPadding(delegate.pxToDp(10),delegate.pxToDp(10),delegate.pxToDp(10),delegate.pxToDp(10));
+//            btn.setPadding(delegate.dpToPx(10),delegate.dpToPx(10),delegate.dpToPx(10),delegate.dpToPx(10));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(pictureWidth, pictureHeight);
-            lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), delegate.pxToDp(20), delegate.pxToDp(10));
+            lp.setMargins(delegate.dpToPx(10), delegate.dpToPx(5), delegate.dpToPx(10), delegate.dpToPx(5));
             btn.setLayoutParams(lp);
             content_view.addView(btn);
         }
@@ -307,7 +309,7 @@ public class Display19Activity extends Activity implements View.OnClickListener 
                 content_view.removeAllViews();
                 setPicture();
             } else {
-                btn.setBackgroundColor(Color.rgb(247,156,49));
+                btn.setBackgroundResource(R.color.ORANGE);
                 SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
                 answer.add(_ans);
             }

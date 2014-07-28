@@ -65,8 +65,8 @@ public class questionniare_delegate extends Application {
     public QuestionManagement QM;
     public Context ctx;
 
-    public int sizeImage;
-    public float scale;
+    public int sizeImage,sizeImage19;
+    public int isBack;
 
     public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -160,7 +160,8 @@ public class questionniare_delegate extends Application {
         imgDefaultIconSelect = R.drawable.no_image_icon_selected;
         font_type = Typeface.createFromAsset(getAssets(),
                 "fonts/DB_Ozone_X.otf");
-        sizeImage = 80;
+        sizeImage = dpToPx(120);
+        sizeImage19 = dpToPx(200);
 
         ctx = this;
         if (questionnaire_selected != null) {
