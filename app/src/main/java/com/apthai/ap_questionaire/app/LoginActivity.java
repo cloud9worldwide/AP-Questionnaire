@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -34,10 +35,16 @@ public class LoginActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         ctx = this;
         delegate = (questionniare_delegate)getApplicationContext();
 
         setObject();
+        if(delegate.service.getLoginStatus()){
+            Intent i = new Intent(this, ProjectsActivity.class);
+            startActivityForResult(i,0);
+        }
         startAnimateLogo();
 //        txtUsername.setText("admin");
 //        txtPassword.setText("password");
@@ -46,9 +53,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
         txtUsername = (EditText) findViewById(R.id.txtUsername);
-        //txtUsername.setInputType(0);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
-        //txtPassword.setInputType(0);
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnForgot = (TextView) findViewById(R.id.btnForgot);
 
@@ -70,7 +75,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         btnForgot.setAlpha(0);
         btnForgot.setOnClickListener(this);
-
 
         /*
         txtUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -137,13 +141,13 @@ public class LoginActivity extends Activity implements OnClickListener {
             Runnable background = new Runnable() {
                 @Override
                 public void run() {
-                    // This is the delay
                     if (delegate.service.Login(txtUsername.getText().toString() , txtPassword.getText().toString()) == true) {
                         if (delegate.service.checkUpdateQuestionnaire()) {
                             //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
                             delegate.service.updateQuestionnaire(ringProgressDialog);
-                            //ringProgressDialog.setMessage("Downloading...All images Data");
                             delegate.service.startDownloadImages(ringProgressDialog);
+                            //ringProgressDialog.setMessage("Downloading...All images Data");
+
                             try {
                                 Thread.sleep(3000);
                             }catch (Exception e) {
@@ -151,6 +155,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                             ringProgressDialog.dismiss();
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         } else {
+                            delegate.service.startDownloadImages(ringProgressDialog);
                             try {
                                 Thread.sleep(3000);
                             }catch (Exception e){
@@ -159,12 +164,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                             ringProgressDialog.dismiss();
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         }
-
                     } else {
                         ringProgressDialog.dismiss();
                         uiHandler.post( onUi );
                     }
-                    //
                 }
             };
 
@@ -177,7 +180,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     }
     private void startAnimateLogo(){
-        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -200);
+
+        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delegate.dpToPx(-175));
         anim.setFillAfter(true);
         anim.setDuration(1000);
 

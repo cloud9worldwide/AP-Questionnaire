@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -13,11 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,9 +33,7 @@ import java.util.ArrayList;
 public class CustomerLookUpActivity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    int total = 5;
     ImageButton btn_menu, btn_send, btn_back;
-    LinearLayout linearLayout, content_view;
     questionniare_delegate delegate;
     EditText txtFirstName,txtLastName,txtTel;
     TextView project_name,question_title;
@@ -43,29 +44,42 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
     TextView lbl_firstname, lbl_lastname, lbl_tel;
     private Context ctx;
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        setImage();
-    }
+
     private void setImage(){
         setObject();
+
+        View rootView = getWindow().getDecorView().getRootView();
+//        rootView.setBackground(this.getResources().getDrawable(R.drawable.img_love_mom_app_bg));
+
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,delegate.imgDefault);
+        img_background.setVisibility(View.GONE);
+
+        Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
+        if (imageBitmap == null) {
+            imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        }
+        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+//        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+//        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+
+        rootView.setBackground(imageDraw);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_look_up);
+//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        setImage();
         ctx = this;
     }
 
     private void setObject(){
         delegate = (questionniare_delegate)getApplicationContext();
+//        ScrollView sv = (ScrollView)findViewById(R.id.scrollView);
+//        sv.setEnabled(false);
 
         btn_menu = (ImageButton) findViewById(R.id.btnMenu);
         btn_send = (ImageButton) findViewById(R.id.btnSend);
@@ -173,7 +187,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
-                if (txtFirstName.getText().toString().length() == 0 && txtLastName.getText().toString().length() == 0 && txtTel.getText().toString().length() == 0) {
+                if (txtFirstName.getText().toString().trim().length() == 0 && txtLastName.getText().toString().trim().length() == 0 && txtTel.getText().toString().length() == 0) {
                     startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
                 } else {
                     final ProgressDialog progress = new ProgressDialog(this);
@@ -198,7 +212,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                     Runnable background = new Runnable() {
                         @Override
                         public void run() {
-                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString(), txtLastName.getText().toString(), txtTel.getText().toString());
+                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString().trim(), txtLastName.getText().toString().trim(), txtTel.getText().toString());
                             delegate.setCustomer_list(new ArrayList<ContactSearchData>());
                             if (searchData != null) {
                                 if (searchData.size() != 0) {
@@ -253,43 +267,29 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
-
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        //Log.e("debug",String.valueOf(v.getX()+delegate.dpToPx(50))+" , "+String.valueOf(v.getY()+delegate.dpToPx(50)));
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 setResult(0);
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
                 setResult(2);

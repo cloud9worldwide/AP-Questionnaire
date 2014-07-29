@@ -58,7 +58,7 @@
     <ImageButton
         android:id="@+id/btnLogin"
         android:layout_marginTop="10dp"
-        android:src="@drawable/btn_login"
+        android:src="@drawable/login_btn_"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtPassword"

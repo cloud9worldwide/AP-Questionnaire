@@ -2,9 +2,13 @@
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="35dp"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
     android:id="@+id/list_title"
+    android:fontFamily="fonts/DB_Ozone_X.otf"
     android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
     android:layout_marginBottom="10dp"
 
     />

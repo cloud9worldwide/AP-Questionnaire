@@ -7,11 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
@@ -30,7 +33,6 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
     questionniare_delegate delegate;
     RelativeLayout footer;
     TextView project_name,question_title;
-    String txtPromp;
     RelativeLayout root_view;
     static PopupWindow popup, popupAddMobile;
 
@@ -49,32 +51,28 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer_en);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setObject();
         getCustomerInfo();
     }
 
     private void getCustomerInfo(){
-        if(delegate.customer_selected.getContactId().equals("")){
-//new customer
-        } else {
-            AddressData home = new_customer.getAddress();
-            AddressData work = new_customer.getAddressWork();
+        AddressData home = new_customer.getAddress();
+        AddressData work = new_customer.getAddressWork();
 
-            txtHomeId.setText(home.getHouseId().toString());
-            txtMoo.setText(home.getMoo().toString());
-            txtBuilding.setText(home.getVillage().toString());
-            txtFloor.setText(home.getFloor().toString());
-            txtRoom.setText(home.getRoom().toString());
-            txtSoi.setText(home.getSoi().toString());
-            txtRoad.setText(home.getRoad().toString());
-            txtProvince.setText(home.getProvince().toString());
-            txtDistrict.setText(home.getDistrict().toString());
-            txtSubDistrict.setText(home.getSubdistrict().toString());
-            txtPostcode.setText(home.getPostalcode().toString());
-            txtWork.setText(work.getVillage().toString());
-            txtWorkDistrict.setText(work.getDistrict().toString());
-        }
-
+        txtHomeId.setText(home.getHouseId().toString());
+        txtMoo.setText(home.getMoo().toString());
+        txtBuilding.setText(home.getVillage().toString());
+        txtFloor.setText(home.getFloor().toString());
+        txtRoom.setText(home.getRoom().toString());
+        txtSoi.setText(home.getSoi().toString());
+        txtRoad.setText(home.getRoad().toString());
+        txtProvince.setText(home.getProvince().toString());
+        txtDistrict.setText(home.getDistrict().toString());
+        txtSubDistrict.setText(home.getSubdistrict().toString());
+        txtPostcode.setText(home.getPostalcode().toString());
+        txtWork.setText(work.getVillage().toString());
+        txtWorkDistrict.setText(work.getDistrict().toString());
     }
 
     private void setObject(){
@@ -87,8 +85,6 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         project_name.setTextSize(30);
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
-
-        txtPromp = "กรุณาเลือก";
 
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_header.setTypeface(delegate.font_type);
@@ -133,11 +129,12 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         txtProvince = (EditText) findViewById(R.id.txtProvince);
         txtDistrict = (EditText) findViewById(R.id.txtDistrict);
         txtSubDistrict = (EditText) findViewById(R.id.txtSubDistrict);
-        txtPostcode = (EditText) findViewById(R.id.txtPostcode2);
+        txtPostcode = (EditText) findViewById(R.id.txtPostcode);
         txtWork = (EditText) findViewById(R.id.txtWork);
         txtWorkDistrict = (EditText) findViewById(R.id.txtDistrictWork);
 
         setFont();
+        setKeyListener();
         final View activityRootView = findViewById(R.id.root_view);
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -151,6 +148,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             }
         });
     }
+
     private void setFont(){
         lblHomeId.setTextSize(25);
         lblHomeId.setTypeface(delegate.font_type);
@@ -208,6 +206,140 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
     }
 
+    private void setKeyListener() {
+        txtHomeId.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtHomeId.clearFocus();
+                    txtMoo.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtMoo.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtMoo.clearFocus();
+                    txtBuilding.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtBuilding.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtBuilding.clearFocus();
+                    txtFloor.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtFloor.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtFloor.clearFocus();
+                    txtRoom.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtRoom.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtRoom.clearFocus();
+                    txtSoi.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtSoi.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtSoi.clearFocus();
+                    txtRoad.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtRoad.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtRoad.clearFocus();
+                    txtProvince.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtProvince.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtProvince.clearFocus();
+                    txtDistrict.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtDistrict.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtDistrict.clearFocus();
+                    txtSubDistrict.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtSubDistrict.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtSubDistrict.clearFocus();
+                    txtPostcode.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtPostcode.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtPostcode.clearFocus();
+                    txtWork.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtWork.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtWork.clearFocus();
+                    txtWorkDistrict.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtWorkDistrict.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(txtWorkDistrict.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
@@ -227,11 +359,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void packData(){
 
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
-//        AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
 
         if(txtHomeId.getText().toString().length()>0){
             home.setHouseId(txtHomeId.getText().toString());
@@ -337,6 +469,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         };
         new Thread( background ).start();
     }
+
     public void onClick(View v) {
         if (popup.isShowing()) {
             popup.dismiss();
@@ -346,11 +479,12 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             packData();
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();
-        } else if(v.getId() == R.id.popup){
+        } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
         }
 
     }
+
     public void onBackPressed() {
         this.setResult(3);
         finish();
@@ -362,52 +496,37 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             finish();
         }
     }
+
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
+        View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 setResult(0);
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
                 setResult(2);
                 finish();

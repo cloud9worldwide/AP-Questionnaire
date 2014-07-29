@@ -7,22 +7,20 @@
     >
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="matrix"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tileMode="disabled"
+        android:scaleType="centerCrop"
         android:id="@+id/img_background"
-        android:adjustViewBounds="false"
         android:layout_below="@+id/project_name" />
     <TextView
         android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
-        android:paddingTop="10dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -34,12 +32,12 @@
     <LinearLayout
         android:id="@+id/sizeContent"
         android:layout_width="1000dp"
-        android:layout_height="524dp"
+        android:layout_height="wrap_content"
         android:background="@color/WHITE"
         android:orientation="vertical"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="@dimen/marginTop_content"
         android:layout_centerHorizontal="true"
-        android:baselineAligned="false"
+
         android:clickable="false">
         <TextView
             android:layout_marginTop="20dp"
@@ -64,7 +62,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/scrollView"
             android:layout_gravity="center"
-            android:fillViewport="false">
+            >
             <LinearLayout
                 android:id="@+id/AP_content"
                 android:layout_width="match_parent"
@@ -96,7 +94,6 @@
                     android:paddingLeft="10dp"
                     android:hint="@string/customer_look_up_hint_name" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/latout_customer_lookup_surname"
                     android:layout_marginTop="20dp"
@@ -122,7 +119,6 @@
                         android:paddingLeft="10dp"
                         android:hint="@string/customer_look_up_hint_surname" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/layout_customer_lookup_tel"
                     android:layout_marginTop="20dp"
@@ -153,7 +149,6 @@
         </ScrollView>
         <RelativeLayout
             android:id="@+id/footer"
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="75dp"
@@ -162,7 +157,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_back"
+                android:src="@drawable/back_btn"
                 android:id="@+id/btnBack"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
@@ -170,7 +165,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_send"
+                android:src="@drawable/send_btn_"
                 android:id="@+id/btnSend"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

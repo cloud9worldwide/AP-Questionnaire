@@ -347,6 +347,7 @@ public class CoreEngine {
             return true;
         }else{
             this.logoutMessage = "Not have internet connection";
+//            return true;
             return false;
         }
     }
@@ -374,12 +375,12 @@ public class CoreEngine {
                     _cursor.getString(2),
                     _cursor.getString(3),
                     _cursor.getString(4));
-            //Log.d(debugTag,_pData.getName()+" ,"+_cursor.getString(1)+" ,"+_cursor.getString(2)+" ,"+_cursor.getString(3));
+            Log.d(debugTag,_pData.getName()+" ,"+_cursor.getString(1)+" ,"+_cursor.getString(2)+" ,"+_cursor.getString(3));
 
             Cursor _qcursor = _sqlHelper.getAllQuestionnaireByProject(_pData.getId());
             if(_qcursor != null) {
                 _qcursor.moveToFirst();
-                //Log.d(debugTag, "_qcursor ::" + _qcursor.getString(_qcursor.getColumnIndex("timestamp")));
+                Log.d(debugTag, "_qcursor ::" + _qcursor.getString(_qcursor.getColumnIndex("timestamp")));
 
                 for (int j = 0; j < _qcursor.getCount(); j++) {
                     QuestionnaireData _qData = new QuestionnaireData(
@@ -387,6 +388,7 @@ public class CoreEngine {
                             _qcursor.getString(_qcursor.getColumnIndex("questionnairetype")),
                             _qcursor.getString(_qcursor.getColumnIndex("logo")),
                             _qcursor.getString(_qcursor.getColumnIndex("timestamp")));
+
                     _pData.addQuestionnaire(_qData);
                     _qcursor.moveToNext();
                 }
@@ -509,18 +511,24 @@ public class CoreEngine {
                         this.responseMessage = "Server error";
                         return null;
                     }
+
                     JSONObject respObj = new JSONObject(r);
                     if(respObj.getBoolean("status")) {
                         JSONArray _arr_json = respObj.getJSONArray("result");
                         for (int i = 0; i < _arr_json.length(); i++) {
                             JSONObject _json = _arr_json.getJSONObject(i);
+
+                            Boolean isOp = false;
+                            if(_json.getString("isOpporpunity").equals("YES")){
+                                isOp = true;
+                            }
                             ContactSearchData _sData = new ContactSearchData(
                                     _json.getString("contactid"),
                                     _json.getString("fname"),
                                     _json.getString("lname"),
                                     _json.getString("unitnumber"),
                                     _json.getString("lastvisit"),
-                                    _json.getBoolean("isOpporpunity")
+                                    isOp
                             );
                             _data.add(_sData);
                         }
@@ -1272,7 +1280,6 @@ public class CoreEngine {
             return true;
         }
     }
-
 
     public synchronized boolean saveQuestionnaireData2(QuestionnaireAnswerData _data){
         if(isOnline()){
@@ -2046,6 +2053,7 @@ public class CoreEngine {
         ArrayList<QuestionTypeData> _data = new ArrayList<QuestionTypeData>();
         String _fileName = _questionnaire_id+"_"+_timestamp+".json";
         String _json_str = this._qnFS.readFileOnSD(_fileName);
+
         try {
             JSONObject _json_obj = new JSONObject(_json_str);
             JSONArray _questionlist = _json_obj.getJSONObject("result").getJSONArray("questionlist");
@@ -2371,7 +2379,7 @@ public class CoreEngine {
 
     public ArrayList<ValTextData> getCountry(){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        data.add(0,new ValTextData("0","Thailand"));
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getAllCountry();
@@ -2387,7 +2395,7 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getNationality(){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        data.add(0,new ValTextData("0","Thailand"));
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getAllNationality();

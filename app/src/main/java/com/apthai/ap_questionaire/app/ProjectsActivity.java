@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,14 +39,12 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     TextView project_name;
     TextView lbl_title;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
 
         delegate = (questionniare_delegate)getApplicationContext();
-
 
         if(delegate.service.isOnline()){
             final ProgressDialog progress = new ProgressDialog(this);
@@ -76,7 +75,7 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             };
             new Thread( background ).start();
 
-        }else {
+        } else {
             list_projectdata = delegate.service.getProjects();
             total = list_projectdata.size();
             setObject();
@@ -113,7 +112,8 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
-        int icon_size = delegate.pxToDp(85);
+//        int icon_size = delegate.pxToDp(400);
+        int icon_size = 0;
         int icon_size_for_demo = delegate.pxToDp(150);
 
         int column =4 ;
@@ -133,7 +133,9 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
         for(int i =0, c = 0, r = 0; i < total; i++, c++){
             ProjectData obj = list_projectdata.get(i);
-            int imageWidth = delegate.pxToDp(100), imageHeight = delegate.pxToDp(50);
+//            int imageWidth = delegate.dpToPx(100), imageHeight = delegate.dpToPx(50);
+            int imageWidth = 0, imageHeight = 0;
+            int imageWidth2 = delegate.dpToPx(200), imageHeight2 = delegate.dpToPx(100);
 
             if(c == column){
                 c = 0;
@@ -153,20 +155,27 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(), imageWidth, imageHeight);
             if(bmp !=null) {
                 image.setImageBitmap(bmp);
+                LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
+                lpImage.gravity = Gravity.CENTER;
+                image.setLayoutParams(lpImage);
             }
-
             bmp = null;
+
             btn.addView(image);
+//            if(i%2 ==0){
+//                btn.setBackgroundColor(Color.RED);
+//            } else {
+//                btn.setBackgroundColor(Color.GRAY);
+//            }
 
             LinearLayout.LayoutParams lp;
 
             lp = new LinearLayout.LayoutParams(icon_size,LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.weight = 1;
-            lp.setMargins(delegate.pxToDp(20),delegate.pxToDp( 20), delegate.pxToDp(20), delegate.pxToDp(20));
+            lp.setMargins(delegate.dpToPx(20),delegate.dpToPx(20), delegate.dpToPx(20), delegate.dpToPx(20));
             lp.gravity = Gravity.CENTER;
 
             btn.setLayoutParams(lp);
-//            btn.setBackgroundColor(Color.GRAY);
             linearLayout.addView(btn);
 
         }
@@ -205,10 +214,22 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode==2){
             this.setResult(resultCode);
             finish();
         }
+    }
+
+    protected void onResume() {
+        super.onResume();
+        Log.e("Resume", "Resume");
+//        if(delegate.isBack == 2 || delegate.isBack == 0 || delegate.isBack == 1){
+//            this.setResult(delegate.isBack);
+//            delegate.isBack = 9;
+//            finish();
+//        }
+
     }
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
@@ -217,18 +238,17 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
+
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        //Log.e("debug",String.valueOf(v.getX()+delegate.dpToPx(50))+" , "+String.valueOf(v.getY()+delegate.dpToPx(50)));
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
+
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
 
         home.setOnClickListener(new View.OnClickListener() {
@@ -241,19 +261,10 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 //                finish();
             }
         });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-//                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-//                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-            }
-        });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 if (popup.isShowing()) {
                     popup.dismiss();

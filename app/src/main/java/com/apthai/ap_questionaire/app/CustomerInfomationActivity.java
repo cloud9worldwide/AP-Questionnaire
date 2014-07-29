@@ -1,11 +1,14 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.ContactData;
 
@@ -26,7 +30,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     final String TAG = this.getClass().getSimpleName();
     int total = 5;
-    ImageButton btn_menu, btn_next, btn_back;
+    ImageButton btn_menu, btn_next, btn_back, btn_reVisit;
     LinearLayout linearLayout, content_view, btnEdit;
     questionniare_delegate delegate;
     String customerIndex;
@@ -37,27 +41,16 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     RelativeLayout root_view;
     ImageView img_background;
 
-    TextView txtUpdate,question_title,title;
+    TextView question_title,title;
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(delegate ==null){
-            setImage();
-        }
-    }
-
     private void setImage(){
-
         img_background = (ImageView) findViewById(R.id.img_background);
 
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,R.drawable.logo_ap);
-
-        //setObject();
 
     }
 
@@ -81,6 +74,25 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
+                setImage();
+            }
+        };
+        final  Runnable onUi2 = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                progress.dismiss();
+                new AlertDialog.Builder(CustomerInfomationActivity.this)
+                        .setTitle("Connection Lost")
+                        .setMessage("Please enter customer info again.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(1);
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         };
         Runnable background = new Runnable() {
@@ -88,13 +100,17 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             public void run() {
                 // This is the delay
                 customer_info = delegate.service.getContactInfo(customerIndex);
-                customer_info.setContactId(delegate.service.globals.getContactId());
-                try {
-                    Thread.sleep(2000);
-                }catch (Exception e){
+                if(customer_info !=null){
+                    customer_info.setContactId(delegate.service.globals.getContactId());
+                    try {
+                        Thread.sleep(2000);
+                    }catch (Exception e){
 
+                    }
+                    uiHandler.post( onUi );
+                }else{
+                    uiHandler.post( onUi2 );
                 }
-                uiHandler.post( onUi );
             }
         };
         new Thread( background ).start();
@@ -171,7 +187,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                         if(!allMobile.equals("")){
                             allMobile = allMobile + ", ";
                         }
-                        allMobile = allMobile + customer_info.getMobiles().get(i);
+                        allMobile = allMobile + numberformat(customer_info.getMobiles().get(i));
                     }
                 }
             }
@@ -189,7 +205,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                         if(!allTels.equals("")){
                             allTels = allTels + ", ";
                         }
-                        allTels = allTels + customer_info.getTels().get(i);
+                        allTels = allTels + numberformat(customer_info.getTels().get(i));
                     }
                 }
             }
@@ -215,14 +231,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             btn_back = (ImageButton) findViewById(R.id.btnBack);
             btn_back.setOnClickListener(this);
 
+            btn_reVisit = (ImageButton) findViewById(R.id.btnReVisit);
+            btn_reVisit.setOnClickListener(this);
+
             popup = new PopupWindow(this);
 
             root_view = (RelativeLayout) findViewById(R.id.root_view);
             root_view.setOnClickListener(this);
-
-            txtUpdate = (TextView) findViewById(R.id.txtUpdate);
-            txtUpdate.setTypeface(delegate.font_type);
-            txtUpdate.setTextSize(25);
 
             question_title = (TextView) findViewById(R.id.question_title);
             question_title.setTypeface(delegate.font_type);
@@ -232,7 +247,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             title.setTypeface(delegate.font_type);
             title.setTextSize(30);
 
-//        lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email
             lbl_Fname = (TextView) findViewById(R.id.lbl_Fname);
             lbl_Lname = (TextView) findViewById(R.id.lbl_Lname);
             lbl_address = (TextView) findViewById(R.id.lbl_address);
@@ -255,6 +269,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             lbl_email.setTextSize(25);
         }
 
+        if(delegate.service.isOnline()) {
+            btnEdit.setVisibility(View.VISIBLE);
+            btn_reVisit.setVisibility(View.VISIBLE);
+        } else {
+            btnEdit.setVisibility(View.INVISIBLE);
+            btn_reVisit.setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -368,18 +389,21 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                     startActivityForResult(_newPage,0);
                 }
 
-
-
-//                delegate.setIndex_question(0);
-//                Log.e(TAG, delegate.questions.get(delegate.index_question).getQuestionType());
-
-
             }
         } else if(v.getId() == R.id.btnBack){
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
                 onBackPressed();
+            }
+        } else if(v.getId() ==R.id.btnReVisit){
+            if(popup.isShowing()){
+                popup.dismiss();
+            } else {
+                //method revisit
+                Toast.makeText(this, "wait a moment plz", Toast.LENGTH_SHORT).show();
+//                delegate.QM.revisitMode();
+//                startActivityForResult(new Intent(this, CustomerFinishedAnswerActivity.class),0);
             }
         } else if(v.getId() == R.id.btnMenu){
             if(popup.isShowing()){
@@ -391,9 +415,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
-                Log.e("customer_info",customer_info.toString());
-                delegate.customer_selected = customer_info;
-                startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
+                if(delegate.service.isOnline()){
+                    Log.e("customer_info",customer_info.toString());
+                    delegate.customer_selected = customer_info;
+                    startActivityForResult(new Intent(this, AddCustomerOneActivity.class),0);
+                } else {
+                    Toast.makeText(this, R.string.is_offine, Toast.LENGTH_SHORT).show();
+                }
             }
         } else if(v.getId() == R.id.root_view){
             if(popup.isShowing()){
@@ -401,6 +429,19 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("Resume","Resume");
+        if(delegate.isBack == 2 || delegate.isBack == 0 || delegate.isBack == 1){
+            this.setResult(delegate.isBack);
+            delegate.isBack = 9;
+            finish();
+        }
+
+    }
+
     public void onBackPressed() {
         this.setResult(3);
         finish();
@@ -418,52 +459,45 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 setResult(0);
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
                 setResult(2);
                 finish();
             }
         });
+    }
+    public String numberformat(String phone){
+        if(phone.length()==10){
+            //mobile mode
+            return PhoneNumberUtils.formatNumber(phone);
+        } else if(phone.length()==9){
+            //home mode
+            return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+        }
+        //do not anythings
+        return phone;
     }
 }

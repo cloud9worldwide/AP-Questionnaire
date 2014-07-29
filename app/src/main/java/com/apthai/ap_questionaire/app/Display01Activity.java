@@ -6,8 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,7 +32,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +43,6 @@ import com.cloud9worldwide.questionnaire.data.SaveAnswerData;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
 public class Display01Activity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
@@ -51,12 +51,12 @@ public class Display01Activity extends Activity implements OnClickListener {
     LinearLayout linearLayout, content_view;
     QuestionTypeData data;
     questionniare_delegate delegate;
-    TextView question_title,project_name;
+    TextView project_name;
     ImageButton btn_back,btnNext;
     ArrayList<SaveAnswerData> answer;
     ImageView img_background;
 
-    SeekBar navigatorBar;
+    TextView navigatorBar;
     TextView txt_process;
     Drawable thumb;
     RelativeLayout footer;
@@ -66,39 +66,23 @@ public class Display01Activity extends Activity implements OnClickListener {
     private QuestionAnswerData checkAnswer = null;
 
     private void setImage(){
-        img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,delegate.imgDefault);
+        View rootView = getWindow().getDecorView().getRootView();
+        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+        rootView.setBackground(imageDraw);
     }
 
     public void setNavigator(){
-        navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-        navigatorBar.setMax(delegate.getMax());
-        navigatorBar.setProgress(0);
-        navigatorBar.setProgress(delegate.getProcessed());
-        navigatorBar.setEnabled(false);
-        navigatorBar.setVisibility(View.VISIBLE);
-        thumb = getResources().getDrawable(R.drawable.icon_navigator);
-        thumb.setBounds(new Rect(0,0, thumb.getIntrinsicWidth(),thumb.getIntrinsicHeight()));
-        navigatorBar.setThumb(thumb);
-
-        txt_process = new TextView(this);
-        txt_process.setText(delegate.getPercent());
-
-        txt_process.setWidth(thumb.getIntrinsicWidth());
-        txt_process.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.setMargins((thumb.getBounds().left + (int) navigatorBar.getX()) -8 , (int)navigatorBar.getY()+5, 0, 0);
-        txt_process.setLayoutParams(params);
-        footer = (RelativeLayout) findViewById(R.id.footer);
-        footer.addView(txt_process);
+        navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+        navigatorBar.setText(delegate.getTitleSequence());
+        navigatorBar.setTypeface(delegate.font_type);
+        navigatorBar.setTextSize(20);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display01);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
@@ -127,9 +111,8 @@ public class Display01Activity extends Activity implements OnClickListener {
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
-                    question_title.setText("คำถามย่อย");
-                    navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-                    navigatorBar.setVisibility(View.GONE);
+                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+                    navigatorBar.setText("คำถามย่อย");
                 }
             }
         };
@@ -183,11 +166,6 @@ public class Display01Activity extends Activity implements OnClickListener {
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
 
-        question_title = (TextView) findViewById(R.id.question_title);
-        question_title.setText(delegate.getTitleSequence());
-        question_title.setTypeface(delegate.font_type);
-        question_title.setTextSize(20);
-
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
         project_name.setTextSize(30);
@@ -206,8 +184,9 @@ public class Display01Activity extends Activity implements OnClickListener {
         question.setText(data.getQuestion().getTitle());
         question.setTextSize(35);
         question.setTypeface(delegate.font_type);
-        question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
-        question.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.1f));
+        question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
+        question.setGravity(Gravity.CENTER);
+        question.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.1f));
         linearLayout.addView(question);
         content_view.addView(linearLayout);
 
@@ -231,7 +210,7 @@ public class Display01Activity extends Activity implements OnClickListener {
             final ImageView image = new ImageView(this);
             image.setTag(99);
 
-            lp = new LinearLayout.LayoutParams(delegate.pxToDp(50), delegate.pxToDp(50));
+            lp = new LinearLayout.LayoutParams(delegate.dpToPx(50), delegate.dpToPx(50));
             lp.gravity =Gravity.CENTER_VERTICAL;
 
             image.setLayoutParams(lp);
@@ -256,12 +235,12 @@ public class Display01Activity extends Activity implements OnClickListener {
             name.setText(data.getAnswers().get(i).getTitle().toString());
             name.setTextSize(30);
             name.setTypeface(delegate.font_type);
-            name.setPadding(delegate.pxToDp(20), delegate.pxToDp(15), 0, 0);
+            name.setPadding(delegate.dpToPx(20), delegate.dpToPx(15), 0, 0);
             name.setTag(98);
             name.setGravity(Gravity.CENTER_VERTICAL);
 
             btn.addView(image);
-            name.setHeight(delegate.pxToDp(45));
+            name.setHeight(delegate.dpToPx(45));
             btn.addView(name);
 
             if(data.getAnswers().get(i).getIsFreeTxt()){
@@ -279,7 +258,7 @@ public class Display01Activity extends Activity implements OnClickListener {
                     int heightTextBox = delegate.dpToPx(40);
 
                     if(textType ==4){
-                        addDate.setPadding(delegate.pxToDp(15), 0, 0, 0);
+                        addDate.setPadding(delegate.dpToPx(15), 0, 0, 0);
 
                         if(getFreeText.length()>0){
                             addDate.setText(getFreeText);
@@ -293,7 +272,7 @@ public class Display01Activity extends Activity implements OnClickListener {
 
                     } else {
 
-                        addEdit.setPadding(delegate.pxToDp(15), 0, 0, 0);
+                        addEdit.setPadding(delegate.dpToPx(15), 0, 0, 0);
                         addEdit.setTag(97);
                         if(getFreeText.length()>0){
                             addEdit.setText(getFreeText);
@@ -383,28 +362,41 @@ public class Display01Activity extends Activity implements OnClickListener {
                         txtError.setTextColor(Color.RED);
                         txtError.setTypeface(delegate.font_type);
                         txtError.setGravity(Gravity.CENTER_VERTICAL);
-                        txtError.setHeight(delegate.pxToDp(15));
+                        txtError.setHeight(delegate.dpToPx(15));
                         btn2.addView(txtError);
                         if(textType ==4){
                             btn2.addView(addDate);
                         } else {
                             btn2.addView(addEdit);
                         }
-                        lp = new LinearLayout.LayoutParams(widthTextBox, delegate.pxToDp(55));
+                        lp = new LinearLayout.LayoutParams(widthTextBox, delegate.dpToPx(55));
                         lp.gravity = Gravity.CENTER_VERTICAL;
-                        lp.setMargins(delegate.pxToDp(20), 5, 0, 5);
+                        lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(5), 0, delegate.dpToPx(5));
                         btn2.setLayoutParams(lp);
                         btn.addView(btn2);
                     }
                 }
             }
 
-            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.pxToDp(55));
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
             lp.gravity = Gravity.CENTER_VERTICAL;
             lp.weight = 1;
-            lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), 0, delegate.pxToDp(10));
+            lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
             btn.setLayoutParams(lp);
             linearLayout.addView(btn);
+            //for beautiful
+            if(i==total-1  && total % column !=0){
+                for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
+                    LinearLayout btn2 = new LinearLayout(this);
+                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+                    lp.gravity = Gravity.CENTER_VERTICAL;
+
+                    lp.weight = 1;
+                    lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
+                    btn2.setLayoutParams(lp);
+                    linearLayout.addView(btn2);
+                }
+            }
         }
         content_view.addView(linearLayout);
     }
@@ -431,18 +423,27 @@ public class Display01Activity extends Activity implements OnClickListener {
     public void onClick(View v) {
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
-            if(delegate.dataSubQuestion !=null){
-                //sub question mode
-                if(answer.size()!=0){
-                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+            String error_msg = delegate.validate(answer,data.getAnswers());
+            if(error_msg.equals("NO")){
+                if(delegate.dataSubQuestion !=null){
+                    //sub question mode
+                    if(answer.size()!=0){
+                        delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+                    }
+                    delegate.skip_save_subans = false;
+                    onBackPressed();
+                } else {
+                    delegate.QM.save_answer(answer);
+                    delegate.nextQuestionPage(delegate.nextPage(this));
                 }
-                onBackPressed();
             } else {
-                //normal mode
-                nextPage();
+                Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else {
             seletedAnswer(v, "");

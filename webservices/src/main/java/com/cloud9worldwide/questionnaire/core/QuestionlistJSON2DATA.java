@@ -16,10 +16,16 @@ public class QuestionlistJSON2DATA {
         ArrayList<QuestionTypeData> _result = new ArrayList<QuestionTypeData>();
         //Extract question data & find url image for download to local
         try {
+            int k = 1;
             for (int i = 0; i < _questionlist.length(); i++) {
 
                 JSONObject _question = _questionlist.getJSONObject(i);
                 QuestionTypeData _qTypeData = new QuestionTypeData(_question);
+                if(_qTypeData.getParent_question_id() == -1){
+                    _qTypeData.setQuestionOrder(k);
+                    k++;
+                }
+
                 if(_qTypeData.getQuestion() != null && _qTypeData.getAnswers() != null)
                     _result.add(_qTypeData);
             }

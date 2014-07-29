@@ -65,6 +65,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     private void setObject() {
         delegate = (questionniare_delegate)getApplicationContext();
+        delegate.isBack = 9;
         customer_list = delegate.getCustomer_list();
         total = customer_list.size();
 
@@ -96,15 +97,16 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     private void setTableLayout(){
         LinearLayout.LayoutParams lp;
-        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.pxToDp(75));
+        lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.dpToPx(50));
         lp.weight = 1;
         lp.gravity = Gravity.CENTER_VERTICAL;
-        lp.setMargins(delegate.pxToDp(20), 0, delegate.pxToDp(20), 0);
+        lp.setMargins(delegate.dpToPx(20), 0, delegate.dpToPx(20), 0);
+        LinearLayout.LayoutParams lp2;
+        lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,delegate.dpToPx(50));
+        lp2.weight = 1;
+        lp2.gravity = Gravity.CENTER_VERTICAL;
+        lp2.setMargins(delegate.dpToPx(20), 0, delegate.dpToPx(20), 0);
 
-        LinearLayout.LayoutParams lp_arrow;
-        lp_arrow = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp_arrow.setMargins(delegate.pxToDp(20), 0, delegate.pxToDp(20), 0);
-        lp_arrow.gravity = Gravity.CENTER_VERTICAL;
         //set question
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -114,48 +116,43 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         header_name.setLayoutParams(lp);
         header_name.setTypeface(delegate.font_type, Typeface.BOLD);
         header_name.setTextSize(20);
-        header_name.setGravity(Gravity.CENTER_VERTICAL);
+        header_name.setGravity(Gravity.CENTER);
         linearLayout.addView(header_name);
         TextView header_surname = new TextView(this);
         header_surname.setText("SURNAME");
         header_surname.setTypeface(delegate.font_type, Typeface.BOLD);
         header_surname.setTextSize(20);
-        header_surname.setGravity(Gravity.CENTER_VERTICAL);
+        header_surname.setGravity(Gravity.CENTER);
         header_surname.setLayoutParams(lp);
         linearLayout.addView(header_surname);
         TextView header_unitnumber = new TextView(this);
         header_unitnumber.setText("UNIT NUMBER");
         header_unitnumber.setTypeface(delegate.font_type, Typeface.BOLD);
         header_unitnumber.setTextSize(20);
-        header_unitnumber.setGravity(Gravity.CENTER_VERTICAL);
+        header_unitnumber.setGravity(Gravity.CENTER);
         header_unitnumber.setLayoutParams(lp);
         linearLayout.addView(header_unitnumber);
         TextView header_contact_id = new TextView(this);
         header_contact_id.setText("CONTACT ID");
         header_contact_id.setTypeface(delegate.font_type, Typeface.BOLD);
         header_contact_id.setTextSize(20);
-        header_contact_id.setGravity(Gravity.CENTER_VERTICAL);
+        header_contact_id.setGravity(Gravity.CENTER);
         header_contact_id.setLayoutParams(lp);
         linearLayout.addView(header_contact_id);
         TextView header_time = new TextView(this);
         header_time.setText("LAST VISIT");
         header_time.setTypeface(delegate.font_type, Typeface.BOLD);
         header_time.setTextSize(20);
-        header_time.setGravity(Gravity.CENTER_VERTICAL);
+        header_time.setGravity(Gravity.CENTER);
         header_time.setLayoutParams(lp);
         linearLayout.addView(header_time);
         TextView header_opatulity = new TextView(this);
         header_opatulity.setText("OPP");
         header_opatulity.setTypeface(delegate.font_type, Typeface.BOLD);
         header_opatulity.setTextSize(20);
-        header_opatulity.setGravity(Gravity.CENTER_VERTICAL);
-        header_opatulity.setLayoutParams(lp);
+        header_opatulity.setGravity(Gravity.CENTER);
+        header_opatulity.setLayoutParams(lp2);
         linearLayout.addView(header_opatulity);
-        ImageButton arrow2 = new ImageButton(this);
-        arrow2.setImageResource(R.drawable.arrow_right);
-        arrow2.setLayoutParams(lp_arrow);
-        arrow2.setVisibility(View.INVISIBLE);
-        linearLayout.addView(arrow2);
 
         content_view.addView(linearLayout);
 
@@ -180,47 +177,44 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             surname.setTypeface(delegate.font_type);
             surname.setGravity(Gravity.CENTER_VERTICAL);
             surname.setTextSize(25);
-
             surname.setLayoutParams(lp);
             btn.addView(surname);
+
             TextView unitnumber = new TextView(this);
             unitnumber.setText(obj.getUnitNumber());
             unitnumber.setTypeface(delegate.font_type);
             unitnumber.setTextSize(20);
             unitnumber.setGravity(Gravity.CENTER_VERTICAL);
-
             unitnumber.setLayoutParams(lp);
             btn.addView(unitnumber);
+
             TextView contact_id = new TextView(this);
             contact_id.setText(obj.getContactId());
             contact_id.setTypeface(delegate.font_type);
             contact_id.setGravity(Gravity.CENTER_VERTICAL);
             contact_id.setTextSize(20);
-
             contact_id.setLayoutParams(lp);
             btn.addView(contact_id);
+
             TextView time = new TextView(this);
             time.setText(obj.getLastVisit());
             time.setTypeface(delegate.font_type);
-            time.setGravity(Gravity.CENTER_VERTICAL);
-            time.setTextSize(20);
-
+            time.setGravity(Gravity.CENTER);
+            time.setTextSize(18);
             time.setLayoutParams(lp);
             btn.addView(time);
-            TextView opatulity = new TextView(this);
-            opatulity.setText(obj.getIsOpporpunity().toString());
-            opatulity.setTypeface(delegate.font_type);
-            opatulity.setGravity(Gravity.CENTER_VERTICAL);
-            opatulity.setTextSize(20);
 
-            opatulity.setLayoutParams(lp);
+            TextView opatulity = new TextView(this);
+            String op = "NO";
+            if(obj.getIsOpporpunity()){
+                op = "YES";
+            }
+            opatulity.setText(op);
+            opatulity.setTypeface(delegate.font_type);
+            opatulity.setGravity(Gravity.CENTER);
+            opatulity.setTextSize(20);
+            opatulity.setLayoutParams(lp2);
             btn.addView(opatulity);
-            ImageView arrow = new ImageView(this);
-            //arrow.setBackgroundColor();
-            //arrow.setBackground(null);
-            arrow.setImageResource(R.drawable.arrow_right);
-            arrow.setLayoutParams(lp_arrow);
-            btn.addView(arrow);
 
             btn.setTag(i);
             btn.setOnClickListener(this);
@@ -297,54 +291,37 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             finish();
         }
     }
+
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 setResult(0);
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
                 setResult(2);
                 finish();

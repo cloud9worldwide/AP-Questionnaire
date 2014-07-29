@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -22,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +39,7 @@ public class Display20Activity extends Activity implements View.OnClickListener 
     LinearLayout content_view;
     QuestionTypeData data;
     questionniare_delegate delegate;
-    TextView question_title, project_name, txt_question;
+    TextView project_name, txt_question;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
     ImageButton btnNext, btn_left, btn_right, btnBack;
@@ -53,7 +50,7 @@ public class Display20Activity extends Activity implements View.OnClickListener 
     HorizontalScrollView scrollPicture;
     int maxScrollX;
 
-    SeekBar navigatorBar;
+    TextView navigatorBar;
     TextView txt_process;
     Drawable thumb;
     RelativeLayout footer;
@@ -62,60 +59,19 @@ public class Display20Activity extends Activity implements View.OnClickListener 
     private QuestionAnswerData checkAnswer = null;
 
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
-
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,
                 delegate.imgDefault);
-
-        /*
-        setObject();
-        setPicture();
-
-        if(delegate.dataSubQuestion ==null){
-            setNavigator();
-        } else {
-            question_title.setText("คำถามย่อย");
-            navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-            navigatorBar.setVisibility(View.GONE);
-        }
-        */
     }
     public void setNavigator(){
-        navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-        navigatorBar.setMax(delegate.getMax());
-        navigatorBar.setProgress(0);
-        navigatorBar.setProgress(delegate.getProcessed());
-        navigatorBar.setEnabled(false);
-        navigatorBar.setVisibility(View.VISIBLE);
-        thumb = getResources().getDrawable(R.drawable.icon_navigator);
-        thumb.setBounds(new Rect(0,0, thumb.getIntrinsicWidth(),thumb.getIntrinsicHeight()));
-        navigatorBar.setThumb(thumb);
-
-        txt_process = new TextView(this);
-        txt_process.setText(delegate.getPercent());
-
-        txt_process.setWidth(thumb.getIntrinsicWidth());
-        txt_process.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins((thumb.getBounds().left + (int) navigatorBar.getX()) -8 , (int)navigatorBar.getY()+5, 0, 0);
-        txt_process.setLayoutParams(params);
-        footer = (RelativeLayout) findViewById(R.id.footer);
-        footer.addView(txt_process);
+        navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+        navigatorBar.setText(delegate.getTitleSequence());
+        navigatorBar.setTypeface(delegate.font_type);
+        navigatorBar.setTextSize(20);
     }
 
     @Override
@@ -146,12 +102,12 @@ public class Display20Activity extends Activity implements View.OnClickListener 
                 progress.dismiss();
                 setObject();
                 setPicture();
+                setImage();
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
-                    question_title.setText("คำถามย่อย");
-                    navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-                    navigatorBar.setVisibility(View.GONE);
+                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+                    navigatorBar.setText("คำถามย่อย");
                 }
             }
         };
@@ -196,26 +152,11 @@ public class Display20Activity extends Activity implements View.OnClickListener 
         new Thread( background ).start();
     }
     private void setObject(){
-        /*
-        data = delegate.QM.get_question();
-        QuestionAnswerData checkAnswer;
-        checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-        if(checkAnswer==null){
-            answer = delegate.getHistory();
-        } else {
-            answer = checkAnswer.getAnswer();
-        }
-        */
         btnNext = (ImageButton) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
 
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
-
-        question_title = (TextView) findViewById(R.id.question_title);
-        question_title.setText(delegate.getTitleSequence());
-        question_title.setTextSize(20);
-        question_title.setTypeface(delegate.font_type);
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
@@ -229,7 +170,7 @@ public class Display20Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.pxToDp(20), 0, delegate.pxToDp(20));
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         btn_left = (ImageButton) findViewById(R.id.btnLeft);
 //        btn_left.setOnClickListener(this);
@@ -239,8 +180,8 @@ public class Display20Activity extends Activity implements View.OnClickListener 
         content_view = (LinearLayout) findViewById(R.id.picture);
         content_view.removeAllViews();
 
-        pictureWidth = delegate.pxToDp(250);
-        pictureHeight =delegate.pxToDp(250);
+        pictureWidth = delegate.dpToPx(250);
+        pictureHeight =delegate.dpToPx(250);
 
         scrollPicture = (HorizontalScrollView) findViewById(R.id.scrollPicture);
 //        scrollPicture.setOnTouchListener(new View.OnTouchListener() {
@@ -301,15 +242,17 @@ public class Display20Activity extends Activity implements View.OnClickListener 
             }
 
             if(isSelected){
-                btn.setBackgroundColor(Color.rgb(247,156,49));
+                btn.setBackgroundResource(R.color.ORANGE);
             } else {
                 btn.setBackgroundColor(Color.TRANSPARENT);
             }
+            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage19,delegate.sizeImage19);
+            image.setLayoutParams(imageLayout);
 
             btn.addView(image);
-            btn.setPadding(delegate.pxToDp(10),delegate.pxToDp(10),delegate.pxToDp(10),delegate.pxToDp(10));
+            btn.setPadding(delegate.dpToPx(10),delegate.dpToPx(10),delegate.dpToPx(10),delegate.dpToPx(10));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(pictureWidth, pictureHeight);
-            lp.setMargins(delegate.pxToDp(20), delegate.pxToDp(10), delegate.pxToDp(20), delegate.pxToDp(10));
+            lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), delegate.dpToPx(20), delegate.dpToPx(10));
             btn.setLayoutParams(lp);
             content_view.addView(btn);
         }
@@ -346,6 +289,7 @@ public class Display20Activity extends Activity implements View.OnClickListener 
                 }
                 //this.setResult(3);
                 //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -353,6 +297,9 @@ public class Display20Activity extends Activity implements View.OnClickListener 
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
             onBackPressed();
         } else {
             LinearLayout btn = (LinearLayout) v;
@@ -369,7 +316,7 @@ public class Display20Activity extends Activity implements View.OnClickListener 
                     }
                 }
                 if(isSeleted){
-                    btn.setBackgroundColor(Color.rgb(247, 156, 49));
+                    btn.setBackgroundResource(R.color.ORANGE);
                     SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
                     answer.add(_ans);
                 } else {
@@ -377,7 +324,7 @@ public class Display20Activity extends Activity implements View.OnClickListener 
                     answer.remove(index);
                 }
             } else {
-                btn.setBackgroundColor(Color.rgb(247,156,49));
+                btn.setBackgroundResource(R.color.ORANGE);
                 SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
                 answer.add(_ans);
             }
@@ -403,18 +350,6 @@ public class Display20Activity extends Activity implements View.OnClickListener 
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
 }

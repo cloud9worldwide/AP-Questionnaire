@@ -8,17 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/img_background"
-        android:layout_below="@+id/project_name" />
+        android:scaleType="fitXY"
+        />
     <TextView
-        android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
-        android:paddingTop="10dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -28,15 +26,15 @@
         android:layout_alignParentTop="true" />
 
     <LinearLayout
+        android:gravity="center"
         android:id="@+id/sizeContent"
         android:layout_width="1000dp"
-        android:layout_height="524dp"
+        android:layout_height="525dp"
         android:background="@color/WHITE"
+        android:layout_alignParentEnd="false"
         android:orientation="vertical"
-        android:layout_marginTop="125dp"
-        android:layout_centerHorizontal="true"
-        android:baselineAligned="false"
-        android:clickable="false">
+        android:layout_marginTop="@dimen/marginTop_content"
+        android:layout_centerHorizontal="true">
         <TextView
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
@@ -86,12 +84,12 @@
                     android:layout_gravity="center_horizontal" />
 
                 <TextView
-                    android:text="@string/thanks1"
+
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textSize="16dp"
-                    android:layout_height="20dp"
-                    android:layout_margin="5dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="5dp"
                     android:id="@+id/thanks1"
                     />
                 <TextView
@@ -136,16 +134,15 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_back"
+                android:src="@drawable/back_btn"
                 android:id="@+id/btnBackHome"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:background="@null" />
-
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_staff"
+                android:src="@drawable/for_btn_"
                 android:id="@+id/btnStaff"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

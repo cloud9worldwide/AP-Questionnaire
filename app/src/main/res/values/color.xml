@@ -2,18 +2,20 @@
 <resources>
     <color name="header">#F6F6F6</color>
     <color name="line">#D6D6D6</color>
-    <color name="GREEN">#A2CE18</color>
+    <color name="GREEN">#FDBD2D</color>
 
     <color name="footer">#EDEDED</color>
 
     <color name="RED">#FF0000</color>
 
-    <color name="ORANGE">#F58B17</color>
-
+    <color name="ORANGE">#759591</color>
+    <color name="ORANGE_OLD">#F58B17</color>
 
     <color name="gray">#DDDDDD</color>
     <color name="WHITE">#FFFFFF</color>
     <color name="BLACK">#000000</color>
+    <color name="TITLE">#F9F9F9</color>
+
 
 
 </resources>

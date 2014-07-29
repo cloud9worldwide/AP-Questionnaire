@@ -14,12 +14,10 @@
         android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
-        android:paddingTop="10dp"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -94,7 +92,7 @@
                         android:gravity="center_vertical"
                         android:layout_height="50dp"
                         android:paddingLeft="10dp"
-                        android:imeOptions="actionNext"
+
                         android:id="@+id/lblHomeID"
                         />
                     <EditText
@@ -105,7 +103,7 @@
                         android:alpha="1"
                         android:lines="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
+
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_homeid" />
                     <TextView
@@ -123,7 +121,7 @@
                         android:background="@drawable/box_small"
                         android:alpha="1"
                         android:lines="1"
-                        android:imeOptions="actionNext"
+
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_moo" />
@@ -144,7 +142,7 @@
                         android:alpha="1"
                         android:paddingLeft="10dp"
                         android:lines="1"
-                        android:imeOptions="actionNext"
+
                         android:singleLine="true"
                         android:hint="@string/add_customer_building" />
                     <TextView
@@ -163,7 +161,7 @@
                         android:alpha="1"
                         android:lines="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
+
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_floor" />
                     <TextView
@@ -181,7 +179,7 @@
                         android:background="@drawable/box_small"
                         android:alpha="1"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
+
                         android:lines="1"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_room" />
@@ -210,7 +208,7 @@
                         android:lines="1"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
-                        android:imeOptions="actionNext"
+
                         android:hint="@string/add_customer_soi" />
                     <TextView
                         android:text="@string/add_customer_road"
@@ -225,7 +223,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"
                         android:alpha="1"
-                        android:imeOptions="actionNext"
+
                         android:lines="1"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
@@ -319,7 +317,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"
                         android:alpha="1"
-                        android:imeOptions="actionNext"
+
                         android:paddingLeft="10dp"
                         android:lines="1"
                         android:singleLine="true"
@@ -339,7 +337,7 @@
                         android:background="@drawable/box_large"
                         android:alpha="1"
                         android:lines="1"
-                        android:imeOptions="actionNext"
+
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_district" />
@@ -366,7 +364,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_back"
+            android:src="@drawable/back_btn"
             android:id="@+id/btnBack"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
@@ -374,7 +372,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_send"
+            android:src="@drawable/send_btn_"
             android:id="@+id/btnSend"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

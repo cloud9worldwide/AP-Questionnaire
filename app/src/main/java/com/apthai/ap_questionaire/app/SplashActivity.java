@@ -57,11 +57,15 @@ public class SplashActivity extends Activity {
                     delegate.service.initSubDistrictData(SplashActivity.this);
                     delegate.service.initCountryData(SplashActivity.this);
                     delegate.service.initNationalityData(SplashActivity.this);
+
                 }
 
                 if(delegate.service.getLoginStatus()){
-                    Intent i = new Intent(SplashActivity.this, ProjectsActivity.class);
+                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivityForResult(i,0);
+
+//                    Intent i = new Intent(SplashActivity.this, ProjectsActivity.class);
+//                    startActivityForResult(i,0);
                 } else {
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivityForResult(i,0);

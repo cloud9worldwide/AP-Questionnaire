@@ -34,7 +34,7 @@
     <string name="not_found_customer_detail">คุณสามารถเพิ่มลูกค้าใหม่ได้โดยการกดปุ่ม "Add" ข้างล่าง</string>
     <string name="title_activity_add_customer">AddCustomerActivity</string>
     <string name="add_customer_prefix">คำนำหน้า</string>
-    <string name="add_customer_prefix_extra">พิเศษ</string>
+    <string name="add_customer_prefix_extra">ยศ/ตำแหน่ง</string>
     <string name="add_customer_name">ชื่อ</string>
     <string name="add_customer_surname">นามสกุล</string>
     <string name="add_customer_nickname">ชื่อเล่น</string>
@@ -104,12 +104,16 @@
     <string name="title_activity_add_customer_one">AddCustomerOneActivity</string>
     <string name="title_activity_add_customer_en">AddCustomerENActivity</string>
     <string name="title_activity_add_customer_th">AddCustomerTHActivity</string>
-
-
     <string name="popup_mobile">โทรศัพท์มือถือ</string>
     <string name="popup_phone">โทรศัพท์บ้าน</string>
-
     <string name="email_not_correct">E-MAIL IS INVALID</string>
     <string name="cancel">cancel</string>
+    <string name="title_activity_do_not_answer_list">DoNotAnswerListActivity</string>
+    <string name="default_display_13">กรุณาเลือกคำตอบด้วยค่ะ</string>
+    <string name="title_dont_answer">คำถามที่ลูกค้ายังไม่ได้ตอบ</string>
+    <string name="default_display_14_15">คลิก - + เพื่อตอบ</string>
+    <string name="default_display_16">กรุณาเลือกคำตอบด้านล่างค่ะ</string>
+    <string name="is_offine">ไม่สามารถแก้ไขได้ เนื่องจากอยู่ใน offline mode</string>
+
 
 </resources>

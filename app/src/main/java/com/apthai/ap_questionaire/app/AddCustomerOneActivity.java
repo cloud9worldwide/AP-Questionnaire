@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -15,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +30,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
@@ -58,29 +63,32 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     EditText home1, home2, home3, home4, home5, home6, home7, home8, home9;
     EditText mobile1, mobile2, mobile3, mobile4, mobile5, mobile6, mobile7, mobile8, mobile9,mobile10;
 
-    TextView txt_header,lblPrefix,lbl_add_customer_name, lbl_add_customer_surname, lblNickname,
-            lbl_add_customer_birthday, lblEmail,lbl_add_customer_tel_home_BKK_line1, lbl_add_customer_tel_home_line2,
-            lbl_digit_tel_home_BKK1, lbl_digit_tel_home_BKK2, lbl_add_customer_tel_home_other_line1,
-            lbl_add_customer_tel_home_other_line2, lbl_digit_tel_home_other1, lbl_add_customer_mobile,
-            lbl_digit_mobile1, lblWork, lbl_add_customer_district_work, lblCountry, lblHomeID, lbl_add_customer_moo,
-            lbl_add_customer_building, lbl_add_customer_floor, lbl_add_customer_room, lbl_add_customer_soi,
-            lbl_add_customer_road, lblProvince, lbl_add_customer_district, lbl_add_customer_sub_district,
-            lblPostcode;
-
+    TextView txt_header;
     TextView lbl_add_customer_phone1, lbl_add_customer_phone2, lbl_add_customer_phone3, lbl_add_customer_phone4;
     TextView lbl_add_customer_mobile1, lbl_add_customer_mobile2, lbl_add_customer_mobile3, lbl_add_customer_mobile4;
-    TextView lbl_prefix_extra1,lbl_prefix_extra2;
 
     ContactData new_customer;
     ArrayList<String> listfix;
     int indexPrefix, indexNationality, indexCountry;
 
+    TextView lblPrefix,lbl_prefix_extra2,lbl_add_customer_name,lbl_add_customer_surname,lblNickname;
+    TextView lblEmail,lbl_add_customer_mobile_line1,lbl_add_customer_mobile_line2,lbl_add_customer_tel_home_other_line1;
+    TextView lbl_add_customer_tel_home_other_line2,lbl_add_customer_birthday,lblCountry,lblNationality;
+    String focus_mobile_number;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer_one);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-//        setObject();
+        AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "Thailand", "", "");
+        AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
+        new_customer = new ContactData("คุณ", "", "", "", "", "", null, null,null);
+        new_customer.setAddress(home);
+        new_customer.setNationality("Thailand");
+        new_customer.setAddressWork(work);
+
         listfix = new ArrayList<String>();
         listfix.add("คุณ");
         listfix.add("นาย");
@@ -127,16 +135,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
     }
     private void getCustomerInfoLong(){
-
-
         for (int i = 0; i < listfix.size(); i++) {
-
             if (listfix.get(i).equals(new_customer.getPrefix())) {
-
                 indexPrefix = i;
                 break;
             }
         }
+
         ArrayList<ValTextData> list =delegate.service.getNationality();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).toString().equals(new_customer.getNationality())) {
@@ -154,14 +159,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
     private void getCustomerInfo(){
         if(delegate.customer_selected ==null){
-            AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
+            AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "Thailand", "", "");
             AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
-            new_customer = new ContactData("", "", "", "", "", "", null, null,null);
+            new_customer = new ContactData("คุณ", "", "", "", "", "", null, null,null);
             new_customer.setAddress(home);
+            new_customer.setNationality("Thailand");
             new_customer.setAddressWork(work);
         } else {
 
-            txtPrefix.setText(new_customer.getPrefix().toString());
+            txtPrefix.setText(new_customer.getPrefix_vip().toString());
             if(indexPrefix != -1){
                 ddlPrefix.setSelection(indexPrefix);
             }
@@ -172,7 +178,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             txtEmail.setText(new_customer.getEmail());
             datePicker.setText(new_customer.getBirthdate());
 
-
+            Log.e("indexNationality indexCountry",indexNationality +" "+ indexCountry);
             if(indexNationality != -1){
                 ddlNationality.setSelection(indexNationality);
             }
@@ -184,26 +190,16 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             String mobile = mobile_list.get(0);
             mobile = mobile.replace("-", "");
             switch (mobile.length()) {
-                case 10:
-                    mobile10.setText(mobile.substring(9, 10));
-                case 9:
-                    mobile9.setText(mobile.substring(8, 9));
-                case 8:
-                    mobile8.setText(mobile.substring(7, 8));
-                case 7:
-                    mobile7.setText(mobile.substring(6, 7));
-                case 6:
-                    mobile6.setText(mobile.substring(5, 6));
-                case 5:
-                    mobile5.setText(mobile.substring(4, 5));
-                case 4:
-                    mobile4.setText(mobile.substring(3, 4));
-                case 3:
-                    mobile3.setText(mobile.substring(2, 3));
-                case 2:
-                    mobile2.setText(mobile.substring(1, 2));
-                case 1:
-                    mobile1.setText(mobile.substring(0, 1));
+                case 10: mobile10.setText(mobile.substring(9, 10));
+                case 9: mobile9.setText(mobile.substring(8, 9));
+                case 8: mobile8.setText(mobile.substring(7, 8));
+                case 7: mobile7.setText(mobile.substring(6, 7));
+                case 6: mobile6.setText(mobile.substring(5, 6));
+                case 5: mobile5.setText(mobile.substring(4, 5));
+                case 4: mobile4.setText(mobile.substring(3, 4));
+                case 3: mobile3.setText(mobile.substring(2, 3));
+                case 2: mobile2.setText(mobile.substring(1, 2));
+                case 1: mobile1.setText(mobile.substring(0, 1));
             }
 
             phone_list = new_customer.getTels();
@@ -211,30 +207,23 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             tel = tel.replace("-", "");
             int length = tel.length();
             switch (length) {
-                case 9:
-                    home9.setText(tel.substring(8, 9));
-                case 8:
-                    home8.setText(tel.substring(7, 8));
-                case 7:
-                    home7.setText(tel.substring(6, 7));
-                case 6:
-                    home6.setText(tel.substring(5, 6));
-                case 5:
-                    home5.setText(tel.substring(4, 5));
-                case 4:
-                    home4.setText(tel.substring(3, 4));
-                case 3:
-                    home3.setText(tel.substring(2, 3));
-                case 2:
-                    home2.setText(tel.substring(1, 2));
-                case 1:
-                    home1.setText(tel.substring(0, 1));
+                case 9: home9.setText(tel.substring(8, 9));
+                case 8: home8.setText(tel.substring(7, 8));
+                case 7: home7.setText(tel.substring(6, 7));
+                case 6: home6.setText(tel.substring(5, 6));
+                case 5: home5.setText(tel.substring(4, 5));
+                case 4: home4.setText(tel.substring(3, 4));
+                case 3: home3.setText(tel.substring(2, 3));
+                case 2: home2.setText(tel.substring(1, 2));
+                case 1: home1.setText(tel.substring(0, 1));
             }
             updateMobile();
-
         }
+        txtFirstName.requestFocus();
     }
+
     private void setObject() {
+        focus_mobile_number ="";
         footer = (RelativeLayout) findViewById(R.id.footer);
 
         project_name = (TextView) findViewById(R.id.project_name);
@@ -242,8 +231,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         project_name.setTextSize(30);
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
-
-        txtPromp = "กรุณาเลือก";
 
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_header.setTypeface(delegate.font_type);
@@ -309,7 +296,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lbl_add_customer_phone3.setText("");
         lbl_add_customer_phone4.setText("");
 
-        lbl_prefix_extra1  = (TextView) findViewById(R.id.lbl_prefix_extra1);
         lbl_prefix_extra2 = (TextView) findViewById(R.id.lbl_prefix_extra2);
 
         setItemSpinner();
@@ -333,8 +319,23 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         });
     }
     private void setKeyListener(){
-        txtFirstName.setOnKeyListener(new View.OnKeyListener() {
+
+        txtPrefix.setOnKeyListener(new View.OnKeyListener() {
+
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+                    txtPrefix.clearFocus();
+                    txtFirstName.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        txtFirstName.setOnKeyListener(new View.OnKeyListener() {
+
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.e("keyCode",keyCode+"");
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
                     txtFirstName.clearFocus();
                     txtLastName.requestFocus();
@@ -356,6 +357,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         txtNickname.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
                     txtNickname.clearFocus();
                     txtEmail.requestFocus();
@@ -366,7 +368,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         });
         txtEmail.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+                Log.e("keyCode",keyCode+"");
+                if ((keyCode == KeyEvent.KEYCODE_TAB ||keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_UP){
                     InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(txtEmail.getWindowToken(), 0);
@@ -380,10 +383,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
+                Log.e("keyCode1",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    Log.e("ACTION_UP",keyCode+"");
-                    mobile1.clearFocus();
-                    mobile2.requestFocus();
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        //delete
+                    } else {
+                        mobile1.clearFocus();
+                        mobile2.requestFocus();
+                    }
                     return true;
                 }
                 return false;
@@ -392,11 +399,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         mobile2.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("keyCode",keyCode+"");
+                Log.e("keyCode2",keyCode+"");
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    Log.e("ACTION_UP",keyCode+"");
-                    mobile2.clearFocus();
-                    mobile3.requestFocus();
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile1.requestFocus();
+                        mobile2.clearFocus();
+                    } else {
+                        mobile2.clearFocus();
+                        mobile3.requestFocus();
+                    }
                     return true;
                 }
                 return false;
@@ -405,9 +416,18 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         mobile3.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    mobile3.clearFocus();
-                    mobile4.requestFocus();
+
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile2.requestFocus();
+                        mobile3.clearFocus();
+                    } else {
+                        mobile3.clearFocus();
+                        mobile4.requestFocus();
+                    }
+
+
                     return true;
                 }
                 return false;
@@ -417,8 +437,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile4.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    mobile4.clearFocus();
-                    mobile5.requestFocus();
+
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile3.requestFocus();
+                        mobile4.clearFocus();
+                    } else {
+                        mobile4.clearFocus();
+                        mobile5.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -428,8 +455,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile5.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    mobile5.clearFocus();
-                    mobile6.requestFocus();
+
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile4.requestFocus();
+                        mobile5.clearFocus();
+                    } else {
+                        mobile5.clearFocus();
+                        mobile6.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -439,8 +473,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile6.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    mobile6.clearFocus();
-                    mobile7.requestFocus();
+
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile5.requestFocus();
+                        mobile6.clearFocus();
+                    } else {
+                        mobile6.clearFocus();
+                        mobile7.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -450,8 +491,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile7.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    mobile7.clearFocus();
-                    mobile8.requestFocus();
+
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile6.requestFocus();
+                        mobile7.clearFocus();
+                    } else {
+                        mobile7.clearFocus();
+                        mobile8.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -461,8 +509,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile8.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    mobile8.clearFocus();
-                    mobile9.requestFocus();
+
+                    if(keyCode == KeyEvent.KEYCODE_DEL){
+                        mobile7.requestFocus();
+                        mobile8.clearFocus();
+                    } else {
+                        mobile8.clearFocus();
+                        mobile9.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -472,9 +527,31 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile9.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    InputMethodManager imm = (InputMethodManager)getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mobile9.getWindowToken(), 0);
+
+                    if(keyCode == KeyEvent.KEYCODE_DEL){
+                        mobile8.requestFocus();
+                        mobile9.clearFocus();
+                    } else {
+                        mobile9.clearFocus();
+                        mobile10.requestFocus();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+        mobile10.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP){
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+                        mobile9.requestFocus();
+                        mobile10.clearFocus();
+                    } else {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mobile10.getWindowToken(), 0);
+                    }
                     return true;
                 }
                 return false;
@@ -484,8 +561,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    home1.clearFocus();
-                    home2.requestFocus();
+                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+
+                    } else {
+                        home1.clearFocus();
+                        home2.requestFocus();
+                    }
                     return true;
                 }
                 return false;
@@ -495,13 +576,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         home2.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e(TAG,"keyCode"+keyCode);
-                if(keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP ){
-                    home2.clearFocus();
-                    home1.requestFocus();
-                } else if (event.getAction() == KeyEvent.ACTION_UP){
-                    home2.clearFocus();
-                    home3.requestFocus();
+                 if (event.getAction() == KeyEvent.ACTION_UP){
+                     if(keyCode == KeyEvent.KEYCODE_DEL ){
+                         home1.requestFocus();
+                         home2.clearFocus();
+                     } else{
+                         home2.clearFocus();
+                         home3.requestFocus();
+                     }
                     return true;
                 }
                 return false;
@@ -510,13 +592,16 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         home3.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP ){
-                    home3.clearFocus();
-                    home2.requestFocus();
-                } else if (event.getAction() == KeyEvent.ACTION_UP){
-                    home3.clearFocus();
-                    home4.requestFocus();
-                    return true;
+                if (event.getAction() == KeyEvent.ACTION_UP){
+
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home2.requestFocus();
+                        home3.clearFocus();
+                    } else {
+                        home3.clearFocus();
+                        home4.requestFocus();
+                    }
+                        return true;
                 }
                 return false;
             }
@@ -525,8 +610,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home4.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    home4.clearFocus();
-                    home5.requestFocus();
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home3.requestFocus();
+                        home4.clearFocus();
+                    } else{
+                        home4.clearFocus();
+                        home5.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -536,8 +627,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home5.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    home5.clearFocus();
-                    home6.requestFocus();
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home4.requestFocus();
+                        home5.clearFocus();
+                    } else{
+                        home5.clearFocus();
+                        home6.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -547,8 +644,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home6.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    home6.clearFocus();
-                    home7.requestFocus();
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home5.requestFocus();
+                        home6.clearFocus();
+                    } else{
+                        home6.clearFocus();
+                        home7.requestFocus();
+                    }
+
+
                     return true;
                 }
                 return false;
@@ -558,8 +662,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home7.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    home7.clearFocus();
-                    home8.requestFocus();
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home6.requestFocus();
+                        home7.clearFocus();
+                    } else{
+                        home7.clearFocus();
+                        home8.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -569,8 +679,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home8.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    home8.clearFocus();
-                    home9.requestFocus();
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home7.requestFocus();
+                        home8.clearFocus();
+                    } else{
+                        home8.clearFocus();
+                        home9.requestFocus();
+                    }
+
                     return true;
                 }
                 return false;
@@ -580,11 +696,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         home9.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP){
-                    if (event.getAction() == KeyEvent.ACTION_UP){
+                    if(keyCode == KeyEvent.KEYCODE_DEL ){
+                        home8.requestFocus();
+                        home9.clearFocus();
+                    } else{
                         InputMethodManager imm = (InputMethodManager)getSystemService(
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(home9.getWindowToken(), 0);
-                        return true;
                     }
                     return true;
                 }
@@ -613,6 +731,46 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         txtEmail.setTypeface(delegate.font_type);
         txtEmail.setTextSize(25);
 
+        lblPrefix = (TextView) findViewById(R.id.lblPrefix);
+        lbl_prefix_extra2 = (TextView) findViewById(R.id.lbl_prefix_extra2);
+        lbl_add_customer_name = (TextView) findViewById(R.id.lbl_add_customer_name);
+        lbl_add_customer_surname = (TextView) findViewById(R.id.lbl_add_customer_surname);
+        lblNickname = (TextView) findViewById(R.id.lblNickname);
+        lblEmail = (TextView) findViewById(R.id.lblEmail);
+        lbl_add_customer_mobile_line1 = (TextView) findViewById(R.id.lbl_add_customer_mobile_line1);
+        lbl_add_customer_mobile_line2 = (TextView) findViewById(R.id.lbl_add_customer_mobile_line2);
+        lbl_add_customer_tel_home_other_line1 = (TextView) findViewById(R.id.lbl_add_customer_tel_home_other_line1);
+        lbl_add_customer_tel_home_other_line2 = (TextView) findViewById(R.id.lbl_add_customer_tel_home_other_line2);
+        lbl_add_customer_birthday = (TextView) findViewById(R.id.lbl_add_customer_birthday);
+        lblCountry = (TextView) findViewById(R.id.lblCountry);
+        lblNationality = (TextView) findViewById(R.id.lblNationality);
+
+        lblPrefix.setTypeface(delegate.font_type);
+        lblPrefix.setTextSize(25);
+        lbl_prefix_extra2.setTypeface(delegate.font_type);
+        lbl_prefix_extra2.setTextSize(25);
+        lbl_add_customer_name.setTypeface(delegate.font_type);
+        lbl_add_customer_name.setTextSize(25);
+        lbl_add_customer_surname.setTypeface(delegate.font_type);
+        lbl_add_customer_surname.setTextSize(25);
+        lblNickname.setTypeface(delegate.font_type);
+        lblNickname.setTextSize(25);
+        lblEmail.setTypeface(delegate.font_type);
+        lblEmail.setTextSize(25);
+        lbl_add_customer_mobile_line1.setTypeface(delegate.font_type);
+        lbl_add_customer_mobile_line1.setTextSize(20);
+        lbl_add_customer_mobile_line2.setTypeface(delegate.font_type);
+        lbl_add_customer_mobile_line2.setTextSize(15);
+        lbl_add_customer_tel_home_other_line1.setTypeface(delegate.font_type);
+        lbl_add_customer_tel_home_other_line1.setTextSize(20);
+        lbl_add_customer_tel_home_other_line2.setTypeface(delegate.font_type);
+        lbl_add_customer_tel_home_other_line2.setTextSize(15);
+        lbl_add_customer_birthday.setTypeface(delegate.font_type);
+        lbl_add_customer_birthday.setTextSize(25);
+        lblCountry.setTypeface(delegate.font_type);
+        lblCountry.setTextSize(25);
+        lblNationality.setTypeface(delegate.font_type);
+        lblNationality.setTextSize(25);
     }
     private void setObjectTelephone(){
 
@@ -662,6 +820,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
     }
+
     private void setItemSpinner(){
         ArrayList<ValTextData> list;
         ArrayAdapter<ValTextData> dataAdapter;
@@ -677,11 +836,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if(arg2 == listfix.size()-1){
                     //koy
-                    lbl_prefix_extra1.setVisibility(View.VISIBLE);
                     lbl_prefix_extra2.setVisibility(View.VISIBLE);
                     txtPrefix.setVisibility(View.VISIBLE);
                 } else {
-                    lbl_prefix_extra1.setVisibility(View.GONE);
                     lbl_prefix_extra2.setVisibility(View.GONE);
                     txtPrefix.setVisibility(View.GONE);
                 }
@@ -752,16 +909,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             phone_list.set(0, txtPhone);
         }
 
-        if(!ddlCountry.getSelectedItem().toString().equals(txtPromp)){
-            home.setCountry(ddlCountry.getSelectedItem().toString());
-        } else {
-            home.setCountry("");
-        }
-        if(!ddlNationality.getSelectedItem().toString().equals(txtPromp)){
-            new_customer.setNationality(ddlNationality.getSelectedItem().toString());
-        } else {
-            new_customer.setNationality("");
-        }
+        home.setCountry(ddlCountry.getSelectedItem().toString());
+        new_customer.setNationality(ddlNationality.getSelectedItem().toString());
 
         if(txtPrefix.getVisibility() == View.VISIBLE){
             new_customer.setPrefix_vip(txtPrefix.getText().toString());
@@ -782,6 +931,46 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         new_customer.setAddressWork(work);
 
         delegate.customer_selected = new_customer;
+    }
+    private boolean validate() {
+        boolean status = true;
+
+        if(txtFirstName.getText().toString().length() ==0){
+            lbl_add_customer_name.setText(Html.fromHtml(getString(R.string.add_customer_name) +"<font color=\"#FF0000\"> *</font>"));
+            status = false;
+        } else {
+            lbl_add_customer_name.setText(getString(R.string.add_customer_name));
+        }
+        if(txtLastName.getText().toString().length() ==0){
+            lbl_add_customer_surname.setText(Html.fromHtml(getString(R.string.add_customer_surname) +"<font color=\"#FF0000\"> *</font>"));
+            status = false;
+        } else {
+            lbl_add_customer_surname.setText(getString(R.string.add_customer_surname));
+        }
+
+        if (mobile1.getText().toString().length() > 0 && mobile2.getText().toString().length() > 0
+                && mobile3.getText().toString().length() > 0 && mobile4.getText().toString().length() > 0
+                && mobile5.getText().toString().length() > 0 && mobile6.getText().toString().length() > 0
+                && mobile7.getText().toString().length() > 0 && mobile8.getText().toString().length() > 0
+                && mobile9.getText().toString().length() > 0 && mobile10.getText().toString().length() > 0) {
+            lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
+        } else {
+            status = false;
+            lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+        }
+
+        if(txtEmail.getText().toString().length() !=0){
+            if(delegate.emailValidator(txtEmail.getText().toString())){
+                lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email)));
+            } else {
+                lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email) +"<font color=\"#FF0000\"> *</font>"));
+                status = false;
+            }
+        } else {
+            lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email)));
+        }
+
+        return status;
     }
 
     public void onClick(View v) {
@@ -808,17 +997,24 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 popupAddMobile.dismiss();
             }
         } else if(v.getId() == R.id.btnNext){
-            packData();
-            if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
-                startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
+            if(validate()){
+                packData();
+                if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
+                    startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
+                } else {
+                    startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
+                }
             } else {
-                startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
+                Toast.makeText(this, "Please enter request fill.", Toast.LENGTH_SHORT).show();
             }
+
         } else if (v.getId() == R.id.btnAddMobiles){
-            showPopupAddMobile(this,"mobile",99);
+//            showPopupAddMobile(this,"mobile",99);
+            showPopupAddMobile2(this,"mobile",99);
         } else if(v.getId() == R.id.lbl_add_customer_mobile1){
             if(mobile_list.get(1).length()!=0) {
-                showPopupAddMobile(this, "mobile", 1);
+                showPopupAddMobile2(this, "mobile", 1);
+//                showPopupAddMobile(this, "mobile", 1);
             }
         } else if(v.getId() == R.id.lbl_add_customer_mobile2){
             if(mobile_list.get(2).length()!=0){
@@ -833,10 +1029,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 showPopupAddMobile(this,"mobile",4);
             }
         } else if (v.getId() == R.id.btnAddPhone){
-            showPopupAddMobile(this,"phone",99);
+//            showPopupAddMobile(this,"phone",99);
+            showPopupAddMobile2(this,"phone",99);
         } else if(v.getId() == R.id.lbl_add_customer_phone1){
             if(phone_list.get(1).length()!=0){
-                showPopupAddMobile(this,"phone",1);
+                showPopupAddMobile2(this,"phone",1);
+//                showPopupAddMobile(this,"phone",1);
             }
         } else if(v.getId() == R.id.lbl_add_customer_phone2){
             if(phone_list.get(2).length()!=0){
@@ -853,9 +1051,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
     }
     public void onBackPressed() {
+        delegate.customer_selected = null;
         this.setResult(3);
         finish();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode ==2 || resultCode == 0 || resultCode == 1){
@@ -870,47 +1070,30 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
-        //popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 70);
+        View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 setResult(0);
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
                 setResult(2);
                 finish();
@@ -924,8 +1107,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         popupAddMobile = new PopupWindow(context);
         popupAddMobile.setFocusable(true);
         popupAddMobile.setContentView(layout);
-        popupAddMobile.setWidth(delegate.pxToDp(500));
-        popupAddMobile.setHeight(delegate.pxToDp(150));
+        popupAddMobile.setWidth(delegate.dpToPx(500));
+        popupAddMobile.setHeight(delegate.dpToPx(150));
         popupAddMobile.setBackgroundDrawable(null);
         popupAddMobile.showAtLocation(layout, Gravity.CENTER, 0, 0);
         View view_instance = (View)layout.findViewById(R.id.popup_mobile);
@@ -1086,6 +1269,16 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 updateMobile();
 
                 popupAddMobile.dismiss();
+            }
+        });
+        m00.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP){
+                    m00.clearFocus();
+                    m01.requestFocus();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -1263,37 +1456,295 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
 
         if(mobile_list.size()>1){
-            lbl_add_customer_mobile1.setText(mobile_list.get(1));
+            lbl_add_customer_mobile1.setText(numberformat(mobile_list.get(1)));
             lbl_add_customer_mobile1.setOnClickListener(this);
         }
         if(mobile_list.size()>2){
-            lbl_add_customer_mobile2.setText(mobile_list.get(2));
+            lbl_add_customer_mobile2.setText(numberformat(mobile_list.get(2)));
             lbl_add_customer_mobile2.setOnClickListener(this);
         }
         if(mobile_list.size()>3){
-            lbl_add_customer_mobile3.setText(mobile_list.get(3));
+            lbl_add_customer_mobile3.setText(numberformat(mobile_list.get(3)));
             lbl_add_customer_mobile3.setOnClickListener(this);
         }
         if(mobile_list.size()>4){
-            lbl_add_customer_mobile4.setText(mobile_list.get(4));
+            lbl_add_customer_mobile4.setText(numberformat(mobile_list.get(4)));
             lbl_add_customer_mobile4.setOnClickListener(this);
         }
 
         if(phone_list.size()>1){
-            lbl_add_customer_phone1.setText(phone_list.get(1));
+            lbl_add_customer_phone1.setText(numberformat(phone_list.get(1)));
             lbl_add_customer_phone1.setOnClickListener(this);
         }
         if(phone_list.size()>2){
-            lbl_add_customer_phone2.setText(phone_list.get(2));
+            lbl_add_customer_phone2.setText(numberformat(phone_list.get(2)));
             lbl_add_customer_phone2.setOnClickListener(this);
         }
         if(phone_list.size()>3){
-            lbl_add_customer_phone3.setText(phone_list.get(3));
+            lbl_add_customer_phone3.setText(numberformat(phone_list.get(3)));
             lbl_add_customer_phone3.setOnClickListener(this);
         }
         if(phone_list.size()>4){
-            lbl_add_customer_phone4.setText(phone_list.get(4));
+            lbl_add_customer_phone4.setText(numberformat(phone_list.get(4)));
             lbl_add_customer_phone4.setOnClickListener(this);
         }
+    }
+    public String numberformat(String phone){
+        if(phone.length()==10){
+            //mobile mode
+            return phone.substring(0,3) +"-"+phone.substring(3,6)+"-"+phone.substring(6,10);
+        } else if(phone.length()==9){
+            //home mode
+            if(phone.substring(0,2).equals("02")){
+                return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+            }
+            return phone.substring(0,3) +"-"+phone.substring(3,6)+"-"+phone.substring(6,9);
+        }
+        //do not anythings
+        return phone;
+    }
+    public void showPopupAddMobile2(final Activity context, final String type, final int index) {
+        RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup_mobile);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.activity_add_moblie2, viewGroup);
+        popupAddMobile = new PopupWindow(context);
+        popupAddMobile.setFocusable(true);
+        popupAddMobile.setContentView(layout);
+        popupAddMobile.setWidth(delegate.dpToPx(500));
+        popupAddMobile.setHeight(delegate.dpToPx(150));
+        popupAddMobile.setBackgroundDrawable(null);
+        popupAddMobile.showAtLocation(layout, Gravity.CENTER, 0, 0);
+        View view_instance = (View) layout.findViewById(R.id.popup_mobile);
+        focus_mobile_number ="";
+
+        final EditText txt_digit_mobile = (EditText) layout.findViewById(R.id.txt_digit_mobile);
+
+        final TextView lbl = (TextView) layout.findViewById(R.id.lbl_add_customer_mobile);
+
+        lbl.setTypeface(delegate.font_type);
+        lbl.setTextSize(25);
+
+        final TextView lbl_error = (TextView) layout.findViewById(R.id.error_add_mobile);
+        lbl_error.setTypeface(delegate.font_type);
+        lbl_error.setTextSize(25);
+
+        final Button btn_ok = (Button) layout.findViewById(R.id.btn_ok);
+        final Button btn_cancel = (Button) layout.findViewById(R.id.btn_cancel);
+        final Button btn_delete = (Button) layout.findViewById(R.id.btn_delete);
+        btn_delete.setTypeface(delegate.font_type);
+        btn_delete.setTextSize(25);
+        btn_ok.setTypeface(delegate.font_type);
+        btn_ok.setTextSize(25);
+        btn_cancel.setTypeface(delegate.font_type);
+        btn_cancel.setTextSize(25);
+        if (index != 99) {
+            btn_delete.setVisibility(View.VISIBLE);
+        } else {
+            btn_delete.setVisibility(View.GONE);
+        }
+        //add on condition
+        if (type.equals("mobile")) {
+            lbl.setText(getString(R.string.popup_mobile));
+        } else {
+            lbl.setText(getString(R.string.popup_phone));
+        }
+
+        if (index != 99) {
+            //edit mode
+            String txtmobile = "";
+
+            if (type.equals("mobile")) {
+                //mobile mode
+                txtmobile = mobile_list.get(index);
+                txtmobile = txtmobile.replace("-", "");
+                if(txtmobile.length() ==10){
+                    String new_format_mobile = "";
+                    for(int i = 0; i<txtmobile.length(); i++){
+                        if(i==2 || i==5){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1) + "  -  ";
+                        } else if(i==9){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1);
+                        } else {
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1)+"  ";
+                        }
+                    }
+                    txt_digit_mobile.setText(new_format_mobile);
+                }
+            } else {
+                //phone modes
+                txtmobile = phone_list.get(index);
+                txtmobile = txtmobile.replace("-", "");
+                if(txtmobile.length() ==9){
+                    String new_format_mobile = "";
+                    for(int i = 0; i<txtmobile.length(); i++){
+                        if(i==1 || i==4){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1) + "  -  ";
+                        } else if(i==8){
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1);
+                        } else {
+                            new_format_mobile = new_format_mobile + txtmobile.substring(i,i+1)+"  ";
+                        }
+                    }
+                    txt_digit_mobile.setText(new_format_mobile);
+                }
+            }
+        }
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if((type.equals("mobile") && txt_digit_mobile.getText().length()==34) || (type.equals("phone") && txt_digit_mobile.getText().length()==31)){
+                        InputMethodManager imm = (InputMethodManager)getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(txt_digit_mobile.getWindowToken(), 0);
+                        lbl_error.setVisibility(View.INVISIBLE);
+                        String string_phone = txt_digit_mobile.getText().toString().replace(" ", "").replace("-","");
+                    if(index !=99){
+                        //edit
+                        if(type.equals("mobile")){
+                            mobile_list.set(index, string_phone);
+                        } else {
+                            phone_list.set(index, string_phone);
+                        }
+                    } else {
+                        addMobileinPage(string_phone,type);
+                    }
+
+                    updateMobile();
+                        popupAddMobile.dismiss();
+
+
+                } else {
+                    lbl_error.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupAddMobile.dismiss();
+            }
+        });
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mobile_list.set(index, "");
+                if (type.equals("mobile")) {
+                    mobile_list.remove(index);
+                    mobile_list.add("");
+                } else {
+                    phone_list.remove(index);
+                    phone_list.add("");
+                }
+
+                if (type.equals("mobile")) {
+                    btnAddMobile.setVisibility(View.VISIBLE);
+                } else {
+                    btnAddPhone.setVisibility(View.VISIBLE);
+                }
+                updateMobile();
+
+                popupAddMobile.dismiss();
+            }
+        });
+        txt_digit_mobile.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txt_digit_mobile.getText().length() !=0){
+                    txt_digit_mobile.setSelection(txt_digit_mobile.getText().length());
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start+1== txt_digit_mobile.getText().length()|| start== txt_digit_mobile.getText().length() ){
+                    String check;
+                    if(type.equals("mobile") && txt_digit_mobile.getText().length()<=34){
+                        if(focus_mobile_number.length() > txt_digit_mobile.getText().length()) {
+                            if (txt_digit_mobile.getText().toString().length() == 34) {
+                                focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 1);
+                                txt_digit_mobile.setText(focus_mobile_number);
+                            } else if (txt_digit_mobile.getText().toString().length() == 33) {
+                                focus_mobile_number = txt_digit_mobile.getText().toString();
+                            } else {
+                                if (focus_mobile_number.length() == 12 || focus_mobile_number.length() == 24) {
+                                    focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 6);
+                                } else {
+                                    focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 3);
+                                }
+                                txt_digit_mobile.setText(focus_mobile_number);
+                            }
+
+                        } else {
+                            if(txt_digit_mobile.getText().length()<2){
+                                check ="";
+                            } else {
+                                check = txt_digit_mobile.getText().charAt(txt_digit_mobile.getText().toString().length()-1)+"";
+                            }
+                            if (!check.equals(" ") && txt_digit_mobile.getText().toString().length() != 34 &&txt_digit_mobile.getText().length()!=0) {
+                                if (focus_mobile_number.length() == 6 || focus_mobile_number.length() == 18) {
+                                    focus_mobile_number = txt_digit_mobile.getText().toString() + "  -  ";
+                                } else {
+                                    focus_mobile_number = txt_digit_mobile.getText().toString() + "  ";
+                                }
+                                txt_digit_mobile.setText(focus_mobile_number);
+                            } else if (txt_digit_mobile.getText().toString().length() == 34) {
+                                focus_mobile_number = txt_digit_mobile.getText().toString();
+                            }
+                        }
+                    } else if(type.equals("phone") && txt_digit_mobile.getText().length()<=31){
+                        if(focus_mobile_number.length() > txt_digit_mobile.getText().length()) {
+                            if (txt_digit_mobile.getText().toString().length() == 31) {
+                                focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 1);
+                                txt_digit_mobile.setText(focus_mobile_number);
+                            } else if(txt_digit_mobile.getText().toString().length() == 30) {
+                                focus_mobile_number = txt_digit_mobile.getText().toString();
+                            } else {
+                                if (focus_mobile_number.length() == 9 || focus_mobile_number.length() == 21) {
+                                    focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 6);
+                                } else {
+                                    focus_mobile_number = focus_mobile_number.substring(0, focus_mobile_number.length() - 3);
+                                }
+                                txt_digit_mobile.setText(focus_mobile_number);
+                            }
+
+                        } else {
+                            if(txt_digit_mobile.getText().length()<2){
+                                check ="";
+                            } else {
+                                check = txt_digit_mobile.getText().charAt(txt_digit_mobile.getText().toString().length()-1)+"";
+                            }
+                            if (!check.equals(" ") && txt_digit_mobile.getText().toString().length() != 31 &&txt_digit_mobile.getText().length()!=0) {
+                                if (focus_mobile_number.length() == 3 || focus_mobile_number.length() == 15) {
+                                    focus_mobile_number = txt_digit_mobile.getText().toString() + "  -  ";
+                                } else if(focus_mobile_number.equals("0  2")){
+
+                                } else {
+                                    focus_mobile_number = txt_digit_mobile.getText().toString() + "  ";
+                                }
+                                txt_digit_mobile.setText(focus_mobile_number);
+                            } else if (txt_digit_mobile.getText().toString().length() == 31) {
+                                focus_mobile_number = txt_digit_mobile.getText().toString();
+                            }
+                        }
+                    } else {
+                        txt_digit_mobile.setText(focus_mobile_number);
+                    }
+
+                } else {
+                    if(focus_mobile_number.length()!=0 && !txt_digit_mobile.getText().toString().equals(focus_mobile_number)){
+                        txt_digit_mobile.setText(focus_mobile_number);
+                    }
+                }
+            }
+        });
     }
 }

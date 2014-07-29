@@ -16,12 +16,10 @@
         android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:background="@drawable/box_title"
-        android:paddingTop="10dp"
+        android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
     <ImageButton
-        android:layout_marginTop="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnMenu"
@@ -35,12 +33,11 @@
         android:layout_height="524dp"
         android:background="@color/WHITE"
         android:orientation="vertical"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="@dimen/marginTop_content"
         android:layout_centerHorizontal="true"
         android:baselineAligned="false"
         android:gravity="center"
         android:clickable="false">
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,13 +54,13 @@
             android:id="@+id/lbl_line"
             android:gravity="center|center_vertical|center_horizontal"
             android:background="@color/line"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="5dp"
             android:layout_alignBottom="@+id/lbl_title"
              />
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="425dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:id="@+id/scrollView">

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,13 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,14 +39,14 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     LinearLayout linearLayout, content_view;
     QuestionTypeData data;
     questionniare_delegate delegate;
-    TextView question_title, project_name, txt_question;
+    TextView project_name, txt_question;
     int selected =0;
     ArrayList<SaveAnswerData> answer = new ArrayList<SaveAnswerData>();
     ImageButton btnNext, btnBack;
     static PopupWindow popup;
     ImageView img_background;
 
-    SeekBar navigatorBar;
+    TextView navigatorBar;
     TextView txt_process;
     Drawable thumb;
     RelativeLayout footer;
@@ -57,19 +56,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
 
-
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
-            if(delegate ==null){
-                setImage();
-            }
-        }
-    }
     private void setImage(){
-        delegate = (questionniare_delegate)getApplicationContext();
-
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
@@ -79,31 +66,16 @@ public class Display18Activity extends Activity implements View.OnClickListener 
 
     }
     public void setNavigator(){
-        navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-        navigatorBar.setMax(delegate.getMax());
-        navigatorBar.setProgress(0);
-        navigatorBar.setProgress(delegate.getProcessed());
-        navigatorBar.setEnabled(false);
-        navigatorBar.setVisibility(View.VISIBLE);
-        thumb = getResources().getDrawable(R.drawable.icon_navigator);
-        thumb.setBounds(new Rect(0,0, thumb.getIntrinsicWidth(),thumb.getIntrinsicHeight()));
-        navigatorBar.setThumb(thumb);
-
-        txt_process = new TextView(this);
-        txt_process.setText(delegate.getPercent());
-
-        txt_process.setWidth(thumb.getIntrinsicWidth());
-        txt_process.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins((thumb.getBounds().left + (int) navigatorBar.getX()) -8 , (int)navigatorBar.getY()+5, 0, 0);
-        txt_process.setLayoutParams(params);
-        footer = (RelativeLayout) findViewById(R.id.footer);
-        footer.addView(txt_process);
+        navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+        navigatorBar.setText(delegate.getTitleSequence());
+        navigatorBar.setTypeface(delegate.font_type);
+        navigatorBar.setTextSize(20);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display18);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
 
@@ -112,7 +84,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         } else{
             data = delegate.QM.get_question();
         }
-        Log.e("data", data.getAnswers().toString());
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -129,13 +100,13 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 isParent = delegate.QM.get_question().isParent_question();
                 setObject();
                 setTableLayout();
+                setImage();
                 if(delegate.dataSubQuestion == null){
                     setNavigator();
                 } else {
                     isParent = delegate.dataSubQuestion.isParent_question();
-                    question_title.setText("คำถามย่อย");
-                    navigatorBar = (SeekBar) findViewById(R.id.navigatorBar);
-                    navigatorBar.setVisibility(View.GONE);
+                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
+                    navigatorBar.setText("คำถามย่อย");
                 }
             }
         };
@@ -150,7 +121,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                     }else{
                         answer = checkAnswer.getAnswer();
                     }
-                    Log.e("Ans",answer.toString());
+
                 }else {
                     //is parent question
                     if(data.getParent_question_id() > 0){
@@ -188,11 +159,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
 
-        question_title = (TextView) findViewById(R.id.question_title);
-        question_title.setText(delegate.getTitleSequence());
-        question_title.setTextSize(20);
-        question_title.setTypeface(delegate.font_type);
-
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
         project_name.setTextSize(30);
@@ -205,7 +171,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
         txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, 20, 0, 20);
+        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
@@ -214,10 +180,9 @@ public class Display18Activity extends Activity implements View.OnClickListener 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
         int column =4;
-        for(int i =0, c = 0, r = 0; i < total; i++, c++){
+        for(int i =0, c = 0; i < total; i++, c++){
             if(c == column){
                 c = 0;
-                r++;
                 content_view.addView(linearLayout);
                 linearLayout = new LinearLayout(this);
             }
@@ -227,6 +192,10 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             ImageView image = new ImageView(this);
             image.setTag(99);
             image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage,delegate.sizeImage);
+            imageLayout.gravity = Gravity.CENTER;
+            image.setLayoutParams(imageLayout);
+
             btn.setTag(i);
             btn.setOnClickListener(this);
             boolean isSelected = false;
@@ -249,6 +218,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 if(data.getAnswers().get(i).getIconInActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconInActiveUrl())==null){
                     image.setImageResource(delegate.imgDefaultIcon);
                 } else {
+                    Log.e("image url",data.getAnswers().get(i).getIconInActiveUrl());
                     image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getIconInActiveUrl()));
                 }
             }
@@ -256,18 +226,18 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             TextView name = new TextView(this);
             name.setText(data.getAnswers().get(i).getTitle().toString());
             name.setTypeface(delegate.font_type);
-            name.setPadding(0, 20, 0, 20);
+            name.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
             name.setGravity(Gravity.CENTER);
             name.setTextSize(25);
             name.setTag(98);
 
             btn.addView(image);
-            name.setHeight(80);
+            name.setHeight(delegate.dpToPx(80));
             btn.addView(name);
             LinearLayout.LayoutParams lp;
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             lp.weight = 1;
-            lp.setMargins(10, 10, 10, 10);
+            lp.setMargins(delegate.dpToPx(10), delegate.dpToPx(10), delegate.dpToPx(10), delegate.dpToPx(10));
 
             btn.setLayoutParams(lp);
 
@@ -275,7 +245,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         }
         content_view.addView(linearLayout);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -303,10 +272,8 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 //sub question mode
                 if(answer.size()!=0){
                     delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
                 }
-                //this.setResult(3);
-                //finish();
+                delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
                 //normal mode
@@ -315,6 +282,11 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
+
+            if(delegate.dataSubQuestion !=null) {
+                delegate.skip_save_subans = true;
+            }
+
             onBackPressed();
         } else {
 
@@ -328,7 +300,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 String tag = obj.getTag().toString();
                 if(tag.equals("99")){
                     AnswerData selected = data.getAnswers().get(indexSelected);
-
                     ImageView image = (ImageView) obj;
                     if(answer.size()>0){
                         boolean isSeleted = true;
@@ -345,11 +316,12 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                             } else {
                                 image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconActiveUrl()));
                             }
-
                             SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
-                            answer.add(_ans);
+                            //answer.add(_ans);
                             if(isParent){
                                 parentSelected(indexSelected);
+                            }else{
+                                answer.add(_ans);
                             }
                         } else {
                             if(data.getAnswers().get(indexSelected).getIconInActiveUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconInActiveUrl())==null){
@@ -358,7 +330,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                                 image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconInActiveUrl()));
                             }
 
-                            answer.remove(index);
+                            //answer.remove(index);
                             if(data.getParent_question_id() > 0){
                                 //is sub question, will save @ save_answer(answers, quesiton inx)
                                 delegate.RemoveQuestionHistory(data.getQuestion().getId().toString());
@@ -371,9 +343,9 @@ public class Display18Activity extends Activity implements View.OnClickListener 
 
 
                             if(isParent){
-                                //remove sub question
-                                //delegate.RemoveQuestionHistory("s");
-                                //delegate.QM.clear_sub_answer(data.getAnswers().get(indexSelected).getId());
+                                parentSelected(indexSelected);
+                            }else{
+                                answer.remove(index);
                             }
 
                         }
@@ -383,11 +355,12 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                         } else {
                             image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(indexSelected).getIconActiveUrl()));
                         }
-
                         SaveAnswerData _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
-                        answer.add(_ans);
+                        //answer.add(_ans);
                         if(isParent){
                             parentSelected(indexSelected);
+                        }else{
+                            answer.add(_ans);
                         }
                     }
                 }
@@ -408,26 +381,12 @@ public class Display18Activity extends Activity implements View.OnClickListener 
         }
     }
 
-
     public void onBackPressed() {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
             Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
         }
-//        if(delegate.dataSubQuestion ==null){
-//            if(delegate.QM.move_back()){
-//                this.setResult(3);
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Cannot Back", Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            // back sub question
-//            delegate.dataSubQuestion = null;
-//            this.setResult(3);
-//            finish();
-//        }
     }
 
     public void parentSelected(int indexSelected){
@@ -480,9 +439,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             } else if(dataSubQuestion.getQuestionType().equals("21")){
                 newPage = new Intent(this, Display21Activity.class);
             }
-            //newPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //newPage.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
             delegate.nextQuestionPage(newPage);
     }
 

@@ -49,9 +49,9 @@ public class questionniare_delegate extends Application {
     public ProjectData project;
     public int index_question;
     public ArrayList<QuestionTypeData> questions;
-    ArrayList<QuestionAnswerData> _answers, _staff_answers;
 
     public QuestionTypeData dataSubQuestion;
+    public boolean skip_save_subans = false;
 
     public long timesleep = 100;
 
@@ -65,52 +65,16 @@ public class questionniare_delegate extends Application {
     public QuestionManagement QM;
     public Context ctx;
 
+    public int sizeImage,sizeImage19;
+    public int isBack;
+
     public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.commit();
     }
 
-    public synchronized boolean testja() {
-        return false;
-    }
 
-    //    public void addAnswers(QuestionAnswerData answerData){
-//        if(isCustomerMode){
-//            _answers.add(answerData);
-//            Log.e("print",_answers.toString());
-//        } else {
-//            _staff_answers.add(answerData);
-//            Log.e("print",_staff_answers.toString());
-//        }
-//    }
-    private void printAnswer(QuestionAnswerData answerData) {
-        ArrayList<SaveAnswerData> save = new ArrayList<SaveAnswerData>();
-        save = answerData.getAnswer();
-        for (int j = 0; j < save.size(); j++) {
-            Log.e("print ans", "order " + j + " : " + save.get(j).getValue());
-        }
-    }
-
-    private void printAllAnswer() {
-        for (int f = 0; f < _answers.size(); f++) {
-            ArrayList<SaveAnswerData> save = _answers.get(f).getAnswer();
-            for (int j = 0; j < save.size(); j++) {
-                Log.e("print ans", "order " + f + " : " + save.get(j).getValue());
-            }
-        }
-    }
-
-    private void printAllStaffAnswer() {
-        for (int f = 0; f < _staff_answers.size(); f++) {
-            ArrayList<SaveAnswerData> save = _staff_answers.get(f).getAnswer();
-            for (int j = 0; j < save.size(); j++) {
-                Log.e("staff ans", "order " + f + " : " + save.get(j).getValue());
-            }
-        }
-    }
-    //keep
-    //service.sync_save_questionnaire()
 
     public void sendAnswer() {
         if (QM.pack_staff_question_ans_data()) {
@@ -118,17 +82,6 @@ public class questionniare_delegate extends Application {
         } else {
             //cannot pack staff
         }
-
-//        QuestionnaireAnswerData answer_data = new QuestionnaireAnswerData();
-//        answer_data.setCustomerId(String.valueOf(service.globals.getContactId()));
-//        answer_data.setIscustomerLocal(service.globals.getIsCustomerLocal());
-//        answer_data.setProjectId(project.getId());
-//        answer_data.setQuestionnaireId(questionnaire_selected_id);
-//        answer_data.setAnswers(_answers);
-//        answer_data.setStaffanswers(_staff_answers);
-//
-//        Log.e("print",answer_data.toString());
-//        service.saveQuestionnaireData(answer_data);
         service.globals.setContactId("-1");
     }
 
@@ -170,30 +123,6 @@ public class questionniare_delegate extends Application {
         return questions.get(index_question);
     }
 
-    public void nextIndex_question() {
-        index_question++;
-        Log.e("s question", index_question + "");
-    }
-
-    public boolean backIndex_question() {
-        if (index_question == 0) {
-            return false;
-        } else {
-            index_question--;
-            _answers.remove(index_question);
-            return true;
-        }
-
-
-    }
-
-    public void setIndex_question(int index) {
-        index_question = index;
-    }
-
-    public int getIndex_question() {
-        return index_question;
-    }
 
     public void setQuestionnaire_selected_id(String id) {
         questionnaire_selected_id = id;
@@ -205,10 +134,6 @@ public class questionniare_delegate extends Application {
 
     public void setQuestionnaire_time(String time) {
         questionnaire_time = time;
-    }
-
-    public String getQuestionnaire_time() {
-        return questionnaire_time;
     }
 
     public void setCustomer_list(ArrayList<ContactSearchData> customer_list) {
@@ -235,6 +160,8 @@ public class questionniare_delegate extends Application {
         imgDefaultIconSelect = R.drawable.no_image_icon_selected;
         font_type = Typeface.createFromAsset(getAssets(),
                 "fonts/DB_Ozone_X.otf");
+        sizeImage = dpToPx(120);
+        sizeImage19 = dpToPx(200);
 
         ctx = this;
         if (questionnaire_selected != null) {
@@ -325,8 +252,15 @@ public class questionniare_delegate extends Application {
 
             //Find the correct scale value. It should be the power of 2.
             int scale = 1;
-            while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
-                scale *= 2;
+            Log.e("scale ",scale +"");
+            if(width !=0 && height !=0){
+                while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height){
+                    scale *= 2;
+                    Log.e("scale ",scale +"");
+                }
+            }
+
+
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
@@ -420,6 +354,7 @@ public class questionniare_delegate extends Application {
             questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()));
         }
         AllHistoryAnswer = questionnaireAnswer;
+        Log.e("AllHistoryAnswer",AllHistoryAnswer.toString());
         return questionnaireAnswer;
     }
 
@@ -435,10 +370,9 @@ public class questionniare_delegate extends Application {
         return true;
     }
 
-
     public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        float scale = getResources().getDisplayMetrics().density;
+        int px = (int) (dp * scale + 0.5f);
         return px;
     }
 
@@ -516,12 +450,12 @@ public class questionniare_delegate extends Application {
             dataSubQuestion = null;
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
-            startActivity(i);
+            //startActivity(i);
         } else {
             QM.move_back();
             Intent i = getCurentQuestionIntent();
             nextQuestionPage(i);
-            startActivity(i);
+            //startActivity(i);
         }
     }
 
@@ -537,6 +471,9 @@ public class questionniare_delegate extends Application {
     public boolean checkPressBack(ArrayList<SaveAnswerData> _ans) {
         if (dataSubQuestion != null) {
             //isSub question
+            if(skip_save_subans)
+                return true;
+
             QuestionTypeData parent_question = QM.get_question();
             QuestionTypeData sub_question = this.dataSubQuestion;
             if (parent_question.isParent_question() && parent_question.getQuestion().getId() == sub_question.getParent_question_id()) {
@@ -605,6 +542,7 @@ public class questionniare_delegate extends Application {
     //MaxChar work case 1 and 2 only;
     public String validate(ArrayList<SaveAnswerData> answer, ArrayList<AnswerData> choice) {
         String error_msg = "NO";
+
         for (int i = 0; i < answer.size(); i++) {
             for (int j = 0; j < choice.size(); j++) {
                 if (answer.get(i).getValue().toString().equals(String.valueOf(choice.get(j).getId()))) {
@@ -618,7 +556,7 @@ public class questionniare_delegate extends Application {
                                 error_msg = "Please ans";
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("3")) {
-                            if (emailValidator(answer.get(i).getFreetxt().toString()) || answer.get(i).getFreetxt().toString().length() == 0) {
+                            if (!emailValidator(answer.get(i).getFreetxt().toString())|| answer.get(i).getFreetxt().toString().length() == 0) {
                                 error_msg = getString(R.string.email_not_correct);
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("4")) {

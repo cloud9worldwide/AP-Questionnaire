@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -27,22 +30,26 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     questionniare_delegate delegate;
     static PopupWindow popup;
 
-
     private Context ctx;
 
-
+    private void setImage(){
+        setObject();
+        View rootView = getWindow().getDecorView().getRootView();
+        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+        rootView.setBackground(imageDraw);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_finished_answer);
-
+        delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
-
-        setObject();
+        setImage();
     }
 
     private void setObject() {
-        delegate = (questionniare_delegate)getApplicationContext();
+
 
         popup = new PopupWindow(this);
 
@@ -76,10 +83,12 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_back_home.setOnClickListener(this);
 
         if(!delegate.QM.isStaffQustion()){
+
+            thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
             customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
             btn_back_home.setEnabled(false);
             btn_back_home.setVisibility(View.GONE);
-            btn_staff.setImageResource(R.drawable.btn_staff);
+            btn_staff.setImageResource(R.drawable.for_btn_);
         } else {
             btn_back_home.setImageResource(R.drawable.btn_projects);
             btn_staff.setImageResource(R.drawable.btn_questionniare);
@@ -121,13 +130,8 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                if (!delegate.QM.isStaffQustion()) {
-                    delegate.initQuestionsStaff();
-                    nextPage();
-                } else {
+                if (delegate.QM.isStaffQustion()) {
                     delegate.sendAnswer();
-
-//                    this.setResult(1);
                     if (delegate.service.isOnline()) {
                         final ProgressDialog progress = new ProgressDialog(this);
                         progress.setTitle("Please wait");
@@ -136,12 +140,12 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                         progress.show();
 
                         final Handler uiHandler = new Handler();
-                        final  Runnable onUi = new Runnable() {
+                        final Runnable onUi = new Runnable() {
                             @Override
                             public void run() {
                                 // this will run on the main UI thread
                                 progress.dismiss();
-                                Intent i = new Intent(CustomerFinishedAnswerActivity.this,QuestionniareActivity.class);
+                                Intent i = new Intent(CustomerFinishedAnswerActivity.this, QuestionniareActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
                                 finish();
@@ -152,19 +156,26 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                             public void run() {
                                 // This is the delay
                                 delegate.service.sync_save_questionnaire(progress);
-                                uiHandler.post( onUi );
+                                uiHandler.post(onUi);
                             }
                         };
-                        new Thread( background ).start();
-
+                        new Thread(background).start();
                     } else {
-                        Intent i = new Intent(this,QuestionniareActivity.class);
+                        Intent i = new Intent(this, QuestionniareActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                         finish();
                     }
+                } else {
+                    if(delegate.QM.CheckQuestionNotAns().size()!=0){
+                        Intent newPage = new Intent(this, DoNotAnswerListActivity.class);
+                        delegate.nextQuestionPage(newPage);
+                        startActivityForResult(newPage,0);
+                    } else {
+                        delegate.initQuestionsStaff();
+                        nextPage();
+                    }
                 }
-
             }
         } else if(v.getId() == R.id.btnBackHome){
             if (popup.isShowing()) {
@@ -214,54 +225,34 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         View layout = layoutInflater.inflate(R.layout.activity_menu, viewGroup);
         popup = new PopupWindow(context);
         popup.setContentView(layout);
-        popup.setWidth(delegate.pxToDp(180));
-        popup.setHeight(delegate.pxToDp(118));
+        popup.setWidth(delegate.dpToPx(175));
+        popup.setHeight(delegate.dpToPx(80));
         popup.setBackgroundDrawable(null);
 
-
         ImageButton v = (ImageButton)findViewById(R.id.btnMenu);
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,0,(int)v.getY()+delegate.dpToPx(50));
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 0, (int)v.getY()+delegate.dpToPx(70));
 
         View view_instance = (View)layout.findViewById(R.id.popup);
         final RelativeLayout home = (RelativeLayout) layout.findViewById(R.id.menu_home);
-        final RelativeLayout settings = (RelativeLayout) layout.findViewById(R.id.menu_settings);
         final RelativeLayout logout = (RelativeLayout) layout.findViewById(R.id.menu_logout);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
-                Intent i = new Intent(CustomerFinishedAnswerActivity.this,ProjectsActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                setResult(0);
+                delegate.isBack = 0;
                 finish();
-            }
-        });
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                settings.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
-                if (popup.isShowing()) {
-                    popup.dismiss();
-                }
                 delegate.service.Logout();
-                Intent i = new Intent(CustomerFinishedAnswerActivity.this, LoginActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                setResult(2);
+                delegate.isBack = 2;
                 finish();
             }
         });
