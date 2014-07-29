@@ -34,6 +34,7 @@ import com.cloud9worldwide.questionnaire.webservices.LoginMethod;
 import com.cloud9worldwide.questionnaire.webservices.SaveCustomerMethod;
 import com.cloud9worldwide.questionnaire.webservices.SavequestionnaireMethod;
 import com.cloud9worldwide.questionnaire.webservices.UpdateCustomerMethod;
+import com.cloud9worldwide.questionnaire.webservices.VisitLogMethod;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,16 @@ public class CoreEngine {
     private static final String PARAM_QUESTIONID = "questionid";
     private static final String PARAM_CUSTOMERID = "customerid";
 
+
+    private String lg = "th";
+
+    public String getLg() {
+        return lg;
+    }
+
+    public void setLg(String lg) {
+        this.lg = lg;
+    }
 
     private final Context mCtx;
 
@@ -130,6 +141,30 @@ public class CoreEngine {
             globals.setStaffId(this.staffId);
         }
     }
+
+    /**
+     *
+     * @param params
+     *  0 - contact_id
+     *  1 - staff_id
+     *  2 - project_id
+     */
+    public void StampVisitLog(String... params){
+        try {
+            JSONObject jsonObj = new JSONObject();
+            try {
+                jsonObj.put("contact_id",params[0]);
+                jsonObj.put("staff_id",params[1]);
+                jsonObj.put("project_id",params[2]);
+            }catch (JSONException ee){
+                ee.printStackTrace();
+            }
+            VisitLogMethod.execute(this.mCtx,webserviceUrl, jsonObj.toString());
+        }catch (VisitLogMethod.ApiException e){
+            e.printStackTrace();
+        }
+
+    }
     public void setWebserviceUrl(String _url){
         this.webserviceUrl = _url;
     }
@@ -181,10 +216,18 @@ public class CoreEngine {
                 return false;
             }
 
+
+
+
             try{
                 JSONObject respObj = new JSONObject(r);
                 if(respObj.getBoolean("status")){
+
+                    //JSONArray pkgArr = respObj.getJSONArray("result");
+
                     //Log.d(debugTag, respObj.getJSONObject("result").getString("message"));
+
+
                     this.loginMessage = respObj.getJSONObject("result").getString("message");
                     this.tokenAccess = respObj.getJSONObject("result").getString("tokenaccess");
                     this.staffId = respObj.getJSONObject("result").getString("staffid");
@@ -208,11 +251,12 @@ public class CoreEngine {
 
                     MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
                     _dbHelper.open();
-                    _dbHelper.deleteAll(_dbHelper.DATABASE_TABLE_PROJECT);
+
                     //Log.d(debugTag, this.tokenAccess);
 
 
-                    JSONArray projectlist = respObj.getJSONObject("result").getJSONArray("projectlist");
+                    JSONArray projectlist = respObj.getJSONObject("result").getJSONArray("projectlistth");
+                    _dbHelper.deleteAll(_dbHelper.DATABASE_TABLE_PROJECT);
                     for (int i = 0; i < projectlist.length(); i++) {
                         JSONObject project = projectlist.getJSONObject(i);
 
@@ -247,7 +291,7 @@ public class CoreEngine {
                                     _questionnaire.getString("questionnaireId"),
                                     _questionnaire.getString("questionnaireType"),
                                     _questionnaire.getString("logo"),
-                                    _questionnaire.getString("timestamp")
+                                    _questionnaire.getString("timestamp"),"th"
                             );
                             tmp_questionids.add(_questionnareData.getId());
 
@@ -262,7 +306,7 @@ public class CoreEngine {
                                     String jsonFile = _cursor.getString(_cursor.getColumnIndex("questionnaireid"))
                                             +"_"
                                             +_questionnaire.getString("timestamp")
-                                            +".json";
+                                            +"_th.json";
 
                                     Log.d(debugTag, jsonFile);
 
@@ -300,6 +344,101 @@ public class CoreEngine {
                         }
 
                         _dbHelper.deleteQuestionnairExceptId(tmp_questionids,_projectData.getId());
+                    }
+
+
+
+
+
+                    //en
+                    projectlist = null;
+                    projectlist = respObj.getJSONObject("result").getJSONArray("projectlisten");
+                    _dbHelper.deleteAll(_dbHelper.DATABASE_TABLE_PROJECT_EN);
+                    for (int i = 0; i < projectlist.length(); i++) {
+                        JSONObject project = projectlist.getJSONObject(i);
+
+                        ProjectData _projectData = new ProjectData(
+                                project.getString("projectId"),
+                                project.getString("projectName"),
+                                project.getString("logo"),
+                                project.getString("background"));
+
+
+                        long rewId = _dbHelper.createProject_EN(
+                                _projectData.getId(),
+                                _projectData.getName(),
+                                _projectData.getLogoUrl(),
+                                _projectData.getBackgroundUrl());
+
+                        this.downloadImgUrl.add(_projectData.getLogoUrl());
+                        this.downloadImgUrl.add(_projectData.getBackgroundUrl());
+
+
+                        //Log.d(debugTag, rewId+" :: project row id");
+                        /**
+                         * GET Questionnaire list
+                         */
+                        JSONArray questionnairelist = project.getJSONArray("questionnairelist");
+
+                        ArrayList<String> tmp_questionids = new ArrayList<String>();
+
+                        for (int j = 0; j < questionnairelist.length(); j++) {
+                            JSONObject _questionnaire = questionnairelist.getJSONObject(j);
+                            QuestionnaireData _questionnareData = new QuestionnaireData(
+                                    _questionnaire.getString("questionnaireId"),
+                                    _questionnaire.getString("questionnaireType"),
+                                    _questionnaire.getString("logo"),
+                                    _questionnaire.getString("timestamp"),
+                                    "en"
+                            );
+                            tmp_questionids.add(_questionnareData.getId());
+
+                            this.downloadImgUrl.add(_questionnareData.getLogoUrl());
+
+                            try{
+                                Cursor _cursor = _dbHelper.getQuestionnaire_ENById(_questionnareData.getId());
+                                if (_cursor.getCount() > 0) {
+                                    //Log.d(debugTag, "have questionnaire ");
+                                    _cursor.moveToFirst();
+
+                                    String jsonFile = _cursor.getString(_cursor.getColumnIndex("questionnaireid"))
+                                            +"_"
+                                            +_questionnaire.getString("timestamp")
+                                            +"_en.json";
+
+                                    Log.d(debugTag, jsonFile);
+
+                                    if(!this._qnFS.checkFileIsExists(jsonFile)){
+                                        questionnaireUpdate.add(_questionnareData);
+                                        Log.d(debugTag,jsonFile+" not found !");
+                                        //updateQuestionnaire
+                                        _dbHelper.updateQuestionnaire_EN(_questionnareData.getId(), _projectData.getId(),
+                                                _questionnareData.getType(), _questionnareData.getLogoUrl(), _questionnareData.getTimeStamp());
+                                    }else{
+                                        Log.d(debugTag,jsonFile+" found in SD storage !");
+                                    }
+
+                                    // check questionnaire update
+                                }else {
+                                    Log.d(debugTag, "not have questionnaire ");
+                                    questionnaireUpdate.add(_questionnareData);
+                                    long _qrow_id = _dbHelper.createQuestionnaire_EN(
+                                            _questionnareData.getId(),
+                                            _projectData.getId(),
+                                            _questionnareData.getType(),
+                                            _questionnareData.getLogoUrl(),
+                                            _questionnareData.getTimeStamp());
+                                    Log.d(debugTag, _qrow_id+" :: questionnaire row id");
+                                }
+
+
+
+                            }catch (SQLException ee) {
+                                ee.printStackTrace();
+                            }
+                        }
+                        _dbHelper.deleteQuestionnair_ENExceptId(tmp_questionids, _projectData.getId());
+
                     }
                     _dbHelper.close();
                     return true;
@@ -365,7 +504,12 @@ public class CoreEngine {
 
         MySQLiteHelper _sqlHelper = new MySQLiteHelper(this.mCtx);
         _sqlHelper.open();
-        Cursor _cursor = _sqlHelper.getAllProjects();
+        Cursor _cursor = null;
+        if(this.getLg().equals("en")) {
+            _cursor = _sqlHelper.getAllProjects_EN();
+        }else{
+            _cursor = _sqlHelper.getAllProjects();
+        }
         if(_cursor != null)
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
@@ -411,7 +555,7 @@ public class CoreEngine {
             for (int i = 0; i < this.questionnaireUpdate.size(); i++) {
                 QuestionnaireData _question_data = this.questionnaireUpdate.get(i);
                 String _json_str = _jsonData.get(i);
-                String _fileName = _question_data.getId()+"_"+_question_data.getTimeStamp()+".json";
+                String _fileName = _question_data.getId()+"_"+_question_data.getTimeStamp()+"_"+_question_data.getLg()+".json";
 
                 //Extract question data & find url image for download to local
                 try {
@@ -2051,7 +2195,7 @@ public class CoreEngine {
     }
     public ArrayList<QuestionTypeData> getQuestionnaireData(String _questionnaire_id, String _timestamp){
         ArrayList<QuestionTypeData> _data = new ArrayList<QuestionTypeData>();
-        String _fileName = _questionnaire_id+"_"+_timestamp+".json";
+        String _fileName = _questionnaire_id+"_"+_timestamp+"_"+this.getLg()+".json";
         String _json_str = this._qnFS.readFileOnSD(_fileName);
 
         try {
@@ -2067,7 +2211,7 @@ public class CoreEngine {
     }
     public ArrayList<QuestionTypeData> getStaffQuestionnaireData(String _questionnaire_id, String _timestamp){
         ArrayList<QuestionTypeData> _data = new ArrayList<QuestionTypeData>();
-        String _fileName = _questionnaire_id+"_"+_timestamp+".json";
+        String _fileName = _questionnaire_id+"_"+_timestamp+"_"+this.getLg()+".json";
         String _json_str = this._qnFS.readFileOnSD(_fileName);
         try {
             JSONObject _json_obj = new JSONObject(_json_str);

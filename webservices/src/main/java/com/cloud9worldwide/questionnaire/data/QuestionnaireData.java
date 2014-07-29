@@ -11,14 +11,22 @@ public class QuestionnaireData {
     private String type;
     private String logoUrl;
     private String timeStamp;
+    private String lg;
 
     public QuestionnaireData(String _id,String _type,String _logoUrl,String _timeStamp){
         this.id = _id;
         this.type = _type;
         this.logoUrl = _logoUrl;
         this.timeStamp = _timeStamp;
+        this.lg = "th";
     }
-
+    public QuestionnaireData(String _id,String _type,String _logoUrl,String _timeStamp, String _lg){
+        this.id = _id;
+        this.type = _type;
+        this.logoUrl = _logoUrl;
+        this.timeStamp = _timeStamp;
+        this.lg = _lg;
+    }
     public String getId() {
         return id;
     }
@@ -51,6 +59,14 @@ public class QuestionnaireData {
         return timeStamp;
     }
 
+    public String getLg() {
+        return lg;
+    }
+
+    public void setLg(String lg) {
+        this.lg = lg;
+    }
+
     public JSONObject toJsonObject(){
         JSONObject obj = new JSONObject();
         try {
@@ -58,6 +74,7 @@ public class QuestionnaireData {
             obj.put("type",this.type);
             obj.put("logoUrl",this.logoUrl);
             obj.put("timeStamp",this.timeStamp);
+            obj.put("lg",this.lg);
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -71,6 +88,7 @@ public class QuestionnaireData {
             obj.put("type",this.type);
             obj.put("logoUrl",this.logoUrl);
             obj.put("timeStamp",this.timeStamp);
+            obj.put("lg",this.lg);
         }catch (JSONException e){
             e.printStackTrace();
         }

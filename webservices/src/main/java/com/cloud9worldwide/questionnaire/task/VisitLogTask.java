@@ -1,23 +1,27 @@
 package com.cloud9worldwide.questionnaire.task;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.cloud9worldwide.questionnaire.webservices.WebserviceHelper;
 
 /**
- * Created by cloud9 on 4/8/14.
+ * Created by cloud9 on 7/29/14.
  */
-public class CustomerSearchAPITask extends AsyncTask<String, Integer, String> {
+public class VisitLogTask extends AsyncTask<String, Integer, String> {
     private Context context;
-    private static final String debugTag = "searchcustomerAPITask";
-    private static final String command = "searchcustomer";
+    private ProgressDialog progDialog;
+    private static final String debugTag    = "VisitLogTask";
+    private static final String command     = "visitlog";
 
-    public CustomerSearchAPITask(Context context) {
-        this.context = context;
+    public VisitLogTask(Context _context) {
+        super();
+        this.context = _context;
     }
-
-    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
     protected String doInBackground(String... params) {
         Boolean _error = false;
         String _error_msg = null;
@@ -36,17 +40,20 @@ public class CustomerSearchAPITask extends AsyncTask<String, Integer, String> {
             try {
                 client.Execute(WebserviceHelper.RequestMethod.POST);
             } catch (Exception e) {
-                _error = true;
                 _error_msg = e.getMessage();
             }
             response = client.getResponse();
         } catch (Exception e) {
             _error_msg = e.getMessage();
         }
-        if(!_error && response != null){
+        if(!_error){
             return response;
         }else {
             return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
         }
+    }
+    protected void onPostExecute(String result)
+    {
+        //progDialog.dismiss();
     }
 }

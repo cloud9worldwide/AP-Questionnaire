@@ -42,6 +42,7 @@ public class DownloadQuestionnaire {
             try {
                 JSONObject json = new JSONObject();
                 json.put("questionnaireid",_allquestionnaire.get(i).getId());
+                json.put("lg",_allquestionnaire.get(i).getLg());
                 json.put("tokenaccess",_tokenaccess);
                 WebserviceHelper client = new WebserviceHelper(_webserviceUrl);
                 client.AddParam("cmd", command);

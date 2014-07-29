@@ -46,7 +46,7 @@ public class CustomerInfoAPITask extends AsyncTask<String, Integer, String> {
         if(!_error && response != null){
             return response;
         }else {
-            return "{\"status\":false,\"reuslt\":{\"message\":\""+_error_msg+"\"}}";
+            return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
         }
     }
 }

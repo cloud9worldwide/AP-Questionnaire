@@ -50,7 +50,7 @@ public class ForgotpasswordAPITask extends AsyncTask<String, Integer, String> {
         if(!_error){
             return response;
         }else {
-            return "{\"status\":false,\"reuslt\":{\"message\":\""+_error_msg+"\"}}";
+            return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
         }
     }
     protected void onPostExecute(String result)
