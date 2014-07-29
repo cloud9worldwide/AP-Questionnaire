@@ -388,7 +388,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                     }
                 }
             }
-            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
             lp.gravity = Gravity.CENTER_VERTICAL;
 
             lp.weight = 1;
@@ -404,7 +404,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
             if(i==total-1  && total % column !=0){
                 for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
                     LinearLayout btn2 = new LinearLayout(this);
-                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
                     lp.gravity = Gravity.CENTER_VERTICAL;
 
                     lp.weight = 1;

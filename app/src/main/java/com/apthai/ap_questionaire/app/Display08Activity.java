@@ -206,6 +206,7 @@ public class Display08Activity extends Activity implements View.OnClickListener 
             ImageView image = new ImageView(this);
             image.setTag(99);
             lp = new LinearLayout.LayoutParams(delegate.dpToPx(50), delegate.dpToPx(50));
+            lp.gravity =Gravity.CENTER_VERTICAL;
             image.setLayoutParams(lp);
             btn.setTag(i);
 
@@ -229,8 +230,9 @@ public class Display08Activity extends Activity implements View.OnClickListener 
             name.setText(data.getAnswers().get(i).getTitle().toString());
             name.setTextSize(30);
             name.setTypeface(delegate.font_type);
-            name.setPadding(delegate.dpToPx(20), 0, 0, 0);
+//            name.setPadding(delegate.dpToPx(20), 0, 0, 0);
             name.setTag(98);
+            name.setPadding(delegate.dpToPx(20), delegate.dpToPx(15), 0, 0);
             name.setGravity(Gravity.CENTER_VERTICAL);
 
             btn.addView(image);
@@ -390,7 +392,7 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                     }
                 }
             }
-            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
             lp.gravity = Gravity.CENTER_VERTICAL;
 
             lp.weight = 1;
@@ -408,7 +410,7 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                 for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
                     Log.e("addcolumn",addcolum +"");
                     LinearLayout btn2 = new LinearLayout(this);
-                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
                     lp.gravity = Gravity.CENTER_VERTICAL;
 
                     lp.weight = 1;

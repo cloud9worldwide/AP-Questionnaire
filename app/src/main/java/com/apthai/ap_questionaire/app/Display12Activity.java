@@ -406,7 +406,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
                     }
                 }
             }
-            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
             lp.gravity = Gravity.CENTER_VERTICAL;
 
             lp.weight = 1;
@@ -424,7 +424,7 @@ public class Display12Activity extends Activity implements View.OnClickListener 
                 for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
                     Log.e("addcolumn",addcolum +"");
                     LinearLayout btn2 = new LinearLayout(this);
-                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
+                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
                     lp.gravity = Gravity.CENTER_VERTICAL;
 
                     lp.weight = 1;
