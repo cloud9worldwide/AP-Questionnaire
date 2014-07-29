@@ -68,7 +68,9 @@ public class MySQLiteHelper {
     public static final String SAVE_QUESTIONNAIREID = "savequestionnarieid";
 
     public static final String DATABASE_TABLE_QUESTIONNAIRE = "questionnaires";
+    public static final String DATABASE_TABLE_QUESTIONNAIRE_EN = "questionnaires_en";
     public static final String DATABASE_TABLE_PROJECT = "projects";
+    public static final String DATABASE_TABLE_PROJECT_EN = "projects_en";
     public static final String DATABASE_TABLE_CONTACT = "contact";
     public static final String DATABASE_TABLE_ADDRESS = "address";
     public static final String DATABASE_TABLE_ADDRESS_WORK = "address_work";
@@ -88,8 +90,21 @@ public class MySQLiteHelper {
                     + NAME+ " TEXT,"
                     + LOGO+ " TEXT,"
                     + BACKGROUND+ " TEXT" + ");";
+    public static final String CREATE_TABLE_PROJECT_EN =
+            "create table "+DATABASE_TABLE_PROJECT_EN+" (_id integer primary key autoincrement, "
+                    + PROJECT_ID+ " TEXT,"
+                    + NAME+ " TEXT,"
+                    + LOGO+ " TEXT,"
+                    + BACKGROUND+ " TEXT" + ");";
 
     public static final String CREATE_TABLE_QUESTIONNAIRE = "create table "+DATABASE_TABLE_QUESTIONNAIRE+" (_id integer primary key autoincrement, "
+            +QUESTIONNAIRE_ID+" TEXT,"
+            +PROJECT_ID+" TEXT,"
+            +TYPE+" TEXT,"
+            +LOGO+" TEXT,"
+            +TIMESTAMP+" TEXT"+ ");";
+
+    public static final String CREATE_TABLE_QUESTIONNAIRE_EN = "create table "+DATABASE_TABLE_QUESTIONNAIRE_EN+" (_id integer primary key autoincrement, "
             +QUESTIONNAIRE_ID+" TEXT,"
             +PROJECT_ID+" TEXT,"
             +TYPE+" TEXT,"
@@ -259,7 +274,9 @@ public class MySQLiteHelper {
         public void onCreate(SQLiteDatabase db)
         {
             db.execSQL(CREATE_TABLE_PROJECT);
+            db.execSQL(CREATE_TABLE_PROJECT_EN);
             db.execSQL(CREATE_TABLE_QUESTIONNAIRE);
+            db.execSQL(CREATE_TABLE_QUESTIONNAIRE_EN);
             db.execSQL(CREATE_TABLE_CONTACT);
             db.execSQL(CRATE_TABLE_MOBILES);
             db.execSQL(CREATE_TABLE_ADDRESS_WORK);
@@ -328,7 +345,14 @@ public class MySQLiteHelper {
         initialValues.put(BACKGROUND, background);
         return this.db.insert(DATABASE_TABLE_PROJECT, null, initialValues);
     }
-
+    public long createProject_EN(String projectid,String name, String logo, String background){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(PROJECT_ID, projectid);
+        initialValues.put(NAME, name);
+        initialValues.put(LOGO, logo);
+        initialValues.put(BACKGROUND, background);
+        return this.db.insert(DATABASE_TABLE_PROJECT_EN, null, initialValues);
+    }
     /**
      * Delete the project with the given rowId
      *
@@ -338,6 +362,10 @@ public class MySQLiteHelper {
     public boolean deleteProject(long rowId) {
 
         return this.db.delete(DATABASE_TABLE_PROJECT, ROW_ID + "=" + rowId, null) > 0; //$NON-NLS-1$
+    }
+    public boolean deleteProject_EN(long rowId) {
+
+        return this.db.delete(DATABASE_TABLE_PROJECT_EN, ROW_ID + "=" + rowId, null) > 0; //$NON-NLS-1$
     }
 
     /**
@@ -350,7 +378,11 @@ public class MySQLiteHelper {
         return this.db.query(DATABASE_TABLE_PROJECT, new String[] { ROW_ID,PROJECT_ID,
                 NAME, LOGO, BACKGROUND }, null, null, null, null, null);
     }
+    public Cursor getAllProjects_EN() {
 
+        return this.db.query(DATABASE_TABLE_PROJECT_EN, new String[] { ROW_ID,PROJECT_ID,
+                NAME, LOGO, BACKGROUND }, null, null, null, null, null);
+    }
     /**
      * Return a Cursor positioned at the project that matches the given rowId
      * @param rowId
@@ -368,7 +400,17 @@ public class MySQLiteHelper {
         }
         return mCursor;
     }
+    public Cursor getProject_EN(long rowId) throws SQLException {
 
+        Cursor mCursor =
+
+                this.db.query(true, DATABASE_TABLE_PROJECT_EN, new String[] { ROW_ID,PROJECT_ID, NAME,
+                        LOGO, BACKGROUND}, ROW_ID + "=" + rowId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
     /**
      * Update the project.
      *
@@ -389,7 +431,16 @@ public class MySQLiteHelper {
 
         return this.db.update(DATABASE_TABLE_PROJECT, args, ROW_ID + "=" + rowId, null) >0;
     }
+    public boolean updateProject_EN(long rowId,String projectid, String name, String logo,
+                                 String background){
+        ContentValues args = new ContentValues();
+        args.put(PROJECT_ID, projectid);
+        args.put(NAME, name);
+        args.put(LOGO, logo);
+        args.put(BACKGROUND, background);
 
+        return this.db.update(DATABASE_TABLE_PROJECT_EN, args, ROW_ID + "=" + rowId, null) >0;
+    }
 
     /**
      * Create a new questionnaire. If the questionnaire is successfully created return the new
@@ -410,6 +461,15 @@ public class MySQLiteHelper {
         initialValues.put(TIMESTAMP, timestamp);
         return this.db.insert(DATABASE_TABLE_QUESTIONNAIRE, null, initialValues);
     }
+    public long createQuestionnaire_EN(String questionnaireid,String projectid,String questionnairetype, String logo, String timestamp){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(QUESTIONNAIRE_ID, questionnaireid);
+        initialValues.put(PROJECT_ID, projectid);
+        initialValues.put(TYPE, questionnairetype);
+        initialValues.put(LOGO, logo);
+        initialValues.put(TIMESTAMP, timestamp);
+        return this.db.insert(DATABASE_TABLE_QUESTIONNAIRE_EN, null, initialValues);
+    }
 
     public boolean updateQuestionnaire(String questionnaire_id,String projectid,String questionnairetype, String logo, String timestamp){
         ContentValues initialValues = new ContentValues();
@@ -420,6 +480,16 @@ public class MySQLiteHelper {
         initialValues.put(TIMESTAMP, timestamp);
 
         return this.db.update(DATABASE_TABLE_QUESTIONNAIRE, initialValues, QUESTIONNAIRE_ID + "= ?", new String[] { questionnaire_id}) >0;
+    }
+    public boolean updateQuestionnaire_EN(String questionnaire_id,String projectid,String questionnairetype, String logo, String timestamp){
+        ContentValues initialValues = new ContentValues();
+        //nitialValues.put(QUESTIONNAIRE_ID, questionnaire_id);
+        initialValues.put(PROJECT_ID, projectid);
+        initialValues.put(TYPE, questionnairetype);
+        initialValues.put(LOGO, logo);
+        initialValues.put(TIMESTAMP, timestamp);
+
+        return this.db.update(DATABASE_TABLE_QUESTIONNAIRE_EN, initialValues, QUESTIONNAIRE_ID + "= ?", new String[] { questionnaire_id}) >0;
     }
     /**
      * Return a Cursor over the list of all questionnaire in the project
@@ -438,7 +508,15 @@ public class MySQLiteHelper {
         return this.db.query(DATABASE_TABLE_QUESTIONNAIRE, new String[] { ROW_ID,QUESTIONNAIRE_ID,PROJECT_ID,
                 TYPE, LOGO, TIMESTAMP }, whereClause ,whereArgs, null, null, null, null);
     }
+    public Cursor getAllQuestionnaire_ENByProject(String projectid) throws SQLException {
+        String whereClause = PROJECT_ID + "= ? ";
+        String[] whereArgs = new String[] {
+                projectid
+        };
 
+        return this.db.query(DATABASE_TABLE_QUESTIONNAIRE_EN, new String[] { ROW_ID,QUESTIONNAIRE_ID,PROJECT_ID,
+                TYPE, LOGO, TIMESTAMP }, whereClause ,whereArgs, null, null, null, null);
+    }
 
 
     /**
@@ -458,7 +536,17 @@ public class MySQLiteHelper {
         }
         return mCursor;
     }
+    public Cursor getQuestionnaire_EN(long rowId) throws SQLException {
 
+        Cursor mCursor =
+
+                this.db.query(true, DATABASE_TABLE_QUESTIONNAIRE_EN, new String[] { ROW_ID,QUESTIONNAIRE_ID,PROJECT_ID,
+                        TYPE, LOGO, TIMESTAMP}, ROW_ID + "=" + rowId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
     /**
      * Return a Cursor positioned at the questionnaire that matches the given rowId
      * @param questionnaireid
@@ -486,7 +574,27 @@ public class MySQLiteHelper {
         }
         return mCursor;
     }
+    public Cursor getQuestionnaire_ENById(String questionnaireid) throws SQLException {
 
+        String whereClause = QUESTIONNAIRE_ID + "= ? ";
+        String[] whereArgs = new String[] {
+                questionnaireid
+        };
+        /*
+        Cursor mCursor =
+
+                this.db.query(true, DATABASE_TABLE_QUESTIONNAIRE, new String[] { ROW_ID,QUESTIONNAIRE_ID,PROJECT_ID,
+                        TYPE, LOGO, TIMESTAMP},whereClause , whereArgs, null, null, null, null);
+                        */
+        String sql = "select * from "+DATABASE_TABLE_QUESTIONNAIRE_EN+" where "+whereClause;
+        //Log.d("Core",sql);
+        Cursor mCursor = this.db.rawQuery(sql,whereArgs);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            //Log.d("Core","debug :: "+mCursor.getCount());
+        }
+        return mCursor;
+    }
     /**
      * Update the questionnaire.
      *
@@ -509,7 +617,17 @@ public class MySQLiteHelper {
 
         return this.db.update(DATABASE_TABLE_QUESTIONNAIRE, args, ROW_ID + "=" + rowId, null) >0;
     }
+    public boolean updateProject_EN(long rowId,String questionnaireid, String projectid, String type, String logo,
+                                 String timestamp){
+        ContentValues args = new ContentValues();
+        args.put(QUESTIONNAIRE_ID, questionnaireid);
+        args.put(PROJECT_ID, projectid);
+        args.put(TYPE, type);
+        args.put(LOGO, logo);
+        args.put(TIMESTAMP, timestamp);
 
+        return this.db.update(DATABASE_TABLE_QUESTIONNAIRE_EN, args, ROW_ID + "=" + rowId, null) >0;
+    }
     /**
      *
      * @param prefix
@@ -758,6 +876,14 @@ public class MySQLiteHelper {
         }
         str_ids = str_ids.substring(0,str_ids.length() - 1);
         return this.db.delete(DATABASE_TABLE_QUESTIONNAIRE, QUESTIONNAIRE_ID + " NOT IN (" + str_ids+" ) AND "+PROJECT_ID+ " = '"+proId+"'", null) > 0;
+    }
+    public boolean deleteQuestionnair_ENExceptId(ArrayList<String> Ids,String proId){
+        String str_ids = "";
+        for (int i = 0; i < Ids.size(); i++) {
+            str_ids += "'"+Ids.get(i)+"',";
+        }
+        str_ids = str_ids.substring(0,str_ids.length() - 1);
+        return this.db.delete(DATABASE_TABLE_QUESTIONNAIRE_EN, QUESTIONNAIRE_ID + " NOT IN (" + str_ids+" ) AND "+PROJECT_ID+ " = '"+proId+"'", null) > 0;
     }
     /**
      * close the db
