@@ -165,8 +165,16 @@ public class QuestionManagement {
             for (int i = 0; i < this.SubAnsListData.size(); i++) {
                 QuestionAnswerData tmp_sub_ans = this.SubAnsListData.get(i);
                 if(Integer.parseInt(tmp_sub_ans.getQuestionId()) == question_id ){
-                    tmp_sub_ans.setAnswer(_save_ans_ist);
-                    tmp_sub_ans.setDefault(false);
+                    if(_save_ans_ist.size() == 0){
+                        SaveAnswerData save_ans = new SaveAnswerData("-1","");
+                        ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
+                        _ans_list.add(save_ans);
+                        tmp_sub_ans.setAnswer(_ans_list);
+                        tmp_sub_ans.setDefault(true);
+                    }else {
+                        tmp_sub_ans.setAnswer(_save_ans_ist);
+                        tmp_sub_ans.setDefault(false);
+                    }
                     this.SubAnsListData.set(i,tmp_sub_ans);
                     return true;
                 }

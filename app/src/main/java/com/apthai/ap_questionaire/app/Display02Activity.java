@@ -51,7 +51,7 @@ public class Display02Activity extends Activity implements OnClickListener {
     questionniare_delegate delegate;
     TextView project_name;
     int selected =0;
-    ArrayList<SaveAnswerData> answer;
+    private ArrayList<SaveAnswerData> answer;
     ImageButton btnNext, btnBack;
     static PopupWindow popup;
     ImageView img_background;
@@ -131,6 +131,7 @@ public class Display02Activity extends Activity implements OnClickListener {
                     }else{
                         answer = checkAnswer.getAnswer();
                     }
+                    Log.e("alekdebug",answer.toString());
                 }else {
                     //is parent question
                     if(data.getParent_question_id() > 0){
@@ -142,9 +143,9 @@ public class Display02Activity extends Activity implements OnClickListener {
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
                     } else {
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
                 try {
@@ -155,6 +156,8 @@ public class Display02Activity extends Activity implements OnClickListener {
                 uiHandler.post( onUi );
             }
         };
+
+        new Thread( background ).interrupt();
         new Thread( background ).start();
     }
 
@@ -433,9 +436,16 @@ public class Display02Activity extends Activity implements OnClickListener {
             if(error_msg.equals("NO")){
                 if(delegate.dataSubQuestion !=null){
                     //sub question mode
+
+                    /*
                     if(answer.size()!=0){
                         delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                     }
+                    */
+
+                    delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                     delegate.skip_save_subans = false;
                     onBackPressed();
                 } else {

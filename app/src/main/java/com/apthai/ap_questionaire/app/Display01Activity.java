@@ -138,9 +138,9 @@ public class Display01Activity extends Activity implements OnClickListener {
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
 
@@ -427,9 +427,14 @@ public class Display01Activity extends Activity implements OnClickListener {
             if(error_msg.equals("NO")){
                 if(delegate.dataSubQuestion !=null){
                     //sub question mode
+                    /*
                     if(answer.size()!=0){
                         delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                     }
+                    */
+                    delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                     delegate.skip_save_subans = false;
                     onBackPressed();
                 } else {
@@ -479,6 +484,7 @@ public class Display01Activity extends Activity implements OnClickListener {
                         }
                     } else {
                         image.setImageResource(R.drawable.checkbox_unselect);
+                        Log.e("alekdebug",index+"");
                         answer.remove(index);
                         content_view.removeAllViews();
                         setTableLayout();
