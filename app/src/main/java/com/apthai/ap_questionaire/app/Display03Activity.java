@@ -141,9 +141,9 @@ public class Display03Activity extends Activity implements View.OnClickListener 
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
                 //delay
