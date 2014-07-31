@@ -134,9 +134,9 @@ public class Display20Activity extends Activity implements View.OnClickListener 
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
 
@@ -283,12 +283,9 @@ public class Display20Activity extends Activity implements View.OnClickListener 
             btnNext.setEnabled(false);
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
-                if(answer.size()!=0){
-                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    //delegate.dataSubQuestion = null;
-                }
-                //this.setResult(3);
-                //finish();
+                delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                 delegate.skip_save_subans = false;
                 onBackPressed();
             } else {

@@ -427,9 +427,15 @@ public class Display03Activity extends Activity implements View.OnClickListener 
             if(error_msg.equals("NO")){
                 if(delegate.dataSubQuestion !=null){
                     //sub question mode
+                    /*
                     if(answer.size()!=0){
                         delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                     }
+                    */
+
+                    delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                     delegate.skip_save_subans = false;
                     onBackPressed();
                 } else {
