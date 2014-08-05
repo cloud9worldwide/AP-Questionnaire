@@ -25,7 +25,7 @@ import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 public class CustomerFinishedAnswerActivity extends Activity implements View.OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    ImageButton btn_staff,btn_menu, btn_back_home ;
+    ImageButton btn_staff,btn_menu, btn_back_home, btnEN, btnTH ;
     TextView customerName,thanks1, thanks2, project_name, lblgreen;
     questionniare_delegate delegate;
     static PopupWindow popup;
@@ -49,8 +49,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     }
 
     private void setObject() {
-
-
         popup = new PopupWindow(this);
 
         btn_menu = (ImageButton) findViewById(R.id.btnMenu);

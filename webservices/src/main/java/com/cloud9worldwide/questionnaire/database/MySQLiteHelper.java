@@ -828,21 +828,21 @@ public class MySQLiteHelper {
         return this.db.delete(DATABASE_TABLE_SAVESTAFFANSWERS, SAVE_QUESTIONNAIREID + "=" + save_questionnaire_id, null) > 0;
     }
     public Cursor getAllProvince(){
-        return this.db.query(TB_PROVINCE, new String[] { ProvinceID,ProvinceName}, ISDelete +"= 0", null, null, null, ProvinceName);
+        return this.db.query(TB_PROVINCE, new String[] { ProvinceID,ProvinceName,ProvinceNameEng}, ISDelete +"= 0", null, null, null, ProvinceName);
     }
     public Cursor getAllDistrictByProvince(String _province_id) throws SQLException {
-        Cursor mCursor =  this.db.query(TB_DISTRICT, new String[]{DistrictID,DistrictName,PostCode},ProvinceID + "= '"+_province_id+"' ",null,null,null,DistrictName);
+        Cursor mCursor =  this.db.query(TB_DISTRICT, new String[]{DistrictID,DistrictName,DistrictNameEng,PostCode},ProvinceID + "= '"+_province_id+"' ",null,null,null,DistrictName);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         return mCursor;
     }
     public Cursor getSubDistrictByDistrict(String _district_id){
-        return this.db.query(TB_SUBDISTRICT, new String[]{SubDistrictID,SubDistrictName,PostCode},DistrictID + "= '"+_district_id+"' ",null,null,null,SubDistrictName);
+        return this.db.query(TB_SUBDISTRICT, new String[]{SubDistrictID,SubDistrictName,SubDistrictNameEng,PostCode},DistrictID + "= '"+_district_id+"' ",null,null,null,SubDistrictName);
     }
 
     public Cursor getSubDistrictByDistrict(String _district_id,String _province_id){
-        return this.db.query(TB_SUBDISTRICT, new String[]{SubDistrictID,SubDistrictName,PostCode},DistrictID + "= '"+_district_id+"' AND "+ProvinceID + "= '"+_province_id+"' ",null,null,null,SubDistrictName);
+        return this.db.query(TB_SUBDISTRICT, new String[]{SubDistrictID,SubDistrictName,SubDistrictNameEng,PostCode},DistrictID + "= '"+_district_id+"' AND "+ProvinceID + "= '"+_province_id+"' ",null,null,null,SubDistrictName);
     }
 
 

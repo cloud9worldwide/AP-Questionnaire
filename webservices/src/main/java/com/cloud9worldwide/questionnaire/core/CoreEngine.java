@@ -2367,14 +2367,24 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getProvinces(){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData("0", "Please select"));
+        }else {
+            data.add(0, new ValTextData("0", "กรุณาเลือก"));
+        }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getAllProvince();
         if(_cursor != null)
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
-            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1));
+            ValTextData val;
+//            if (this.getLg().equals("en")){
+//                val = new ValTextData(_cursor.getString(1),_cursor.getString(0),_cursor.getString(2));
+//            } else {
+                val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+//            }
+
             data.add(val);
             _cursor.moveToNext();
         }
@@ -2383,7 +2393,11 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getDistrictByProvince(String province_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData("0", "Please select"));
+        }else {
+            data.add(0, new ValTextData("0", "กรุณาเลือก"));
+        }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
 
@@ -2392,7 +2406,7 @@ public class CoreEngine {
             if(_cursor != null)
                 _cursor.moveToFirst();
             for (int i = 0; i < _cursor.getCount(); i++) {
-                ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1));
+                ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
                 val.setText2(_cursor.getString(2));
                 data.add(val);
                 _cursor.moveToNext();
@@ -2407,14 +2421,18 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData("0", "Please select"));
+        }else {
+            data.add(0, new ValTextData("0", "กรุณาเลือก"));
+        }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getSubDistrictByDistrict(_district_id);
         if(_cursor != null)
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
-            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1));
+            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
             val.setText2(_cursor.getString(2));
             data.add(val);
             _cursor.moveToNext();
@@ -2425,14 +2443,18 @@ public class CoreEngine {
 
     public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id,String _province_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0,new ValTextData("0","กรุณาเลือก"));
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData("0", "Please select"));
+        }else {
+            data.add(0, new ValTextData("0", "กรุณาเลือก"));
+        }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getSubDistrictByDistrict(_district_id,_province_id);
         if(_cursor != null)
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
-            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1));
+            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
             val.setText2(_cursor.getString(2));
             data.add(val);
             _cursor.moveToNext();

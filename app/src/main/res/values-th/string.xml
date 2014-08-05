@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AP-Questionaire</string>
+    <string name="YOUR_PROJECT">โครงการ</string>
+    <string name="title_activity_questionniare">กรุณาเลือกชุดแบบสอบถาม</string>
+    <string name="customer_look_up_hint_name">ชื่อ</string>
+    <string name="customer_look_up_hint_surname">นามสกุล</string>
+    <string name="customer_look_up_hint_tel">เบอร์โทรศัพท์</string>
+    <string name="title_activity_customer_look_up">ค้นหาลูกค้า</string>
+    <string name="not_found_customer_header">ไม่พบลูกค้าที่ค้นหา</string>
+    <string name="not_found_customer_detail">คุณสามารถเพิ่มลูกค้าใหม่ได้โดยการกดปุ่ม "เพิ่มลูกค้า" ข้างล่าง</string>
+    <string name="title_activity_customer_look_info">ข้อมูลลูกค้า</string>
+    <string name="please_fill_completed">กรุณากรอกข้อมูลของท่านให้ครบถ้วน</string>
+    <string name="add_customer_prefix">คำนำหน้า</string>
+    <string name="add_customer_prefix_extra">ยศ/ตำแหน่ง</string>
+    <string name="add_customer_name">ชื่อ</string>
+    <string name="add_customer_surname">นามสกุล</string>
+    <string name="add_customer_nickname">ชื่อเล่น</string>
+    <string name="add_customer_birthday">วันเกิด</string>
+    <string name="add_customer_email">อีเมล</string>
+    <string name="add_customer_work">ที่ทำงาน/บริษัท</string>
+    <string name="add_customer_district">เขต/อำเภอ</string>
+    <string name="add_customer_tel_home_BKK_line1">โทรศัพท์</string>
+    <string name="add_customer_tel_home_BKK_line2">บ้าน</string>
+    <string name="add_customer_mobilenumber">โทรศัพท์มือถือ</string>
+    <string name="add_customer_mobile_line1">โทรศัพท์</string>
+    <string name="add_customer_mobile_line2">มือถือ</string>
+    <string name="add_customer_homeid">บ้านเลขที่</string>
+    <string name="add_customer_moo">หมู่</string>
+    <string name="add_customer_building">หมู่บ้าน/อาคาร</string>
+    <string name="add_customer_floor">ชั้น</string>
+    <string name="add_customer_room">ห้อง</string>
+    <string name="add_customer_soi">ซอย</string>
+    <string name="add_customer_road">ถนน</string>
+    <string name="add_customer_province">จังหวัด</string>
+    <string name="add_customer_sub_district">ตำบล</string>
+    <string name="add_customer_postcode">รหัสไปรษณีย์</string>
+    <string name="add_customer_other_country">ประเทศ</string>
+    <string name="add_customer_nationality">สัญชาติ</string>
+    <string name="popup_mobile">โทรศัพท์มือถือ</string>
+    <string name="popup_phone">โทรศัพท์บ้าน</string>
+    <string name="error_enter_all_fill">กรุณากรอกให้ครบ</string>
+    <string name="header_list_name">ชื่อ</string>
+    <string name="header_list_surname">นามสกุล</string>
+    <string name="header_list_unitnumber">จำนวน Unit จอง</string>
+    <string name="header_list_contactID">รหัสลูกค้า</string>
+    <string name="header_list_lastVisit">เยี่ยมชมล่าสุด</string>
+    <string name="header_list_opp">OOP</string>
+    <string name="title_activity_customer_list">ผลการค้นหา</string>
+    <string name="address">ที่อยู่</string>
+    <string name="telephone">เบอร์โทรศัพท์</string>
+    <string name="title_customer_info">ตรวจสอบข้อมูลให้ถูกต้อง</string>
+    <string name="question">ข้อที่</string>
+    <string name="of">จาก</string>
+
+
+
+    <string name="menu_home">โครงการ</string>
+    <string name="menu_logout">Logout</string>
+</resources>

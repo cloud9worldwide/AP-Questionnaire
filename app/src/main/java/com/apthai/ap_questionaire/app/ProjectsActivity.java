@@ -34,7 +34,7 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     questionniare_delegate delegate;
     ArrayList<ProjectData> list_projectdata;
     static PopupWindow popup;
-    ImageButton btnMenu;
+    ImageButton btnMenu, btnEN, btnTH;
     RelativeLayout page;
     TextView project_name;
     TextView lbl_title;
@@ -79,7 +79,6 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             list_projectdata = delegate.service.getProjects();
             total = list_projectdata.size();
             setObject();
-            setTableLayout();
         }
 
     }
@@ -107,6 +106,25 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         lbl_title.setTypeface(delegate.font_type);
         lbl_title.setTextSize(25);
 
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
+        changeLanguege();
+
+    }
+    private void changeLanguege(){
+
+        lbl_title.setText(R.string.YOUR_PROJECT);
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+        }
+        content_view.removeAllViews();
+        setTableLayout();
     }
 
 
@@ -191,7 +209,30 @@ public class ProjectsActivity extends Activity implements OnClickListener {
                 showPopup(this);
             }
 
-        } else if(v.getId() == R.id.root_view) {
+        }
+        else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
+            }
+        }
+
+        else if(v.getId() == R.id.root_view) {
             if (popup.isShowing()) {
                 popup.dismiss();
             }

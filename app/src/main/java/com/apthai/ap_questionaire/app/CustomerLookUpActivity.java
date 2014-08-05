@@ -33,14 +33,14 @@ import java.util.ArrayList;
 public class CustomerLookUpActivity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    ImageButton btn_menu, btn_send, btn_back;
+    ImageButton btn_menu, btnEN, btnTH, btn_send, btn_back;
     questionniare_delegate delegate;
     EditText txtFirstName,txtLastName,txtTel;
     TextView project_name,question_title;
     ImageView img_background;
     static PopupWindow popup;
     RelativeLayout root_view;
-    boolean isFirstTime;
+
 
     TextView lbl_firstname, lbl_lastname, lbl_tel;
     private Context ctx;
@@ -78,8 +78,6 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
     private void setObject(){
         delegate = (questionniare_delegate)getApplicationContext();
-//        ScrollView sv = (ScrollView)findViewById(R.id.scrollView);
-//        sv.setEnabled(false);
 
         btn_menu = (ImageButton) findViewById(R.id.btnMenu);
         btn_send = (ImageButton) findViewById(R.id.btnSend);
@@ -159,6 +157,36 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                 return false;
             }
         });
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
+        changeLanguege();
+    }
+    private void changeLanguege(){
+
+        question_title.setText(R.string.title_activity_customer_look_up);
+        project_name.setText(delegate.project.getName());
+
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+        }
+        txtFirstName.setHint(R.string.customer_look_up_hint_name);
+        txtLastName.setHint(R.string.customer_look_up_hint_surname);
+        txtTel.setHint(R.string.customer_look_up_hint_tel);
+        txtFirstName.setText("");
+        txtLastName.setText("");
+        txtTel.setText("");
+
+        lbl_firstname.setText(R.string.customer_look_up_hint_name);
+        lbl_lastname.setText(R.string.customer_look_up_hint_surname);
+        lbl_tel.setText(R.string.customer_look_up_hint_tel);
+
     }
 
     @Override
@@ -245,6 +273,26 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         } else if(v.getId() == R.id.root_view){
             if(popup.isShowing()){
                 popup.dismiss();
+            }
+        } else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
             }
         }
     }

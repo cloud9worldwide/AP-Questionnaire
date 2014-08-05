@@ -320,6 +320,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         ddlProvince.setSelection(0);
         ddlProvince.setAdapter(_provinceAdapter);
 
+
         ddlProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public synchronized void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if(status==0){

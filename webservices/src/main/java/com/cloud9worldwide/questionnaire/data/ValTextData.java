@@ -14,7 +14,11 @@ public class ValTextData {
         this.value = _val;
         this.text = _txt;
     }
-
+    public ValTextData(String _val,String _txt,String _txt2) {
+        this.value = _val;
+        this.text = _txt;
+        this.text2 = _txt2;
+    }
     public String getValue() {
         return value;
     }

@@ -36,7 +36,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
     ArrayList<QuestionnaireData> questionList;
     ImageView img_logo_project, img_background;
     TextView project_name;
-    ImageButton btnMenu;
+    ImageButton btnMenu, btnEN, btnTH;
     RelativeLayout root_view;
     static PopupWindow popup;
     ProjectData project_data;
@@ -81,7 +81,6 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 
 
         setObject();
-        setTableLayout();
     }
 
     private void setObject(){
@@ -93,7 +92,6 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         content_view.removeAllViews();
 
         project_name = (TextView) findViewById(R.id.project_name);
-        project_name.setText(delegate.project.getName());
         project_name.setTextSize(30);
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
@@ -107,6 +105,27 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         lbl_title = (TextView) findViewById(R.id.lbl_title);
         lbl_title.setTypeface(delegate.font_type);
         lbl_title.setTextSize(35);
+
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
+        changeLanguege();
+    }
+    private void changeLanguege(){
+
+        lbl_title.setText(R.string.YOUR_PROJECT);
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+        }
+        project_name.setText(delegate.project.getName());
+
+        content_view.removeAllViews();
+        setTableLayout();
     }
 
 
@@ -203,7 +222,29 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
                 popup.dismiss();
             }
 
-        } else {
+        }
+        else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
+            }
+        }
+        else {
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {

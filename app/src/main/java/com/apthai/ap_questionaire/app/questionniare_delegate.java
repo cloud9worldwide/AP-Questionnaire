@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -33,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,6 +69,7 @@ public class questionniare_delegate extends Application {
 
     public int sizeImage,sizeImage19;
     public int isBack;
+    public Locale myLocale;
 
     public void saveUserNamePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -100,7 +103,7 @@ public class questionniare_delegate extends Application {
 
     public Spanned getTitleSequence() {
         Integer show_index = QM.getCurQuestionIndex() + 1;
-        return Html.fromHtml("QUESTION <b>" + show_index + "</b> OF <b>" + QM.get_questions().size() + "</b>");
+        return Html.fromHtml(getResources().getString(R.string.question) + " <b>" + show_index + "</b> "+ getResources().getString(R.string.of) +" <b>" + QM.get_questions().size() + "</b>");
     }
 
     public String getPercent() {
@@ -252,11 +255,11 @@ public class questionniare_delegate extends Application {
 
             //Find the correct scale value. It should be the power of 2.
             int scale = 1;
-            Log.e("scale ",scale +"");
+
             if(width !=0 && height !=0){
                 while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height){
                     scale *= 2;
-                    Log.e("scale ",scale +"");
+
                 }
             }
 
@@ -570,5 +573,29 @@ public class questionniare_delegate extends Application {
             }
         }
         return error_msg;
+    }
+    public void setLocale(String lang) {
+
+        myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+
+//        Intent refresh = new Intent(this, AndroidLocalize.class);
+//        startActivity(refresh);
+
+
+//        ArrayList<ProjectData> projects;
+//        projects = service.getProjects();
+//
+//        for (int projectIndex = 0;projectIndex <= projects.size();projectIndex++ ){
+//            if(projects.get(projectIndex).getId().equals(project.getId())){
+//                project = projects.get(projectIndex);
+//                break;
+//            }
+//        }
+
     }
 }
