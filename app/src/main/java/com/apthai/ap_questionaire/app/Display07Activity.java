@@ -50,7 +50,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
     TextView project_name;
     ImageButton btn_back;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext;
+    ImageButton btnNext, btnEN, btnTH;
     ImageView img_background;
 
     TextView navigatorBar;

@@ -49,9 +49,8 @@ public class Display10Activity extends Activity implements View.OnClickListener 
     QuestionTypeData data;
     questionniare_delegate delegate;
     TextView project_name;
-    ImageButton btn_back;
+    ImageButton btn_back, btnNext, btnEN, btnTH;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext;
     ImageView img_background;
 
     TextView navigatorBar;

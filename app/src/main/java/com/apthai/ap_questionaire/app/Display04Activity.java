@@ -52,7 +52,7 @@ public class Display04Activity extends Activity implements View.OnClickListener 
     TextView project_name;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext, btnBack;
+    ImageButton btnNext, btnBack, btnEN, btnTH;
     static PopupWindow popup;
     ImageView img_background;
 

@@ -52,7 +52,7 @@ public class Display01Activity extends Activity implements OnClickListener {
     QuestionTypeData data;
     questionniare_delegate delegate;
     TextView project_name;
-    ImageButton btn_back,btnNext;
+    ImageButton btn_back,btnNext, btnEN, btnTH;
     ArrayList<SaveAnswerData> answer;
     ImageView img_background;
 
@@ -74,9 +74,21 @@ public class Display01Activity extends Activity implements OnClickListener {
 
     public void setNavigator(){
         navigatorBar = (TextView) findViewById(R.id.navigatorBar);
-        navigatorBar.setText(delegate.getTitleSequence());
         navigatorBar.setTypeface(delegate.font_type);
         navigatorBar.setTextSize(20);
+        if(delegate.dataSubQuestion ==null){
+            navigatorBar.setText(delegate.getTitleSequence());
+        } else {
+            navigatorBar.setText("คำถามย่อย");
+        }
+
+    }
+    private void getData(){
+        if(delegate.dataSubQuestion !=null){
+            data = delegate.dataSubQuestion;
+        } else{
+            data = delegate.QM.get_question();
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +99,7 @@ public class Display01Activity extends Activity implements OnClickListener {
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
 
-        if(delegate.dataSubQuestion !=null){
-            data = delegate.dataSubQuestion;
-        } else{
-            data = delegate.QM.get_question();
-        }
-
+        getData();
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
         progress.setMessage("Loading....");
@@ -106,14 +113,8 @@ public class Display01Activity extends Activity implements OnClickListener {
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
-                setTableLayout();
                 setImage();
-                if(delegate.dataSubQuestion ==null){
-                    setNavigator();
-                } else {
-                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
-                    navigatorBar.setText("คำถามย่อย");
-                }
+
             }
         };
         Runnable background = new Runnable() {
@@ -164,7 +165,6 @@ public class Display01Activity extends Activity implements OnClickListener {
         btn_back.setOnClickListener(this);
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
-        content_view.removeAllViews();
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
@@ -173,6 +173,27 @@ public class Display01Activity extends Activity implements OnClickListener {
         project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
+
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
+        changeLanguege();
+    }
+
+    public void changeLanguege(){
+        Log.e("LG",delegate.service.getLg());
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+        }
+        content_view.removeAllViews();
+        getData();
+        setTableLayout();
+        setNavigator();
     }
 
     private void setTableLayout(){
@@ -445,12 +466,26 @@ public class Display01Activity extends Activity implements OnClickListener {
                 Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
             }
             btnNext.setEnabled(true);
-        } else if (v.getId() == R.id.btnBack){
+        } else if (v.getId() == R.id.btnBack) {
             if(delegate.dataSubQuestion !=null) {
                 delegate.skip_save_subans = true;
             }
             onBackPressed();
-        } else {
+        }
+        else if(v.getId() == R.id.btnEN){
+            if (!delegate.service.getLg().equals("en")) {
+                delegate.service.setLg("en");
+                delegate.setLocale("en");
+                changeLanguege();
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (!delegate.service.getLg().equals("th")) {
+                delegate.service.setLg("th");
+                delegate.setLocale("th");
+                changeLanguege();
+            }
+        }
+        else {
             seletedAnswer(v, "");
         }
     }

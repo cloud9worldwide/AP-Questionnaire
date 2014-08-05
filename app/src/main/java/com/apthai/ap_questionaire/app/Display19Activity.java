@@ -41,7 +41,7 @@ public class Display19Activity extends Activity implements View.OnClickListener 
     TextView project_name, txt_question;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext, btn_left, btn_right, btnBack;
+    ImageButton btnNext, btn_left, btn_right, btnBack, btnEN, btnTH;
     static PopupWindow popup;
     ImageView img_background;
     int pictureWidth, pictureHeight;
