@@ -43,7 +43,7 @@ import java.util.Calendar;
 public class AddCustomerOneActivity extends Activity implements View.OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    ImageButton btnMenu, btnNext, btnBack;
+    ImageButton btnMenu, btnNext, btnBack, btnEN, btnTH;
     Spinner ddlPrefix, ddlCountry, ddlNationality;
 
     questionniare_delegate delegate;
@@ -236,6 +236,10 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         txt_header.setTypeface(delegate.font_type);
         txt_header.setTextSize(35);
 
+        question_title = (TextView) findViewById(R.id.question_title);
+        question_title.setTypeface(delegate.font_type);
+        question_title.setTextSize(30);
+
         root_view = (RelativeLayout) findViewById(R.id.root_view);
         root_view.setOnClickListener(this);
         popup = new PopupWindow(this);
@@ -273,6 +277,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lbl_add_customer_mobile2 = (TextView) findViewById(R.id.lbl_add_customer_mobile2);
         lbl_add_customer_mobile3 = (TextView) findViewById(R.id.lbl_add_customer_mobile3);
         lbl_add_customer_mobile4 = (TextView) findViewById(R.id.lbl_add_customer_mobile4);
+
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
 
         mobile_list = new ArrayList<String>();
         mobile_list.add("");
@@ -317,7 +326,45 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 }
             }
         });
+        changeLanguege();
     }
+    private void changeLanguege(){
+
+        project_name.setText(delegate.project.getName());
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+//            btnAdd.setImageResource(R.drawable.btn_en_add_customer);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+//            btnAdd.setImageResource(R.drawable.btn_th_add_customer);
+        }
+        question_title.setText(R.string.title_activity_customer_look_info);
+        txt_header.setText(R.string.please_fill_completed);
+
+        txtPrefix.setHint(R.string.add_customer_prefix_extra);
+        txtFirstName.setHint(R.string.add_customer_name);
+        txtLastName.setHint(R.string.add_customer_surname);
+        txtNickname.setHint(R.string.add_customer_nickname);
+        txtEmail.setHint(R.string.add_customer_email);
+
+        lblPrefix.setText(R.string.add_customer_prefix);
+        lbl_prefix_extra2.setText(R.string.add_customer_prefix_extra);
+        lbl_add_customer_name.setText(R.string.add_customer_name);
+        lbl_add_customer_surname.setText(R.string.add_customer_surname);
+        lblNickname.setText(R.string.add_customer_nickname);
+        lblEmail.setText(R.string.add_customer_email);
+        lbl_add_customer_mobile_line1.setText(R.string.add_customer_mobile_line1);
+        lbl_add_customer_mobile_line2.setText(R.string.add_customer_mobile_line2);
+        lbl_add_customer_tel_home_other_line1.setText(R.string.add_customer_tel_home_BKK_line1);
+        lbl_add_customer_tel_home_other_line2.setText(R.string.add_customer_tel_home_BKK_line2);
+        lbl_add_customer_birthday.setText(R.string.add_customer_birthday);
+        lblCountry.setText(R.string.add_customer_other_country);
+        lblNationality.setText(R.string.add_customer_nationality);
+
+    }
+
     private void setKeyListener(){
 
         txtPrefix.setOnKeyListener(new View.OnKeyListener() {
@@ -1047,6 +1094,26 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         } else if(v.getId() == R.id.lbl_add_customer_phone4){
             if(phone_list.get(4).length()!=0){
                  showPopupAddMobile(this,"phone",4);
+            }
+        } else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
             }
         }
     }

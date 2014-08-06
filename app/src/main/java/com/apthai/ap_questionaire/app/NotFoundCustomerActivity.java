@@ -23,7 +23,7 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
 
     final String TAG = this.getClass().getSimpleName();
     int total = 5;
-    ImageButton btn_menu, btnAdd, btn_back;
+    ImageButton btn_menu, btnAdd, btn_back, btnEN, btnTH;
     LinearLayout linearLayout, content_view;
     static PopupWindow popup;
     questionniare_delegate delegate;
@@ -75,11 +75,17 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         btn_back.setOnClickListener(this);
 
         project_name = (TextView) findViewById(R.id.project_name);
-        project_name.setText(delegate.project.getName());
+
         project_name.setTextSize(30);
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
         popup = new PopupWindow(this);
+
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
+        changeLanguege();
     }
 
 
@@ -112,6 +118,26 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
                 popup.dismiss();
             } else {
                 showPopup(this);
+            }
+        } else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
             }
         }
     }
@@ -163,5 +189,22 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
                 finish();
             }
         });
+    }
+
+    private void changeLanguege(){
+
+        project_name.setText(delegate.project.getName());
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+            btnAdd.setImageResource(R.drawable.btn_en_add_customer);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+            btnAdd.setImageResource(R.drawable.btn_th_add_customer);
+        }
+
+        lblRed.setText(R.string.not_found_customer_header);
+        lblBlack.setText(R.string.not_found_customer_detail);
     }
 }

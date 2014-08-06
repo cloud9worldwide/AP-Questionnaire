@@ -32,7 +32,6 @@
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.Display02Activity"
-            android:label="@string/title_activity_display02"
             android:screenOrientation="landscape" >
         </activity>
         <activity

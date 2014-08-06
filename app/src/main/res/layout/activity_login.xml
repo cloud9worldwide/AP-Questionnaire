@@ -79,6 +79,18 @@
         android:textColor="@color/ORANGE"
         android:visibility="gone"
         android:gravity="center" />
+    <EditText
+        android:layout_below="@+id/btnLogin"
+        android:id="@+id/txtIP"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:background="@drawable/box_login"
+        android:hint="Web service ip"
+        android:singleLine="true"
+        android:layout_centerInParent="true"
+        />
+
 
 
 

@@ -49,9 +49,8 @@ public class Display09Activity extends Activity implements View.OnClickListener 
     QuestionTypeData data;
     questionniare_delegate delegate;
     TextView project_name;
-    ImageButton btn_back;
+    ImageButton btn_back, btnNext, btnEN, btnTH;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext;
     ImageView img_background;
 
     TextView navigatorBar;
@@ -141,9 +140,9 @@ public class Display09Activity extends Activity implements View.OnClickListener 
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
 
@@ -445,9 +444,9 @@ public class Display09Activity extends Activity implements View.OnClickListener 
             if(error_msg.equals("NO")){
                 if(delegate.dataSubQuestion !=null){
                     //sub question mode
-                    if(answer.size()!=0){
-                        delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                    }
+                    delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                     delegate.skip_save_subans = false;
                     onBackPressed();
                 } else {

@@ -42,7 +42,7 @@ public class Display17Activity extends Activity implements View.OnClickListener 
     TextView project_name, txt_question;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext,btnBack;
+    ImageButton btnNext,btnBack, btnEN, btnTH;
     static PopupWindow popup;
     ImageView img_background;
     int heightLine;
@@ -131,9 +131,9 @@ public class Display17Activity extends Activity implements View.OnClickListener 
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
 
@@ -266,9 +266,9 @@ public class Display17Activity extends Activity implements View.OnClickListener 
             btnNext.setEnabled(false);
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
-                if(answer.size()!=0){
-                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                }
+                delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                 delegate.skip_save_subans = false;
                 onBackPressed();
             } else {

@@ -52,7 +52,7 @@ public class Display01Activity extends Activity implements OnClickListener {
     QuestionTypeData data;
     questionniare_delegate delegate;
     TextView project_name;
-    ImageButton btn_back,btnNext;
+    ImageButton btn_back,btnNext, btnEN, btnTH;
     ArrayList<SaveAnswerData> answer;
     ImageView img_background;
 
@@ -74,9 +74,21 @@ public class Display01Activity extends Activity implements OnClickListener {
 
     public void setNavigator(){
         navigatorBar = (TextView) findViewById(R.id.navigatorBar);
-        navigatorBar.setText(delegate.getTitleSequence());
         navigatorBar.setTypeface(delegate.font_type);
         navigatorBar.setTextSize(20);
+        if(delegate.dataSubQuestion ==null){
+            navigatorBar.setText(delegate.getTitleSequence());
+        } else {
+            navigatorBar.setText("คำถามย่อย");
+        }
+
+    }
+    private void getData(){
+        if(delegate.dataSubQuestion !=null){
+            data = delegate.dataSubQuestion;
+        } else{
+            data = delegate.QM.get_question();
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +99,7 @@ public class Display01Activity extends Activity implements OnClickListener {
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
 
-        if(delegate.dataSubQuestion !=null){
-            data = delegate.dataSubQuestion;
-        } else{
-            data = delegate.QM.get_question();
-        }
-
+        getData();
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
         progress.setMessage("Loading....");
@@ -106,14 +113,8 @@ public class Display01Activity extends Activity implements OnClickListener {
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
-                setTableLayout();
                 setImage();
-                if(delegate.dataSubQuestion ==null){
-                    setNavigator();
-                } else {
-                    navigatorBar = (TextView) findViewById(R.id.navigatorBar);
-                    navigatorBar.setText("คำถามย่อย");
-                }
+
             }
         };
         Runnable background = new Runnable() {
@@ -138,9 +139,9 @@ public class Display01Activity extends Activity implements OnClickListener {
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
 
@@ -164,7 +165,6 @@ public class Display01Activity extends Activity implements OnClickListener {
         btn_back.setOnClickListener(this);
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
-        content_view.removeAllViews();
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
@@ -173,6 +173,14 @@ public class Display01Activity extends Activity implements OnClickListener {
         project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
+        changeLanguege();
+    }
+
+    public void changeLanguege(){
+        content_view.removeAllViews();
+        getData();
+        setTableLayout();
+        setNavigator();
     }
 
     private void setTableLayout(){
@@ -427,9 +435,14 @@ public class Display01Activity extends Activity implements OnClickListener {
             if(error_msg.equals("NO")){
                 if(delegate.dataSubQuestion !=null){
                     //sub question mode
+                    /*
                     if(answer.size()!=0){
                         delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
                     }
+                    */
+                    delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                     delegate.skip_save_subans = false;
                     onBackPressed();
                 } else {
@@ -440,12 +453,13 @@ public class Display01Activity extends Activity implements OnClickListener {
                 Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
             }
             btnNext.setEnabled(true);
-        } else if (v.getId() == R.id.btnBack){
+        } else if (v.getId() == R.id.btnBack) {
             if(delegate.dataSubQuestion !=null) {
                 delegate.skip_save_subans = true;
             }
             onBackPressed();
-        } else {
+        }
+        else {
             seletedAnswer(v, "");
         }
     }
@@ -479,6 +493,7 @@ public class Display01Activity extends Activity implements OnClickListener {
                         }
                     } else {
                         image.setImageResource(R.drawable.checkbox_unselect);
+                        Log.e("alekdebug",index+"");
                         answer.remove(index);
                         content_view.removeAllViews();
                         setTableLayout();
@@ -510,9 +525,8 @@ public class Display01Activity extends Activity implements OnClickListener {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

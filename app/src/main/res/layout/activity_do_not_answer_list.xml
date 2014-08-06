@@ -12,12 +12,12 @@
         android:visibility="gone"
         android:scaleType="fitXY" />
     <TextView
-        android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
         android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
+
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"

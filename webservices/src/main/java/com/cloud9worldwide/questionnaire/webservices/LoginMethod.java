@@ -51,7 +51,7 @@ public class LoginMethod {
         }
         if(!_error && response != null){
             return response;
-        }else {
+        } else {
             return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
         }
 

@@ -15,6 +15,7 @@
         android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
+
     <LinearLayout
         android:gravity="center"
         android:id="@+id/sizeContent"

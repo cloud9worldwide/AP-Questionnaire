@@ -44,7 +44,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
     TextView project_name, txt_question;
     int selected =0;
     ArrayList<SaveAnswerData> answer;
-    ImageButton btnNext, btnBack;
+    ImageButton btnNext, btnBack, btnEN, btnTH;
     static PopupWindow popup;
     ImageView img_background,img_question;
     Spinner ddl;
@@ -132,9 +132,9 @@ public class Display13Activity extends Activity implements View.OnClickListener 
                     }
 
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
-                    }else{
-                        answer = checkAnswer.getAnswer();
+                        answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                    } else {
+                        answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                     }
                 }
 
@@ -241,9 +241,9 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
-                if(answer.size()!=0){
-                    delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
-                }
+                delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                delegate.QM.save_answer(answer, delegate.dataSubQuestion.getQuestion().getId());
+
                 delegate.skip_save_subans = false;
                 onBackPressed();
             } else {
@@ -275,7 +275,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cannot_back, Toast.LENGTH_SHORT).show();
         }
     }
 
