@@ -173,23 +173,10 @@ public class Display01Activity extends Activity implements OnClickListener {
         project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
-
-        btnEN = (ImageButton) findViewById(R.id.btnEN);
-        btnTH = (ImageButton) findViewById(R.id.btnTH);
-        btnEN.setOnClickListener(this);
-        btnTH.setOnClickListener(this);
         changeLanguege();
     }
 
     public void changeLanguege(){
-        Log.e("LG",delegate.service.getLg());
-        if(delegate.service.getLg().equals("en")){
-            btnEN.setImageResource(R.drawable.btn_en_);
-            btnTH.setImageResource(R.drawable.btn_th);
-        } else {
-            btnEN.setImageResource(R.drawable.btn_en);
-            btnTH.setImageResource(R.drawable.btn_th_);
-        }
         content_view.removeAllViews();
         getData();
         setTableLayout();
@@ -472,19 +459,6 @@ public class Display01Activity extends Activity implements OnClickListener {
             }
             onBackPressed();
         }
-        else if(v.getId() == R.id.btnEN){
-            if (!delegate.service.getLg().equals("en")) {
-                delegate.service.setLg("en");
-                delegate.setLocale("en");
-                changeLanguege();
-            }
-        } else if(v.getId() == R.id.btnTH){
-            if (!delegate.service.getLg().equals("th")) {
-                delegate.service.setLg("th");
-                delegate.setLocale("th");
-                changeLanguege();
-            }
-        }
         else {
             seletedAnswer(v, "");
         }
@@ -551,9 +525,8 @@ public class Display01Activity extends Activity implements OnClickListener {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

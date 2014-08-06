@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="YOUR_PROJECT">YOUR PROJECT</string>
     <string name="title_activity_customer_look_up">CUSTOMER LOOKUP</string>
     <string name="customer_look_up_hint_name">Name</string>
     <string name="customer_look_up_hint_surname">Surname</string>
@@ -51,18 +52,29 @@
     <string name="of">OF</string>
     <string name="mini_question">MINI QUESTION</string>
 
-
-
+    <string name="default_display_13">Please select answer</string>
+    <string name="title_dont_answer">Question client do not answer</string>
+    <string name="default_display_14_15">click - + for answer</string>
+    <string name="default_display_16">Please select answer</string>
+    <string name="is_offine">Cannot Edit Because we are offline mode</string>
+    <string name="add_mobile">+ add mobile</string>
+    <string name="cannot_back">Sorry cannot back</string>
+    <string name="Please_enter">Please enter answer</string>
+    <string name="Please_enter_txtbox_in_question">Please enter answer</string>
+    <string name="answer_finish">You are complate your questionnaire</string>
+    <string name="email_not_correct">E-MAIL IS INVALID</string>
+    <string name="save_complete">Complete information</string>
+    <string name="msg_offline">"system is offline mode. when device is online. which will be sync automatic"</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
 
     <string name="app_name">AP-Questionaire</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_projects">ProjectsActivity</string>
-    <string name="username">username</string>
-    <string name="password">password</string>
+
     <string name="btnLogin">LOGIN</string>
     <string name="title_activity_questionniare">Please select Questionnaire</string>
-    <string name="project_name"></string>
-    <string name="question_title"></string>
+
     <string name="btn_back">BACK</string>
     <string name="btn_next">NEXT</string>
     <string name="title_activity_display01">Display01Activity</string>
@@ -102,7 +114,7 @@
 
     <string name="update_data">อัพเดทข้อมูล</string>
     <string name="title_activity_customer_finished_answer">CustomerFinishedAnswerActivity</string>
-    <string name="answer_finish">ท่านได้ตอบแบบสอบถามครบถ้วนแล้ว</string>
+
     <string name="thanks1">โครงการ The CITY งามวงศ์วาน ขอขอบคุณ</string>
     <string name="thanks2">ที่ท่านได้สละเวลาในการตอบแบบสอบถามครั้งนี้</string>
     <string name="customer_full_name">[ NAME SURNAME ]</string>
@@ -115,25 +127,19 @@
     <string name="title_activity_display16">Display16Activity</string>
     <string name="title_activity_display20">Display20Activity</string>
     <string name="title_activity_display21">Display21Activity</string>
-    <string name="Please_enter">กรุณากรอกข้อความ</string>
-    <string name="add_mobile">+ เพิ่มเบอร์โทรศัพท์</string>
-    <string name="cannot_back">ไม่สามารถย้อนกลับได้</string>
 
-    <string name="Please_enter_txtbox_in_question">กรุณาระบุ</string>
+
+
+
+
     <string name="title_activity_add_customer_one">AddCustomerOneActivity</string>
     <string name="title_activity_add_customer_en">AddCustomerENActivity</string>
     <string name="title_activity_add_customer_th">AddCustomerTHActivity</string>
 
-    <string name="email_not_correct">E-MAIL IS INVALID</string>
-    <string name="cancel">cancel</string>
     <string name="title_activity_do_not_answer_list">DoNotAnswerListActivity</string>
-    <string name="default_display_13">กรุณาเลือกคำตอบด้วยค่ะ</string>
-    <string name="title_dont_answer">คำถามที่ลูกค้ายังไม่ได้ตอบ</string>
-    <string name="default_display_14_15">คลิก - + เพื่อตอบ</string>
-    <string name="default_display_16">กรุณาเลือกคำตอบด้านล่างค่ะ</string>
-    <string name="is_offine">ไม่สามารถแก้ไขได้ เนื่องจากอยู่ใน offline mode</string>
 
-    <string name="YOUR_PROJECT">YOUR PROJECT</string>
+
+
 
 
 </resources>

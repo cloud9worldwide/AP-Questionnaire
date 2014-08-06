@@ -169,6 +169,9 @@ public class CoreEngine {
     public void setWebserviceUrl(String _url){
         this.webserviceUrl = _url;
     }
+    public String getWebserviceUrl(){
+        return this.webserviceUrl;
+    }
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) this.mCtx.getSystemService(Context.CONNECTIVITY_SERVICE);

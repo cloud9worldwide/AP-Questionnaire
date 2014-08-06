@@ -18,22 +18,7 @@
         android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/btnEN"
-        android:scaleType="center"
-        android:src="@drawable/btn_en"
-        android:layout_toLeftOf="@+id/btnTH"
-        android:layout_alignParentTop="true" />
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/btnTH"
-        android:scaleType="center"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/btn_th"
-        android:layout_alignParentTop="true" />
+
     <LinearLayout
         android:gravity="center"
         android:id="@+id/sizeContent"

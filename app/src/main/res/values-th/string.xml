@@ -52,7 +52,24 @@
     <string name="title_customer_info">ตรวจสอบข้อมูลให้ถูกต้อง</string>
     <string name="question">ข้อที่</string>
     <string name="of">จาก</string>
+    <string name="save_complete">บันทึกข้อมูลเรียบร้อยแล้ว</string>
+    <string name="msg_offline">"ขณะนี้เป็นระบบ offline หาก online แล้ว ระบบ จะทำการ sync ให้ อัตโนมัติ"</string>
+    <string name="username">ชื่อผู้ใช้</string>
+    <string name="password">รหัสผ่าน</string>
+
     <string name="mini_question">คำถามย่อย</string>
+    <string name="default_display_13">กรุณาเลือกคำตอบด้วยค่ะ</string>
+    <string name="title_dont_answer">คำถามที่ลูกค้ายังไม่ได้ตอบ</string>
+    <string name="default_display_14_15">คลิก - + เพื่อตอบ</string>
+    <string name="default_display_16">กรุณาเลือกคำตอบด้านล่างค่ะ</string>
+    <string name="is_offine">ไม่สามารถแก้ไขได้ เนื่องจากอยู่ใน offline mode</string>
+    <string name="add_mobile">+ เพิ่มเบอร์โทรศัพท์</string>
+    <string name="cannot_back">ไม่สามารถย้อนกลับได้</string>
+    <string name="Please_enter">กรุณากรอกข้อความ</string>
+    <string name="Please_enter_txtbox_in_question">กรุณาระบุ</string>
+    <string name="answer_finish">ท่านได้ตอบแบบสอบถามครบถ้วนแล้ว</string>
+    <string name="email_not_correct">E-MAIL ไม่ถูกต้อง</string>
+
 
 
 

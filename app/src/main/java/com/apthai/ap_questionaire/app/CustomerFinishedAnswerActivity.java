@@ -81,23 +81,34 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_back_home.setOnClickListener(this);
 
         if(!delegate.QM.isStaffQustion()){
-
-            thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
+            if(delegate.service.getLg().equals("th")){
+                thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
+                thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
+                btn_staff.setImageResource(R.drawable.for_btn_);
+            } else {
+                thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
+                thanks2.setText("");
+                btn_staff.setImageResource(R.drawable.btn_en_staff);
+            }
             customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
             btn_back_home.setEnabled(false);
             btn_back_home.setVisibility(View.GONE);
-            btn_staff.setImageResource(R.drawable.for_btn_);
         } else {
-            btn_back_home.setImageResource(R.drawable.btn_projects);
-            btn_staff.setImageResource(R.drawable.btn_questionniare);
+            if(delegate.service.getLg().equals("th")){
+                btn_back_home.setImageResource(R.drawable.btn_projects);
+                btn_staff.setImageResource(R.drawable.btn_questionniare);
+            } else {
+                btn_back_home.setImageResource(R.drawable.btn_en_projects);
+                btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
+            }
             btn_back_home.setVisibility(View.VISIBLE);
             thanks1.setText("");
             thanks2.setText("");
             if (delegate.service.isOnline()) {
-                customerName.setText("บันทึกข้อมูลเรียบร้อยแล้ว");
+                customerName.setText(R.string.save_complete);
                 customerName.setTextColor(getResources().getColor(R.color.GREEN));
             } else {
-                customerName.setText("ขณะนี้เป็นระบบ offline หาก online แล้ว ระบบ จะทำการ sync ให้ อัตโนมัติ");
+                customerName.setText(R.string.msg_offline);
                 customerName.setTextColor(getResources().getColor(R.color.ORANGE));
             }
         }

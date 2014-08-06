@@ -46,6 +46,12 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
         delegate = (questionniare_delegate)getApplicationContext();
 
+        if(delegate.service.getLg().equals("en")){
+            delegate.setLocale("en");
+        } else {
+            delegate.setLocale("th");
+        }
+
         if(delegate.service.isOnline()){
             final ProgressDialog progress = new ProgressDialog(this);
             progress.setTitle("Please wait");
@@ -62,7 +68,6 @@ public class ProjectsActivity extends Activity implements OnClickListener {
                     list_projectdata = delegate.service.getProjects();
                     total = list_projectdata.size();
                     setObject();
-                    setTableLayout();
                 }
             };
             Runnable background = new Runnable() {
@@ -124,6 +129,7 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             btnTH.setImageResource(R.drawable.btn_th_);
         }
         content_view.removeAllViews();
+        list_projectdata = delegate.service.getProjects();
         setTableLayout();
     }
 

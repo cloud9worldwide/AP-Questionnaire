@@ -68,18 +68,10 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         project_data = delegate.project;
         img_background = (ImageView) findViewById(R.id.img_background);
         img_logo_project = (ImageView)findViewById(R.id.img_logo_project);
-
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,R.drawable.space);
-
-        delegate.imageLoader.display(delegate.project.getLogoUrl(),
-                String.valueOf(img_logo_project.getWidth()),
-                String.valueOf(img_logo_project.getHeight()),
-                img_logo_project,R.drawable.logo_ap);
-
-
         setObject();
     }
 
@@ -122,13 +114,16 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
         }
+        delegate.imageLoader.display(delegate.project.getLogoUrl(),
+                String.valueOf(img_logo_project.getWidth()),
+                String.valueOf(img_logo_project.getHeight()),
+                img_logo_project,R.drawable.logo_ap);
+
         project_name.setText(delegate.project.getName());
 
         content_view.removeAllViews();
         setTableLayout();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

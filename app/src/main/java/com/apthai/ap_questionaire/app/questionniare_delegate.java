@@ -587,15 +587,19 @@ public class questionniare_delegate extends Application {
 //        startActivity(refresh);
 
 
-//        ArrayList<ProjectData> projects;
-//        projects = service.getProjects();
-//
-//        for (int projectIndex = 0;projectIndex <= projects.size();projectIndex++ ){
-//            if(projects.get(projectIndex).getId().equals(project.getId())){
-//                project = projects.get(projectIndex);
-//                break;
-//            }
-//        }
+
+
+        if(project !=null){
+            ArrayList<ProjectData> projects;
+            projects = service.getProjects();
+            for (int projectIndex = 0;projectIndex <= projects.size();projectIndex++ ){
+                if(projects.get(projectIndex).getId().equals(project.getId())){
+                    project = projects.get(projectIndex);
+                    break;
+                }
+            }
+        }
+
 
     }
 }

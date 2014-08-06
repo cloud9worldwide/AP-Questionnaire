@@ -13,7 +13,6 @@
         android:scaleType="fitXY"
         />
     <TextView
-        android:text="@string/project_name"
         android:layout_width="match_parent"
         android:gravity="center"
         android:background="@color/TITLE"

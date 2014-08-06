@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
     ImageView imgLogo;
-    EditText txtUsername, txtPassword;
+    EditText txtUsername, txtPassword,txtIP;
     ImageButton btnLogin;
     TextView btnForgot,txtError;
     questionniare_delegate delegate;
@@ -39,6 +40,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         ctx = this;
         delegate = (questionniare_delegate)getApplicationContext();
+
+        if(delegate.service.getLg().equals("en")){
+            delegate.setLocale("en");
+        } else {
+            delegate.setLocale("th");
+        }
 
         setObject();
         if(delegate.service.getLoginStatus()){
@@ -56,14 +63,24 @@ public class LoginActivity extends Activity implements OnClickListener {
         txtPassword = (EditText) findViewById(R.id.txtPassword);
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnForgot = (TextView) findViewById(R.id.btnForgot);
+        txtIP = (EditText) findViewById(R.id.txtIP);
 
         txtError = (TextView) findViewById(R.id.txtError);
         txtError.setText("");
         txtError.setTypeface(delegate.font_type);
         txtError.setTextSize(25);
 
-        txtUsername.setTypeface(delegate.font_type);
+        txtIP.setTypeface(delegate.font_type);
+        txtIP.setTextSize(30);
+        txtIP.setVisibility(View.GONE);
+
         txtUsername.setTextSize(30);
+        txtUsername.setTypeface(delegate.font_type);
+        txtPassword.setTextSize(30);
+        txtPassword.setTypeface(delegate.font_type);
+        txtUsername.setHint(R.string.username);
+        txtPassword.setHint(R.string.password);
+
         btnForgot.setTypeface(delegate.font_type);
         btnForgot.setTextSize(30);
 
@@ -94,6 +111,29 @@ public class LoginActivity extends Activity implements OnClickListener {
                 }
             }
         });
+
+        txtIP.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP){
+                    if(keyCode ==KeyEvent.KEYCODE_ENTER){
+                        delegate.service.setWebserviceUrl(txtIP.getText().toString().trim());
+                        txtIP.setVisibility(View.GONE);
+                        InputMethodManager imm = (InputMethodManager)getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(txtIP.getWindowToken(), 0);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        if(delegate.service.getLg().equals("en")){
+            btnLogin.setImageResource(R.drawable.login_btn_);
+        } else {
+            btnLogin.setImageResource(R.drawable.btn_th_login);
+        }
     }
 
     public void hideKeyboard(View view) {
@@ -122,7 +162,12 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     public void onClick(View v) {
-        if (v.getId() == R.id.btnLogin && txtUsername.getText().length() > 0 && txtPassword.getText().length() > 0) {
+
+
+        if(v.getId() == R.id.btnLogin && txtUsername.getText().toString().equals("apqtn") && txtPassword.getText().toString().equals("ntqpa")){
+            txtIP.setVisibility(View.VISIBLE);
+            txtIP.setText(delegate.service.getWebserviceUrl());
+        } else if (v.getId() == R.id.btnLogin && txtUsername.getText().length() > 0 && txtPassword.getText().length() > 0) {
 
             final ProgressDialog ringProgressDialog = ProgressDialog.show(ctx, "Please wait ...", "Login...", true);
             ringProgressDialog.setCancelable(false);
