@@ -89,4 +89,14 @@
         </ScrollView>
     </LinearLayout>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sync GEO"
+        android:id="@+id/sync_geo"
+        android:layout_alignBottom="@+id/project_name"
+        android:layout_toLeftOf="@+id/btnEN"
+        android:layout_alignParentTop="true" />
+
 </RelativeLayout>

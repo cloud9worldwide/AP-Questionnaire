@@ -8,6 +8,7 @@ import android.database.SQLException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.cloud9worldwide.questionnaire.database.MySQLiteHelper;
 import com.cloud9worldwide.questionnaire.webservices.AnswerHistoryMethod;
 import com.cloud9worldwide.questionnaire.webservices.CustomerInfoMethod;
 import com.cloud9worldwide.questionnaire.webservices.CustomerSearchMethod;
+import com.cloud9worldwide.questionnaire.webservices.DistrictMethod;
 import com.cloud9worldwide.questionnaire.webservices.DownloadImages;
 import com.cloud9worldwide.questionnaire.webservices.DownloadQuestionnaire;
 import com.cloud9worldwide.questionnaire.webservices.ForgotpasswordMethod;
@@ -2465,7 +2467,242 @@ public class CoreEngine {
         _dbHelper.close();
         return  data;
     }
+    public synchronized void sync_geo_data(Context ctx){
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(ctx, "Please wait ...", "initial...", true);
+        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.show();
 
+        final Context mCtx;
+        mCtx = this.mCtx;
+
+
+
+
+        final Handler uiHandler = new Handler();
+        final  Runnable onUi = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                ringProgressDialog.dismiss();
+
+
+
+            }
+        };
+        Runnable background = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MySQLiteHelper _dbHelper = new MySQLiteHelper(mCtx);
+                    _dbHelper.open();
+                    ringProgressDialog.setMessage("Downloading...");
+                    String r = DistrictMethod.execute(mCtx, webserviceUrl, "district");
+                    try{
+                        String[] lines = r.split(System.getProperty("line.separator"));
+                        //Log.e("district",lines.length+" ");
+                        if(lines.length > 0){
+                            _dbHelper.deleteAll(_dbHelper.TB_DISTRICT);
+                            String line = "";
+                            String tableName = _dbHelper.TB_DISTRICT;
+                            ////ProvinceID,DistrictID,DistrictName,DistrictNameEng,PostCode,AutoID
+                            String columns = _dbHelper.ProvinceID+", "+_dbHelper.DistrictID+","+_dbHelper.DistrictName+", "+_dbHelper.DistrictNameEng+", "+_dbHelper.PostCode+", "+_dbHelper.AutoID;
+                            String str1 = "INSERT INTO " + tableName + " (" + columns + ") values(";
+                            String str2 = ");";
+
+                            _dbHelper.db.beginTransaction();
+                            int i = 0;
+                            while (i < lines.length) {
+                                line = lines[i];
+                                //Log.e("district",line);
+                                if(i > 0) {
+                                    StringBuilder sb = new StringBuilder(str1);
+                                    sb.append(line);
+                                    sb.append(str2);
+                                    //Log.e("district",sb.toString());
+                                    _dbHelper.db.execSQL(sb.toString());
+                                }
+                                i++;
+                            }
+
+                            _dbHelper.db.setTransactionSuccessful();
+                            _dbHelper.db.endTransaction();
+                        }
+
+
+                    }catch (Exception er){
+                        er.printStackTrace();
+                    }
+
+                    //ringProgressDialog.setMessage("Downloading... province data");
+                    String p = DistrictMethod.execute(mCtx, webserviceUrl, "province");
+                    try{
+                        String[] lines = p.split(System.getProperty("line.separator"));
+                        if(lines.length > 0){
+                            _dbHelper.deleteAll(_dbHelper.TB_PROVINCE);
+                            String line = "";
+                            String tableName = _dbHelper.TB_PROVINCE;
+                            String columns = _dbHelper.ProvinceID+", "+_dbHelper.ProvinceName+", "+_dbHelper.ProvinceNameEng+", "+_dbHelper.ISDelete;
+                            String str1 = "INSERT INTO " + tableName + " (" + columns + ") values(";
+                            String str2 = ");";
+
+                            _dbHelper.db.beginTransaction();
+                            int i = 0;
+                            while (i < lines.length) {
+                                line = lines[i];
+                                //Log.e("district",line);
+                                if(i > 0) {
+                                    StringBuilder sb = new StringBuilder(str1);
+                                    sb.append(line);
+                                    sb.append(str2);
+                                    //Log.e("province",sb.toString());
+                                    _dbHelper.db.execSQL(sb.toString());
+                                }
+                                i++;
+                            }
+
+                            _dbHelper.db.setTransactionSuccessful();
+                            _dbHelper.db.endTransaction();
+
+                        }
+
+
+
+                    }catch (Exception ep){
+                        ep.printStackTrace();
+                    }
+
+                    String sd = DistrictMethod.execute(mCtx, webserviceUrl, "subdistrict");
+                    try{
+                        String[] lines = sd.split(System.getProperty("line.separator"));
+                        if(lines.length > 0){
+                            _dbHelper.deleteAll(_dbHelper.TB_SUBDISTRICT);
+                            String line = "";
+                            String tableName = _dbHelper.TB_SUBDISTRICT;
+                            //String columns = _dbHelper.ProvinceID+", "+_dbHelper.ProvinceName+", "+_dbHelper.ProvinceNameEng+", "+_dbHelper.ISDelete;
+                            String columns =    _dbHelper.ProvinceID+", "+
+                                    _dbHelper.DistrictID+", "+
+                                    _dbHelper.SubDistrictID+","+
+                                    _dbHelper.LandOfficeID+","+
+                                    _dbHelper.SubDistrictName+", "+
+                                    _dbHelper.SubDistrictNameEng+", "+
+                                    _dbHelper.PostCode;
+
+                            String str1 = "INSERT INTO " + tableName + " (" + columns + ") values(";
+                            String str2 = ");";
+
+                            _dbHelper.db.beginTransaction();
+                            int i = 0;
+                            while (i < lines.length) {
+                                line = lines[i];
+                                //Log.e("district",line);
+                                if(i > 0) {
+                                    StringBuilder sb = new StringBuilder(str1);
+                                    sb.append(line);
+                                    sb.append(str2);
+                                    //Log.e("subdistrict",sb.toString());
+                                    _dbHelper.db.execSQL(sb.toString());
+                                }
+                                i++;
+                            }
+
+                            _dbHelper.db.setTransactionSuccessful();
+                            _dbHelper.db.endTransaction();
+
+                        }
+
+
+
+                    }catch (Exception ep){
+                        ep.printStackTrace();
+                    }
+
+
+                    String c = DistrictMethod.execute(mCtx, webserviceUrl, "country");
+                    try{
+                        String[] lines = c.split(System.getProperty("line.separator"));
+                        if(lines.length > 0){
+                            _dbHelper.deleteAll(_dbHelper.DATABASE_TABLE_COUNTRY);
+                            String line = "";
+                            String tableName = _dbHelper.DATABASE_TABLE_COUNTRY;
+                            String columns = " id, title";
+                            String str1 = "INSERT INTO " + tableName + " (" + columns + ") values(";
+                            String str2 = ");";
+
+                            _dbHelper.db.beginTransaction();
+                            int i = 0;
+                            while (i < lines.length) {
+                                line = lines[i];
+                                //Log.e("district",line);
+                                if(i > 0) {
+                                    StringBuilder sb = new StringBuilder(str1);
+                                    sb.append(line);
+                                    sb.append(str2);
+                                    //Log.e("countryinfo",sb.toString());
+                                    _dbHelper.db.execSQL(sb.toString());
+                                }
+                                i++;
+                            }
+
+                            _dbHelper.db.setTransactionSuccessful();
+                            _dbHelper.db.endTransaction();
+
+                        }
+
+
+
+                    }catch (Exception ep){
+                        ep.printStackTrace();
+                    }
+
+                    String n = DistrictMethod.execute(mCtx, webserviceUrl, "nationality");
+                    try{
+                        String[] lines = n.split(System.getProperty("line.separator"));
+                        if(lines.length > 0){
+                            _dbHelper.deleteAll(_dbHelper.DATABASE_TABLE_NATIONALITY);
+                            String line = "";
+                            String tableName = _dbHelper.DATABASE_TABLE_NATIONALITY;
+                            String columns = " id, title";
+                            String str1 = "INSERT INTO " + tableName + " (" + columns + ") values(";
+                            String str2 = ");";
+
+                            _dbHelper.db.beginTransaction();
+                            int i = 0;
+                            while (i < lines.length) {
+                                line = lines[i];
+                                //Log.e("district",line);
+                                if(i > 0) {
+                                    StringBuilder sb = new StringBuilder(str1);
+                                    sb.append(line);
+                                    sb.append(str2);
+                                    //Log.e("nationality",sb.toString());
+                                    _dbHelper.db.execSQL(sb.toString());
+                                }
+                                i++;
+                            }
+
+                            _dbHelper.db.setTransactionSuccessful();
+                            _dbHelper.db.endTransaction();
+
+                        }
+
+
+
+                    }catch (Exception ep){
+                        ep.printStackTrace();
+                    }
+                    _dbHelper.close();
+                } catch (DistrictMethod.ApiException e){
+                    e.printStackTrace();
+                }
+
+                uiHandler.post( onUi );
+            }
+        };
+        new Thread( background ).start();
+
+
+        //ringProgressDialog.dismiss();
+    }
     public synchronized void initCountryData(Context ctx){
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();

@@ -39,10 +39,13 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     TextView project_name;
     TextView lbl_title;
 
+    Context mCtx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
+        mCtx = this;
 
         delegate = (questionniare_delegate)getApplicationContext();
 
@@ -51,6 +54,15 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         } else {
             delegate.setLocale("th");
         }
+
+        Button sycn_geo = (Button)findViewById(R.id.sync_geo);
+        sycn_geo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("debug","click");
+                delegate.service.sync_geo_data(mCtx);
+            }
+        });
 
         if(delegate.service.isOnline()){
             final ProgressDialog progress = new ProgressDialog(this);
