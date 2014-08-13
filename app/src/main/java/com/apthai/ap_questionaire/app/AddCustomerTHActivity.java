@@ -268,7 +268,9 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             String indexSelect="999";
 
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getText().equals(home.getProvince().toString())) {
+                Log.e("list",list.get(i).getText().toString());
+                Log.e("home",home.getProvince().toString());
+                if (list.get(i).getText().toString().equals(home.getProvince().toString())) {
                     indexSelect = list.get(i).getValue().toString();
                     ddlProvince.setSelection(i);
 
@@ -375,7 +377,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                         }
                     }
                 }
-                txtPostcode.setText(subDistrict.get(arg2).getText2());
+                txtPostcode.setText(subDistrict.get(arg2).getValue());
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }

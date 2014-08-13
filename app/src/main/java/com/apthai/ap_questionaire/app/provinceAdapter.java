@@ -1,6 +1,7 @@
 package com.apthai.ap_questionaire.app;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,14 @@ public class provinceAdapter extends ArrayAdapter<ValTextData> {
         View rowView = inflater.inflate(R.layout.dropdownlist, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.list_title);
 
-        String s = objects.get(position).getText() ;
+        String s;
+        if(delegate.service.getLg().equals("en")){
+            s = objects.get(position).getText2() ;
+        } else {
+            s = objects.get(position).getText() ;
+        }
+        Log.e("lG",delegate.service.getLg());
+        Log.e("s",s);
         textView.setText(s);
         return rowView;
     }
