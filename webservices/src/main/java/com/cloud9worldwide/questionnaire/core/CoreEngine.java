@@ -2431,7 +2431,7 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0, new ValTextData("0", "กรุณาเลือก", "Please select"));
+        data.add(0, new ValTextData(" ", "กรุณาเลือก", "Please select"));
 //        if (this.getLg().equals("en")){
 //            data.add(0, new ValTextData("0", "Please select"));
 //        }else {
@@ -2446,7 +2446,8 @@ public class CoreEngine {
 //            Log.e("0",_cursor.getString(0));
 //            Log.e("1",_cursor.getString(1));
 //            Log.e("2",_cursor.getString(2));
-            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+
+            ValTextData val = new ValTextData(_cursor.getString(3),_cursor.getString(1),_cursor.getString(2));
 //            val.setText2(_cursor.getString(2));
             data.add(val);
             _cursor.moveToNext();

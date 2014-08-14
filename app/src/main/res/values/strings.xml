@@ -80,6 +80,7 @@
     <string name="title_activity_display01">Display01Activity</string>
     <string name="hello_world">Hello world!</string>
     <string name="btn_forgot">FORGOT PASSWORD?</string>
+    <string name="btn_syncGEO">sync GEO</string>
     <string name="title_activity_reset_password">RESET PASSWORD</string>
     <string name="reset_password_question">กรุณากรอกอีเมล์ของท่าน</string>
     <string name="reset_password_desricption">ระบบจะส่ง Password ให้ท่านตามที่กรอกไว้</string>

@@ -55,14 +55,14 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             delegate.setLocale("th");
         }
 
-        Button sycn_geo = (Button)findViewById(R.id.sync_geo);
-        sycn_geo.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("debug","click");
-                delegate.service.sync_geo_data(mCtx);
-            }
-        });
+//        Button sycn_geo = (Button)findViewById(R.id.sync_geo);
+//        sycn_geo.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("debug","click");
+//                delegate.service.sync_geo_data(mCtx);
+//            }
+//        });
 
         if(delegate.service.isOnline()){
             final ProgressDialog progress = new ProgressDialog(this);
