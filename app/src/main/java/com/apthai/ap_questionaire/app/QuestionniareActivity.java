@@ -94,7 +94,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         btnTH = (ImageButton) findViewById(R.id.btnTH);
         btnEN.setOnClickListener(this);
         btnTH.setOnClickListener(this);
-//        changeLanguege();
+
     }
 
     private void changeLanguege(){
@@ -107,11 +107,6 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
         }
-
-//        delegate.imageLoader.display(delegate.project.getLogoUrl(),
-//                String.valueOf(img_logo_project.getWidth()),
-//                String.valueOf(img_logo_project.getHeight()),
-//                img_logo_project,R.drawable.logo_ap);
 
         Bitmap bmp = delegate.readImageFileOnSD(delegate.project.getLogoUrl(), delegate.dpToPx(200), delegate.dpToPx(100));
         if(bmp !=null) {
@@ -239,6 +234,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         }
         content_view.addView(linearLayout);
     }
+
     public void onClick(View v) {
 
         if(v.getId() == R.id.btnMenu){

@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.ContactData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class CustomerInfomationActivity extends Activity implements View.OnClickListener {
 
@@ -401,16 +404,22 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         }
     }
 
-    @Override
     protected void onResume() {
         super.onResume();
-        Log.e("Resume","Resume");
-        if(delegate.isBack == 2 || delegate.isBack == 0 || delegate.isBack == 1){
-            this.setResult(delegate.isBack);
-            delegate.isBack = 9;
-            finish();
-        }
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
     public void onBackPressed() {

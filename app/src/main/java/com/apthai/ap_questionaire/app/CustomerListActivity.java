@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.ContactSearchData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class CustomerListActivity extends Activity implements View.OnClickListener {
@@ -98,8 +100,6 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         btnEN.setOnClickListener(this);
         btnTH.setOnClickListener(this);
 
-        changeLanguege();
-
     }
 
     private void changeLanguege(){
@@ -117,6 +117,23 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         question_title.setText(R.string.title_activity_customer_list);
         content_view.removeAllViews();
         setTableLayout();
+    }
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
     private void setTableLayout(){

@@ -18,6 +18,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.ProjectData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class NotFoundCustomerActivity extends Activity implements View.OnClickListener {
 
@@ -85,7 +88,41 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         btnTH = (ImageButton) findViewById(R.id.btnTH);
         btnEN.setOnClickListener(this);
         btnTH.setOnClickListener(this);
-        changeLanguege();
+    }
+
+    private void changeLanguege(){
+
+        project_name.setText(delegate.project.getName());
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+            btnAdd.setImageResource(R.drawable.btn_en_add_customer);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+            btnAdd.setImageResource(R.drawable.btn_th_add_customer);
+        }
+
+        lblRed.setText(R.string.not_found_customer_header);
+        lblBlack.setText(R.string.not_found_customer_detail);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
 
@@ -191,20 +228,5 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         });
     }
 
-    private void changeLanguege(){
 
-        project_name.setText(delegate.project.getName());
-        if(delegate.service.getLg().equals("en")){
-            btnEN.setImageResource(R.drawable.btn_en_);
-            btnTH.setImageResource(R.drawable.btn_th);
-            btnAdd.setImageResource(R.drawable.btn_en_add_customer);
-        } else {
-            btnEN.setImageResource(R.drawable.btn_en);
-            btnTH.setImageResource(R.drawable.btn_th_);
-            btnAdd.setImageResource(R.drawable.btn_th_add_customer);
-        }
-
-        lblRed.setText(R.string.not_found_customer_header);
-        lblBlack.setText(R.string.not_found_customer_detail);
-    }
 }

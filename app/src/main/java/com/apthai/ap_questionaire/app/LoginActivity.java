@@ -51,8 +51,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             delegate.setLocale("th");
         }
 
-        setObject();
-
+setObject();
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
         String nowDate = sdf.format(c.getTime());
@@ -72,8 +71,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     }
 
-
-
+    protected void onResume() {
+        super.onResume();
+//        txtUsername.setHint(R.string.username);
+//        txtPassword.setHint(R.string.password);
+//        if(delegate.service.getLg().equals("en")){
+//            btnLogin.setImageResource(R.drawable.login_btn_);
+//        } else {
+//            btnLogin.setImageResource(R.drawable.btn_th_login);
+//        }
+    }
 
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
@@ -149,11 +156,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         });
 
 
-        if(delegate.service.getLg().equals("en")){
-            btnLogin.setImageResource(R.drawable.login_btn_);
-        } else {
-            btnLogin.setImageResource(R.drawable.btn_th_login);
-        }
+
     }
 
     public void hideKeyboard(View view) {

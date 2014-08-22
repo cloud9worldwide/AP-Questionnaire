@@ -30,7 +30,9 @@ import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
 import com.cloud9worldwide.questionnaire.data.ValTextData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class AddCustomerTHActivity extends Activity implements View.OnClickListener {
@@ -150,10 +152,23 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                 }
             }
         });
+    }
+    protected void onResume() {
+        super.onResume();
 
-        changeLanguege();
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
 
-
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
     private void changeLanguege(){
 

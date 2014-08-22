@@ -24,6 +24,9 @@ import android.widget.TextView;
 import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class AddCustomerENActivity extends Activity implements View.OnClickListener {
 
@@ -163,7 +166,23 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             }
         });
 
-        changeLanguege();
+    }
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
     private void changeLanguege(){

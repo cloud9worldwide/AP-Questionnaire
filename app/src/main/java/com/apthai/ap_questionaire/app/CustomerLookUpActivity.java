@@ -27,7 +27,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.ContactSearchData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class CustomerLookUpActivity extends Activity implements OnClickListener {
@@ -40,7 +42,6 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     ImageView img_background;
     static PopupWindow popup;
     RelativeLayout root_view;
-
 
     TextView lbl_firstname, lbl_lastname, lbl_tel;
     private Context ctx;
@@ -161,8 +162,9 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         btnTH = (ImageButton) findViewById(R.id.btnTH);
         btnEN.setOnClickListener(this);
         btnTH.setOnClickListener(this);
-        changeLanguege();
+
     }
+
     private void changeLanguege(){
 
         question_title.setText(R.string.title_activity_customer_look_up);
@@ -187,6 +189,24 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         lbl_lastname.setText(R.string.customer_look_up_hint_surname);
         lbl_tel.setText(R.string.customer_look_up_hint_tel);
 
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
     @Override

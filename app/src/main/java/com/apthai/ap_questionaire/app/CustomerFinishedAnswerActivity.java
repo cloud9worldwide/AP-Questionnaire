@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class CustomerFinishedAnswerActivity extends Activity implements View.OnClickListener {
 
@@ -82,6 +85,67 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_back_home.setOnClickListener(this);
         btn_menu.setVisibility(View.GONE);
 
+        if(delegate.QM.isStaffQustion()){
+            delegate.sendAnswer();
+        }
+
+//        if(!delegate.QM.isStaffQustion()){
+//            if(delegate.service.getLg().equals("th")){
+//                thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
+//                thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
+//                btn_staff.setImageResource(R.drawable.for_btn_);
+//
+//            } else {
+//                thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
+//                thanks2.setText("");
+//                btn_staff.setImageResource(R.drawable.btn_en_staff);
+//
+//            }
+//            customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
+//            btn_back_home.setEnabled(false);
+//            btn_back_home.setVisibility(View.GONE);
+//
+//        } else {
+//            if(delegate.service.getLg().equals("th")){
+//                btn_back_home.setImageResource(R.drawable.btn_projects);
+//                btn_staff.setImageResource(R.drawable.btn_questionniare);
+//            } else {
+//                btn_back_home.setImageResource(R.drawable.btn_en_projects);
+//                btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
+//            }
+//            btn_back_home.setVisibility(View.VISIBLE);
+//            thanks1.setText("");
+//            thanks2.setText("");
+//            if (delegate.service.isOnline()) {
+//                customerName.setText(R.string.save_complete);
+//                customerName.setTextColor(getResources().getColor(R.color.GREEN));
+//            } else {
+//                customerName.setText(R.string.msg_offline);
+//                customerName.setTextColor(getResources().getColor(R.color.ORANGE));
+//            }
+//            delegate.sendAnswer();
+//        }
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
+    }
+
+    private void changeLanguege(){
         if(!delegate.QM.isStaffQustion()){
             if(delegate.service.getLg().equals("th")){
                 thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
@@ -116,7 +180,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 customerName.setText(R.string.msg_offline);
                 customerName.setTextColor(getResources().getColor(R.color.ORANGE));
             }
-            delegate.sendAnswer();
+
         }
     }
 

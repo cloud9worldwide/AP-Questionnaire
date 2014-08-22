@@ -22,7 +22,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class DoNotAnswerListActivity extends Activity implements View.OnClickListener {
@@ -119,6 +121,22 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.do_not_answer_list, menu);
         return true;
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }
     }
 
     @Override
@@ -277,6 +295,7 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
             }
         });
     }
+
     public void nextPage(){
         QuestionTypeData data = delegate.getQuestions();
         if(data == null){
