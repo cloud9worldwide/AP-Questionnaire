@@ -340,7 +340,11 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

@@ -36,11 +36,11 @@ public class provinceAdapter extends ArrayAdapter<ValTextData> {
         TextView textView = (TextView) rowView.findViewById(R.id.list_title);
 
         String s;
-        if(delegate.service.getLg().equals("en")){
-            s = objects.get(position).getText2() ;
-        } else {
+//        if(delegate.service.getLg().equals("en")){
+//            s = objects.get(position).getText2() ;
+//        } else {
             s = objects.get(position).getText() ;
-        }
+//        }
         Log.e("lG",delegate.service.getLg());
         Log.e("s",s);
         textView.setText(s);

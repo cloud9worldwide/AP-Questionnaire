@@ -46,6 +46,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
         setImage();
+
     }
 
     private void setObject() {
@@ -79,20 +80,24 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_menu.setOnClickListener(this);
         btn_staff.setOnClickListener(this);
         btn_back_home.setOnClickListener(this);
+        btn_menu.setVisibility(View.GONE);
 
         if(!delegate.QM.isStaffQustion()){
             if(delegate.service.getLg().equals("th")){
                 thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
                 thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
                 btn_staff.setImageResource(R.drawable.for_btn_);
+
             } else {
                 thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
                 thanks2.setText("");
                 btn_staff.setImageResource(R.drawable.btn_en_staff);
+
             }
             customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
             btn_back_home.setEnabled(false);
             btn_back_home.setVisibility(View.GONE);
+
         } else {
             if(delegate.service.getLg().equals("th")){
                 btn_back_home.setImageResource(R.drawable.btn_projects);
@@ -111,6 +116,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 customerName.setText(R.string.msg_offline);
                 customerName.setTextColor(getResources().getColor(R.color.ORANGE));
             }
+            delegate.sendAnswer();
         }
     }
 
@@ -140,7 +146,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 popup.dismiss();
             } else {
                 if (delegate.QM.isStaffQustion()) {
-                    delegate.sendAnswer();
+//                    delegate.sendAnswer();
                     if (delegate.service.isOnline()) {
                         final ProgressDialog progress = new ProgressDialog(this);
                         progress.setTitle("Please wait");
@@ -190,7 +196,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                delegate.sendAnswer();
+//                delegate.sendAnswer();
                 Intent i = new Intent(this,ProjectsActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
@@ -217,8 +223,10 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     }
 
     public void onBackPressed() {
-        this.setResult(3);
-        finish();
+//        Toast.makeText(this, getResources().getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
+
+//        this.setResult(3);
+//        finish();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -249,8 +257,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                setResult(0);
-                delegate.isBack = 0;
+//                setResult(0);
+//                delegate.isBack = 0;
+//                finish();
+
+                Intent i = new Intent(ctx, ProjectsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });
@@ -260,8 +273,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
-                delegate.isBack = 2;
+//                setResult(2);
+//                delegate.isBack = 2;
+//                finish();
+
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

@@ -470,7 +470,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                 selectRadio.setImageResource(R.drawable.radiobtn_selected);
 
                 if(indexSelected !=99){
-                    AnswerData choiceInfo =data.getAnswers().get(indexSelected);
+                    AnswerData choiceInfo = data.getAnswers().get(indexSelected);
                     if(choiceInfo.getIsFreeTxt()){
                         if(choiceInfo.getFreeTxtType().equals("4")){
                             LinearLayout findTxtBox = (LinearLayout) layoutSelected.findViewWithTag(96);
@@ -521,7 +521,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cannot_back, Toast.LENGTH_SHORT).show();
         }
     }
 

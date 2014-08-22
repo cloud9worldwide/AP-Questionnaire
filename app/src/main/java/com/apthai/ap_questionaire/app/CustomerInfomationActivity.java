@@ -43,6 +43,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     TextView question_title,title;
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
+    Context ctx;
 
     private void setImage(){
         img_background = (ImageView) findViewById(R.id.img_background);
@@ -127,39 +128,39 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         project_name.setText(delegate.project.getName());
         String strAddress = "";
 
-        if(customer_info.getAddress().getHouseId().length()!=0){
+        if(customer_info.getAddress().getHouseId().trim().length()!=0){
             strAddress = getResources().getString(R.string.add_customer_homeid)+ " " + customer_info.getAddress().getHouseId();
         }
 
-        if(customer_info.getAddress().getMoo().length()!=0){
+        if(customer_info.getAddress().getMoo().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_moo) +" " + customer_info.getAddress().getMoo();
         }
 
-        if(customer_info.getAddress().getVillage().length()!=0){
+        if(customer_info.getAddress().getVillage().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_building) +" " + customer_info.getAddress().getVillage();
         }
 
-        if(customer_info.getAddress().getSoi().length()!=0){
+        if(customer_info.getAddress().getSoi().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_soi) +" " + customer_info.getAddress().getSoi();
         }
 
-        if(customer_info.getAddress().getRoad().length()!=0){
+        if(customer_info.getAddress().getRoad().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_road) +" " + customer_info.getAddress().getRoad();
         }
 
-        if(customer_info.getAddress().getSubdistrict().length()!=0){
+        if(customer_info.getAddress().getSubdistrict().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_sub_district) +" " + customer_info.getAddress().getSubdistrict();
         }
 
-        if(customer_info.getAddress().getDistrict().length()!=0){
+        if(customer_info.getAddress().getDistrict().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_district) +" " + customer_info.getAddress().getDistrict();
         }
 
-        if(customer_info.getAddress().getProvince().length()!=0){
+        if(customer_info.getAddress().getProvince().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_province) +" " + customer_info.getAddress().getProvince();
         }
 
-        if(customer_info.getAddress().getPostalcode().length()!=0){
+        if(customer_info.getAddress().getPostalcode().trim().length()!=0){
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_postcode) +" " + customer_info.getAddress().getPostalcode();
         }
 
@@ -308,6 +309,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             btnEdit.setImageResource(R.drawable.btn_th_edit_profile);
         }
         question_title.setText(R.string.title_activity_customer_list);
+        title.setText(R.string.title_customer_info);
         setData();
     }
 
@@ -337,90 +339,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 popup.dismiss();
             } else {
                 delegate.customer_selected = customer_info;
-                delegate.initQuestions();
-
-                Intent newPage = new Intent();
-                if(delegate.QM.get_question().getQuestionType().equals("1")){
-                    newPage = new Intent(this, Display01Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("2")){
-                    newPage = new Intent(this, Display02Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("3")){
-                    newPage = new Intent(this, Display03Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("4")){
-                    newPage = new Intent(this, Display04Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("5")){
-                    newPage = new Intent(this, Display05Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("6")){
-                    newPage = new Intent(this, Display06Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("7")){
-                    newPage = new Intent(this, Display07Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("8")){
-                    newPage = new Intent(this, Display08Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("9")){
-                    newPage = new Intent(this, Display09Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("10")){
-                    newPage = new Intent(this, Display10Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("11")){
-                    newPage = new Intent(this, Display11Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("12")){
-                    newPage = new Intent(this, Display12Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("13")){
-                    newPage = new Intent(this, Display13Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("14")){
-                    newPage = new Intent(this, Display14Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("15")){
-                    newPage = new Intent(this, Display15Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("16")){
-                    newPage = new Intent(this, Display16Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("17")){
-                    newPage = new Intent(this, Display17Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("18")){
-                    newPage = new Intent(this, Display18Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("19")){
-                    newPage = new Intent(this, Display19Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("20")){
-                    newPage = new Intent(this, Display20Activity.class);
-                } else if(delegate.QM.get_question().getQuestionType().equals("21")){
-                    newPage = new Intent(this, Display21Activity.class);
-                }
-
-                final Intent _newPage = newPage;
-                if(delegate.service.isOnline()) {
-                    final ProgressDialog progress = new ProgressDialog(this);
-                    progress.setTitle("Please wait");
-                    progress.setMessage("Loading....");
-                    progress.setCancelable(false);
-                    progress.show();
-
-                    final Handler uiHandler = new Handler();
-                    final Runnable onUi = new Runnable() {
-                        @Override
-                        public void run() {
-                            // this will run on the main UI thread
-                            progress.dismiss();
-                            //startActivityForResult(_newPage,0);
-                            delegate.nextQuestionPage(_newPage);
-                        }
-                    };
-                    Runnable background = new Runnable() {
-                        @Override
-                        public void run() {
-                            delegate.getQuestionnaireHistory();
-                            //delay
-                            try {
-                                Thread.sleep(500);
-                            } catch (Exception e) {
-
-                            }
-                            uiHandler.post(onUi);
-                        }
-                    };
-                    new Thread(background).start();
-
-                }else{
-                    startActivityForResult(_newPage,0);
-                }
-
+                startActivityForResult(new Intent(this, FlagActivity.class),0);
             }
         } else if(v.getId() == R.id.btnBack){
             if(popup.isShowing()){
@@ -537,7 +456,11 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

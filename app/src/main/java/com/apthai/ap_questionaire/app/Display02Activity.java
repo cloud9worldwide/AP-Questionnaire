@@ -546,7 +546,7 @@ public class Display02Activity extends Activity implements OnClickListener {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cannot_back, Toast.LENGTH_SHORT).show();
         }
     }
     public void showCalendar(final int indexCalendar){

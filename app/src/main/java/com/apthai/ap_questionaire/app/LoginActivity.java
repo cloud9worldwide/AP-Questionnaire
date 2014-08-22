@@ -22,6 +22,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class LoginActivity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
@@ -32,6 +35,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     questionniare_delegate delegate;
     private static Context ctx;
     private static boolean txtfocus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,15 +52,29 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
 
         setObject();
-        if(delegate.service.getLoginStatus()){
-            Intent i = new Intent(this, ProjectsActivity.class);
-            startActivityForResult(i,0);
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(delegate.service.getLoginStatus() ){
+            if(delegate.service.globals.getDateLastLogin().equals(nowDate)){
+                Intent i = new Intent(this, ProjectsActivity.class);
+                startActivityForResult(i,0);
+            } else {
+                delegate.service.Logout();
+            }
+
         }
         startAnimateLogo();
 //        txtUsername.setText("admin");
 //        txtPassword.setText("password");
 
     }
+
+
+
+
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
         txtUsername = (EditText) findViewById(R.id.txtUsername);
@@ -162,6 +180,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void showConfig(){
         InputMethodManager imm = (InputMethodManager)getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -173,6 +192,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             txtIP.setText(delegate.service.getWebserviceUrl());
 
     }
+
     private void hideConfig(){
 
 
@@ -198,6 +218,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
 
         } else if (v.getId() == R.id.btnLogin && txtUsername.getText().length() > 0 && txtPassword.getText().length() > 0) {
+            hideConfig();
 
             final ProgressDialog ringProgressDialog = ProgressDialog.show(ctx, "Please wait ...", "Login...", true);
             ringProgressDialog.setCancelable(false);
@@ -228,6 +249,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                             }catch (Exception e) {
                             }
                             ringProgressDialog.dismiss();
+
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         } else {
                             delegate.service.startDownloadImages(ringProgressDialog);
@@ -258,6 +280,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         }
     }
+
     private void startAnimateLogo(){
 
         TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delegate.dpToPx(-175));
@@ -303,6 +326,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             finish();
         }
     }
+
     public void onBackPressed() {
         delegate.service.Logout();
         this.setResult(4);

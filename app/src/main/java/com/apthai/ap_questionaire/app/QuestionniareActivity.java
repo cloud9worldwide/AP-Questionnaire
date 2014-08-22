@@ -23,7 +23,9 @@ import android.widget.TextView;
 import com.cloud9worldwide.questionnaire.data.ProjectData;
 import com.cloud9worldwide.questionnaire.data.QuestionnaireData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class QuestionniareActivity extends Activity implements OnClickListener {
 
@@ -41,26 +43,16 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
     static PopupWindow popup;
     ProjectData project_data;
     TextView lbl_title;
-
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-
-       if(hasFocus){
-           Log.e(TAG, "hasFocus YES");
-       } else {
-           Log.e(TAG, "hasFocus NO");
-       }
-            if(delegate ==null){
-                setImage();
-            }
-
-    }
+    Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionniare);
+        ctx = this;
+
+            setImage();
+
     }
 
     private void setImage(){
@@ -102,11 +94,12 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         btnTH = (ImageButton) findViewById(R.id.btnTH);
         btnEN.setOnClickListener(this);
         btnTH.setOnClickListener(this);
-        changeLanguege();
+//        changeLanguege();
     }
+
     private void changeLanguege(){
 
-        lbl_title.setText(R.string.YOUR_PROJECT);
+        lbl_title.setText(R.string.Please_select_questionnaire);
         if(delegate.service.getLg().equals("en")){
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
@@ -114,15 +107,45 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
         }
-        delegate.imageLoader.display(delegate.project.getLogoUrl(),
-                String.valueOf(img_logo_project.getWidth()),
-                String.valueOf(img_logo_project.getHeight()),
-                img_logo_project,R.drawable.logo_ap);
+
+//        delegate.imageLoader.display(delegate.project.getLogoUrl(),
+//                String.valueOf(img_logo_project.getWidth()),
+//                String.valueOf(img_logo_project.getHeight()),
+//                img_logo_project,R.drawable.logo_ap);
+
+        Bitmap bmp = delegate.readImageFileOnSD(delegate.project.getLogoUrl(), delegate.dpToPx(200), delegate.dpToPx(100));
+        if(bmp !=null) {
+            img_logo_project.setImageBitmap(bmp);
+            LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(delegate.dpToPx(200), delegate.dpToPx(100));
+            lpImage.gravity = Gravity.CENTER;
+            img_logo_project.setLayoutParams(lpImage);
+        } else {
+            img_logo_project.setImageResource(R.drawable.logo_ap);
+        }
+        bmp = null;
 
         project_name.setText(delegate.project.getName());
 
         content_view.removeAllViews();
         setTableLayout();
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
     @Override
@@ -166,7 +189,9 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 
         for(int i =0, c = 0, r = 0; i < total; i++, c++){
             QuestionnaireData obj = questionList.get(i);
-            int imageWidth = delegate.dpToPx(200), imageHeight = delegate.dpToPx(100);
+//            int imageWidth = delegate.dpToPx(200), imageHeight = delegate.dpToPx(100);
+            int imageWidth = 0, imageHeight = 0;
+            int imageWidth2 = delegate.dpToPx(200), imageHeight2 = delegate.dpToPx(100);
             if(c == column){
                 c = 0;
                 r++;
@@ -180,9 +205,21 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             ImageView image = new ImageView(this);
             btn.setTag(i);
             btn.setOnClickListener(this);
-            Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(),imageWidth,imageHeight);
-            image.setImageBitmap(bmp);
+//            Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(),imageWidth,imageHeight);
+//            image.setImageBitmap(bmp);
+//            bmp = null;
+            Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(), imageWidth, imageHeight);
+            if(bmp !=null) {
+                image.setImageBitmap(bmp);
+                LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
+                lpImage.gravity = Gravity.CENTER;
+                image.setLayoutParams(lpImage);
+
+            } else {
+                image.setImageResource(R.drawable.logo_ap);
+            }
             bmp = null;
+
 
             TextView name = new TextView(this);
 //            name.setText(obj.get);
@@ -307,7 +344,11 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
                     popup.dismiss();
                 }
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx , LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

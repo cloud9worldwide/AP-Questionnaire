@@ -35,10 +35,10 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name="com.apthai.ap_questionaire.app.Display01Activity"
             android:label="@string/title_activity_display01"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.ResetPasswordActivity"
@@ -168,6 +168,7 @@
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -207,7 +208,13 @@
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.DoNotAnswerListActivity"
+            android:screenOrientation="landscape"
             android:label="@string/title_activity_do_not_answer_list" >
+        </activity>
+        <activity
+            android:name="com.apthai.ap_questionaire.app.FlagActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/title_activity_flag" >
         </activity>
     </application>
 

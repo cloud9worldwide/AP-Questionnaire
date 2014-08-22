@@ -44,7 +44,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by cloud9 on 3/31/14.
@@ -52,8 +54,8 @@ import java.util.ArrayList;
 public class CoreEngine {
     private static final String debugTag = "CoreEngine";
     //private String webserviceUrl = "http://www.cloud9worldwide.com/webservices/ws_questionnaire.php";
-    private String webserviceUrl = "http://www.siwapon.me/apquestionnaireth/service.aspx";
-//    private String webserviceUrl = "http://www.siwapon.me/apquestionnaire/service.aspx";
+//    private String webserviceUrl = "http://www.siwapon.me/apquestionnaireth/service.aspx";
+    private String webserviceUrl = "http://www.siwapon.me/apquestionnaire/service.aspx";
 
     private static final String PARAM_USERNAME = "username";
     private static final String PARAM_PASSWORD = "password";
@@ -125,6 +127,7 @@ public class CoreEngine {
                 Secure.ANDROID_ID);
         globals.setUDID(device_id);
 
+
         //Check Session Login
         boolean isLogin = settings.getBoolean(Globals.IS_LOGIN, false);
         if(isLogin){
@@ -135,7 +138,8 @@ public class CoreEngine {
             this.loginStatus = isLogin;
             this.staffId = settings.getString(Globals.STAFF_ID,null);
             globals.setStaffId(this.staffId);
-        }else {
+            globals.setDateLastLogin(settings.getString(Globals.DATE_LAST_LOGIN,null));
+        } else {
             globals.setIsLogin(false);
             globals.setLoginTokenAccess(null);
             globals.setUsername(null);
@@ -241,6 +245,10 @@ public class CoreEngine {
                     Log.d(debugTag, this.tokenAccess);
 
                     //set global & pref
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd");
+
+                    globals.setDateLastLogin(sdf.format(c.getTime()));
                     globals.setIsLogin(true);
                     globals.setLoginTokenAccess(this.tokenAccess);
                     globals.setUsername(params[0]);
@@ -251,6 +259,7 @@ public class CoreEngine {
                     editor.putString(Globals.TOKEN_ACCESS,this.tokenAccess);
                     editor.putString(Globals.USER_NAME,params[0]);
                     editor.putString(Globals.STAFF_ID,this.staffId);
+                    editor.putString(Globals.DATE_LAST_LOGIN, globals.getDateLastLogin());
 
                     // Commit the edits!
                     editor.commit();
@@ -481,11 +490,14 @@ public class CoreEngine {
             globals.setIsLogin(false);
             globals.setUsername(null);
             globals.setLoginTokenAccess(null);
+            globals.setDateLastLogin(null);
 
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean(Globals.IS_LOGIN, false);
             editor.putString(Globals.TOKEN_ACCESS,null);
             editor.putString(Globals.USER_NAME,null);
+
+
             // Commit the edits!
             editor.commit();
 
@@ -2372,12 +2384,12 @@ public class CoreEngine {
     }
     public ArrayList<ValTextData> getProvinces(){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-//        if (this.getLg().equals("en")){
-//            data.add(0, new ValTextData("0", "Please select"));
-//        }else {
-//
-//        }
-        data.add(0, new ValTextData("0", "กรุณาเลือก", "Please select"));
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData("0", "Please select","กรุณาเลือก" ));
+        }else {
+            data.add(0, new ValTextData("0", "กรุณาเลือก", "Please select"));
+        }
+
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getAllProvince();
@@ -2385,12 +2397,11 @@ public class CoreEngine {
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
             ValTextData val;
-//            if (this.getLg().equals("en")){
-//                val = new ValTextData(_cursor.getString(1),_cursor.getString(0),_cursor.getString(2));
-//            } else {
+            if (this.getLg().equals("en")){
+                val = new ValTextData(_cursor.getString(0),_cursor.getString(2),_cursor.getString(1));
+            } else {
                 val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
-
-//            }
+            }
 
             data.add(val);
             _cursor.moveToNext();
@@ -2402,12 +2413,11 @@ public class CoreEngine {
 
     public ArrayList<ValTextData> getDistrictByProvince(String province_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0, new ValTextData("0", "กรุณาเลือก", "Please select"));
-//        if (this.getLg().equals("en")){
-//            data.add(0, new ValTextData("0", "Please select"));
-//        }else {
-//            data.add(0, new ValTextData("0", "กรุณาเลือก"));
-//        }
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData("0", "Please select","กรุณาเลือก" ));
+        }else {
+            data.add(0, new ValTextData("0", "กรุณาเลือก", "Please select"));
+        }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
 
@@ -2416,8 +2426,13 @@ public class CoreEngine {
             if(_cursor != null)
                 _cursor.moveToFirst();
             for (int i = 0; i < _cursor.getCount(); i++) {
-                ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
-                val.setText2(_cursor.getString(2));
+                ValTextData val;
+                if (this.getLg().equals("en")){
+                    val = new ValTextData(_cursor.getString(0),_cursor.getString(2),_cursor.getString(1));
+                } else {
+                    val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+                }
+
                 data.add(val);
                 _cursor.moveToNext();
             }
@@ -2429,26 +2444,27 @@ public class CoreEngine {
 
         return  data;
     }
+
     public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
-        data.add(0, new ValTextData(" ", "กรุณาเลือก", "Please select"));
-//        if (this.getLg().equals("en")){
-//            data.add(0, new ValTextData("0", "Please select"));
-//        }else {
-//            data.add(0, new ValTextData("0", "กรุณาเลือก"));
-//        }
+        if (this.getLg().equals("en")){
+            data.add(0, new ValTextData(" ", "Please select","กรุณาเลือก" ));
+        } else {
+            data.add(0, new ValTextData(" ", "กรุณาเลือก", "Please select"));
+        }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
         Cursor _cursor = _dbHelper.getSubDistrictByDistrict(_district_id);
         if(_cursor != null)
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
-//            Log.e("0",_cursor.getString(0));
-//            Log.e("1",_cursor.getString(1));
-//            Log.e("2",_cursor.getString(2));
 
-            ValTextData val = new ValTextData(_cursor.getString(3),_cursor.getString(1),_cursor.getString(2));
-//            val.setText2(_cursor.getString(2));
+            ValTextData val;
+            if (this.getLg().equals("en")){
+                val = new ValTextData(_cursor.getString(0),_cursor.getString(2),_cursor.getString(1));
+            } else {
+                val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+            }
             data.add(val);
             _cursor.moveToNext();
         }
@@ -2459,9 +2475,9 @@ public class CoreEngine {
     public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id,String _province_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
         if (this.getLg().equals("en")){
-            data.add(0, new ValTextData("0", "Please select"));
+            data.add(0, new ValTextData(" ", "Please select"));
         }else {
-            data.add(0, new ValTextData("0", "กรุณาเลือก"));
+            data.add(0, new ValTextData(" ", "กรุณาเลือก"));
         }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
@@ -2469,8 +2485,12 @@ public class CoreEngine {
         if(_cursor != null)
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
-            ValTextData val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
-//            val.setText2(_cursor.getString(2));
+            ValTextData val;
+            if (this.getLg().equals("en")){
+                val = new ValTextData(_cursor.getString(0),_cursor.getString(2),_cursor.getString(1));
+            } else {
+                val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+            }
             data.add(val);
             _cursor.moveToNext();
         }

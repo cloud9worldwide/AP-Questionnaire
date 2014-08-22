@@ -76,6 +76,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     TextView lbl_add_customer_tel_home_other_line2,lbl_add_customer_birthday,lblCountry,lblNationality;
     String focus_mobile_number;
 
+    Context ctx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,6 +225,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
 
     private void setObject() {
+        ctx = this;
         focus_mobile_number ="";
         footer = (RelativeLayout) findViewById(R.id.footer);
 
@@ -334,11 +337,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         if(delegate.service.getLg().equals("en")){
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
-//            btnAdd.setImageResource(R.drawable.btn_en_add_customer);
         } else {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
-//            btnAdd.setImageResource(R.drawable.btn_th_add_customer);
         }
         question_title.setText(R.string.title_activity_customer_look_info);
         txt_header.setText(R.string.please_fill_completed);
@@ -1052,7 +1053,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
                 }
             } else {
-                Toast.makeText(this, "Please enter request fill.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
             }
 
         } else if (v.getId() == R.id.btnAddMobiles){
@@ -1162,7 +1163,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });
@@ -1289,6 +1294,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                         m04.getText().length()!=0 && m05.getText().length()!=0 && m06.getText().length()!=0 &&
                         m07.getText().length()!=0 && m08.getText().length()!=0 && m09.getText().length()!=0) {
                     if(type.equals("mobile") && m01.getText().length()==0){
+                        lbl_error.setText(R.string.error_add_phone);
                         lbl_error.setVisibility(View.VISIBLE);
                     } else {
                         InputMethodManager imm = (InputMethodManager)getSystemService(
@@ -1306,6 +1312,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                         popupAddMobile.dismiss();
                     }
                 } else {
+                    lbl_error.setText(R.string.error_add_phone);
                     lbl_error.setVisibility(View.VISIBLE);
                 }
             }
@@ -1443,6 +1450,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                             m04.getText().length()!=0 && m05.getText().length()!=0 && m06.getText().length()!=0 &&
                             m07.getText().length()!=0 && m08.getText().length()!=0 && m09.getText().length()!=0) {
                         if(type.equals("mobile") && m01.getText().length()==0){
+                            lbl_error.setText(R.string.error_add_phone);
                             lbl_error.setVisibility(View.VISIBLE);
                         } else {
                             InputMethodManager imm = (InputMethodManager)getSystemService(
@@ -1460,6 +1468,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                             popupAddMobile.dismiss();
                         }
                     } else {
+                        lbl_error.setText(R.string.error_add_phone);
                         lbl_error.setVisibility(View.VISIBLE);
                     }
                 }
@@ -1683,6 +1692,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
 
                 } else {
+                    lbl_error.setText(R.string.error_add_phone);
                     lbl_error.setVisibility(View.VISIBLE);
                 }
             }

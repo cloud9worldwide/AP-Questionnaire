@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">AP-Questionaire</string>
     <string name="YOUR_PROJECT">โครงการ</string>
+    <string name="Please_select_questionnaire">เลือกแบบสอบถาม</string>
     <string name="title_activity_questionniare">กรุณาเลือกชุดแบบสอบถาม</string>
     <string name="customer_look_up_hint_name">ชื่อ</string>
     <string name="customer_look_up_hint_surname">นามสกุล</string>
@@ -39,20 +40,22 @@
     <string name="add_customer_nationality">สัญชาติ</string>
     <string name="popup_mobile">โทรศัพท์มือถือ</string>
     <string name="popup_phone">โทรศัพท์บ้าน</string>
-    <string name="error_enter_all_fill">กรุณากรอกให้ครบ</string>
+
     <string name="header_list_name">ชื่อ</string>
     <string name="header_list_surname">นามสกุล</string>
     <string name="header_list_unitnumber">จำนวน Unit จอง</string>
     <string name="header_list_contactID">รหัสลูกค้า</string>
     <string name="header_list_lastVisit">เยี่ยมชมล่าสุด</string>
-    <string name="header_list_opp">OOP</string>
+    <string name="header_list_opp">Opp.</string>
     <string name="title_activity_customer_list">ผลการค้นหา</string>
     <string name="address">ที่อยู่</string>
     <string name="telephone">เบอร์โทรศัพท์</string>
-    <string name="title_customer_info">ตรวจสอบข้อมูลให้ถูกต้อง</string>
+    <string name="title_customer_info">ตรวจสอบข้อมูลของท่าน</string>
     <string name="question">ข้อที่</string>
     <string name="of">จาก</string>
-    <string name="save_complete">บันทึกข้อมูลเรียบร้อยแล้ว</string>
+
+    <string name="save_complete">คุณสามารถกลับไปเลือกโครงการ หรือแบบสอบถามใหม่ได้ โดยการคลิกที่ปุ่มด้านล่าง</string>
+
     <string name="msg_offline">"ขณะนี้เป็นระบบ offline หาก online แล้ว ระบบ จะทำการ sync ให้ อัตโนมัติ"</string>
     <string name="username">ชื่อผู้ใช้</string>
     <string name="password">รหัสผ่าน</string>
@@ -64,15 +67,25 @@
     <string name="default_display_16">กรุณาเลือกคำตอบด้านล่างค่ะ</string>
     <string name="is_offine">ไม่สามารถแก้ไขได้ เนื่องจากอยู่ใน offline mode</string>
     <string name="add_mobile">+ เพิ่มเบอร์โทรศัพท์</string>
-    <string name="cannot_back">ไม่สามารถย้อนกลับได้</string>
+    <string name="cannot_back">คำถามข้อแรก ไม่สามารถย้อนกลับได้</string>
     <string name="Please_enter">กรุณากรอกข้อความ</string>
     <string name="Please_enter_txtbox_in_question">กรุณาระบุ</string>
     <string name="answer_finish">ท่านได้ตอบแบบสอบถามครบถ้วนแล้ว</string>
     <string name="email_not_correct">E-MAIL ไม่ถูกต้อง</string>
 
+    <string name="txtPromp">กรุณาเลือก</string>
+    <string name="error_customer_one">โปรดกรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบถ้วน</string>
 
+    <string name="error_add_phone">กรุณากรอกให้ครบ</string>
 
+    <string name="error_textbox_number">กรุณาตอบคำถามในช่องของคำตอบที่เลือก</string>
+    <string name="error_textbox_freetext">กรุณาตอบคำถามในช่องของคำตอบที่เลือก</string>
+    <string name="error_textbox_datetime">กรุณาระบุวันที่</string>
 
     <string name="menu_home">โครงการ</string>
     <string name="menu_logout">Logout</string>
+
+    <string name="title_flag">คุณต้องการทำแบบสอบถามในภาษาใด</string>
+    <string name="flag_name_TH">ภาษาไทย</string>
+    <string name="flag_name_EN">ภาษาอังกฤษ</string>
 </resources>

@@ -257,7 +257,7 @@ public class Display21Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cannot_back, Toast.LENGTH_SHORT).show();
         }
     }
 

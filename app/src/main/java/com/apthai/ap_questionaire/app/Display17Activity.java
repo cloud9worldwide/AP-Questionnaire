@@ -229,7 +229,7 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         name.setTag(98);
 
         btn.addView(image);
-        name.setHeight(delegate.dpToPx(80));
+        name.setHeight(delegate.heightDescriptionUnderImage);
         btn.addView(name);
         LinearLayout.LayoutParams lp;
         lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -319,7 +319,7 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cannot_back, Toast.LENGTH_SHORT).show();
         }
     }
 
