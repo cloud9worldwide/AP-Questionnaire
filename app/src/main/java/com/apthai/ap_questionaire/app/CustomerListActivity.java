@@ -43,11 +43,11 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     ImageButton btnAdd,btnBack;
     private Context ctx;
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        setImage();
-    }
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        // TODO Auto-generated method stub
+//        super.onWindowFocusChanged(hasFocus);
+//
+//    }
 
     private void setImage(){
         setObject();
@@ -62,7 +62,9 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
+
         ctx = this;
+        setImage();
     }
 
     private void setObject() {

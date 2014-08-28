@@ -832,6 +832,7 @@ public class CoreEngine {
                                 prifix_vip,
                                 nationality
                         );
+                        Log.e("_data",_data.toString());
                         this.globals.setIsCustomerLocal(false);
                         return _data;
                     }else{
@@ -848,7 +849,7 @@ public class CoreEngine {
                 e.printStackTrace();
             }
             return null;
-        }else {
+        } else {
             //return null;
             // get contact info for local database
             MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
@@ -2459,11 +2460,12 @@ public class CoreEngine {
             _cursor.moveToFirst();
         for (int i = 0; i < _cursor.getCount(); i++) {
 
+
             ValTextData val;
             if (this.getLg().equals("en")){
-                val = new ValTextData(_cursor.getString(0),_cursor.getString(2),_cursor.getString(1));
+                val = new ValTextData(_cursor.getString(3),_cursor.getString(2),_cursor.getString(1));
             } else {
-                val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+                val = new ValTextData(_cursor.getString(3),_cursor.getString(1),_cursor.getString(2));
             }
             data.add(val);
             _cursor.moveToNext();

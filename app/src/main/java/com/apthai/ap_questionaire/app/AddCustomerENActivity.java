@@ -62,13 +62,27 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
 
-        txtHomeId.setText(home.getHouseId().toString());
-        txtMoo.setText(home.getMoo().toString());
-        txtBuilding.setText(home.getVillage().toString());
-        txtFloor.setText(home.getFloor().toString());
-        txtRoom.setText(home.getRoom().toString());
-        txtSoi.setText(home.getSoi().toString());
-        txtRoad.setText(home.getRoad().toString());
+        if(!home.getHouseId().trim().equals("null")){
+            txtHomeId.setText(home.getHouseId().toString());
+        }
+        if(!home.getMoo().trim().equals("null")){
+            txtMoo.setText(home.getMoo().toString());
+        }
+        if(!home.getVillage().trim().equals("null")){
+            txtBuilding.setText(home.getVillage().toString());
+        }
+        if(!home.getFloor().trim().equals("null")){
+            txtFloor.setText(home.getFloor().toString());
+        }
+        if(!home.getRoom().trim().equals("null")){
+            txtRoom.setText(home.getRoom().toString());
+        }
+        if(!home.getSoi().trim().equals("null")){
+            txtSoi.setText(home.getSoi().toString());
+        }
+        if(!home.getRoad().trim().equals("null")){
+            txtRoad.setText(home.getRoad().toString());
+        }
         if(!(home.getProvince().toString().equals("Please select") && home.getProvince().toString().equals("กรุณาเลือก"))){
             txtProvince.setText(home.getProvince().toString());
         }
@@ -83,9 +97,15 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
 //        txtDistrict.setText(home.getDistrict().toString());
 //        txtSubDistrict.setText(home.getSubdistrict().toString());
-        txtPostcode.setText(home.getPostalcode().toString());
-        txtWork.setText(work.getVillage().toString());
-        txtWorkDistrict.setText(work.getDistrict().toString());
+        if(!home.getPostalcode().trim().equals("null")){
+            txtPostcode.setText(home.getPostalcode().toString());
+        }
+        if(!work.getVillage().trim().equals("null")){
+            txtWork.setText(work.getVillage().toString());
+        }
+        if(!work.getDistrict().trim().equals("null")){
+            txtWorkDistrict.setText(work.getDistrict().toString());
+        }
     }
 
     private void setObject(){
@@ -167,6 +187,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         });
 
     }
+
     protected void onResume() {
         super.onResume();
 

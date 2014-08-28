@@ -71,16 +71,16 @@ setObject();
 
     }
 
-    protected void onResume() {
-        super.onResume();
-//        txtUsername.setHint(R.string.username);
-//        txtPassword.setHint(R.string.password);
-//        if(delegate.service.getLg().equals("en")){
-//            btnLogin.setImageResource(R.drawable.login_btn_);
-//        } else {
-//            btnLogin.setImageResource(R.drawable.btn_th_login);
-//        }
-    }
+//    protected void onResume() {
+//        super.onResume();
+////        txtUsername.setHint(R.string.username);
+////        txtPassword.setHint(R.string.password);
+////        if(delegate.service.getLg().equals("en")){
+////            btnLogin.setImageResource(R.drawable.login_btn_);
+////        } else {
+////            btnLogin.setImageResource(R.drawable.btn_th_login);
+////        }
+//    }
 
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);

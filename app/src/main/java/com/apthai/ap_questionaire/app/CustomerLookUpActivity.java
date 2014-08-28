@@ -232,6 +232,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     public void onClick(View v) {
 
         if(v.getId() == R.id.btnSend){
+            hideKeyboard();
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
@@ -368,5 +369,13 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                 finish();
             }
         });
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtTel.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtLastName.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtFirstName.getWindowToken(), 0);
     }
 }

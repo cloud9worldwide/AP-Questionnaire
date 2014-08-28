@@ -153,6 +153,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             }
         });
     }
+
     protected void onResume() {
         super.onResume();
 
@@ -170,6 +171,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             changeLanguege();
         }
     }
+
     private void changeLanguege(){
 
         txt_header.setText(R.string.please_fill_completed);
@@ -318,35 +320,55 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
 
     private void getCustomerInfo(){
 
-            AddressData home = new_customer.getAddress();
-            AddressData work = new_customer.getAddressWork();
+        AddressData home = new_customer.getAddress();
+        AddressData work = new_customer.getAddressWork();
 
+        if(!home.getHouseId().trim().equals("null")){
             txtHomeId.setText(home.getHouseId().toString());
+        }
+        if(!home.getMoo().trim().equals("null")){
             txtMoo.setText(home.getMoo().toString());
+        }
+        if(!home.getVillage().trim().equals("null")){
             txtBuilding.setText(home.getVillage().toString());
+        }
+        if(!home.getFloor().trim().equals("null")){
             txtFloor.setText(home.getFloor().toString());
+        }
+        if(!home.getRoom().trim().equals("null")){
             txtRoom.setText(home.getRoom().toString());
+        }
+        if(!home.getSoi().trim().equals("null")){
             txtSoi.setText(home.getSoi().toString());
+        }
+        if(!home.getRoad().trim().equals("null")){
             txtRoad.setText(home.getRoad().toString());
+        }
+        if(!home.getPostalcode().trim().equals("null")){
             txtPostcode.setText(home.getPostalcode().toString());
+        }
+        if(!work.getVillage().trim().equals("null")){
             txtWork.setText(work.getVillage().toString());
+        }
+        if(!work.getDistrict().trim().equals("null")){
             txtWorkDistrict.setText(work.getDistrict().toString());
+        }
 
-            ArrayList<ValTextData> list;
-            list= delegate.service.getProvinces();
-            status=0;
+        ArrayList<ValTextData> list;
+        list= delegate.service.getProvinces();
+        status=0;
 
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getText2().toString().equals(home.getProvince().toString())) {
-                    ddlProvince.setSelection(i);
-                    break;
-                }
-
-                if (list.get(i).getText().toString().equals(home.getProvince().toString())) {
-                    ddlProvince.setSelection(i);
-                    break;
-                }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getText2().toString().equals(home.getProvince().toString())) {
+                ddlProvince.setSelection(i);
+                break;
             }
+
+            if (list.get(i).getText().toString().equals(home.getProvince().toString())) {
+                ddlProvince.setSelection(i);
+                break;
+            }
+        }
 
     }
 

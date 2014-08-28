@@ -36,10 +36,7 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
 
     TextView lblRed, lblBlack;
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        setImage();
-    }
+
     private void setImage(){
         delegate = (questionniare_delegate)getApplicationContext();
         setObject();
@@ -51,12 +48,13 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected synchronized void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_not_found_customer);
         delegate = (questionniare_delegate)getApplicationContext();
         project_data = delegate.project;
         delegate.customer_selected =null;
+        setImage();
     }
 
     private void setObject(){

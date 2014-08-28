@@ -48,6 +48,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
     Context ctx;
 
+    boolean loadready = false;
     private void setImage(){
         img_background = (ImageView) findViewById(R.id.img_background);
 
@@ -58,13 +59,18 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_infomation);
-
+    private synchronized void loadData(){
         delegate = (questionniare_delegate)getApplicationContext();
         customerIndex = delegate.service.globals.getContactId();
+
+//        customer_info = delegate.service.getContactInfo("eiei");
+
+//        customer_info = delegate.service.getContactInfo(customerIndex);
+//        if(customer_info !=null) {
+//            customer_info.setContactId(delegate.service.globals.getContactId());
+//        }
+//        setObject();
+//        setImage();
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -72,6 +78,8 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         progress.show();
 
         final Handler uiHandler = new Handler();
+
+
         final  Runnable onUi = new Runnable() {
             @Override
             public void run() {
@@ -79,6 +87,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 progress.dismiss();
                 setObject();
                 setImage();
+                loadready = true;
             }
         };
         final  Runnable onUi2 = new Runnable() {
@@ -119,6 +128,16 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         };
         new Thread( background ).start();
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_customer_infomation);
+
+
+        //cut
+        loadData();
+    }
     private void setData(){
 
         lbl_Fname.setText(R.string.add_customer_name);
@@ -131,40 +150,66 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         project_name.setText(delegate.project.getName());
         String strAddress = "";
 
-        if(customer_info.getAddress().getHouseId().trim().length()!=0){
+//        if(customer_info.getEmail().toString().trim().length()!=0 && !customer_info.getEmail().equals("null")){
+
+        if(customer_info.getAddress().getHouseId().trim().length()!=0 && !customer_info.getAddress().getHouseId().trim().equals("null")){
             strAddress = getResources().getString(R.string.add_customer_homeid)+ " " + customer_info.getAddress().getHouseId();
         }
 
-        if(customer_info.getAddress().getMoo().trim().length()!=0){
-            strAddress = strAddress + " " + getResources().getString(R.string.add_customer_moo) +" " + customer_info.getAddress().getMoo();
+        if(customer_info.getAddress().getMoo().trim().length()!=0 && !customer_info.getAddress().getMoo().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
+            strAddress = strAddress + getResources().getString(R.string.add_customer_moo) +" " + customer_info.getAddress().getMoo();
         }
 
-        if(customer_info.getAddress().getVillage().trim().length()!=0){
-            strAddress = strAddress + " " + getResources().getString(R.string.add_customer_building) +" " + customer_info.getAddress().getVillage();
+        if(customer_info.getAddress().getVillage().trim().length()!=0 && !customer_info.getAddress().getVillage().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
+            strAddress = strAddress + getResources().getString(R.string.add_customer_building) +" " + customer_info.getAddress().getVillage();
         }
 
-        if(customer_info.getAddress().getSoi().trim().length()!=0){
-            strAddress = strAddress + " " + getResources().getString(R.string.add_customer_soi) +" " + customer_info.getAddress().getSoi();
+        if(customer_info.getAddress().getSoi().trim().length()!=0 && !customer_info.getAddress().getSoi().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
+            strAddress = strAddress + getResources().getString(R.string.add_customer_soi) +" " + customer_info.getAddress().getSoi();
         }
 
-        if(customer_info.getAddress().getRoad().trim().length()!=0){
-            strAddress = strAddress + " " + getResources().getString(R.string.add_customer_road) +" " + customer_info.getAddress().getRoad();
+        if(customer_info.getAddress().getRoad().trim().length()!=0 && !customer_info.getAddress().getRoad().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
+            strAddress = strAddress + getResources().getString(R.string.add_customer_road) +" " + customer_info.getAddress().getRoad();
         }
 
-        if(customer_info.getAddress().getSubdistrict().trim().length()!=0){
+        if(customer_info.getAddress().getSubdistrict().trim().length()!=0 && !customer_info.getAddress().getSubdistrict().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_sub_district) +" " + customer_info.getAddress().getSubdistrict();
         }
 
-        if(customer_info.getAddress().getDistrict().trim().length()!=0){
+        if(customer_info.getAddress().getDistrict().trim().length()!=0 && !customer_info.getAddress().getDistrict().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
             strAddress = strAddress + " " + getResources().getString(R.string.add_customer_district) +" " + customer_info.getAddress().getDistrict();
         }
 
-        if(customer_info.getAddress().getProvince().trim().length()!=0){
-            strAddress = strAddress + " " + getResources().getString(R.string.add_customer_province) +" " + customer_info.getAddress().getProvince();
+        if(customer_info.getAddress().getProvince().trim().length()!=0 && !customer_info.getAddress().getProvince().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
+            strAddress = strAddress + getResources().getString(R.string.add_customer_province) +" " + customer_info.getAddress().getProvince();
         }
 
-        if(customer_info.getAddress().getPostalcode().trim().length()!=0){
-            strAddress = strAddress + " " + getResources().getString(R.string.add_customer_postcode) +" " + customer_info.getAddress().getPostalcode();
+        if(customer_info.getAddress().getPostalcode().trim().length()!=0 && !customer_info.getAddress().getPostalcode().trim().equals("null")){
+            if(strAddress.length() >0){
+                strAddress = strAddress + " ";
+            }
+            strAddress = strAddress + getResources().getString(R.string.add_customer_postcode) +" " + customer_info.getAddress().getPostalcode();
         }
 
         txtAddress.setText(strAddress);
@@ -199,10 +244,12 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(customer_info.getMobiles() !=null){
                 for(int i = 0; i< customer_info.getMobiles().size(); i++){
                     if(customer_info.getMobiles().get(i).length() !=0){
-                        if(!allMobile.equals("")){
-                            allMobile = allMobile + ", ";
+                        if(!customer_info.getMobiles().get(i).equals("null")){
+                            if(!allMobile.equals("")){
+                                allMobile = allMobile + ", ";
+                            }
+                            allMobile = allMobile + numberformat(customer_info.getMobiles().get(i));
                         }
-                        allMobile = allMobile + numberformat(customer_info.getMobiles().get(i));
                     }
                 }
             }
@@ -217,10 +264,12 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(customer_info.getTels() !=null){
                 for(int i = 0; i< customer_info.getTels().size(); i++){
                     if(customer_info.getTels().get(i).length() !=0){
-                        if(!allTels.equals("")){
-                            allTels = allTels + ", ";
+                        if(!customer_info.getTels().get(i).equals("null")) {
+                            if (!allTels.equals("")) {
+                                allTels = allTels + ", ";
+                            }
+                            allTels = allTels + numberformat(customer_info.getTels().get(i));
                         }
-                        allTels = allTels + numberformat(customer_info.getTels().get(i));
                     }
                 }
             }
@@ -231,7 +280,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             txtTel.setTypeface(delegate.font_type);
             txtTel.setTextSize(25);
             txtEmail = (TextView) findViewById(R.id.txtEmail);
-            txtEmail.setText(customer_info.getEmail());
+            if(customer_info.getEmail().toString().trim().length()!=0 && !customer_info.getEmail().equals("null")){
+                txtEmail.setText(customer_info.getEmail());
+            } else {
+                txtEmail.setText("-");
+            }
+
+
             txtEmail.setTypeface(delegate.font_type);
             txtEmail.setTextSize(25);
             btnEdit = (ImageButton) findViewById(R.id.btnEdit);
@@ -300,6 +355,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         changeLanguege();
 
     }
+
     private void changeLanguege(){
 
         if(delegate.service.getLg().equals("en")){
@@ -418,8 +474,10 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             startActivity(i);
             finish();
         } else {
-            changeLanguege();
+            if(loadready)
+                changeLanguege();
         }
+
     }
 
     public void onBackPressed() {

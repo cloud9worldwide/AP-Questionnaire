@@ -78,6 +78,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     String focus_mobile_number;
 
     Context ctx;
+    boolean loadready = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 progress.dismiss();
                 setObject();
                 getCustomerInfo();
+                loadready = true;
             }
         };
         Runnable background = new Runnable() {
@@ -175,11 +177,21 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 ddlPrefix.setSelection(indexPrefix);
             }
 
-            txtFirstName.setText(new_customer.getFname());
-            txtLastName.setText(new_customer.getLname());
-            txtNickname.setText(new_customer.getNickname());
-            txtEmail.setText(new_customer.getEmail());
-            datePicker.setText(new_customer.getBirthdate());
+            if(!new_customer.getFname().trim().equals("null")){
+                txtFirstName.setText(new_customer.getFname());
+            }
+            if(!new_customer.getLname().trim().equals("null")){
+                txtLastName.setText(new_customer.getLname());
+            }
+            if(!new_customer.getNickname().trim().equals("null")){
+                txtNickname.setText(new_customer.getNickname());
+            }
+            if(!new_customer.getEmail().trim().equals("null")){
+                txtEmail.setText(new_customer.getEmail());
+            }
+            if(!new_customer.getBirthdate().trim().equals("null")){
+                datePicker.setText(new_customer.getBirthdate());
+            }
 
             Log.e("indexNationality indexCountry",indexNationality +" "+ indexCountry);
             if(indexNationality != -1){
@@ -189,9 +201,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 ddlCountry.setSelection(indexCountry);
             }
             mobile_list = new_customer.getMobiles();
+            for(int i = 0; i<mobile_list.size();i++){
+                if(mobile_list.get(i).equals("null")){
+                    mobile_list.set(i,"");
+                }
+            }
 
             String mobile = mobile_list.get(0);
             mobile = mobile.replace("-", "");
+
             switch (mobile.length()) {
                 case 10: mobile10.setText(mobile.substring(9, 10));
                 case 9: mobile9.setText(mobile.substring(8, 9));
@@ -206,6 +224,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
 
             phone_list = new_customer.getTels();
+            for(int i = 0; i<phone_list.size();i++){
+                if(phone_list.get(i).equals("null")){
+                    phone_list.set(i,"");
+                }
+            }
+
+
             String tel = phone_list.get(0);
             tel = tel.replace("-", "");
             int length = tel.length();
@@ -347,9 +372,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             startActivity(i);
             finish();
         } else {
+            if(loadready)
             changeLanguege();
         }
     }
+
     private void changeLanguege(){
 
         project_name.setText(delegate.project.getName());
