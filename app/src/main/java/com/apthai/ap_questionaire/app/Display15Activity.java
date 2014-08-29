@@ -28,7 +28,9 @@ import com.cloud9worldwide.questionnaire.data.QuestionAnswerData;
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 import com.cloud9worldwide.questionnaire.data.SaveAnswerData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class Display15Activity extends Activity implements View.OnClickListener {
@@ -327,8 +329,23 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, "Cannot Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,R.string.cannot_back, Toast.LENGTH_SHORT).show();
         }
     }
 
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }
+    }
 }

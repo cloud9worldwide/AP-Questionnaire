@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +21,15 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.ProjectData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class ProjectsActivity extends Activity implements OnClickListener {
 
     final String TAG = "eiei";
-    int total = 1;
+    int total = 0;
     Button btn_settings, btn_home;
     LinearLayout linearLayout, content_view;
     questionniare_delegate delegate;
@@ -39,10 +40,13 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     TextView project_name;
     TextView lbl_title;
 
+    Context mCtx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projects);
+        mCtx = this;
 
         delegate = (questionniare_delegate)getApplicationContext();
 
@@ -51,6 +55,15 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         } else {
             delegate.setLocale("th");
         }
+
+//        Button sycn_geo = (Button)findViewById(R.id.sync_geo);
+//        sycn_geo.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("debug","click");
+//                delegate.service.sync_geo_data(mCtx);
+//            }
+//        });
 
         if(delegate.service.isOnline()){
             final ProgressDialog progress = new ProgressDialog(this);
@@ -83,8 +96,9 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         } else {
             list_projectdata = delegate.service.getProjects();
             total = list_projectdata.size();
-            setObject();
+
         }
+        setObject();
 
     }
 
@@ -132,7 +146,6 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         list_projectdata = delegate.service.getProjects();
         setTableLayout();
     }
-
 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
@@ -182,10 +195,13 @@ public class ProjectsActivity extends Activity implements OnClickListener {
                 LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
                 lpImage.gravity = Gravity.CENTER;
                 image.setLayoutParams(lpImage);
+
+            } else {
+                image.setImageResource(R.drawable.logo_ap);
             }
             bmp = null;
-
             btn.addView(image);
+
 //            if(i%2 ==0){
 //                btn.setBackgroundColor(Color.RED);
 //            } else {
@@ -254,9 +270,9 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         }
     }
     public void onBackPressed() {
-        delegate.service.Logout();
-        this.setResult(4);
-        finish();
+//        delegate.service.Logout();
+//        this.setResult(4);
+//        finish();
     }
 
     @Override
@@ -268,16 +284,25 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         }
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        Log.e("Resume", "Resume");
-//        if(delegate.isBack == 2 || delegate.isBack == 0 || delegate.isBack == 1){
-//            this.setResult(delegate.isBack);
-//            delegate.isBack = 9;
-//            finish();
-//        }
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
+
     public void showPopup(final Activity context) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.ContactSearchData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class CustomerListActivity extends Activity implements View.OnClickListener {
@@ -41,11 +43,12 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     ImageButton btnAdd,btnBack;
     private Context ctx;
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        setImage();
-    }
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        // TODO Auto-generated method stub
+//        super.onWindowFocusChanged(hasFocus);
+//
+//    }
+
     private void setImage(){
         setObject();
         img_background = (ImageView) findViewById(R.id.img_background);
@@ -59,7 +62,9 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
+
         ctx = this;
+        setImage();
     }
 
     private void setObject() {
@@ -97,9 +102,8 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         btnEN.setOnClickListener(this);
         btnTH.setOnClickListener(this);
 
-        changeLanguege();
-
     }
+
     private void changeLanguege(){
 
         if(delegate.service.getLg().equals("en")){
@@ -111,9 +115,27 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             btnTH.setImageResource(R.drawable.btn_th_);
             btnAdd.setImageResource(R.drawable.btn_th_add_customer);
         }
+        project_name.setText(delegate.project.getName());
         question_title.setText(R.string.title_activity_customer_list);
         content_view.removeAllViews();
         setTableLayout();
+    }
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
     }
 
     private void setTableLayout(){
@@ -153,13 +175,13 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         header_unitnumber.setGravity(Gravity.CENTER);
         header_unitnumber.setLayoutParams(lp);
         linearLayout.addView(header_unitnumber);
-        TextView header_contact_id = new TextView(this);
-        header_contact_id.setText(R.string.header_list_contactID);
-        header_contact_id.setTypeface(delegate.font_type, Typeface.BOLD);
-        header_contact_id.setTextSize(20);
-        header_contact_id.setGravity(Gravity.CENTER);
-        header_contact_id.setLayoutParams(lp);
-        linearLayout.addView(header_contact_id);
+//        TextView header_contact_id = new TextView(this);
+//        header_contact_id.setText(R.string.header_list_contactID);
+//        header_contact_id.setTypeface(delegate.font_type, Typeface.BOLD);
+//        header_contact_id.setTextSize(20);
+//        header_contact_id.setGravity(Gravity.CENTER);
+//        header_contact_id.setLayoutParams(lp);
+//        linearLayout.addView(header_contact_id);
         TextView header_time = new TextView(this);
         header_time.setText(R.string.header_list_lastVisit);
         header_time.setTypeface(delegate.font_type, Typeface.BOLD);
@@ -209,13 +231,13 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             unitnumber.setLayoutParams(lp);
             btn.addView(unitnumber);
 
-            TextView contact_id = new TextView(this);
-            contact_id.setText(obj.getContactId());
-            contact_id.setTypeface(delegate.font_type);
-            contact_id.setGravity(Gravity.CENTER_VERTICAL);
-            contact_id.setTextSize(20);
-            contact_id.setLayoutParams(lp);
-            btn.addView(contact_id);
+//            TextView contact_id = new TextView(this);
+//            contact_id.setText(obj.getContactId());
+//            contact_id.setTypeface(delegate.font_type);
+//            contact_id.setGravity(Gravity.CENTER_VERTICAL);
+//            contact_id.setTextSize(20);
+//            contact_id.setLayoutParams(lp);
+//            btn.addView(contact_id);
 
             TextView time = new TextView(this);
             time.setText(obj.getLastVisit());
@@ -365,7 +387,11 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

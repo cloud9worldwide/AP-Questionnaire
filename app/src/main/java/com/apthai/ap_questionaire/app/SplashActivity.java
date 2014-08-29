@@ -61,6 +61,8 @@ public class SplashActivity extends Activity {
                 }
 
                 if(delegate.service.getLoginStatus()){
+
+
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivityForResult(i,0);
 

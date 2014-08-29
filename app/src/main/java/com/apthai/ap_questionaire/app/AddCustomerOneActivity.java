@@ -36,6 +36,7 @@ import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
 import com.cloud9worldwide.questionnaire.data.ValTextData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -76,6 +77,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     TextView lbl_add_customer_tel_home_other_line2,lbl_add_customer_birthday,lblCountry,lblNationality;
     String focus_mobile_number;
 
+    Context ctx;
+    boolean loadready = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +117,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 progress.dismiss();
                 setObject();
                 getCustomerInfo();
+                loadready = true;
             }
         };
         Runnable background = new Runnable() {
@@ -172,11 +177,21 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 ddlPrefix.setSelection(indexPrefix);
             }
 
-            txtFirstName.setText(new_customer.getFname());
-            txtLastName.setText(new_customer.getLname());
-            txtNickname.setText(new_customer.getNickname());
-            txtEmail.setText(new_customer.getEmail());
-            datePicker.setText(new_customer.getBirthdate());
+            if(!new_customer.getFname().trim().equals("null")){
+                txtFirstName.setText(new_customer.getFname());
+            }
+            if(!new_customer.getLname().trim().equals("null")){
+                txtLastName.setText(new_customer.getLname());
+            }
+            if(!new_customer.getNickname().trim().equals("null")){
+                txtNickname.setText(new_customer.getNickname());
+            }
+            if(!new_customer.getEmail().trim().equals("null")){
+                txtEmail.setText(new_customer.getEmail());
+            }
+            if(!new_customer.getBirthdate().trim().equals("null")){
+                datePicker.setText(new_customer.getBirthdate());
+            }
 
             Log.e("indexNationality indexCountry",indexNationality +" "+ indexCountry);
             if(indexNationality != -1){
@@ -186,9 +201,15 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 ddlCountry.setSelection(indexCountry);
             }
             mobile_list = new_customer.getMobiles();
+            for(int i = 0; i<mobile_list.size();i++){
+                if(mobile_list.get(i).equals("null")){
+                    mobile_list.set(i,"");
+                }
+            }
 
             String mobile = mobile_list.get(0);
             mobile = mobile.replace("-", "");
+
             switch (mobile.length()) {
                 case 10: mobile10.setText(mobile.substring(9, 10));
                 case 9: mobile9.setText(mobile.substring(8, 9));
@@ -203,6 +224,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
 
             phone_list = new_customer.getTels();
+            for(int i = 0; i<phone_list.size();i++){
+                if(phone_list.get(i).equals("null")){
+                    phone_list.set(i,"");
+                }
+            }
+
+
             String tel = phone_list.get(0);
             tel = tel.replace("-", "");
             int length = tel.length();
@@ -223,6 +251,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
 
     private void setObject() {
+        ctx = this;
         focus_mobile_number ="";
         footer = (RelativeLayout) findViewById(R.id.footer);
 
@@ -326,19 +355,37 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 }
             }
         });
-        changeLanguege();
+
     }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            if(loadready)
+            changeLanguege();
+        }
+    }
+
     private void changeLanguege(){
 
         project_name.setText(delegate.project.getName());
         if(delegate.service.getLg().equals("en")){
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
-//            btnAdd.setImageResource(R.drawable.btn_en_add_customer);
         } else {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
-//            btnAdd.setImageResource(R.drawable.btn_th_add_customer);
         }
         question_title.setText(R.string.title_activity_customer_look_info);
         txt_header.setText(R.string.please_fill_completed);
@@ -427,335 +474,355 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         });
 
         //test
-        mobile1.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//        mobile1.setOnKeyListener(new View.OnKeyListener() {
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//
+//                Log.e("keyCode1",keyCode+"");
+//                if (event.getAction() == KeyEvent.ACTION_UP){
+//                    if(keyCode ==KeyEvent.KEYCODE_DEL){
+//                        //delete
+//                    } else {
+//                        mobile1.clearFocus();
+//                        mobile2.requestFocus();
+//                    }
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
-                Log.e("keyCode1",keyCode+"");
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        //delete
-                    } else {
-                        mobile1.clearFocus();
-                        mobile2.requestFocus();
-                    }
-                    return true;
+
+        mobile1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+
+                } else {
+
+                    mobile1.clearFocus();
+                    mobile2.requestFocus();
                 }
-                return false;
             }
         });
 
-        mobile2.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("keyCode2",keyCode+"");
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile1.requestFocus();
-                        mobile2.clearFocus();
-                    } else {
-                        mobile2.clearFocus();
-                        mobile3.requestFocus();
-                    }
-                    return true;
+        mobile2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile1.requestFocus();
+                    mobile2.clearFocus();
+                } else {
+                    mobile2.clearFocus();
+                    mobile3.requestFocus();
                 }
-                return false;
             }
         });
+        mobile3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile3.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile2.requestFocus();
-                        mobile3.clearFocus();
-                    } else {
-                        mobile3.clearFocus();
-                        mobile4.requestFocus();
-                    }
-
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile2.requestFocus();
+                    mobile3.clearFocus();
+                } else {
+                    mobile3.clearFocus();
+                    mobile4.requestFocus();
                 }
-                return false;
             }
         });
+        mobile4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile4.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile3.requestFocus();
-                        mobile4.clearFocus();
-                    } else {
-                        mobile4.clearFocus();
-                        mobile5.requestFocus();
-                    }
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile3.requestFocus();
+                    mobile4.clearFocus();
+                } else {
+                    mobile4.clearFocus();
+                    mobile5.requestFocus();
                 }
-                return false;
             }
         });
+        mobile5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile5.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile4.requestFocus();
-                        mobile5.clearFocus();
-                    } else {
-                        mobile5.clearFocus();
-                        mobile6.requestFocus();
-                    }
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile4.requestFocus();
+                    mobile5.clearFocus();
+                } else {
+                    mobile5.clearFocus();
+                    mobile6.requestFocus();
                 }
-                return false;
             }
         });
+        mobile6.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile6.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile5.requestFocus();
-                        mobile6.clearFocus();
-                    } else {
-                        mobile6.clearFocus();
-                        mobile7.requestFocus();
-                    }
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile5.requestFocus();
+                    mobile6.clearFocus();
+                } else {
+                    mobile6.clearFocus();
+                    mobile7.requestFocus();
                 }
-                return false;
             }
         });
+        mobile7.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile7.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile6.requestFocus();
-                        mobile7.clearFocus();
-                    } else {
-                        mobile7.clearFocus();
-                        mobile8.requestFocus();
-                    }
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile6.requestFocus();
+                    mobile7.clearFocus();
+                } else {
+                    mobile7.clearFocus();
+                    mobile8.requestFocus();
                 }
-                return false;
             }
         });
+        mobile8.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile8.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode == KeyEvent.KEYCODE_DEL){
-                        mobile7.requestFocus();
-                        mobile8.clearFocus();
-                    } else {
-                        mobile8.clearFocus();
-                        mobile9.requestFocus();
-                    }
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile7.requestFocus();
+                    mobile8.clearFocus();
+                } else {
+                    mobile8.clearFocus();
+                    mobile9.requestFocus();
                 }
-                return false;
             }
         });
+        mobile9.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mobile9.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode == KeyEvent.KEYCODE_DEL){
-                        mobile8.requestFocus();
-                        mobile9.clearFocus();
-                    } else {
-                        mobile9.clearFocus();
-                        mobile10.requestFocus();
-                    }
-
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile8.requestFocus();
+                    mobile9.clearFocus();
+                } else {
+                    mobile9.clearFocus();
+                    mobile10.requestFocus();
                 }
-                return false;
             }
         });
-        mobile10.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-                        mobile9.requestFocus();
-                        mobile10.clearFocus();
-                    } else {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mobile10.getWindowToken(), 0);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
+        mobile10.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        home1.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode ==KeyEvent.KEYCODE_DEL){
-
-                    } else {
-                        home1.clearFocus();
-                        home2.requestFocus();
-                    }
-                    return true;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    mobile9.requestFocus();
+                    mobile10.clearFocus();
+                } else {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mobile10.getWindowToken(), 0);
                 }
-                return false;
             }
         });
 
 
-        home2.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                 if (event.getAction() == KeyEvent.ACTION_UP){
-                     if(keyCode == KeyEvent.KEYCODE_DEL ){
-                         home1.requestFocus();
-                         home2.clearFocus();
-                     } else{
-                         home2.clearFocus();
-                         home3.requestFocus();
-                     }
-                    return true;
+
+
+
+
+        home1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                } else {
+                    home1.clearFocus();
+                    home2.requestFocus();
                 }
-                return false;
+            }
+        });
+        home2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home1.requestFocus();
+                    home2.clearFocus();
+                } else{
+                    home2.clearFocus();
+                    home3.requestFocus();
+                }
+            }
+        });
+        home3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home2.requestFocus();
+                    home3.clearFocus();
+                } else {
+                    home3.clearFocus();
+                    home4.requestFocus();
+                }
+            }
+        });
+        home4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home3.requestFocus();
+                    home4.clearFocus();
+                } else{
+                    home4.clearFocus();
+                    home5.requestFocus();
+                }
+            }
+        });
+        home5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home4.requestFocus();
+                    home5.clearFocus();
+                } else{
+                    home5.clearFocus();
+                    home6.requestFocus();
+                }
+            }
+        });
+        home6.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home5.requestFocus();
+                    home6.clearFocus();
+                } else{
+                    home6.clearFocus();
+                    home7.requestFocus();
+                }
+            }
+        });
+        home7.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home6.requestFocus();
+                    home7.clearFocus();
+                } else{
+                    home7.clearFocus();
+                    home8.requestFocus();
+                }
+            }
+        });
+        home8.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home7.requestFocus();
+                    home8.clearFocus();
+                } else{
+                    home8.clearFocus();
+                    home9.requestFocus();
+                }
+            }
+        });
+        home9.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    home8.requestFocus();
+                    home9.clearFocus();
+                } else{
+                    InputMethodManager imm = (InputMethodManager)getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(home9.getWindowToken(), 0);
+                }
             }
         });
 
-        home3.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home2.requestFocus();
-                        home3.clearFocus();
-                    } else {
-                        home3.clearFocus();
-                        home4.requestFocus();
-                    }
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        home4.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home3.requestFocus();
-                        home4.clearFocus();
-                    } else{
-                        home4.clearFocus();
-                        home5.requestFocus();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        home5.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home4.requestFocus();
-                        home5.clearFocus();
-                    } else{
-                        home5.clearFocus();
-                        home6.requestFocus();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        home6.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home5.requestFocus();
-                        home6.clearFocus();
-                    } else{
-                        home6.clearFocus();
-                        home7.requestFocus();
-                    }
-
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        home7.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home6.requestFocus();
-                        home7.clearFocus();
-                    } else{
-                        home7.clearFocus();
-                        home8.requestFocus();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        home8.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home7.requestFocus();
-                        home8.clearFocus();
-                    } else{
-                        home8.clearFocus();
-                        home9.requestFocus();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        home9.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP){
-                    if(keyCode == KeyEvent.KEYCODE_DEL ){
-                        home8.requestFocus();
-                        home9.clearFocus();
-                    } else{
-                        InputMethodManager imm = (InputMethodManager)getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(home9.getWindowToken(), 0);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
     }
     private void setFont(){
         txtPrefix = (EditText) findViewById(R.id.txt_Prefix);
@@ -1052,7 +1119,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
                 }
             } else {
-                Toast.makeText(this, "Please enter request fill.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
             }
 
         } else if (v.getId() == R.id.btnAddMobiles){
@@ -1162,7 +1229,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });
@@ -1289,6 +1360,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                         m04.getText().length()!=0 && m05.getText().length()!=0 && m06.getText().length()!=0 &&
                         m07.getText().length()!=0 && m08.getText().length()!=0 && m09.getText().length()!=0) {
                     if(type.equals("mobile") && m01.getText().length()==0){
+                        lbl_error.setText(R.string.error_add_phone);
                         lbl_error.setVisibility(View.VISIBLE);
                     } else {
                         InputMethodManager imm = (InputMethodManager)getSystemService(
@@ -1306,6 +1378,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                         popupAddMobile.dismiss();
                     }
                 } else {
+                    lbl_error.setText(R.string.error_add_phone);
                     lbl_error.setVisibility(View.VISIBLE);
                 }
             }
@@ -1443,6 +1516,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                             m04.getText().length()!=0 && m05.getText().length()!=0 && m06.getText().length()!=0 &&
                             m07.getText().length()!=0 && m08.getText().length()!=0 && m09.getText().length()!=0) {
                         if(type.equals("mobile") && m01.getText().length()==0){
+                            lbl_error.setText(R.string.error_add_phone);
                             lbl_error.setVisibility(View.VISIBLE);
                         } else {
                             InputMethodManager imm = (InputMethodManager)getSystemService(
@@ -1460,6 +1534,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                             popupAddMobile.dismiss();
                         }
                     } else {
+                        lbl_error.setText(R.string.error_add_phone);
                         lbl_error.setVisibility(View.VISIBLE);
                     }
                 }
@@ -1683,6 +1758,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
 
                 } else {
+                    lbl_error.setText(R.string.error_add_phone);
                     lbl_error.setVisibility(View.VISIBLE);
                 }
             }

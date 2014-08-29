@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class CustomerFinishedAnswerActivity extends Activity implements View.OnClickListener {
 
@@ -31,6 +34,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     static PopupWindow popup;
 
     private Context ctx;
+    boolean loadready = false;
 
     private void setImage(){
         setObject();
@@ -38,6 +42,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
         Drawable imageDraw =  new BitmapDrawable(imageBitmap);
         rootView.setBackground(imageDraw);
+        loadready = true;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,39 +84,130 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_menu.setOnClickListener(this);
         btn_staff.setOnClickListener(this);
         btn_back_home.setOnClickListener(this);
+        btn_menu.setVisibility(View.GONE);
 
-        if(!delegate.QM.isStaffQustion()){
+        if(delegate.QM !=null){
+            if(delegate.QM.isStaffQustion()){
+                delegate.sendAnswer();
+            }
+        }
+
+
+//        if(!delegate.QM.isStaffQustion()){
+//            if(delegate.service.getLg().equals("th")){
+//                thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
+//                thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
+//                btn_staff.setImageResource(R.drawable.for_btn_);
+//
+//            } else {
+//                thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
+//                thanks2.setText("");
+//                btn_staff.setImageResource(R.drawable.btn_en_staff);
+//
+//            }
+//            customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
+//            btn_back_home.setEnabled(false);
+//            btn_back_home.setVisibility(View.GONE);
+//
+//        } else {
+//            if(delegate.service.getLg().equals("th")){
+//                btn_back_home.setImageResource(R.drawable.btn_projects);
+//                btn_staff.setImageResource(R.drawable.btn_questionniare);
+//            } else {
+//                btn_back_home.setImageResource(R.drawable.btn_en_projects);
+//                btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
+//            }
+//            btn_back_home.setVisibility(View.VISIBLE);
+//            thanks1.setText("");
+//            thanks2.setText("");
+//            if (delegate.service.isOnline()) {
+//                customerName.setText(R.string.save_complete);
+//                customerName.setTextColor(getResources().getColor(R.color.GREEN));
+//            } else {
+//                customerName.setText(R.string.msg_offline);
+//                customerName.setTextColor(getResources().getColor(R.color.ORANGE));
+//            }
+//            delegate.sendAnswer();
+//        }
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            if(loadready)
+            changeLanguege();
+        }
+    }
+
+    private void changeLanguege(){
+
+        if(delegate.QM ==null){
             if(delegate.service.getLg().equals("th")){
                 thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
                 thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
-                btn_staff.setImageResource(R.drawable.for_btn_);
+                btn_back_home.setImageResource(R.drawable.btn_projects);
+                btn_staff.setImageResource(R.drawable.btn_questionniare);
+
             } else {
                 thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
                 thanks2.setText("");
-                btn_staff.setImageResource(R.drawable.btn_en_staff);
-            }
-            customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
-            btn_back_home.setEnabled(false);
-            btn_back_home.setVisibility(View.GONE);
-        } else {
-            if(delegate.service.getLg().equals("th")){
-                btn_back_home.setImageResource(R.drawable.btn_projects);
-                btn_staff.setImageResource(R.drawable.btn_questionniare);
-            } else {
                 btn_back_home.setImageResource(R.drawable.btn_en_projects);
                 btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
             }
+
+
+            customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
             btn_back_home.setVisibility(View.VISIBLE);
-            thanks1.setText("");
-            thanks2.setText("");
-            if (delegate.service.isOnline()) {
-                customerName.setText(R.string.save_complete);
-                customerName.setTextColor(getResources().getColor(R.color.GREEN));
+        } else {
+            if(!delegate.QM.isStaffQustion()){
+                if(delegate.service.getLg().equals("th")){
+                    thanks1.setText("โครงการ "+ delegate.project.getName() + " ขอขอบคุณ");
+                    thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
+                    btn_staff.setImageResource(R.drawable.for_btn_);
+
+                } else {
+                    thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
+                    thanks2.setText("");
+                    btn_staff.setImageResource(R.drawable.btn_en_staff);
+                }
+                customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
+                btn_back_home.setEnabled(false);
+                btn_back_home.setVisibility(View.GONE);
+
             } else {
-                customerName.setText(R.string.msg_offline);
-                customerName.setTextColor(getResources().getColor(R.color.ORANGE));
+                if(delegate.service.getLg().equals("th")){
+                    btn_back_home.setImageResource(R.drawable.btn_projects);
+                    btn_staff.setImageResource(R.drawable.btn_questionniare);
+                } else {
+                    btn_back_home.setImageResource(R.drawable.btn_en_projects);
+                    btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
+                }
+                btn_back_home.setVisibility(View.VISIBLE);
+                thanks1.setText("");
+                thanks2.setText("");
+                if (delegate.service.isOnline()) {
+                    customerName.setText(R.string.save_complete);
+                    customerName.setTextColor(getResources().getColor(R.color.GREEN));
+                } else {
+                    customerName.setText(R.string.msg_offline);
+                    customerName.setTextColor(getResources().getColor(R.color.ORANGE));
+                }
+
             }
         }
+
+
     }
 
     @Override
@@ -139,58 +235,66 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                if (delegate.QM.isStaffQustion()) {
-                    delegate.sendAnswer();
-                    if (delegate.service.isOnline()) {
-                        final ProgressDialog progress = new ProgressDialog(this);
-                        progress.setTitle("Please wait");
-                        progress.setMessage("Sync local data to server.");
-                        progress.setCancelable(false);
-                        progress.show();
-
-                        final Handler uiHandler = new Handler();
-                        final Runnable onUi = new Runnable() {
-                            @Override
-                            public void run() {
-                                // this will run on the main UI thread
-                                progress.dismiss();
-                                Intent i = new Intent(CustomerFinishedAnswerActivity.this, QuestionniareActivity.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(i);
-                                finish();
-                            }
-                        };
-                        Runnable background = new Runnable() {
-                            @Override
-                            public void run() {
-                                // This is the delay
-                                delegate.service.sync_save_questionnaire(progress);
-                                uiHandler.post(onUi);
-                            }
-                        };
-                        new Thread(background).start();
-                    } else {
-                        Intent i = new Intent(this, QuestionniareActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                        finish();
-                    }
+                if(delegate.QM ==null){
+                    Intent i = new Intent(this, QuestionniareActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
                 } else {
-                    if(delegate.QM.CheckQuestionNotAns().size()!=0){
-                        Intent newPage = new Intent(this, DoNotAnswerListActivity.class);
-                        delegate.nextQuestionPage(newPage);
-                        startActivityForResult(newPage,0);
+                    if (delegate.QM.isStaffQustion()) {
+//                    delegate.sendAnswer();
+                        if (delegate.service.isOnline()) {
+                            final ProgressDialog progress = new ProgressDialog(this);
+                            progress.setTitle("Please wait");
+                            progress.setMessage("Sync local data to server.");
+                            progress.setCancelable(false);
+                            progress.show();
+
+                            final Handler uiHandler = new Handler();
+                            final Runnable onUi = new Runnable() {
+                                @Override
+                                public void run() {
+                                    // this will run on the main UI thread
+                                    progress.dismiss();
+                                    Intent i = new Intent(CustomerFinishedAnswerActivity.this, QuestionniareActivity.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            };
+                            Runnable background = new Runnable() {
+                                @Override
+                                public void run() {
+                                    // This is the delay
+                                    delegate.service.sync_save_questionnaire(progress);
+                                    uiHandler.post(onUi);
+                                }
+                            };
+                            new Thread(background).start();
+                        } else {
+                            Intent i = new Intent(this, QuestionniareActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                            finish();
+                        }
                     } else {
-                        delegate.initQuestionsStaff();
-                        nextPage();
+                        if(delegate.QM.CheckQuestionNotAns().size()!=0){
+                            Intent newPage = new Intent(this, DoNotAnswerListActivity.class);
+                            delegate.nextQuestionPage(newPage);
+                            startActivityForResult(newPage,0);
+                        } else {
+                            delegate.initQuestionsStaff();
+                            nextPage();
+                        }
                     }
                 }
+
             }
         } else if(v.getId() == R.id.btnBackHome){
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                delegate.sendAnswer();
+//                delegate.sendAnswer();
                 Intent i = new Intent(this,ProjectsActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
@@ -217,8 +321,10 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     }
 
     public void onBackPressed() {
-        this.setResult(3);
-        finish();
+//        Toast.makeText(this, getResources().getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
+
+//        this.setResult(3);
+//        finish();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -249,8 +355,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             public void onClick(View v) {
                 home.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 logout.setBackgroundColor(getResources().getColor(R.color.WHITE));
-                setResult(0);
-                delegate.isBack = 0;
+//                setResult(0);
+//                delegate.isBack = 0;
+//                finish();
+
+                Intent i = new Intent(ctx, ProjectsActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });
@@ -260,8 +371,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
-                delegate.isBack = 2;
+//                setResult(2);
+//                delegate.isBack = 2;
+//                finish();
+
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

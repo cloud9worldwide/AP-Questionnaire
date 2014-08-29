@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.apthai.ap_questionaire.app.Display18Activity">
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +14,6 @@
         android:background="@color/TITLE"
         android:layout_height="50dp"
         android:id="@+id/project_name" />
-
     <LinearLayout
         android:gravity="center"
         android:id="@+id/sizeContent"
@@ -87,5 +85,4 @@
                 />
         </RelativeLayout>
     </LinearLayout>
-
 </RelativeLayout>

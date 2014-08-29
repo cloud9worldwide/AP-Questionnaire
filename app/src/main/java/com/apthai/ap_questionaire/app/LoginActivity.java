@@ -22,16 +22,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class LoginActivity extends Activity implements OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
     ImageView imgLogo;
     EditText txtUsername, txtPassword,txtIP;
     ImageButton btnLogin;
-    TextView btnForgot,txtError;
+    TextView btnForgot,txtError,btnSyncGEO;
     questionniare_delegate delegate;
     private static Context ctx;
     private static boolean txtfocus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,16 +51,37 @@ public class LoginActivity extends Activity implements OnClickListener {
             delegate.setLocale("th");
         }
 
-        setObject();
-        if(delegate.service.getLoginStatus()){
-            Intent i = new Intent(this, ProjectsActivity.class);
-            startActivityForResult(i,0);
+setObject();
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(delegate.service.getLoginStatus() ){
+            if(delegate.service.globals.getDateLastLogin().equals(nowDate)){
+                Intent i = new Intent(this, ProjectsActivity.class);
+                startActivityForResult(i,0);
+            } else {
+                delegate.service.Logout();
+            }
+
         }
         startAnimateLogo();
 //        txtUsername.setText("admin");
 //        txtPassword.setText("password");
 
     }
+
+//    protected void onResume() {
+//        super.onResume();
+////        txtUsername.setHint(R.string.username);
+////        txtPassword.setHint(R.string.password);
+////        if(delegate.service.getLg().equals("en")){
+////            btnLogin.setImageResource(R.drawable.login_btn_);
+////        } else {
+////            btnLogin.setImageResource(R.drawable.btn_th_login);
+////        }
+//    }
+
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
         txtUsername = (EditText) findViewById(R.id.txtUsername);
@@ -64,6 +89,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnForgot = (TextView) findViewById(R.id.btnForgot);
         txtIP = (EditText) findViewById(R.id.txtIP);
+        btnSyncGEO = (TextView) findViewById(R.id.btnSyncGEO);
 
         txtError = (TextView) findViewById(R.id.txtError);
         txtError.setText("");
@@ -73,6 +99,10 @@ public class LoginActivity extends Activity implements OnClickListener {
         txtIP.setTypeface(delegate.font_type);
         txtIP.setTextSize(30);
         txtIP.setVisibility(View.GONE);
+        btnSyncGEO.setTypeface(delegate.font_type);
+        btnSyncGEO.setTextSize(30);
+        btnSyncGEO.setVisibility(View.GONE);
+        btnSyncGEO.setOnClickListener(this);
 
         txtUsername.setTextSize(30);
         txtUsername.setTypeface(delegate.font_type);
@@ -117,10 +147,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 if (event.getAction() == KeyEvent.ACTION_UP){
                     if(keyCode ==KeyEvent.KEYCODE_ENTER){
                         delegate.service.setWebserviceUrl(txtIP.getText().toString().trim());
-                        txtIP.setVisibility(View.GONE);
-                        InputMethodManager imm = (InputMethodManager)getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txtIP.getWindowToken(), 0);
+                        hideConfig();
                     }
                     return true;
                 }
@@ -129,11 +156,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         });
 
 
-        if(delegate.service.getLg().equals("en")){
-            btnLogin.setImageResource(R.drawable.login_btn_);
-        } else {
-            btnLogin.setImageResource(R.drawable.btn_th_login);
-        }
+
     }
 
     public void hideKeyboard(View view) {
@@ -161,13 +184,44 @@ public class LoginActivity extends Activity implements OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    private void showConfig(){
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtPassword.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtUsername.getWindowToken(), 0);
+
+            txtIP.setVisibility(View.VISIBLE);
+            btnSyncGEO.setVisibility(View.VISIBLE);
+            txtIP.setText(delegate.service.getWebserviceUrl());
+
+    }
+
+    private void hideConfig(){
+
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtPassword.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtUsername.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtIP.getWindowToken(), 0);
+
+        txtIP.setVisibility(View.GONE);
+        btnSyncGEO.setVisibility(View.GONE);
+        txtIP.setText(delegate.service.getWebserviceUrl());
+    }
+
     public void onClick(View v) {
 
 
         if(v.getId() == R.id.btnLogin && txtUsername.getText().toString().equals("apqtn") && txtPassword.getText().toString().equals("ntqpa")){
-            txtIP.setVisibility(View.VISIBLE);
-            txtIP.setText(delegate.service.getWebserviceUrl());
+            if(txtIP.isShown()) {
+                hideConfig();
+            } else {
+                showConfig();
+            }
+
         } else if (v.getId() == R.id.btnLogin && txtUsername.getText().length() > 0 && txtPassword.getText().length() > 0) {
+            hideConfig();
 
             final ProgressDialog ringProgressDialog = ProgressDialog.show(ctx, "Please wait ...", "Login...", true);
             ringProgressDialog.setCancelable(false);
@@ -198,6 +252,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                             }catch (Exception e) {
                             }
                             ringProgressDialog.dismiss();
+
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         } else {
                             delegate.service.startDownloadImages(ringProgressDialog);
@@ -222,8 +277,13 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
         else if(v.getId() == R.id.btnForgot){
             startActivityForResult(new Intent(this, ResetPasswordActivity.class),0);
+        } else if(v.getId() == R.id.btnSyncGEO){
+            hideConfig();
+            delegate.service.sync_geo_data(this);
+
         }
     }
+
     private void startAnimateLogo(){
 
         TranslateAnimation anim = new TranslateAnimation(0, 0, 0, delegate.dpToPx(-175));
@@ -269,6 +329,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             finish();
         }
     }
+
     public void onBackPressed() {
         delegate.service.Logout();
         this.setResult(4);

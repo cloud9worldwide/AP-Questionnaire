@@ -59,6 +59,7 @@ public class questionniare_delegate extends Application {
 
     TCImageLoader imageLoader;
     int imgDefault, imgDefaultQuestion, imgDefaultIcon, imgDefaultIconSelect;
+    int heightDescriptionUnderImage;
 
     public QuestionnaireData questionnaire_selected;
 
@@ -77,6 +78,16 @@ public class questionniare_delegate extends Application {
         editor.commit();
     }
 
+//    contact_id",params[0]);
+//            jsonObj.put("staff_id",params[1]);
+//    jsonObj.put("project_id",params[2]);
+
+    public void StampVisitLog(){
+        Log.e("id",customer_selected.getContactId());
+        Log.e("s id",service.globals.getStaffId());
+        Log.e("p id",project.getId());
+        service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId());
+    }
 
 
     public void sendAnswer() {
@@ -165,11 +176,14 @@ public class questionniare_delegate extends Application {
                 "fonts/DB_Ozone_X.otf");
         sizeImage = dpToPx(120);
         sizeImage19 = dpToPx(200);
+        heightDescriptionUnderImage = dpToPx(100);
 
         ctx = this;
         if (questionnaire_selected != null) {
             QM = new QuestionManagement(service, project, questionnaire_selected);
         }
+
+
     }
 
     @Override
@@ -553,11 +567,11 @@ public class questionniare_delegate extends Application {
                     if (choice.get(j).getIsFreeTxt()) {
                         if (choice.get(j).getFreeTxtType().toString().equals("1")) {
                             if (answer.get(i).getFreetxt().toString().length() == 0) {
-                                error_msg = "Please ans";
+                                error_msg = getString(R.string.error_textbox_number);
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("2")) {
                             if (answer.get(i).getFreetxt().toString().length() == 0) {
-                                error_msg = "Please ans";
+                                error_msg = getString(R.string.error_textbox_freetext);
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("3")) {
                             if (!emailValidator(answer.get(i).getFreetxt().toString())|| answer.get(i).getFreetxt().toString().length() == 0) {
@@ -565,7 +579,7 @@ public class questionniare_delegate extends Application {
                             }
                         } else if (choice.get(j).getFreeTxtType().toString().equals("4")) {
                             if (answer.get(i).getFreetxt().toString().length() == 0) {
-                                error_msg = "Please ans";
+                                error_msg = getString(R.string.error_textbox_datetime);
                             }
                         }
                     }

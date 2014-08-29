@@ -24,11 +24,14 @@ import android.widget.TextView;
 import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class AddCustomerENActivity extends Activity implements View.OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    ImageButton btnMenu, btnSend, btnBack;
+    ImageButton btnMenu, btnSend, btnBack, btnEN, btnTH;
 
     questionniare_delegate delegate;
     RelativeLayout footer;
@@ -53,26 +56,56 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_add_customer_en);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setObject();
-        getCustomerInfo();
     }
 
     private void getCustomerInfo(){
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
 
-        txtHomeId.setText(home.getHouseId().toString());
-        txtMoo.setText(home.getMoo().toString());
-        txtBuilding.setText(home.getVillage().toString());
-        txtFloor.setText(home.getFloor().toString());
-        txtRoom.setText(home.getRoom().toString());
-        txtSoi.setText(home.getSoi().toString());
-        txtRoad.setText(home.getRoad().toString());
-        txtProvince.setText(home.getProvince().toString());
-        txtDistrict.setText(home.getDistrict().toString());
-        txtSubDistrict.setText(home.getSubdistrict().toString());
-        txtPostcode.setText(home.getPostalcode().toString());
-        txtWork.setText(work.getVillage().toString());
-        txtWorkDistrict.setText(work.getDistrict().toString());
+        if(!home.getHouseId().trim().equals("null")){
+            txtHomeId.setText(home.getHouseId().toString());
+        }
+        if(!home.getMoo().trim().equals("null")){
+            txtMoo.setText(home.getMoo().toString());
+        }
+        if(!home.getVillage().trim().equals("null")){
+            txtBuilding.setText(home.getVillage().toString());
+        }
+        if(!home.getFloor().trim().equals("null")){
+            txtFloor.setText(home.getFloor().toString());
+        }
+        if(!home.getRoom().trim().equals("null")){
+            txtRoom.setText(home.getRoom().toString());
+        }
+        if(!home.getSoi().trim().equals("null")){
+            txtSoi.setText(home.getSoi().toString());
+        }
+        if(!home.getRoad().trim().equals("null")){
+            txtRoad.setText(home.getRoad().toString());
+        }
+        if(!(home.getProvince().toString().equals("Please select") && home.getProvince().toString().equals("กรุณาเลือก"))){
+            txtProvince.setText(home.getProvince().toString());
+        }
+
+        if(!(home.getDistrict().toString().equals("Please select") && home.getDistrict().toString().equals("กรุณาเลือก"))){
+            txtDistrict.setText(home.getDistrict().toString());
+        }
+
+        if(!(home.getSubdistrict().toString().equals("Please select") && home.getSubdistrict().toString().equals("กรุณาเลือก"))){
+            txtSubDistrict.setText(home.getProvince().toString());
+        }
+
+//        txtDistrict.setText(home.getDistrict().toString());
+//        txtSubDistrict.setText(home.getSubdistrict().toString());
+        if(!home.getPostalcode().trim().equals("null")){
+            txtPostcode.setText(home.getPostalcode().toString());
+        }
+        if(!work.getVillage().trim().equals("null")){
+            txtWork.setText(work.getVillage().toString());
+        }
+        if(!work.getDistrict().trim().equals("null")){
+            txtWorkDistrict.setText(work.getDistrict().toString());
+        }
     }
 
     private void setObject(){
@@ -102,6 +135,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         btnMenu.setOnClickListener(this);
         btnSend.setOnClickListener(this);
         btnBack.setOnClickListener(this);
+
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
 
         lblHomeId = (TextView) findViewById(R.id.lblHomeID);
         lblMoo = (TextView) findViewById(R.id.lbl_add_customer_moo);
@@ -147,6 +185,71 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
                 }
             }
         });
+
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
+    }
+
+    private void changeLanguege(){
+
+        txt_header.setText(R.string.please_fill_completed);
+        question_title.setText(R.string.title_activity_customer_look_info);
+
+        project_name.setText(delegate.project.getName());
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+            lblBuilding.setTextSize(20);
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+            lblBuilding.setTextSize(25);
+        }
+
+        lblHomeId.setText(R.string.add_customer_homeid);
+        lblMoo.setText(R.string.add_customer_moo);
+        lblBuilding.setText(R.string.add_customer_building);
+        lblFloor.setText(R.string.add_customer_floor);
+        lblRoom.setText(R.string.add_customer_room);
+        lblSoi.setText(R.string.add_customer_soi);
+        lblProvince.setText(R.string.add_customer_province);
+        lblRoad.setText(R.string.add_customer_road);
+
+        lblDistrict.setText(R.string.add_customer_district);
+        lblSubDistrict.setText(R.string.add_customer_sub_district);
+        lblPostcode.setText(R.string.add_customer_postcode);
+
+        lblWork.setText(R.string.add_customer_work);
+        lblWorkDistrict.setText(R.string.add_customer_district);
+
+        txtHomeId.setHint(R.string.add_customer_homeid);
+        txtMoo.setHint(R.string.add_customer_moo);
+        txtBuilding.setHint(R.string.add_customer_building);
+        txtFloor.setHint(R.string.add_customer_floor);
+        txtRoom.setHint(R.string.add_customer_room);
+        txtSoi.setHint(R.string.add_customer_soi);
+        txtRoad.setHint(R.string.add_customer_road);
+
+        txtPostcode.setText(R.string.add_customer_postcode);
+        txtWork = (EditText) findViewById(R.id.txtWork);
+        txtWorkDistrict = (EditText) findViewById(R.id.txtDistrictWork);
+        getCustomerInfo();
     }
 
     private void setFont(){
@@ -154,8 +257,9 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         lblHomeId.setTypeface(delegate.font_type);
         lblMoo.setTextSize(25);
         lblMoo.setTypeface(delegate.font_type);
-        lblBuilding.setTextSize(25);
+
         lblBuilding.setTypeface(delegate.font_type);
+
         lblFloor.setTextSize(25);
         lblFloor.setTypeface(delegate.font_type);
         lblRoom.setTextSize(25);
@@ -360,8 +464,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    private void packData(){
-
+    private void saveToNewCustomer(){
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
 
@@ -433,6 +536,10 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }else{
             work.setDistrict("");
         }
+    }
+
+    private void packData(){
+        saveToNewCustomer();
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -481,6 +588,28 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             onBackPressed();
         } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
+        } else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                saveToNewCustomer();
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                saveToNewCustomer();
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
+            }
         }
 
     }
@@ -528,7 +657,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
                 home.setBackgroundColor(getResources().getColor(R.color.WHITE));
                 logout.setBackgroundColor(getResources().getColor(R.color.ORANGE));
                 delegate.service.Logout();
-                setResult(2);
+//                setResult(2);
+//                finish();
+                Intent i = new Intent(ctx, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 finish();
             }
         });

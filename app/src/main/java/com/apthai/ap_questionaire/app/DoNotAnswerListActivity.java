@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -25,7 +22,9 @@ import android.widget.TextView;
 
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class DoNotAnswerListActivity extends Activity implements View.OnClickListener {
@@ -43,15 +42,15 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
 
     private void setImage(){
         setObject();
-//        img_background = (ImageView) findViewById(R.id.img_background);
-//        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-//                String.valueOf(img_background.getWidth()),
-//                String.valueOf(img_background.getHeight()),
-//                img_background,delegate.imgDefault);
-        View rootView = getWindow().getDecorView().getRootView();
-        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-        rootView.setBackground(imageDraw);
+        img_background = (ImageView) findViewById(R.id.img_background);
+        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
+                String.valueOf(img_background.getWidth()),
+                String.valueOf(img_background.getHeight()),
+                img_background,delegate.imgDefault);
+//        View rootView = getWindow().getDecorView().getRootView();
+//        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+//        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+//        rootView.setBackground(imageDraw);
     }
     private void setObject(){
         delegate = (questionniare_delegate)getApplicationContext();
@@ -124,6 +123,22 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
         return true;
     }
 
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -146,7 +161,14 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
         } else if(v.getId() == R.id.btnNext){
             delegate.initQuestionsStaff();
             nextPage();
-        } else {
+        }
+        else if(v.getId() == R.id.root_view){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            }
+        }
+
+        else {
             final int indexSelected =Integer.parseInt(v.getTag().toString());
             Log.e("indexSelected",indexSelected +"");
             delegate.QM.redo_question_not_ansAtIndex(indexSelected);
@@ -273,6 +295,7 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
             }
         });
     }
+
     public void nextPage(){
         QuestionTypeData data = delegate.getQuestions();
         if(data == null){

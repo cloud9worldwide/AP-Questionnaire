@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,13 +30,15 @@ import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
 import com.cloud9worldwide.questionnaire.data.ValTextData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class AddCustomerTHActivity extends Activity implements View.OnClickListener {
 
     final String TAG = this.getClass().getSimpleName();
-    ImageButton btnMenu, btnSend, btnBack;
+    ImageButton btnMenu, btnSend, btnBack, btnEN, btnTH;
 
     questionniare_delegate delegate;
     RelativeLayout footer;
@@ -80,7 +81,10 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
 
-        txtPromp = "กรุณาเลือก";
+        question_title = (TextView) findViewById(R.id.question_title);
+        question_title.setTextSize(25);
+        question_title.setTypeface(delegate.font_type);
+        question_title.setGravity(Gravity.CENTER);
 
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_header.setTypeface(delegate.font_type);
@@ -98,6 +102,11 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         btnMenu.setOnClickListener(this);
         btnSend.setOnClickListener(this);
         btnBack.setOnClickListener(this);
+
+        btnEN = (ImageButton) findViewById(R.id.btnEN);
+        btnTH = (ImageButton) findViewById(R.id.btnTH);
+        btnEN.setOnClickListener(this);
+        btnTH.setOnClickListener(this);
 
         lblHomeId = (TextView) findViewById(R.id.lblHomeID);
         lblMoo = (TextView) findViewById(R.id.lbl_add_customer_moo);
@@ -129,7 +138,6 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         txtWork = (EditText) findViewById(R.id.txtWork);
         txtWorkDistrict = (EditText) findViewById(R.id.txtDistrictWork);
         setFont();
-        setItemSpinner();
         setKeyListener();
 
         final View activityRootView = findViewById(R.id.root_view);
@@ -144,9 +152,75 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                 }
             }
         });
+    }
 
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        } else {
+            changeLanguege();
+        }
+    }
+
+    private void changeLanguege(){
+
+        txt_header.setText(R.string.please_fill_completed);
+        question_title.setText(R.string.title_activity_customer_look_info);
+
+        project_name.setText(delegate.project.getName());
+        if(delegate.service.getLg().equals("en")){
+            btnEN.setImageResource(R.drawable.btn_en_);
+            btnTH.setImageResource(R.drawable.btn_th);
+            lblBuilding.setTextSize(20);
+
+//            lblMoo.setWidth(delegate.dpToPx(83));
+        } else {
+            btnEN.setImageResource(R.drawable.btn_en);
+            btnTH.setImageResource(R.drawable.btn_th_);
+            lblBuilding.setTextSize(25);
+
+//            lblMoo.setWidth(delegate.dpToPx(88));
+        }
+
+        lblHomeId.setText(R.string.add_customer_homeid);
+        lblMoo.setText(R.string.add_customer_moo);
+        lblBuilding.setText(R.string.add_customer_building);
+        lblFloor.setText(R.string.add_customer_floor);
+        lblRoom.setText(R.string.add_customer_room);
+        lblSoi.setText(R.string.add_customer_soi);
+        lblProvince.setText(R.string.add_customer_province);
+        lblRoad.setText(R.string.add_customer_road);
+
+        lblDistrict.setText(R.string.add_customer_district);
+        lblSubDistrict.setText(R.string.add_customer_sub_district);
+        lblPostcode.setText(R.string.add_customer_postcode);
+
+        lblWork.setText(R.string.add_customer_work);
+        lblWorkDistrict.setText(R.string.add_customer_district);
+
+        txtHomeId.setHint(R.string.add_customer_homeid);
+        txtMoo.setHint(R.string.add_customer_moo);
+        txtBuilding.setHint(R.string.add_customer_building);
+        txtFloor.setHint(R.string.add_customer_floor);
+        txtRoom.setHint(R.string.add_customer_room);
+        txtSoi.setHint(R.string.add_customer_soi);
+        txtRoad.setHint(R.string.add_customer_road);
+
+        txtPostcode.setText(R.string.add_customer_postcode);
+        txtWork = (EditText) findViewById(R.id.txtWork);
+        txtWorkDistrict = (EditText) findViewById(R.id.txtDistrictWork);
+        setItemSpinner();
         getCustomerInfo();
-
     }
 
     private void setKeyListener() {
@@ -246,64 +320,56 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
 
     private void getCustomerInfo(){
 
-        if(delegate.customer_selected.getContactId().equals("")){
+        AddressData home = new_customer.getAddress();
+        AddressData work = new_customer.getAddressWork();
 
-        } else {
-            AddressData home = new_customer.getAddress();
-            AddressData work = new_customer.getAddressWork();
-
+        if(!home.getHouseId().trim().equals("null")){
             txtHomeId.setText(home.getHouseId().toString());
-            txtMoo.setText(home.getMoo().toString());
-            txtBuilding.setText(home.getVillage().toString());
-            txtFloor.setText(home.getFloor().toString());
-            txtRoom.setText(home.getRoom().toString());
-            txtSoi.setText(home.getSoi().toString());
-            txtRoad.setText(home.getRoad().toString());
-            txtPostcode.setText(home.getPostalcode().toString());
-            txtWork.setText(work.getVillage().toString());
-            txtWorkDistrict.setText(work.getDistrict().toString());
-
-            ArrayList<ValTextData> list;
-            list= delegate.service.getProvinces();
-            String indexSelect="999";
-
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getText().equals(home.getProvince().toString())) {
-                    indexSelect = list.get(i).getValue().toString();
-                    ddlProvince.setSelection(i);
-
-                    break;
-                }
-            }
-            Log.e("indexSelect",indexSelect);
-//            if(!indexSelect.equals("999")){
-//
-//                list= delegate.service.getDistrictByProvince(indexSelect);
-//                Log.e("list",list.toString());
-//
-//                Log.e("server dis",new_customer.getAddress().getDistrict());
-//                Log.e("getText",list.get(0).getText());
-//                indexSelect="999";
-//                for (int i = 0; i < list.size(); i++) {
-//                    if (list.get(i).getText().equals(new_customer.getAddress().getDistrict())) {
-//                        indexSelect = list.get(i).getValue();
-//                        ddlDistrict.setSelection(i);
-//                        setddlSubDistrict(indexSelect);
-//                        break;
-//                    }
-//                }
-//
-//                if(!indexSelect.equals("999")){
-//                    list = delegate.service.getSubDistrictByDistrict(indexSelect);
-//                    for (int i = 0; i < list.size(); i++) {
-//                        if (list.get(i).getText().equals(new_customer.getAddress().getSubdistrict())) {
-//                            ddlSubDistrict.setSelection(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
         }
+        if(!home.getMoo().trim().equals("null")){
+            txtMoo.setText(home.getMoo().toString());
+        }
+        if(!home.getVillage().trim().equals("null")){
+            txtBuilding.setText(home.getVillage().toString());
+        }
+        if(!home.getFloor().trim().equals("null")){
+            txtFloor.setText(home.getFloor().toString());
+        }
+        if(!home.getRoom().trim().equals("null")){
+            txtRoom.setText(home.getRoom().toString());
+        }
+        if(!home.getSoi().trim().equals("null")){
+            txtSoi.setText(home.getSoi().toString());
+        }
+        if(!home.getRoad().trim().equals("null")){
+            txtRoad.setText(home.getRoad().toString());
+        }
+        if(!home.getPostalcode().trim().equals("null")){
+            txtPostcode.setText(home.getPostalcode().toString());
+        }
+        if(!work.getVillage().trim().equals("null")){
+            txtWork.setText(work.getVillage().toString());
+        }
+        if(!work.getDistrict().trim().equals("null")){
+            txtWorkDistrict.setText(work.getDistrict().toString());
+        }
+
+        ArrayList<ValTextData> list;
+        list= delegate.service.getProvinces();
+        status=0;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getText2().toString().equals(home.getProvince().toString())) {
+                ddlProvince.setSelection(i);
+                break;
+            }
+
+            if (list.get(i).getText().toString().equals(home.getProvince().toString())) {
+                ddlProvince.setSelection(i);
+                break;
+            }
+        }
+
     }
 
     private synchronized void setItemSpinner(){
@@ -313,6 +379,8 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         final ArrayList<String> listfix;
         ArrayAdapter<String> dataAdapterfix;
 
+        ddlProvince.setAdapter(null);
+
         //COUNTRY
         final ArrayList<ValTextData> province = delegate.service.getProvinces();
         provinceAdapter _provinceAdapter = new provinceAdapter(this, R.layout.dropdownlist, province);
@@ -320,10 +388,9 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         ddlProvince.setSelection(0);
         ddlProvince.setAdapter(_provinceAdapter);
 
-
         ddlProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public synchronized void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                if(status==0){
+                if(status==0) {
                     status=1;
                 }
                 setddlDistrict(province.get(arg2).getValue());
@@ -331,7 +398,6 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
     }
 
     public synchronized void setddlDistrict(final String provinceID) {
@@ -345,6 +411,11 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                     ArrayList<ValTextData> list;
                     list= delegate.service.getDistrictByProvince(provinceID);
                     for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getText2().equals(new_customer.getAddress().getDistrict())) {
+                            ddlDistrict.setSelection(i);
+                            break;
+                        }
+
                         if (list.get(i).getText().equals(new_customer.getAddress().getDistrict())) {
                             ddlDistrict.setSelection(i);
                             break;
@@ -373,9 +444,13 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                             ddlSubDistrict.setSelection(i);
                             break;
                         }
+                        if (list.get(i).getText2().equals(new_customer.getAddress().getSubdistrict())) {
+                            ddlSubDistrict.setSelection(i);
+                            break;
+                        }
                     }
                 }
-                txtPostcode.setText(subDistrict.get(arg2).getText2());
+                txtPostcode.setText(subDistrict.get(arg2).getValue());
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -388,8 +463,9 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         lblHomeId.setTypeface(delegate.font_type);
         lblMoo.setTextSize(25);
         lblMoo.setTypeface(delegate.font_type);
-        lblBuilding.setTextSize(25);
+
         lblBuilding.setTypeface(delegate.font_type);
+
         lblFloor.setTextSize(25);
         lblFloor.setTypeface(delegate.font_type);
         lblRoom.setTextSize(25);
@@ -462,12 +538,34 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             if(validate()){
                 packData();
             } else {
-                Toast.makeText(this, "Please enter request fill.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
             }
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();
         } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
+        } else if(v.getId() == R.id.btnEN){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                saveToNewCustomer();
+                if (!delegate.service.getLg().equals("en")) {
+                    delegate.service.setLg("en");
+                    delegate.setLocale("en");
+                    changeLanguege();
+                }
+            }
+        } else if(v.getId() == R.id.btnTH){
+            if (popup.isShowing()) {
+                popup.dismiss();
+            } else {
+                saveToNewCustomer();
+                if (!delegate.service.getLg().equals("th")) {
+                    delegate.service.setLg("th");
+                    delegate.setLocale("th");
+                    changeLanguege();
+                }
+            }
         }
     }
 
@@ -485,6 +583,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
 
     private boolean validate() {
         boolean status = true;
+        txtPromp = getResources().getString(R.string.txtPromp);
 
         if(txtHomeId.getText().toString().length() ==0){
             lblHomeId.setText(Html.fromHtml(getString(R.string.add_customer_homeid) + "<font color=\"#FF0000\"> *</font>"));
@@ -492,6 +591,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         } else {
             lblHomeId.setText(getString(R.string.add_customer_homeid));
         }
+
         if(ddlProvince.getSelectedItem().toString().equals(txtPromp)){
             lblProvince.setText(Html.fromHtml(getString(R.string.add_customer_province) + "<font color=\"#FF0000\"> *</font>"));
             status = false;
@@ -514,7 +614,19 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         return status;
     }
 
-    private void packData(){
+    private void saveToNewCustomer(){
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtHomeId.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtMoo.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtBuilding.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtFloor.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtRoom.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtSoi.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtRoad.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtWork.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(txtWorkDistrict.getWindowToken(), 0);
+
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
 
@@ -585,6 +697,10 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         }else{
             work.setDistrict("");
         }
+    }
+
+    private void packData(){
+        saveToNewCustomer();
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");

@@ -6,9 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +38,7 @@ import com.cloud9worldwide.questionnaire.data.QuestionAnswerData;
 import com.cloud9worldwide.questionnaire.data.QuestionTypeData;
 import com.cloud9worldwide.questionnaire.data.SaveAnswerData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -66,10 +65,16 @@ public class Display01Activity extends Activity implements OnClickListener {
     private QuestionAnswerData checkAnswer = null;
 
     private void setImage(){
-        View rootView = getWindow().getDecorView().getRootView();
-        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-        rootView.setBackground(imageDraw);
+//        View rootView = getWindow().getDecorView().getRootView();
+//        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+//        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+//        rootView.setBackground(imageDraw);
+        img_background = (ImageView) findViewById(R.id.img_background);
+        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
+                String.valueOf(img_background.getWidth()),
+                String.valueOf(img_background.getHeight()),
+                img_background,
+                delegate.imgDefault);
     }
 
     public void setNavigator(){
@@ -81,7 +86,6 @@ public class Display01Activity extends Activity implements OnClickListener {
         } else {
             navigatorBar.setText("คำถามย่อย");
         }
-
     }
     private void getData(){
         if(delegate.dataSubQuestion !=null){
@@ -579,5 +583,21 @@ public class Display01Activity extends Activity implements OnClickListener {
         });
         mDatePicker.setTitle("Select date");
         mDatePicker.show();
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        String nowDate = sdf.format(c.getTime());
+
+        if(!delegate.service.globals.getDateLastLogin().equals(nowDate)){
+            delegate.service.Logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }
     }
 }

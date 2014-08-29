@@ -24,6 +24,22 @@
         android:layout_alignParentStart="true"
         android:src="@drawable/menu"
         android:layout_alignParentTop="true" />
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnEN"
+        android:scaleType="center"
+        android:src="@drawable/btn_en"
+        android:layout_toLeftOf="@+id/btnTH"
+        android:layout_alignParentTop="true" />
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnTH"
+        android:scaleType="center"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/btn_th"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:id="@+id/sizeContent"
@@ -96,7 +112,7 @@
                         />
                     <EditText
                         android:id="@+id/txtHomeID"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_small"
                         android:alpha="1"
@@ -107,10 +123,9 @@
                         android:hint="@string/add_customer_homeid" />
                     <TextView
                         android:text="@string/add_customer_moo"
-                        android:layout_width="88dp"
+                        android:layout_width="70dp"
                         android:gravity="center"
                         android:layout_height="50dp"
-                        android:paddingLeft="10dp"
                         android:id="@+id/lbl_add_customer_moo"
                         />
                     <EditText
@@ -165,15 +180,14 @@
                         android:hint="@string/add_customer_floor" />
                     <TextView
                         android:text="@string/add_customer_room"
-                        android:layout_width="88dp"
+                        android:layout_width="80dp"
                         android:gravity="center"
-                        android:paddingLeft="10dp"
                         android:layout_height="50dp"
                         android:id="@+id/lbl_add_customer_room"
                         />
                     <EditText
                         android:id="@+id/txtRoom"
-                        android:layout_width="wrap_content"
+                        android:layout_width="93dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_small"
                         android:alpha="1"
@@ -371,7 +385,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/send_btn_"
+            android:src="@drawable/save_btn_"
             android:id="@+id/btnSend"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

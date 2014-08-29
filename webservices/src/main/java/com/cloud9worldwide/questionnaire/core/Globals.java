@@ -9,6 +9,8 @@ public class Globals {
     public static final String USER_NAME = "username";
     public static final String IS_LOGIN = "isLogin";
     public static final String STAFF_ID = "staffId";
+    public static final String DATE_LAST_LOGIN = "lastDate";
+
 
     private Boolean isLogin = false;
     private String loginTokenAccess = null;
@@ -17,6 +19,15 @@ public class Globals {
     private String staffId;
     private String contactId = "-1";
     private Boolean isCustomerLocal = false;
+
+    private String date_last_login;
+
+    public void setDateLastLogin(String date_last_login){
+        this.date_last_login = date_last_login;
+    }
+    public String getDateLastLogin(){
+        return this.date_last_login;
+    }
 
     public String getContactId() {
         return contactId;
