@@ -172,7 +172,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         } else {
             if(!delegate.QM.isStaffQustion()){
                 if(delegate.service.getLg().equals("th")){
-                    thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
+                    thanks1.setText("โครงการ "+ delegate.project.getName() + " ขอขอบคุณ");
                     thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
                     btn_staff.setImageResource(R.drawable.for_btn_);
 
@@ -180,7 +180,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                     thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
                     thanks2.setText("");
                     btn_staff.setImageResource(R.drawable.btn_en_staff);
-
                 }
                 customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
                 btn_back_home.setEnabled(false);
