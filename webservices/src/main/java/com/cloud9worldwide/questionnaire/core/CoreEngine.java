@@ -832,7 +832,6 @@ public class CoreEngine {
                                 prifix_vip,
                                 nationality
                         );
-                        Log.e("_data",_data.toString());
                         this.globals.setIsCustomerLocal(false);
                         return _data;
                     }else{
@@ -2410,8 +2409,6 @@ public class CoreEngine {
         _dbHelper.close();
         return data;
     }
-
-
     public ArrayList<ValTextData> getDistrictByProvince(String province_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
         if (this.getLg().equals("en")){

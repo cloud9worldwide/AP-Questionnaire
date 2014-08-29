@@ -150,8 +150,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         project_name.setText(delegate.project.getName());
         String strAddress = "";
 
-//        if(customer_info.getEmail().toString().trim().length()!=0 && !customer_info.getEmail().equals("null")){
-
         if(customer_info.getAddress().getHouseId().trim().length()!=0 && !customer_info.getAddress().getHouseId().trim().equals("null")){
             strAddress = getResources().getString(R.string.add_customer_homeid)+ " " + customer_info.getAddress().getHouseId();
         }
@@ -411,9 +409,14 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 popup.dismiss();
             } else {
                 //method revisit
-                Toast.makeText(this, "wait a moment plz", Toast.LENGTH_SHORT).show();
+                delegate.customer_selected = customer_info;
+                delegate.StampVisitLog();
 //                delegate.QM.revisitMode();
-//                startActivityForResult(new Intent(this, CustomerFinishedAnswerActivity.class),0);
+                startActivityForResult(new Intent(this, CustomerFinishedAnswerActivity.class),0);
+//                Intent i = new Intent(ctx, CustomerFinishedAnswerActivity.class);
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
+//                finish();
             }
         } else if(v.getId() == R.id.btnMenu){
             if(popup.isShowing()){

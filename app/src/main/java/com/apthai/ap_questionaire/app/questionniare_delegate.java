@@ -78,6 +78,16 @@ public class questionniare_delegate extends Application {
         editor.commit();
     }
 
+//    contact_id",params[0]);
+//            jsonObj.put("staff_id",params[1]);
+//    jsonObj.put("project_id",params[2]);
+
+    public void StampVisitLog(){
+        Log.e("id",customer_selected.getContactId());
+        Log.e("s id",service.globals.getStaffId());
+        Log.e("p id",project.getId());
+        service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId());
+    }
 
 
     public void sendAnswer() {
