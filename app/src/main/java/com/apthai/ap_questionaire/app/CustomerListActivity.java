@@ -1,10 +1,12 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +45,10 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     ImageButton btnAdd,btnBack;
     private Context ctx;
+
+    boolean statusLoadInfo;
+
+
 //    public void onWindowFocusChanged(boolean hasFocus) {
 //        // TODO Auto-generated method stub
 //        super.onWindowFocusChanged(hasFocus);
@@ -64,6 +70,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
         setContentView(R.layout.activity_customer_list);
 
         ctx = this;
+        statusLoadInfo = true;
         setImage();
     }
 
@@ -329,15 +336,55 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
-                int index = Integer.parseInt(v.getTag().toString());
-                ContactSearchData obj = customer_list.get(index);
 
-                delegate.service.globals.setContactId(obj.getContactId());
-                delegate.service.globals.setIsCustomerLocal(false);
+                if(statusLoadInfo){
+                    statusLoadInfo = false;
 
-                Intent i = new Intent(this, CustomerInfomationActivity.class);
-                Log.e(TAG , "customer index : "+obj.getContactId());
-                startActivityForResult(i, 0);
+                    int index = Integer.parseInt(v.getTag().toString());
+                    ContactSearchData obj = customer_list.get(index);
+
+                    delegate.service.globals.setContactId(obj.getContactId());
+                    delegate.service.globals.setIsCustomerLocal(false);
+                    Log.e(TAG , "customer index : "+obj.getContactId());
+
+                    final ProgressDialog progress = new ProgressDialog(this);
+                    progress.setTitle("Please wait");
+                    progress.setMessage("Searching....");
+                    progress.show();
+
+                    final Handler uiHandler = new Handler();
+                    final Runnable onUi = new Runnable() {
+                        @Override
+                        public void run() {
+                            // this will run on the main UI thread
+                            progress.dismiss();
+                            statusLoadInfo = true;
+                            Intent i = new Intent(ctx, CustomerInfomationActivity.class);
+                            startActivityForResult(i, 0);
+
+                        }
+                    };
+                    Runnable background = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+                                Thread.sleep(2000);
+                            } catch (Exception e) {
+
+                            }
+                            uiHandler.post(onUi);
+                        }
+                    };
+                    new Thread(background).start();
+                }
+
+
+
+
+
+
+
             }
         }
     }

@@ -118,6 +118,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 setObject();
                 getCustomerInfo();
                 loadready = true;
+                changeLanguege();
             }
         };
         Runnable background = new Runnable() {

@@ -231,7 +231,8 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
     public void onClick(View v) {
 
-        if(v.getId() == R.id.btnSend){
+        if(v.getId() == R.id.btnSend) {
+            btn_send.setEnabled(false);
             hideKeyboard();
             if(popup.isShowing()){
                 popup.dismiss();

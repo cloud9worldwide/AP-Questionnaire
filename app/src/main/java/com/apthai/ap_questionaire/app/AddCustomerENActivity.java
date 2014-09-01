@@ -119,6 +119,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         project_name.setTypeface(delegate.font_type);
         project_name.setGravity(Gravity.CENTER);
 
+        question_title = (TextView) findViewById(R.id.question_title);
+        question_title.setTextSize(25);
+        question_title.setTypeface(delegate.font_type);
+        question_title.setGravity(Gravity.CENTER);
+
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_header.setTypeface(delegate.font_type);
         txt_header.setTextSize(35);
@@ -468,70 +473,70 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         AddressData home = new_customer.getAddress();
         AddressData work = new_customer.getAddressWork();
 
-        if(txtHomeId.getText().toString().length()>0){
+        if(txtHomeId.getText().toString().length()>0 && !txtHomeId.getText().equals("null")){
             home.setHouseId(txtHomeId.getText().toString());
         }else{
             home.setHouseId("");
         }
-        if(txtMoo.getText().toString().length()>0){
+        if(txtMoo.getText().toString().length()>0 && !txtMoo.getText().equals("null")){
             home.setMoo(txtMoo.getText().toString());
         }else{
             home.setMoo("");
         }
-        if(txtBuilding.getText().toString().length()>0){
+        if(txtBuilding.getText().toString().length()>0 && !txtBuilding.getText().equals("null")){
             home.setVillage(txtBuilding.getText().toString());
         }else{
             home.setVillage("");
         }
-        if(txtFloor.getText().toString().length()>0){
+        if(txtFloor.getText().toString().length()>0 && !txtFloor.getText().equals("null")){
             home.setFloor(txtFloor.getText().toString());
         }else{
             home.setFloor("");
         }
-        if(txtRoom.getText().toString().length()>0){
+        if(txtRoom.getText().toString().length()>0 && !txtRoom.getText().equals("null")){
             home.setRoom(txtRoom.getText().toString());
         }else{
             home.setRoom("");
         }
-        if(txtSoi.getText().toString().length()>0){
+        if(txtSoi.getText().toString().length()>0 && !txtSoi.getText().equals("null")){
             home.setSoi(txtSoi.getText().toString());
         }else{
             home.setSoi("");
         }
-        if(txtRoad.getText().toString().length()>0){
+        if(txtRoad.getText().toString().length()>0 && !txtRoad.getText().equals("null")){
             home.setRoad(txtRoad.getText().toString());
         }else{
             home.setRoad("");
         }
-        if(txtProvince.getText().toString().length()>0){
+        if(txtProvince.getText().toString().length()>0 && !txtProvince.getText().equals("null")){
             home.setProvince(txtProvince.getText().toString());
         }else{
             home.setProvince("");
         }
 
-        if(txtDistrict.getText().toString().length()>0){
+        if(txtDistrict.getText().toString().length()>0 && !txtDistrict.getText().equals("null")){
             home.setDistrict(txtDistrict.getText().toString());
         }else{
             home.setDistrict("");
         }
-        if(txtSubDistrict.getText().toString().length()>0){
+        if(txtSubDistrict.getText().toString().length()>0 && !txtSubDistrict.getText().equals("null")){
             home.setSubdistrict(txtSubDistrict.getText().toString());
         }else{
             home.setSubdistrict("");
         }
-        if(txtPostcode.getText().toString().length()>0){
+        if(txtPostcode.getText().toString().length()>0 && !txtPostcode.getText().equals("null")){
             home.setPostalcode(txtPostcode.getText().toString());
         }else{
             home.setPostalcode("");
         }
 
 
-        if(txtWork.getText().toString().length()>0){
+        if(txtWork.getText().toString().length()>0 && !txtWork.getText().equals("null")){
             work.setVillage(txtWork.getText().toString());
         }else{
             work.setVillage("");
         }
-        if(txtWorkDistrict.getText().toString().length()>0){
+        if(txtWorkDistrict.getText().toString().length()>0 && !txtWorkDistrict.getText().equals("null")){
             work.setDistrict(txtWorkDistrict.getText().toString());
         }else{
             work.setDistrict("");

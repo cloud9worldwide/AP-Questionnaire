@@ -64,6 +64,7 @@ public class Display08Activity extends Activity implements View.OnClickListener 
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
+    boolean isBackgroud;
 
     private void setImage(){
         img_background = (ImageView) findViewById(R.id.img_background);
@@ -602,4 +603,25 @@ public class Display08Activity extends Activity implements View.OnClickListener 
             finish();
         }
     }
+
+
+    //edit today
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        Log.e("eiei","onStop");
+//        isBackgroud = true;
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//
+//        if(isBackgroud){
+//            onRestart();
+//        }
+//
+//        Log.e("eiei","onDestroy");
+//    }
 }

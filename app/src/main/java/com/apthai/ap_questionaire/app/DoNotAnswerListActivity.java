@@ -89,9 +89,39 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_not_answer_list);
-        setImage();
-        setTableLayout();
+        delegate = (questionniare_delegate)getApplicationContext();
+//        setImage();
+//        setTableLayout();
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Please wait");
+        progress.setMessage("Loading....");
+        progress.setCancelable(false);
+        progress.show();
 
+        final Handler uiHandler = new Handler();
+        final  Runnable onUi = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                progress.dismiss();
+                setImage();
+                setTableLayout();
+
+            }
+        };
+        Runnable background = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(delegate.timesleep);
+                }catch (Exception e){
+
+                }
+                uiHandler.post( onUi );
+            }
+        };
+        new Thread( background ).start();
     }
     private void setTableLayout(){
 

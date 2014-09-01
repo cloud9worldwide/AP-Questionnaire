@@ -403,7 +403,13 @@ public class questionniare_delegate extends Application {
         skip_save_subans = true;
         //QuestionTypeData question = this.QM.get_question();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+
+
+
         /*
         if(!question.isParent_question()) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
