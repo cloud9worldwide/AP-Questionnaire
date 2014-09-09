@@ -30,7 +30,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
@@ -1120,7 +1119,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
                 }
             } else {
-                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
+                delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
             }
 
         } else if (v.getId() == R.id.btnAddMobiles){

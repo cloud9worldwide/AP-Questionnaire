@@ -1,7 +1,9 @@
 package com.apthai.ap_questionaire.app;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -621,5 +623,28 @@ public class questionniare_delegate extends Application {
         }
 
 
+    }
+
+    public void showAlert(Context ctx, String message, String header){
+        AlertDialog alertDialog1 = new AlertDialog.Builder(
+                ctx).create();
+        alertDialog1.setTitle(header);
+        alertDialog1.setMessage(message);
+
+        // Setting Icon to Dialog
+//            alertDialog1.setIcon(R.drawable.icon_alert);
+
+        // Setting OK Button
+        alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog
+                // closed
+//                Toast.makeText(getApplicationContext(),
+//                        "You clicked on OK", Toast.LENGTH_SHORT).show();
+            }
+        });
+        // Showing Alert Message
+        alertDialog1.show();
     }
 }

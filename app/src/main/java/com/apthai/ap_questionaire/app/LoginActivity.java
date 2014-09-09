@@ -212,14 +212,12 @@ setObject();
 
     public void onClick(View v) {
 
-
         if(v.getId() == R.id.btnLogin && txtUsername.getText().toString().equals("apqtn") && txtPassword.getText().toString().equals("ntqpa")){
             if(txtIP.isShown()) {
                 hideConfig();
             } else {
                 showConfig();
             }
-
         } else if (v.getId() == R.id.btnLogin && txtUsername.getText().length() > 0 && txtPassword.getText().length() > 0) {
             hideConfig();
 
@@ -233,7 +231,12 @@ setObject();
                 @Override
                 public void run() {
                     // this will run on the main UI thread
-                    txtError.setText(delegate.service.getLoginMessage());
+                    if(delegate.service.getLoginMessage().equals("null")){
+                        txtError.setText("Please check internet connection.");
+                    } else {
+                        txtError.setText(delegate.service.getLoginMessage());
+                    }
+
                 }
             };
 

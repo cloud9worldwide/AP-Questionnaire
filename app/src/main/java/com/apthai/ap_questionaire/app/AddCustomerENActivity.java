@@ -616,7 +616,6 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
                 }
             }
         }
-
     }
 
     public void onBackPressed() {

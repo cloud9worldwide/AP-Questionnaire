@@ -224,6 +224,10 @@ public class CoreEngine {
                 this.loginMessage = "Server error";
                 this.loginStatus = false;
                 return false;
+            } else if(r.substring(0, 5).equals("Value ")){
+                this.loginMessage = "Please check internet connection";
+                this.loginStatus = false;
+                return false;
             }
 
 

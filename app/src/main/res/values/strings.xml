@@ -134,4 +134,6 @@
     <string name="flag_name_TH">Thai</string>
     <string name="flag_name_EN">English</string>
 
+    <string name="alert_warning">Warning</string>
+
 </resources>
