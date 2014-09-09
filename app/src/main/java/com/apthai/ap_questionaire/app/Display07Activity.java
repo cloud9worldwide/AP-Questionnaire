@@ -455,7 +455,7 @@ public class Display07Activity extends Activity implements View.OnClickListener 
                     delegate.nextQuestionPage(delegate.nextPage(this));
                 }
             } else {
-                Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
+                delegate.showAlert(this, error_msg, getString(R.string.alert_warning));
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){

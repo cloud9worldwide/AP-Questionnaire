@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.ContactData;
 
@@ -62,15 +61,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         delegate = (questionniare_delegate)getApplicationContext();
         customerIndex = delegate.service.globals.getContactId();
         ctx =this;
-
-//        customer_info = delegate.service.getContactInfo("eiei");
-
-//        customer_info = delegate.service.getContactInfo(customerIndex);
-//        if(customer_info !=null) {
-//            customer_info.setContactId(delegate.service.globals.getContactId());
-//        }
-//        setObject();
-//        setImage();
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -518,7 +508,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
 
                 } else {
-                    Toast.makeText(this, R.string.is_offine, Toast.LENGTH_SHORT).show();
+                    delegate.showAlert(this, getString(R.string.is_offine), getString(R.string.alert_warning));
                 }
             }
         } else if(v.getId() == R.id.root_view){

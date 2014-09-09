@@ -1121,7 +1121,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             } else {
                 delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
             }
-
         } else if (v.getId() == R.id.btnAddMobiles){
 //            showPopupAddMobile(this,"mobile",99);
             showPopupAddMobile2(this,"mobile",99);

@@ -29,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.AnswerData;
 import com.cloud9worldwide.questionnaire.data.QuestionAnswerData;
@@ -461,7 +460,7 @@ public class Display08Activity extends Activity implements View.OnClickListener 
                     delegate.nextQuestionPage(delegate.nextPage(this));
                 }
             } else {
-                Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
+                delegate.showAlert(this, error_msg, getString(R.string.alert_warning));
             }
             btnNext.setEnabled(true);
         } else if (v.getId() == R.id.btnBack){
@@ -517,13 +516,12 @@ public class Display08Activity extends Activity implements View.OnClickListener 
     }
 
     public void nextPage(){
-        Log.e("answer", answer.toString());
         String error_msg = delegate.validate(answer,data.getAnswers());
         if(error_msg.equals("NO")){
             delegate.QM.save_answer(answer);
             delegate.nextQuestionPage(delegate.nextPage(this));
         } else {
-            Toast.makeText(this, error_msg, Toast.LENGTH_SHORT).show();
+            delegate.showAlert(this, error_msg, getString(R.string.alert_warning));
         }
     }
 
@@ -532,7 +530,7 @@ public class Display08Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this, R.string.cannot_back, Toast.LENGTH_SHORT).show();
+            delegate.showAlert(this, getString(R.string.cannot_back), getString(R.string.alert_warning));
         }
     }
 
@@ -605,23 +603,4 @@ public class Display08Activity extends Activity implements View.OnClickListener 
     }
 
 
-    //edit today
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        Log.e("eiei","onStop");
-//        isBackgroud = true;
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//
-//        if(isBackgroud){
-//            onRestart();
-//        }
-//
-//        Log.e("eiei","onDestroy");
-//    }
 }

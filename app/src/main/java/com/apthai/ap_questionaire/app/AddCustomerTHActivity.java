@@ -24,7 +24,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.AddressData;
 import com.cloud9worldwide.questionnaire.data.ContactData;
@@ -538,7 +537,8 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             if(validate()){
                 packData();
             } else {
-                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
+                delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
+//                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
             }
         } else if(v.getId() == R.id.btnBack){
             onBackPressed();

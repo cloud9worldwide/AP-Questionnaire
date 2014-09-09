@@ -351,13 +351,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         }
     }
 
-    public void onBackPressed() {
-//        Toast.makeText(this, getResources().getString(R.string.cannot_back), Toast.LENGTH_SHORT).show();
-
-//        this.setResult(3);
-//        finish();
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode ==2 || resultCode == 0|| resultCode == 1){
             this.setResult(resultCode);

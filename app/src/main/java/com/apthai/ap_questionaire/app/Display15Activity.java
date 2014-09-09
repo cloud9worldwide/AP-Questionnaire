@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloud9worldwide.questionnaire.data.AnswerData;
 import com.cloud9worldwide.questionnaire.data.QuestionAnswerData;
@@ -329,7 +328,7 @@ public class Display15Activity extends Activity implements View.OnClickListener 
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
         }else{
-            Toast.makeText(this,R.string.cannot_back, Toast.LENGTH_SHORT).show();
+            delegate.showAlert(this, getString(R.string.cannot_back), getString(R.string.alert_warning));
         }
     }
 
