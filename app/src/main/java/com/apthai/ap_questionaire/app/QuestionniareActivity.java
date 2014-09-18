@@ -42,7 +42,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
     RelativeLayout root_view;
     static PopupWindow popup;
     ProjectData project_data;
-    TextView lbl_title;
+    TextView lbl_title, lblFullName;
     Context ctx;
 
     @Override
@@ -89,6 +89,11 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         lbl_title = (TextView) findViewById(R.id.lbl_title);
         lbl_title.setTypeface(delegate.font_type);
         lbl_title.setTextSize(35);
+
+        lblFullName= (TextView) findViewById(R.id.lblFullName);
+        lblFullName.setTypeface(delegate.font_type);
+        lblFullName.setTextSize(20);
+        lblFullName.setText("User : " + delegate.service.getfullName());
 
         btnEN = (ImageButton) findViewById(R.id.btnEN);
         btnTH = (ImageButton) findViewById(R.id.btnTH);

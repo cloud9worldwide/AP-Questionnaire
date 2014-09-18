@@ -11,6 +11,7 @@
     <dimen name="txt_size_S">20dp</dimen>
 
     <dimen name="marginTop_content">135dp</dimen>
+    <dimen name="marginTop_fullname">675dp</dimen>
 
 
     </resources>

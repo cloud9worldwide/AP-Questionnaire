@@ -71,8 +71,12 @@ setObject();
 
     }
 
-//    protected void onResume() {
-//        super.onResume();
+    protected void onResume() {
+        super.onResume();
+        txtPassword.setText("");
+        txtUsername.setText("");
+        txtPassword.setSelection(0);
+
 ////        txtUsername.setHint(R.string.username);
 ////        txtPassword.setHint(R.string.password);
 ////        if(delegate.service.getLg().equals("en")){
@@ -80,7 +84,7 @@ setObject();
 ////        } else {
 ////            btnLogin.setImageResource(R.drawable.btn_th_login);
 ////        }
-//    }
+    }
 
     private void setObject(){
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
@@ -235,6 +239,7 @@ setObject();
                         txtError.setText("Please check internet connection.");
                     } else {
                         txtError.setText(delegate.service.getLoginMessage());
+
                     }
 
                 }
@@ -244,6 +249,7 @@ setObject();
                 @Override
                 public void run() {
                     if (delegate.service.Login(txtUsername.getText().toString() , txtPassword.getText().toString()) == true) {
+
                         if (delegate.service.checkUpdateQuestionnaire()) {
                             //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
                             delegate.service.updateQuestionnaire(ringProgressDialog);

@@ -87,6 +87,7 @@ public class CoreEngine {
     private Boolean loginStatus;
     private ArrayList<ProjectData> projects;
     private ArrayList<QuestionnaireData> questionnaireUpdate;
+    private String fullName;
 
     //Logout variables
     private String logoutMessage;
@@ -139,6 +140,7 @@ public class CoreEngine {
             this.staffId = settings.getString(Globals.STAFF_ID,null);
             globals.setStaffId(this.staffId);
             globals.setDateLastLogin(settings.getString(Globals.DATE_LAST_LOGIN,null));
+            this.fullName = settings.getString("fullName",null);
         } else {
             globals.setIsLogin(false);
             globals.setLoginTokenAccess(null);
@@ -146,6 +148,7 @@ public class CoreEngine {
             this.loginStatus = false;
             this.staffId = null;
             globals.setStaffId(this.staffId);
+            this.fullName = null;
         }
     }
 
@@ -245,6 +248,7 @@ public class CoreEngine {
                     this.loginMessage = respObj.getJSONObject("result").getString("message");
                     this.tokenAccess = respObj.getJSONObject("result").getString("tokenaccess");
                     this.staffId = respObj.getJSONObject("result").getString("staffid");
+                    this.fullName = respObj.getJSONObject("result").getString("staffName");
                     this.loginStatus = true;
                     Log.d(debugTag, this.tokenAccess);
 
@@ -264,6 +268,7 @@ public class CoreEngine {
                     editor.putString(Globals.USER_NAME,params[0]);
                     editor.putString(Globals.STAFF_ID,this.staffId);
                     editor.putString(Globals.DATE_LAST_LOGIN, globals.getDateLastLogin());
+                    editor.putString("fullName",fullName);
 
                     // Commit the edits!
                     editor.commit();
@@ -521,6 +526,7 @@ public class CoreEngine {
     public String getLoginMessage() {
         return loginMessage;
     }
+    public String getfullName(){ return fullName; }
     public ArrayList<ProjectData> getProjects() {
         projects = new ArrayList<ProjectData>();
 

@@ -38,7 +38,7 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     ImageButton btnMenu, btnEN, btnTH;
     RelativeLayout page;
     TextView project_name;
-    TextView lbl_title;
+    TextView lbl_title, lblFullName;
 
     Context mCtx;
 
@@ -124,6 +124,11 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         lbl_title = (TextView) findViewById(R.id.lbl_title);
         lbl_title.setTypeface(delegate.font_type);
         lbl_title.setTextSize(25);
+
+        lblFullName= (TextView) findViewById(R.id.lblFullName);
+        lblFullName.setTypeface(delegate.font_type);
+        lblFullName.setTextSize(20);
+        lblFullName.setText("User : " + delegate.service.getfullName());
 
         btnEN = (ImageButton) findViewById(R.id.btnEN);
         btnTH = (ImageButton) findViewById(R.id.btnTH);
