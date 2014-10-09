@@ -360,6 +360,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
                             progress.dismiss();
                             statusLoadInfo = true;
                             Intent i = new Intent(ctx, CustomerInfomationActivity.class);
+//                            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             startActivityForResult(i, 0);
 
                         }

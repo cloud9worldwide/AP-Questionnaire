@@ -64,11 +64,12 @@
                     android:id="@+id/img_icon"
                     android:layout_marginBottom="30dp"
                     android:layout_gravity="center_horizontal"
+                    android:visibility="invisible"
                     android:src="@drawable/icon_correct"/>
                 <TextView
                     android:layout_below="@+id/img_icon"
                     android:textColor="@color/GREEN"
-                    android:text= "@string/answer_finish"
+
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="30dp"
@@ -79,6 +80,7 @@
                     android:layout_height="1dp"
                     android:id="@+id/lbl_line1"
                     android:layout_margin="30dp"
+                    android:visibility="invisible"
                     android:background="@color/line"
                     android:layout_alignBottom="@+id/question_title"
                     android:layout_gravity="center_horizontal" />
@@ -93,7 +95,7 @@
                     android:id="@+id/thanks1"
                     />
                 <TextView
-                    android:text="@string/customer_full_name"
+
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="wrap_content"
@@ -105,7 +107,7 @@
                 <TextView
                     android:textSize="16dp"
                     android:layout_margin="5dp"
-                    android:text="@string/thanks2"
+
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="20dp"
@@ -118,6 +120,7 @@
                     android:layout_height="1dp"
                     android:id="@+id/lbl_line2"
                     android:background="@color/line"
+                    android:visibility="invisible"
                     android:layout_alignBottom="@+id/question_title"
                     android:layout_gravity="center_horizontal" />
 

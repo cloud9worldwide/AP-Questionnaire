@@ -75,6 +75,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setImage();
         ctx = this;
+        delegate.service.globals.setContactId("-1");
     }
 
     private void setObject(){
@@ -253,9 +254,16 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                             progress.dismiss();
                             btn_send.setEnabled(true);
                             if (delegate.getCustomer_list().size() > 0) {
-                                startActivityForResult(new Intent(ctx, CustomerListActivity.class), 0);
+                                Intent i = new Intent(ctx, CustomerListActivity.class);
+//                                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivityForResult(i,0);
+
+//                                startActivityForResult(new Intent(ctx, CustomerListActivity.class), 0);
                             } else {
-                                startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
+                                Intent i = new Intent(ctx, NotFoundCustomerActivity.class);
+//                                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivityForResult(i,0);
+//                                startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
                             }
                         }
                     };

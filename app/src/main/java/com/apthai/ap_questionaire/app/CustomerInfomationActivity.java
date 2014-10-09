@@ -58,7 +58,9 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     }
 
     private synchronized void loadData(){
+
         delegate = (questionniare_delegate)getApplicationContext();
+        setImage();
         customerIndex = delegate.service.globals.getContactId();
         ctx =this;
 
@@ -76,7 +78,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 // this will run on the main UI thread
                 progress.dismiss();
                 setObject();
-                setImage();
+//                setImage();
                 loadready = true;
             }
         };
@@ -102,6 +104,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             @Override
             public void run() {
                 // This is the delay
+                customer_info =null;
                 customer_info = delegate.service.getContactInfo(customerIndex);
                 if(customer_info !=null){
                     customer_info.setContactId(delegate.service.globals.getContactId());
@@ -389,8 +392,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
                 delegate.customer_selected = customer_info;
 
-
-
                 final ProgressDialog progress10 = new ProgressDialog(this);
                 progress10.setTitle("Please wait");
                 progress10.setMessage("Loading....");
@@ -549,6 +550,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             delegate.service.Logout();
             Intent i = new Intent(this, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(i);
             finish();
         } else {

@@ -52,7 +52,7 @@ public class Display01Activity extends Activity implements OnClickListener {
     TextView project_name;
     ImageButton btn_back,btnNext, btnEN, btnTH;
     ArrayList<SaveAnswerData> answer;
-    ImageView img_background;
+    ImageView img_background, img_open;
 
     TextView navigatorBar;
     TextView txt_process;
@@ -68,12 +68,18 @@ public class Display01Activity extends Activity implements OnClickListener {
 //        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
 //        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
 //        rootView.setBackground(imageDraw);
+
         img_background = (ImageView) findViewById(R.id.img_background);
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
                 img_background,
                 delegate.imgDefault);
+        project_name = (TextView) findViewById(R.id.project_name);
+        project_name.setText(delegate.project.getName());
+        project_name.setTextSize(30);
+        project_name.setTypeface(delegate.font_type);
+        project_name.setGravity(Gravity.CENTER);
     }
 
     public void setNavigator(){
@@ -101,23 +107,23 @@ public class Display01Activity extends Activity implements OnClickListener {
 
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
+        setImage();
 
         getData();
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
         progress.setMessage("Loading....");
         progress.setCancelable(false);
-        progress.show();
+//        progress.show();
 
         final Handler uiHandler = new Handler();
         final  Runnable onUi = new Runnable() {
             @Override
             public void run() {
                 // this will run on the main UI thread
-                progress.dismiss();
+//                progress.dismiss();
                 setObject();
                 setImage();
-
             }
         };
         Runnable background = new Runnable() {
@@ -168,12 +174,6 @@ public class Display01Activity extends Activity implements OnClickListener {
         btn_back.setOnClickListener(this);
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
-
-        project_name = (TextView) findViewById(R.id.project_name);
-        project_name.setText(delegate.project.getName());
-        project_name.setTextSize(30);
-        project_name.setTypeface(delegate.font_type);
-        project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
         changeLanguege();

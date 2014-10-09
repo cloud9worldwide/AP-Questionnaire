@@ -57,7 +57,7 @@ public class questionniare_delegate extends Application {
     public QuestionTypeData dataSubQuestion;
     public boolean skip_save_subans = false;
 
-    public long timesleep = 100;
+    public long timesleep = 50;
 
     TCImageLoader imageLoader;
     int imgDefault, imgDefaultQuestion, imgDefaultIcon, imgDefaultIconSelect;
@@ -405,7 +405,7 @@ public class questionniare_delegate extends Application {
         skip_save_subans = true;
         //QuestionTypeData question = this.QM.get_question();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
@@ -475,11 +475,13 @@ public class questionniare_delegate extends Application {
 
             dataSubQuestion = null;
             Intent i = getCurentQuestionIntent();
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             nextQuestionPage(i);
             //startActivity(i);
         } else {
             QM.move_back();
             Intent i = getCurentQuestionIntent();
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             nextQuestionPage(i);
             //startActivity(i);
         }
@@ -647,4 +649,5 @@ public class questionniare_delegate extends Application {
         // Showing Alert Message
         alertDialog1.show();
     }
+
 }

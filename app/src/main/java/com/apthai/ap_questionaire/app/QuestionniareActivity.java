@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -51,8 +53,14 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_questionniare);
         ctx = this;
 
-            setImage();
-
+        setImage();
+//        runFadeInAnimation();
+    }
+    private void runFadeInAnimation() {
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.animate);
+        a.reset();
+        root_view.clearAnimation();
+        root_view.startAnimation(a);
     }
 
     private void setImage(){
@@ -285,8 +293,10 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
                 delegate.questionnaire_selected = questionList.get(Integer.parseInt(v.getTag().toString()));
                 delegate.setQuestionnaire_selected_id(questionList.get(Integer.parseInt(v.getTag().toString())).getId());
                 delegate.setQuestionnaire_time(questionList.get(Integer.parseInt(v.getTag().toString())).getTimeStamp());
-                i.putExtra("projectIndex", projectIndex);
-                i.putExtra("questionniareIndex", v.getTag().toString());
+
+
+//                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
                 startActivityForResult(i, 0);
             }
 

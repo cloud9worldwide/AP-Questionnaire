@@ -269,6 +269,7 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             } else {
                 Intent i = new Intent(this, QuestionniareActivity.class);
                 delegate.project = list_projectdata.get(Integer.parseInt(v.getTag().toString()));
+
                 i.putExtra("projectIndex", v.getTag().toString());
                 startActivityForResult(i, 0);
             }

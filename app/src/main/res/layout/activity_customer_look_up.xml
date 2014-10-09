@@ -9,10 +9,9 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:tileMode="disabled"
-        android:scaleType="centerCrop"
         android:id="@+id/img_background"
-        android:layout_below="@+id/project_name" />
+        android:scaleType="fitXY"
+         />
     <TextView
         android:layout_width="match_parent"
         android:gravity="center"

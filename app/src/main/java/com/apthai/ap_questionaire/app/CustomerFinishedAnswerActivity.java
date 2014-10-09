@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,8 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     final String TAG = this.getClass().getSimpleName();
     ImageButton btn_staff,btn_menu, btn_back_home, btnEN, btnTH ;
     TextView customerName,thanks1, thanks2, project_name, lblgreen;
+    ImageView img_icon;
+    TextView lbl_line1,lbl_line2;
     questionniare_delegate delegate;
     static PopupWindow popup;
 
@@ -42,7 +45,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
         Drawable imageDraw =  new BitmapDrawable(imageBitmap);
         rootView.setBackground(imageDraw);
-        loadready = true;
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 progress.dismiss();
                 setImage();
                 changeLanguege();
-
+                loadready = true;
             }
         };
         Runnable background = new Runnable() {
@@ -93,6 +96,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         lblgreen = (TextView) findViewById(R.id.question);
         lblgreen.setTypeface(delegate.font_type);
         lblgreen.setTextSize(30);
+
+        img_icon = (ImageView) findViewById(R.id.img_icon);
+        img_icon.setVisibility(View.VISIBLE);
+        lbl_line1 = (TextView) findViewById(R.id.lbl_line1);
+        lbl_line2 = (TextView) findViewById(R.id.lbl_line2);
+        lbl_line1.setVisibility(View.VISIBLE);
+        lbl_line2.setVisibility(View.VISIBLE);
 
         customerName = (TextView) findViewById(R.id.txtcustomer_name);
         customerName.setTypeface(delegate.font_type);
@@ -182,6 +192,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     }
 
     private void changeLanguege(){
+        lblgreen.setText(R.string.answer_finish);
 
         if(delegate.QM ==null){
             if(delegate.service.getLg().equals("th")){

@@ -64,6 +64,11 @@ public class Display17Activity extends Activity implements View.OnClickListener 
                 String.valueOf(img_background.getHeight()),
                 img_background,
                 delegate.imgDefault);
+        project_name = (TextView) findViewById(R.id.project_name);
+        project_name.setText(delegate.project.getName());
+        project_name.setTextSize(30);
+        project_name.setTypeface(delegate.font_type);
+        project_name.setGravity(Gravity.CENTER);
     }
     public void setNavigator(){
         navigatorBar = (TextView) findViewById(R.id.navigatorBar);
@@ -79,6 +84,7 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
+        setImage();
 
         if(delegate.dataSubQuestion !=null){
             data = delegate.dataSubQuestion;
@@ -90,17 +96,17 @@ public class Display17Activity extends Activity implements View.OnClickListener 
         progress.setTitle("Please wait");
         progress.setMessage("Loading....");
         progress.setCancelable(false);
-        progress.show();
+//        progress.show();
 
         final Handler uiHandler = new Handler();
         final  Runnable onUi = new Runnable() {
             @Override
             public void run() {
                 // this will run on the main UI thread
-                progress.dismiss();
+//                progress.dismiss();
                 setObject();
                 setTableLayout();
-                setImage();
+
                 if(delegate.dataSubQuestion ==null){
                     setNavigator();
                 } else {
@@ -156,12 +162,6 @@ public class Display17Activity extends Activity implements View.OnClickListener 
 
         btnBack = (ImageButton)findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
-
-        project_name = (TextView) findViewById(R.id.project_name);
-        project_name.setText(delegate.project.getName());
-        project_name.setTextSize(30);
-        project_name.setTypeface(delegate.font_type);
-        project_name.setGravity(Gravity.CENTER);
 
         total = data.getAnswers().size();
 
