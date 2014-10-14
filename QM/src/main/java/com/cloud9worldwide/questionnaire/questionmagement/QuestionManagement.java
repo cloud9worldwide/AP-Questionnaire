@@ -120,6 +120,7 @@ public class QuestionManagement {
         }
     }
     public QuestionTypeData get_question(){
+        //if(CurQuestionIndex >= this.count_questions() || CurQuestionIndex < 0)
         if(CurQuestionIndex >= this.count_questions() || CurQuestionIndex < 0)
             return null;
         QuestionTypeData _data = this.mQuestionListData.get(CurQuestionIndex);
@@ -171,11 +172,29 @@ public class QuestionManagement {
                         _ans_list.add(save_ans);
                         tmp_sub_ans.setAnswer(_ans_list);
                         tmp_sub_ans.setDefault(true);
-                    }else {
+                    } else {
                         tmp_sub_ans.setAnswer(_save_ans_ist);
                         tmp_sub_ans.setDefault(false);
+
+                        //save parent here
+
+                        ArrayList<SaveAnswerData> _p_ans = new ArrayList<SaveAnswerData>();
+                        SaveAnswerData save_ans = new SaveAnswerData(String.valueOf(question_id),"");
+                        _p_ans.add(save_ans);
+
+                        for (int j = 0; j < AnsListData.size(); j++) {
+                            if (curParentQuestion.getQuestion().getId() == Integer.parseInt(AnsListData.get(j).getQuestionId())) {
+                                QuestionAnswerData old_ans = AnsListData.get(j);
+                                old_ans.getAnswer().add(save_ans);
+                                //QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(curParentQuestion.getQuestion().getId()), _p_ans);
+                                //question_ans.setDefault(false);
+                                this.AnsListData.set(j, old_ans);
+                            }
+                        }
                     }
+                    Log.e("ans","i : "+ i + ", tmp_sub_ans : " + tmp_sub_ans.toString());
                     this.SubAnsListData.set(i,tmp_sub_ans);
+
                     return true;
                 }
             }
@@ -370,13 +389,36 @@ public class QuestionManagement {
             return  null;
     }
     public synchronized QuestionAnswerData get_answer(){
-        QuestionAnswerData _ans = this.AnsListData.get(CurQuestionIndex);
-         if(this.get_question().getQuestion().getId() != Integer.parseInt(_ans.getQuestionId()))
-             return null;
-         if(_ans.isDefault())
-            return null;
-        else
+        boolean found = false;
+        int inx = -1;
+        for (int i = 0; i < this.AnsListData.size(); i++) {
+            QuestionAnswerData _ans = this.AnsListData.get(i);
+            if(this.get_question().getQuestion().getId() == Integer.parseInt(_ans.getQuestionId())){
+                found = true;
+                inx = i;
+            }
+        }
+        if(found){
+            QuestionAnswerData _ans = this.AnsListData.get(inx);
+            if(_ans.isDefault()){
+                return null;
+            }
             return _ans;
+        }else{
+            return null;
+        }
+        //QuestionAnswerData _ans = this.AnsListData.get(CurQuestionIndex);
+        //Log.e("_ans",_ans.toString());
+        /*
+         if(this.get_question().getQuestion().getId() != Integer.parseInt(_ans.getQuestionId())){
+             return null;
+         }
+
+         if(_ans.isDefault()){
+             return null;
+         }
+            */
+            //return this.AnsListData.get(CurQuestionIndex);//return _ans;
     }
     public synchronized QuestionAnswerData get_sub_answer(int question_id){
         for (int i = 0; i < this.SubAnsListData.size(); i++) {

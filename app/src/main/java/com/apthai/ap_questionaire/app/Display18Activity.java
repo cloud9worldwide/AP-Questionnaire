@@ -133,7 +133,7 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                     if(data.getParent_question_id() > 0){
                         // is sub question
                         checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
-                    }else{
+                    } else {
                         // is parent question
                         checkAnswer = delegate.QM.get_answer();
                     }

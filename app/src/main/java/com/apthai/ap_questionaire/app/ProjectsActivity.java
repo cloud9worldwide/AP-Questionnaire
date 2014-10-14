@@ -175,7 +175,6 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
         for(int i =0, c = 0, r = 0; i < total; i++, c++){
             ProjectData obj = list_projectdata.get(i);
-//            int imageWidth = delegate.dpToPx(100), imageHeight = delegate.dpToPx(50);
             int imageWidth = 0, imageHeight = 0;
             int imageWidth2 = delegate.dpToPx(200), imageHeight2 = delegate.dpToPx(100);
 

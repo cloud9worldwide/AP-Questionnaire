@@ -55,7 +55,7 @@ public class CoreEngine {
     private static final String debugTag = "CoreEngine";
     //private String webserviceUrl = "http://www.cloud9worldwide.com/webservices/ws_questionnaire.php";
 //    private String webserviceUrl = "http://www.siwapon.me/apquestionnaireth/service.aspx";
-    private String webserviceUrl = "http://www.siwapon.me/apquestionnaire/service.aspx";
+    private String webserviceUrl = "http://103.13.31.148:8010/service.aspx";
 
     private static final String PARAM_USERNAME = "username";
     private static final String PARAM_PASSWORD = "password";

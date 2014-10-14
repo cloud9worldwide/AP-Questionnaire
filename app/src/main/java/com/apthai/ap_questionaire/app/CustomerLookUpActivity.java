@@ -239,6 +239,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                 popup.dismiss();
             } else {
                 if (txtFirstName.getText().toString().trim().length() == 0 && txtLastName.getText().toString().trim().length() == 0 && txtTel.getText().toString().length() == 0) {
+                    btn_send.setEnabled(true);
                     startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
                 } else {
                     final ProgressDialog progress = new ProgressDialog(this);

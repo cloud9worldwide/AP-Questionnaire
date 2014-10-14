@@ -41,11 +41,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
     EditText txtHomeId, txtMoo, txtBuilding, txtFloor, txtRoom, txtSoi, txtRoad, txtProvince;
     EditText txtDistrict, txtSubDistrict,txtPostcode;
-    EditText txtWork, txtWorkDistrict;
+    EditText txtWork, txtWorkDistrict, txtWorkProvince, txtRoadWork;
 
     TextView lblHomeId, lblMoo, lblBuilding, lblFloor, lblRoom, lblSoi, lblRoad, lblProvince;
     TextView lblDistrict, lblSubDistrict, lblPostcode;
-    TextView lblWork, lblWorkDistrict, txt_header;
+    TextView lblWork, lblWorkDistrict, txt_header, lblWorkProvince, lblWorkRoad;
 
     ContactData new_customer;
     private Context ctx;
@@ -95,8 +95,6 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             txtSubDistrict.setText(home.getProvince().toString());
         }
 
-//        txtDistrict.setText(home.getDistrict().toString());
-//        txtSubDistrict.setText(home.getSubdistrict().toString());
         if(!home.getPostalcode().trim().equals("null")){
             txtPostcode.setText(home.getPostalcode().toString());
         }
@@ -105,6 +103,12 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }
         if(!work.getDistrict().trim().equals("null")){
             txtWorkDistrict.setText(work.getDistrict().toString());
+        }
+        if(!work.getProvince().trim().equals("null")){
+            txtWorkProvince.setText(work.getProvince().toString());
+        }
+        if(!work.getRoad().trim().equals("null")){
+            txtRoadWork.setText(work.getRoad().toString());
         }
     }
 
@@ -161,6 +165,8 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
         lblWork = (TextView) findViewById(R.id.lblWork);
         lblWorkDistrict = (TextView) findViewById(R.id.lbl_add_customer_district_work);
+        lblWorkProvince = (TextView) findViewById(R.id.lblProvinceWork);
+        lblWorkRoad = (TextView) findViewById(R.id.lbl_add_customer_road_work);
 
         txtHomeId = (EditText) findViewById(R.id.txtHomeID);
         txtMoo = (EditText) findViewById(R.id.txtMoo);
@@ -175,6 +181,8 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         txtPostcode = (EditText) findViewById(R.id.txtPostcode);
         txtWork = (EditText) findViewById(R.id.txtWork);
         txtWorkDistrict = (EditText) findViewById(R.id.txtDistrictWork);
+        txtWorkProvince = (EditText) findViewById(R.id.txtProvinceWork);
+        txtRoadWork = (EditText) findViewById(R.id.txtRoadWork);
 
         setFont();
         setKeyListener();
@@ -242,6 +250,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
         lblWork.setText(R.string.add_customer_work);
         lblWorkDistrict.setText(R.string.add_customer_district);
+        lblWorkRoad.setText(R.string.add_customer_road);
 
         txtHomeId.setHint(R.string.add_customer_homeid);
         txtMoo.setHint(R.string.add_customer_moo);
@@ -252,8 +261,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         txtRoad.setHint(R.string.add_customer_road);
 
         txtPostcode.setText(R.string.add_customer_postcode);
+        lblWorkProvince.setText(R.string.add_customer_province);
+
         txtWork = (EditText) findViewById(R.id.txtWork);
         txtWorkDistrict = (EditText) findViewById(R.id.txtDistrictWork);
+        txtWorkProvince = (EditText) findViewById(R.id.txtProvinceWork);
         getCustomerInfo();
     }
 
@@ -285,6 +297,10 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         lblWork.setTypeface(delegate.font_type);
         lblWorkDistrict.setTextSize(25);
         lblWorkDistrict.setTypeface(delegate.font_type);
+        lblWorkProvince.setTextSize(25);
+        lblWorkProvince.setTypeface(delegate.font_type);
+        lblWorkRoad.setTextSize(25);
+        lblWorkRoad.setTypeface(delegate.font_type);
 
         txtHomeId.setTextSize(25);
         txtHomeId.setTypeface(delegate.font_type);
@@ -310,6 +326,10 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         txtWork.setTypeface(delegate.font_type);
         txtWorkDistrict.setTextSize(25);
         txtWorkDistrict.setTypeface(delegate.font_type);
+        txtWorkProvince.setTextSize(25);
+        txtWorkProvince.setTypeface(delegate.font_type);
+        txtRoadWork.setTextSize(25);
+        txtRoadWork.setTypeface(delegate.font_type);
         txtPostcode.setTextSize(25);
         txtPostcode.setTypeface(delegate.font_type);
 
@@ -430,6 +450,16 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                     txtWork.clearFocus();
+                    txtRoadWork.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtRoadWork.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtRoadWork.clearFocus();
                     txtWorkDistrict.requestFocus();
                     return true;
                 }
@@ -439,9 +469,19 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         txtWorkDistrict.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    txtWorkDistrict.clearFocus();
+                    txtWorkProvince.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+        txtWorkProvince.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(
                             Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(txtWorkDistrict.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(txtWorkProvince.getWindowToken(), 0);
                     return true;
                 }
                 return false;
@@ -536,10 +576,21 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }else{
             work.setVillage("");
         }
+        if(txtRoadWork.getText().toString().trim().length() > 0 && txtRoadWork.getText().equals("null")){
+            work.setRoad(txtRoadWork.getText().toString().trim());
+        } else {
+            work.setRoad("");
+        }
+
         if(txtWorkDistrict.getText().toString().length()>0 && !txtWorkDistrict.getText().equals("null")){
             work.setDistrict(txtWorkDistrict.getText().toString());
         }else{
             work.setDistrict("");
+        }
+        if(txtWorkProvince.getText().toString().length()>0 && !txtWorkProvince.getText().equals("null")){
+            work.setProvince(txtWorkProvince.getText().toString());
+        }else{
+            work.setProvince("");
         }
     }
 

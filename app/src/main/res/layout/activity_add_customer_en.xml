@@ -116,7 +116,6 @@
                         android:alpha="1"
                         android:lines="1"
                         android:singleLine="true"
-
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_homeid" />
                     <TextView
@@ -128,12 +127,11 @@
                         />
                     <EditText
                         android:id="@+id/txtMoo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_small"
                         android:alpha="1"
                         android:lines="1"
-
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_moo" />
@@ -143,7 +141,6 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="10dp"
                         android:layout_height="50dp"
-
                         android:id="@+id/lbl_add_customer_building"
                         />
                     <EditText
@@ -154,7 +151,6 @@
                         android:alpha="1"
                         android:paddingLeft="10dp"
                         android:lines="1"
-
                         android:singleLine="true"
                         android:hint="@string/add_customer_building" />
                     <TextView
@@ -167,7 +163,7 @@
                         />
                     <EditText
                         android:id="@+id/txtFloor"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_small"
                         android:alpha="1"
@@ -178,19 +174,18 @@
                         android:hint="@string/add_customer_floor" />
                     <TextView
                         android:text="@string/add_customer_room"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:gravity="center"
                         android:layout_height="50dp"
                         android:id="@+id/lbl_add_customer_room"
                         />
                     <EditText
                         android:id="@+id/txtRoom"
-                        android:layout_width="93dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_small"
                         android:alpha="1"
                         android:singleLine="true"
-
                         android:lines="1"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_room" />
@@ -253,6 +248,7 @@
                         android:id="@+id/txtProvince"
                         android:background="@drawable/box_login"
                         android:paddingLeft="10dp"
+                        android:hint="@string/add_customer_province"
                         />
                 </LinearLayout>
 
@@ -278,6 +274,7 @@
                         android:id="@+id/txtDistrict"
                         android:background="@drawable/box_login"
                         android:paddingLeft="10dp"
+                        android:hint="@string/add_customer_district"
                         />
                     <TextView
                         android:text="@string/add_customer_sub_district"
@@ -293,6 +290,7 @@
                         android:id="@+id/txtSubDistrict"
                         android:background="@drawable/box_login"
                         android:paddingLeft="10dp"
+                        android:hint="@string/add_customer_sub_district"
                         />
                     <TextView
                         android:text="@string/add_customer_postcode"
@@ -305,7 +303,7 @@
                     <EditText
                         android:singleLine="true"
                         android:id="@+id/txtPostcode"
-                        android:layout_width="wrap_content"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_large"
                         android:alpha="1"
@@ -336,6 +334,49 @@
                         android:singleLine="true"
                         android:hint="@string/add_customer_work" />
                     <TextView
+                        android:text="@string/add_customer_road"
+                        android:layout_width="120dp"
+                        android:gravity="center_vertical"
+                        android:layout_height="35dp"
+                        android:paddingLeft="10dp"
+                        android:id="@+id/lbl_add_customer_road_work"
+                        />
+                    <EditText
+                        android:id="@+id/txtRoadWork"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/box_large"
+                        android:alpha="1"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:paddingLeft="10dp"
+                        android:hint="@string/add_customer_road" />
+                    <TextView
+                        android:text="@string/add_customer_province"
+                        android:layout_width="120dp"
+                        android:gravity="center_vertical"
+                        android:layout_height="35dp"
+                        android:paddingLeft="10dp"
+                        android:id="@+id/lbl_add_customer_province_work"
+                        />
+                    <EditText
+                        android:id="@+id/txtProvinceWork"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/box_large"
+                        android:alpha="1"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:paddingLeft="10dp"
+                        android:hint="@string/add_customer_province" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_customer_add_line8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal" >
+                    <TextView
                         android:text="@string/add_customer_district"
                         android:layout_width="120dp"
                         android:gravity="center_vertical"
@@ -353,13 +394,8 @@
                         android:singleLine="true"
                         android:paddingLeft="10dp"
                         android:hint="@string/add_customer_district" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/addMobiles"
-                        android:orientation="horizontal">
-                    </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
 

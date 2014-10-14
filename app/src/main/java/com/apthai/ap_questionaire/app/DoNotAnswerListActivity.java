@@ -200,9 +200,11 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
 
         else {
             final int indexSelected =Integer.parseInt(v.getTag().toString());
-            Log.e("indexSelected",indexSelected +"");
+//            Log.e("indexSelected", data.get(indexSelected).getQuestionOrder()-1 + "");
+            Log.e("indexSelected", indexSelected +"");
             delegate.QM.redo_question_not_ansAtIndex(indexSelected);
-
+            QuestionTypeData Test = delegate.QM.get_question();
+            Log.e("Test ",Test.toString());
             Intent newPage = new Intent();
             if(delegate.QM.get_question().getQuestionType().equals("1")){
                 newPage = new Intent(this, Display01Activity.class);
