@@ -67,6 +67,8 @@ public class CoreEngine {
     private static final String PARAM_QUESTIONID = "questionid";
     private static final String PARAM_CUSTOMERID = "customerid";
 
+    private static final String PARAM_PROJECTID = "projectid";
+
 
     private String lg = "th";
 
@@ -676,6 +678,7 @@ public class CoreEngine {
                 jsonObj.put(PARAM_FNAME,params[0]);
                 jsonObj.put(PARAM_LNAME,params[1]);
                 jsonObj.put(PARAM_MOBILE,params[2]);
+                jsonObj.put(PARAM_PROJECTID,params[3]);
                 try {
                     String r = CustomerSearchMethod.execute(this.mCtx, webserviceUrl, jsonObj.toString());
                     //Log.e(debugTag,r);

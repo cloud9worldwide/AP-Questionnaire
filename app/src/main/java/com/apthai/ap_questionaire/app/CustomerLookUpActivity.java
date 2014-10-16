@@ -271,7 +271,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                     Runnable background = new Runnable() {
                         @Override
                         public void run() {
-                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString().trim(), txtLastName.getText().toString().trim(), txtTel.getText().toString());
+                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString().trim(), txtLastName.getText().toString().trim(), txtTel.getText().toString(), delegate.project.getId());
                             delegate.setCustomer_list(new ArrayList<ContactSearchData>());
                             if (searchData != null) {
                                 if (searchData.size() != 0) {
