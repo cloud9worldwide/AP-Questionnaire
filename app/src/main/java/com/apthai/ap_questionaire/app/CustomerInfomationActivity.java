@@ -45,6 +45,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     TextView question_title,title;
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
     Context ctx;
+    int statusRevisitOffline;
 
     boolean loadready = false;
     private void setImage(){
@@ -53,7 +54,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
-                img_background,R.drawable.logo_ap);
+                img_background,R.drawable.space);
 
     }
 
@@ -88,8 +89,8 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 // this will run on the main UI thread
                 progress.dismiss();
                 new AlertDialog.Builder(CustomerInfomationActivity.this)
-                        .setTitle("Connection Lost")
-                        .setMessage("Please enter customer info again.")
+                        .setTitle("Offline mode")
+                        .setMessage("Cannot access since you are operating offline mode.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 setResult(1);
@@ -127,7 +128,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_infomation);
 
-
+        statusRevisitOffline =0;
         //cut
         loadData();
     }
@@ -390,37 +391,49 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 popup.dismiss();
             } else {
 
-                delegate.customer_selected = customer_info;
-
-                final ProgressDialog progress10 = new ProgressDialog(this);
-                progress10.setTitle("Please wait");
-                progress10.setMessage("Loading....");
-                progress10.setCancelable(false);
-                progress10.show();
-
-                final Handler uiHandler = new Handler();
-                final  Runnable onUi10 = new Runnable() {
-                    @Override
-                    public void run() {
-                        // this will run on the main UI thread
-                        progress10.dismiss();
-
-                        startActivityForResult(new Intent(ctx, FlagActivity.class),0);
-                    }
-                };
-                Runnable background = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(delegate.timesleep);
-                        }catch (Exception e){
+                if(customer_info.getContactId().length() >6 && !delegate.service.isOnline()){
+                    delegate.customer_selected = null;
+                    statusRevisitOffline =1;
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(
+                            ctx).create();
+                    alertDialog1.setTitle(getString(R.string.alert_warning));
+                    alertDialog1.setMessage(getString(R.string.is_offine_GotoQuestionnaire));
+                    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            onBackPressed();
                         }
-                        uiHandler.post( onUi10 );
-                    }
-                };
-                new Thread( background ).start();
+                    });
+                    alertDialog1.show();
+                } else {
+                    delegate.customer_selected = customer_info;
 
+                    final ProgressDialog progress10 = new ProgressDialog(this);
+                    progress10.setTitle("Please wait");
+                    progress10.setMessage("Loading....");
+                    progress10.setCancelable(false);
+                    progress10.show();
 
+                    final Handler uiHandler = new Handler();
+                    final  Runnable onUi10 = new Runnable() {
+                        @Override
+                        public void run() {
+                            // this will run on the main UI thread
+                            progress10.dismiss();
+                            startActivityForResult(new Intent(ctx, FlagActivity.class),0);
+                        }
+                    };
+                    Runnable background = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(delegate.timesleep);
+                            }catch (Exception e){
+                            }
+                            uiHandler.post( onUi10 );
+                        }
+                    };
+                    new Thread( background ).start();
+                }
             }
         } else if(v.getId() == R.id.btnBack){
             if(popup.isShowing()){
@@ -433,36 +446,50 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 popup.dismiss();
             } else {
                 //method revisit
+                if(delegate.service.isOnline()){
+                    final ProgressDialog progress = new ProgressDialog(this);
+                    progress.setTitle("Please wait");
+                    progress.setMessage("Loading....");
+                    progress.setCancelable(false);
+                    progress.show();
 
-                final ProgressDialog progress = new ProgressDialog(this);
-                progress.setTitle("Please wait");
-                progress.setMessage("Loading....");
-                progress.setCancelable(false);
-                progress.show();
+                    final Handler uiHandler = new Handler();
+                    final  Runnable onUi11 = new Runnable() {
+                        @Override
+                        public void run() {
+                            // this will run on the main UI thread
+                            progress.dismiss();
+                            delegate.customer_selected = customer_info;
+                            delegate.StampVisitLog();
+                            startActivityForResult(new Intent(ctx, CustomerFinishedAnswerActivity.class),0);
 
-                final Handler uiHandler = new Handler();
-                final  Runnable onUi11 = new Runnable() {
-                    @Override
-                    public void run() {
-                        // this will run on the main UI thread
-                        progress.dismiss();
-                        delegate.customer_selected = customer_info;
-                        delegate.StampVisitLog();
-                        startActivityForResult(new Intent(ctx, CustomerFinishedAnswerActivity.class),0);
-
-                    }
-                };
-                Runnable background = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(delegate.timesleep);
-                        }catch (Exception e){
                         }
-                        uiHandler.post( onUi11 );
-                    }
-                };
-                new Thread( background ).start();
+                    };
+                    Runnable background = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(delegate.timesleep);
+                            }catch (Exception e){
+                            }
+                            uiHandler.post( onUi11 );
+                        }
+                    };
+                    new Thread( background ).start();
+                } else {
+                    statusRevisitOffline =1;
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(
+                            ctx).create();
+                    alertDialog1.setTitle(getString(R.string.alert_warning));
+                    alertDialog1.setMessage(getString(R.string.is_offine_Revisit));
+                    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            onBackPressed();
+                        }
+                    });
+                    alertDialog1.show();
+                }
+
 
             }
         } else if(v.getId() == R.id.btnMenu){
@@ -561,12 +588,17 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     }
 
     public void onBackPressed() {
-        this.setResult(3);
+        if(statusRevisitOffline==1){
+            this.setResult(5);
+        } else {
+            this.setResult(3);
+        }
+
         finish();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode ==2 || resultCode == 0|| resultCode == 1){
+        if(resultCode ==2 || resultCode == 0|| resultCode == 1|| resultCode == 5){
             this.setResult(resultCode);
             finish();
         }
@@ -614,6 +646,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     }
 
     public String numberformat(String phone){
+        phone = phone.trim();
         if(phone.length()==10){
             //mobile mode
             return PhoneNumberUtils.formatNumber(phone);

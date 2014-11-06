@@ -56,7 +56,13 @@
 
     <string name="save_complete">คุณสามารถกลับไปเลือกโครงการ หรือแบบสอบถามใหม่ได้ โดยการคลิกที่ปุ่มด้านล่าง</string>
 
-    <string name="msg_offline">"ขณะนี้เป็นระบบ offline หาก online แล้ว ระบบ จะทำการ sync ให้ อัตโนมัติ"</string>
+    <string name="msg_offline_not_found_customer">"ขณะนี้แอพพลิเคชั่นอยู่ในโหมดออฟไลน์"</string>
+    <string name="msg_offline">"ขณะนี้แอพพลิเคชั่นอยู่ในโหมดออฟไลน์ ข้อมูลจะถูกซิงค์อัตโนมัติเมื่อมีการเชื่อมต่ออินเตอร์เน็ต"</string>
+
+    <string name="is_offine_Revisit">ไม่สามารถบันทึกการเยี่ยมชมได้ เนื่องจากอยู่ใน offline mode</string>
+    <string name="is_offine_GotoQuestionnaire">คุณสามารถเพิ่มลูกค้าใหม่เพื่อทำแบบสอบถามได้ เนื่องจากอยู่ใน offline mode</string>
+
+
     <string name="username">ชื่อผู้ใช้</string>
     <string name="password">รหัสผ่าน</string>
 

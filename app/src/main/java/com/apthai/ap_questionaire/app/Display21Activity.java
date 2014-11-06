@@ -216,11 +216,15 @@ public class Display21Activity extends Activity implements View.OnClickListener 
     }
 
     public void onClick(View v) {
+        btnNext.setEnabled(false);
         if(v.getId() == R.id.btnNext){
-            btnNext.setEnabled(false);
+
             answer.clear();
-            SaveAnswerData _ans = new SaveAnswerData(String.valueOf(data.getAnswers().get(0).getId()), txtbox.getText().toString());
-            answer.add(_ans);
+            if(txtbox.getText().length() !=0){
+                SaveAnswerData _ans = new SaveAnswerData(String.valueOf(data.getAnswers().get(0).getId()), txtbox.getText().toString());
+                answer.add(_ans);
+            }
+
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
                 delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
@@ -232,13 +236,20 @@ public class Display21Activity extends Activity implements View.OnClickListener 
                 //normal mode
                 nextPage();
             }
-            btnNext.setEnabled(true);
+
+            try {
+                Thread.sleep(delegate.timesleep);
+            }catch (Exception e){
+            }
+
+
         } else if (v.getId() == R.id.btnBack){
             if(delegate.dataSubQuestion !=null) {
                 delegate.skip_save_subans = true;
             }
             onBackPressed();
         }
+        btnNext.setEnabled(true);
     }
 
     public void nextPage(){

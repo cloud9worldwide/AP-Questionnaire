@@ -96,7 +96,6 @@ public class ProjectsActivity extends Activity implements OnClickListener {
         } else {
             list_projectdata = delegate.service.getProjects();
             total = list_projectdata.size();
-
         }
         setObject();
 
@@ -196,13 +195,12 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(), imageWidth, imageHeight);
             if(bmp !=null) {
                 image.setImageBitmap(bmp);
-                LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
-                lpImage.gravity = Gravity.CENTER;
-                image.setLayoutParams(lpImage);
-
             } else {
                 image.setImageResource(R.drawable.logo_ap);
             }
+            LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
+            lpImage.gravity = Gravity.CENTER;
+            image.setLayoutParams(lpImage);
             bmp = null;
             btn.addView(image);
 

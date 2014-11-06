@@ -75,6 +75,7 @@ setObject();
         super.onResume();
         txtPassword.setText("");
         txtUsername.setText("");
+        txtError.setText("");
         txtPassword.setSelection(0);
 
 ////        txtUsername.setHint(R.string.username);
@@ -239,9 +240,7 @@ setObject();
                         txtError.setText("Please check internet connection.");
                     } else {
                         txtError.setText(delegate.service.getLoginMessage());
-
                     }
-
                 }
             };
 
@@ -249,7 +248,6 @@ setObject();
                 @Override
                 public void run() {
                     if (delegate.service.Login(txtUsername.getText().toString() , txtPassword.getText().toString()) == true) {
-
                         if (delegate.service.checkUpdateQuestionnaire()) {
                             //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
                             delegate.service.updateQuestionnaire(ringProgressDialog);
@@ -264,6 +262,7 @@ setObject();
 
                             startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
                         } else {
+
                             delegate.service.startDownloadImages(ringProgressDialog);
                             try {
                                 Thread.sleep(3000);

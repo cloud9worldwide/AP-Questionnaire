@@ -1,9 +1,11 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -78,6 +80,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
     Context ctx;
     boolean loadready = false;
+    int statusEditOffline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +98,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         listfix = new ArrayList<String>();
         listfix.add("คุณ");
         listfix.add("นาย");
-        listfix.add("นาง");
         listfix.add("นางสาว");
+        listfix.add("นาง");
         listfix.add("อื่นๆ");
         indexPrefix= -1;
         indexNationality= -1;
         indexCountry= -1;
+        statusEditOffline =0;
         delegate = (questionniare_delegate) getApplicationContext();
 
         final ProgressDialog progress = new ProgressDialog(this);
@@ -127,6 +131,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 if(delegate.customer_selected !=null){
                     new_customer = delegate.customer_selected;
                     getCustomerInfoLong();
+                    statusEditOffline =1;
                 }
                 try {
                     Thread.sleep(1000);
@@ -1422,16 +1427,33 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 popupAddMobile.dismiss();
             }
         } else if(v.getId() == R.id.btnNext){
-            if(validate()){
-                packData();
-                if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
-                    startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
-                } else {
-                    startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
-                }
+            if(!delegate.service.isOnline() && statusEditOffline ==1){
+                //offline mode
+                AlertDialog alertDialog1 = new AlertDialog.Builder(
+                        ctx).create();
+                alertDialog1.setTitle(getString(R.string.alert_warning));
+                alertDialog1.setMessage(getString(R.string.is_offine));
+                alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        onBackPressed();
+                    }
+                });
+                alertDialog1.show();
             } else {
-                delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
+                if(validate()){
+                    packData();
+                    if(ddlCountry.getSelectedItem().toString().equals("Thailand")){
+                        startActivityForResult(new Intent(this, AddCustomerTHActivity.class),0);
+                    } else {
+                        startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
+                    }
+                } else {
+                    delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
+                }
+
             }
+
         } else if (v.getId() == R.id.btnAddMobiles){
 //            showPopupAddMobile(this,"mobile",99);
             showPopupAddMobile2(this,"mobile",99);
@@ -1494,14 +1516,19 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
     }
     public void onBackPressed() {
+        if(!delegate.service.isOnline() && statusEditOffline ==1){
+            this.setResult(5);
+        } else {
+            this.setResult(3);
+        }
         delegate.customer_selected = null;
-        this.setResult(3);
         finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode ==2 || resultCode == 0 || resultCode == 1){
+
+        if(resultCode ==2 || resultCode == 0 || resultCode == 1 || resultCode ==4 || resultCode ==5){
             this.setResult(resultCode);
             finish();
         }

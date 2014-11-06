@@ -12,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,14 +52,8 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         ctx = this;
 
         setImage();
-//        runFadeInAnimation();
     }
-    private void runFadeInAnimation() {
-        Animation a = AnimationUtils.loadAnimation(this, R.anim.animate);
-        a.reset();
-        root_view.clearAnimation();
-        root_view.startAnimation(a);
-    }
+
 
     private void setImage(){
         delegate = (questionniare_delegate)getApplicationContext();
@@ -78,8 +70,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
     private void setObject(){
         popup = new PopupWindow(this);
 
-        questionList = delegate.project.getQuestionnaireList();
-        total= questionList.size();
+
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
 
@@ -135,6 +126,9 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         project_name.setText(delegate.project.getName());
 
         content_view.removeAllViews();
+        questionList = delegate.project.getQuestionnaireList();
+        total= questionList.size();
+
         setTableLayout();
     }
 
@@ -219,15 +213,13 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(), imageWidth, imageHeight);
             if(bmp !=null) {
                 image.setImageBitmap(bmp);
-                LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
-                lpImage.gravity = Gravity.CENTER;
-                image.setLayoutParams(lpImage);
-
             } else {
                 image.setImageResource(R.drawable.logo_ap);
             }
+            LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
+            lpImage.gravity = Gravity.CENTER;
+            image.setLayoutParams(lpImage);
             bmp = null;
-
 
             TextView name = new TextView(this);
 //            name.setText(obj.get);
@@ -243,7 +235,6 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 
             btn.setLayoutParams(lp);
             linearLayout.addView(btn);
-
         }
         content_view.addView(linearLayout);
     }

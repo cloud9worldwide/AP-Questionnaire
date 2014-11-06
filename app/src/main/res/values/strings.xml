@@ -56,7 +56,10 @@
     <string name="title_dont_answer">Question client do not answer</string>
     <string name="default_display_14_15">click - + for answer</string>
     <string name="default_display_16">Please select answer</string>
-    <string name="is_offine">Cannot Edit Because we are offline mode</string>
+
+    <string name="is_offine">The application is operating offline mode.</string>
+    <string name="is_offine_Revisit">Cannot stamp re-visit because the application is operating offline mode.</string>
+
     <string name="add_mobile">+ add mobile</string>
     <string name="cannot_back">This is first question, Cannot Back</string>
     <string name="Please_enter">Please enter answer</string>
@@ -67,7 +70,9 @@
     <!--<string name="save_complete">Complete information</string>-->
     <string name="save_complete">You can select new Project or Questionnaire by clicking at button below</string>
 
-    <string name="msg_offline">"system is offline mode. when device is online. which will be sync automatic"</string>
+    <string name="msg_offline_not_found_customer">"The application is operating offline mode."</string>
+    <string name="msg_offline">"The application is operating offline mode.
+the data will be synced automatically when internet is connected."</string>
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="app_name">AP-Questionaire</string>

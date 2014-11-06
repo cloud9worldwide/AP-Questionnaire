@@ -41,7 +41,7 @@ public class MySQLiteHelper {
     //Address fields
     public static final String HOUSE_ID = "house_id";
     public static final String MOO = "moo";
-    public static final String VILLAGE = "village";
+    public static final String VILLAGE = "name";
     public static final String SOI = "soi";
     public static final String ROAD = "road";
     public static final String SUBDISTRICT = "subdistrict";

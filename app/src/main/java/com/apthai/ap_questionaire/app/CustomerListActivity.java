@@ -49,12 +49,6 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
     boolean statusLoadInfo;
 
 
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        // TODO Auto-generated method stub
-//        super.onWindowFocusChanged(hasFocus);
-//
-//    }
-
     private void setImage(){
         setObject();
         img_background = (ImageView) findViewById(R.id.img_background);
@@ -381,11 +375,6 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
                 }
 
 
-
-
-
-
-
             }
         }
     }
@@ -398,7 +387,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode ==2 || resultCode == 0 || resultCode == 1){
+        if(resultCode ==2 || resultCode == 0 || resultCode == 1 || resultCode == 5){
             this.setResult(resultCode);
             finish();
         }

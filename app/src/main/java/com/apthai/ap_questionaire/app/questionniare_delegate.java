@@ -607,11 +607,25 @@ public class questionniare_delegate extends Application {
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
 
-//        Intent refresh = new Intent(this, AndroidLocalize.class);
-//        startActivity(refresh);
+        if(project !=null){
+            ArrayList<ProjectData> projects;
+            projects = service.getProjects();
+            for (int projectIndex = 0;projectIndex <= projects.size();projectIndex++ ){
+                if(projects.get(projectIndex).getId().equals(project.getId())){
+                    project = projects.get(projectIndex);
+                    break;
+                }
+            }
+        }
+    }
+    public void setLocale2(String lang) {
 
-
-
+        myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
 
         if(project !=null){
             ArrayList<ProjectData> projects;
@@ -623,8 +637,6 @@ public class questionniare_delegate extends Application {
                 }
             }
         }
-
-
     }
 
     public void showAlert(Context ctx, String message, String header){

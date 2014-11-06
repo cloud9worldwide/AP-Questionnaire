@@ -50,20 +50,20 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         setObject();
 
         View rootView = getWindow().getDecorView().getRootView();
-//        rootView.setBackground(this.getResources().getDrawable(R.drawable.img_love_mom_app_bg));
 
         img_background = (ImageView) findViewById(R.id.img_background);
         img_background.setVisibility(View.GONE);
+        if(delegate.project.getBackgroundUrl().length()!=0){
+            Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
+            if (imageBitmap == null) {
+                imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+            }
+            Drawable imageDraw =  new BitmapDrawable(imageBitmap);
 
-        Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
-        if (imageBitmap == null) {
-            imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+            rootView.setBackground(imageDraw);
         }
-        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-//        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-//        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
 
-        rootView.setBackground(imageDraw);
+
 
     }
 

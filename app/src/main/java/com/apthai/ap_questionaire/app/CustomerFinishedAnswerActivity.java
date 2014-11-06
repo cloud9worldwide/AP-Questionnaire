@@ -67,10 +67,17 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             @Override
             public void run() {
                 // this will run on the main UI thread
-                progress.dismiss();
+
                 setImage();
                 changeLanguege();
                 loadready = true;
+
+                if(delegate.QM !=null){
+                    if(delegate.QM.isStaffQustion()){
+                        delegate.sendAnswer();
+                    }
+                }
+                progress.dismiss();
             }
         };
         Runnable background = new Runnable() {
@@ -127,11 +134,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_back_home.setOnClickListener(this);
         btn_menu.setVisibility(View.GONE);
 
-        if(delegate.QM !=null){
-            if(delegate.QM.isStaffQustion()){
-                delegate.sendAnswer();
-            }
-        }
+
 
 
 //        if(!delegate.QM.isStaffQustion()){

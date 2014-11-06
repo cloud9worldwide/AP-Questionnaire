@@ -1,12 +1,15 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -56,7 +59,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
 
     ContactData new_customer;
     private Context ctx;
-    int status,statusWork;
+    int status,statusWork, statusFin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         new_customer = delegate.customer_selected;
         status= 0;
         statusWork=0;
+        statusFin=0;
 
         footer = (RelativeLayout) findViewById(R.id.footer);
 
@@ -334,34 +338,34 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         AddressData work = new_customer.getAddressWork();
 
         if(!home.getHouseId().trim().equals("null")){
-            txtHomeId.setText(home.getHouseId().toString().trim());
+            txtHomeId.setText(home.getHouseId().trim());
         }
         if(!home.getMoo().trim().equals("null")){
-            txtMoo.setText(home.getMoo().toString().trim());
+            txtMoo.setText(home.getMoo().trim());
         }
         if(!home.getVillage().trim().equals("null")){
-            txtBuilding.setText(home.getVillage().toString().trim());
+            txtBuilding.setText(home.getVillage().trim());
         }
         if(!home.getFloor().trim().equals("null")){
-            txtFloor.setText(home.getFloor().toString().trim());
+            txtFloor.setText(home.getFloor().trim());
         }
         if(!home.getRoom().trim().equals("null")){
-            txtRoom.setText(home.getRoom().toString().trim());
+            txtRoom.setText(home.getRoom().trim());
         }
         if(!home.getSoi().trim().equals("null")){
-            txtSoi.setText(home.getSoi().toString().trim());
+            txtSoi.setText(home.getSoi().trim());
         }
         if(!home.getRoad().trim().equals("null")){
-            txtRoad.setText(home.getRoad().toString().trim());
+            txtRoad.setText(home.getRoad().trim());
         }
         if(!home.getPostalcode().trim().equals("null")){
-            txtPostcode.setText(home.getPostalcode().toString().trim());
+            txtPostcode.setText(home.getPostalcode().trim());
         }
         if(!work.getVillage().trim().equals("null")){
-            txtWork.setText(work.getVillage().toString().trim());
+            txtWork.setText(work.getVillage().trim());
         }
         if(!work.getRoad().trim().equals("null")){
-            txtRoadWork.setText(work.getRoad().toString().trim());
+            txtRoadWork.setText(work.getRoad().trim());
         }
 
         ArrayList<ValTextData> list;
@@ -370,24 +374,24 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         statusWork = 0;
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getText2().toString().equals(home.getProvince().toString())) {
+            if (list.get(i).getText2().equals(home.getProvince())) {
                 ddlProvince.setSelection(i);
                 break;
             }
 
-            if (list.get(i).getText().toString().equals(home.getProvince().toString())) {
+            if (list.get(i).getText().equals(home.getProvince())) {
                 ddlProvince.setSelection(i);
                 break;
             }
         }
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getText2().toString().equals(work.getProvince().toString())) {
+            if (list.get(i).getText2().equals(work.getProvince())) {
                 ddlProvinceWork.setSelection(i);
                 break;
             }
 
-            if (list.get(i).getText().toString().equals(work.getProvince().toString())) {
+            if (list.get(i).getText().equals(work.getProvince())) {
                 ddlProvinceWork.setSelection(i);
                 break;
             }
@@ -450,12 +454,12 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                     ArrayList<ValTextData> list;
                     list= delegate.service.getDistrictByProvince(provinceID);
                     for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).getText2().equals(new_customer.getAddress().getDistrict())) {
+                        if (list.get(i).getText2().equals(new_customer.getAddressWork().getDistrict())) {
                             ddlDistrictWork.setSelection(i);
                             break;
                         }
 
-                        if (list.get(i).getText().equals(new_customer.getAddress().getDistrict())) {
+                        if (list.get(i).getText().equals(new_customer.getAddressWork().getDistrict())) {
                             ddlDistrictWork.setSelection(i);
                             break;
                         }
@@ -606,14 +610,42 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             popup.dismiss();
         }
         if(v.getId() == R.id.btnSend){
-            if(validate()){
-                packData();
+            if(!delegate.service.isOnline() && !new_customer.getContactId().equals("-1")) {
+                //offline mode
+                AlertDialog alertDialog1 = new AlertDialog.Builder(
+                        ctx).create();
+                alertDialog1.setTitle(getString(R.string.alert_warning));
+                alertDialog1.setMessage(getString(R.string.is_offine));
+                alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        onBackPressed();
+                    }
+                });
+                alertDialog1.show();
             } else {
-                delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
-//                Toast.makeText(this, R.string.error_customer_one, Toast.LENGTH_SHORT).show();
+                if(validate()){
+                    packData();
+                } else {
+                    delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
+                }
             }
-        } else if(v.getId() == R.id.btnBack){
-            onBackPressed();
+
+        } else if (v.getId() == R.id.btnBack){
+                if(!delegate.service.isOnline() && !new_customer.getContactId().equals("-1")) {
+                    //offline mode
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(
+                            ctx).create();
+                    alertDialog1.setTitle(getString(R.string.alert_warning));
+                    alertDialog1.setMessage(getString(R.string.is_offine));
+                    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            onBackPressed();
+                        }
+                    });
+                    alertDialog1.show();
+                } else {
+                    onBackPressed();
+                }
         } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
         } else if(v.getId() == R.id.btnEN){
@@ -642,12 +674,18 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
     }
 
     public void onBackPressed() {
-        this.setResult(3);
+        if(!delegate.service.isOnline() && !new_customer.getContactId().equals("-1")) {
+            this.setResult(5);
+        } else if(statusFin==1){
+            this.setResult(4);
+        } else {
+            this.setResult(3);
+        }
         finish();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 2 || resultCode == 0 || resultCode == 1) {
+        if (resultCode == 2 || resultCode == 0 || resultCode == 1 || resultCode == 5) {
             this.setResult(resultCode);
             finish();
         }
@@ -775,6 +813,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         } else {
             work.setDistrict("");
         }
+        Log.e("work", work.toString());
         if(!ddlProvinceWork.getSelectedItem().toString().equals(txtPromp)){
             work.setProvince(ddlProvinceWork.getSelectedItem().toString());
         } else {
@@ -796,9 +835,14 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             public void run() {
                 // this will run on the main UI thread
                 progress.dismiss();
-                Intent i = new Intent(ctx, CustomerInfomationActivity.class);
-                i.putExtra("customerIndex", delegate.service.globals.getContactId());
-                startActivityForResult(i, 0);
+                if(new_customer.getContactId().equals("-1")){
+                    Intent i = new Intent(ctx, CustomerInfomationActivity.class);
+                    i.putExtra("customerIndex", delegate.service.globals.getContactId());
+                    startActivityForResult(i, 0);
+                } else {
+                    statusFin =1;
+                    onBackPressed();
+                }
             }
         };
         Runnable background = new Runnable() {

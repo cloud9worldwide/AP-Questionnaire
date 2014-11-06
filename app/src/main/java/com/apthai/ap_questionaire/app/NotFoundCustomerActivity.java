@@ -36,7 +36,6 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
 
     TextView lblRed, lblBlack;
 
-
     private void setImage(){
         delegate = (questionniare_delegate)getApplicationContext();
         setObject();
@@ -44,7 +43,7 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
                 String.valueOf(img_background.getWidth()),
                 String.valueOf(img_background.getHeight()),
-                img_background,R.drawable.logo_ap);
+                img_background,R.drawable.space);
     }
 
     @Override
@@ -101,7 +100,12 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
             btnAdd.setImageResource(R.drawable.btn_th_add_customer);
         }
 
-        lblRed.setText(R.string.not_found_customer_header);
+        if(delegate.service.isOnline()){
+            lblRed.setText(R.string.not_found_customer_header);
+        } else {
+            lblRed.setText(R.string.msg_offline_not_found_customer);
+        }
+
         lblBlack.setText(R.string.not_found_customer_detail);
     }
 

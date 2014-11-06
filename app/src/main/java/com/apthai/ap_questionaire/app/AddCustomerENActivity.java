@@ -1,8 +1,10 @@
 package com.apthai.ap_questionaire.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +50,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
     TextView lblWork, lblWorkDistrict, txt_header, lblWorkProvince, lblWorkRoad;
 
     ContactData new_customer;
+    int statusFin;
     private Context ctx;
 
     @Override
@@ -92,7 +95,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }
 
         if(!(home.getSubdistrict().toString().equals("Please select") && home.getSubdistrict().toString().equals("กรุณาเลือก"))){
-            txtSubDistrict.setText(home.getProvince().toString());
+            txtSubDistrict.setText(home.getSubdistrict().toString());
         }
 
         if(!home.getPostalcode().trim().equals("null")){
@@ -115,6 +118,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
     private void setObject(){
         delegate = (questionniare_delegate) getApplicationContext();
         ctx = this;
+        statusFin=0;
         new_customer = delegate.customer_selected;
         footer = (RelativeLayout) findViewById(R.id.footer);
         project_name = (TextView) findViewById(R.id.project_name);
@@ -165,7 +169,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
         lblWork = (TextView) findViewById(R.id.lblWork);
         lblWorkDistrict = (TextView) findViewById(R.id.lbl_add_customer_district_work);
-        lblWorkProvince = (TextView) findViewById(R.id.lblProvinceWork);
+        lblWorkProvince = (TextView) findViewById(R.id.lbl_add_customer_province_work);
         lblWorkRoad = (TextView) findViewById(R.id.lbl_add_customer_road_work);
 
         txtHomeId = (EditText) findViewById(R.id.txtHomeID);
@@ -229,10 +233,12 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
             lblBuilding.setTextSize(20);
+            lblRoom.setTextSize(17);
         } else {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
             lblBuilding.setTextSize(25);
+            lblRoom.setTextSize(25);
         }
 
         lblHomeId.setText(R.string.add_customer_homeid);
@@ -279,8 +285,9 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
 
         lblFloor.setTextSize(25);
         lblFloor.setTypeface(delegate.font_type);
-        lblRoom.setTextSize(25);
+
         lblRoom.setTypeface(delegate.font_type);
+
         lblSoi.setTextSize(25);
         lblSoi.setTypeface(delegate.font_type);
         lblProvince.setTextSize(25);
@@ -608,9 +615,14 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             public void run() {
                 // this will run on the main UI thread
                 progress.dismiss();
-                Intent i = new Intent(ctx, CustomerInfomationActivity.class);
-                i.putExtra("customerIndex", delegate.service.globals.getContactId());
-                startActivityForResult(i, 0);
+                if(new_customer.getContactId().equals("-1")){
+                    Intent i = new Intent(ctx, CustomerInfomationActivity.class);
+                    i.putExtra("customerIndex", delegate.service.globals.getContactId());
+                    startActivityForResult(i, 0);
+                } else {
+                    statusFin =1;
+                    onBackPressed();
+                }
             }
         };
         Runnable background = new Runnable() {
@@ -639,9 +651,37 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }
 
         if(v.getId() == R.id.btnSend){
-            packData();
+            if(!delegate.service.isOnline() && !new_customer.getContactId().equals("-1")) {
+                //offline mode
+                AlertDialog alertDialog1 = new AlertDialog.Builder(
+                        ctx).create();
+                alertDialog1.setTitle(getString(R.string.alert_warning));
+                alertDialog1.setMessage(getString(R.string.is_offine));
+                alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        onBackPressed();
+                    }
+                });
+                alertDialog1.show();
+            } else {
+                packData();
+            }
         } else if(v.getId() == R.id.btnBack){
-            onBackPressed();
+            if(!delegate.service.isOnline() && !new_customer.getContactId().equals("-1")) {
+                //offline mode
+                AlertDialog alertDialog1 = new AlertDialog.Builder(
+                        ctx).create();
+                alertDialog1.setTitle(getString(R.string.alert_warning));
+                alertDialog1.setMessage(getString(R.string.is_offine));
+                alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        onBackPressed();
+                    }
+                });
+                alertDialog1.show();
+            } else {
+                onBackPressed();
+            }
         } else if(v.getId() == R.id.btnMenu){
             showPopup(this);
         } else if(v.getId() == R.id.btnEN){
@@ -670,8 +710,13 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
     }
 
     public void onBackPressed() {
-        this.setResult(3);
-        finish();
+        if(!delegate.service.isOnline() && !new_customer.getContactId().equals("-1")) {
+            this.setResult(5);
+        } else if(statusFin==1){
+            this.setResult(4);
+        } else {
+            this.setResult(3);
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

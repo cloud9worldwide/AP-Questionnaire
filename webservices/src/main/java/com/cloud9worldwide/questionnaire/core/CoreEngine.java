@@ -206,7 +206,7 @@ public class CoreEngine {
         questionnaireUpdate = new ArrayList<QuestionnaireData>();
 
         if(!isOnline()){
-            this.loginMessage = "Not have internet connection";
+            this.loginMessage = "There's no internet connection.";
             this.tokenAccess = "";
             this.loginStatus = false;
             return false;
@@ -347,7 +347,7 @@ public class CoreEngine {
                                     }
 
                                     // check questionnaire update
-                                }else {
+                                } else {
                                     Log.d(debugTag, "not have questionnaire ");
                                     questionnaireUpdate.add(_questionnareData);
                                     long _qrow_id = _dbHelper.createQuestionnaire(
@@ -514,7 +514,7 @@ public class CoreEngine {
 
             return true;
         }else{
-            this.logoutMessage = "Not have internet connection";
+            this.logoutMessage = "There's no internet connection";
 //            return true;
             return false;
         }
@@ -725,7 +725,7 @@ public class CoreEngine {
             }
             return null;
         }else{
-            this.responseMessage = "Not have internet connection";
+            this.responseMessage = "There's no internet connection";
             return null;
         }
 
@@ -783,10 +783,12 @@ public class CoreEngine {
                         if(_address_work_json.has("room"))
                             room_w = _address_work_json.getString("room");
 
+                        Log.e("name",_address_work_json.getString("name"));
+
                         _address_work = new AddressData(
                                 _address_work_json.getString("house_id"),
-                                _address_work_json.getString("moo"),
-                                _address_work_json.getString("village"),
+                                "null",//moo
+                                _address_work_json.getString("name"),//name = village
                                 _address_work_json.getString("soi"),
                                 _address_work_json.getString("road"),
                                 _address_work_json.getString("subdistrict"),
@@ -794,8 +796,8 @@ public class CoreEngine {
                                 _address_work_json.getString("province"),
                                 _address_work_json.getString("postalcode"),
                                 _address_work_json.getString("country"),
-                                _address_work_json.getString("tel"),
-                                _address_work_json.getString("tel_ext"),
+                                "null",//tel,
+                                "null",//tel_ext,
                                 floor_w,
                                 room_w
                         );
@@ -824,8 +826,8 @@ public class CoreEngine {
                                 room
                         );
                         String prifix_vip = "";
-                        if(contactObj.has("prifix_vip"))
-                            prifix_vip = contactObj.getString("prifix_vip");
+                        if(contactObj.has("prefix_vip"))
+                            prifix_vip = contactObj.getString("prefix_vip");
 
                         String nationality = "";
                         if(contactObj.has("nationality"))
@@ -1044,7 +1046,10 @@ public class CoreEngine {
 
             _address_work_js_obj.put("house_id",_address_work.getHouseId());
             _address_work_js_obj.put("moo",_address_work.getMoo());
-            _address_work_js_obj.put("village",_address_work.getVillage());
+            Log.e("b4 _address_work_js_obj",_address_work_js_obj.toString());
+            _address_work_js_obj.put("name",_address_work.getVillage());
+//            _address_work_js_obj.put("village",_address_work.getVillage());
+            Log.e("after _address_work_js_obj",_address_work_js_obj.toString());
             _address_work_js_obj.put("soi",_address_work.getSoi());
             _address_work_js_obj.put("road",_address_work.getRoad());
             _address_work_js_obj.put("subdistrict",_address_work.getSubdistrict());
@@ -1194,7 +1199,8 @@ public class CoreEngine {
 
                 _address_work_js_obj.put("house_id",_address_work.getHouseId());
                 _address_work_js_obj.put("moo",_address_work.getMoo());
-                _address_work_js_obj.put("village",_address_work.getVillage());
+                _address_work_js_obj.put("name",_address_work.getVillage());
+//                _address_work_js_obj.put("village",_address_work.getVillage());
                 _address_work_js_obj.put("soi",_address_work.getSoi());
                 _address_work_js_obj.put("road",_address_work.getRoad());
                 _address_work_js_obj.put("subdistrict",_address_work.getSubdistrict());

@@ -230,15 +230,15 @@ public class Display13Activity extends Activity implements View.OnClickListener 
         if(v.getId() == R.id.btnNext){
             btnNext.setEnabled(false);
             answer.clear();
-            SaveAnswerData _ans;
-            if(ddl.getSelectedItemPosition()==0){
-                _ans = new SaveAnswerData("-1",null);
-            } else {
+
+            if(ddl.getSelectedItemPosition()!=0){
+                SaveAnswerData _ans;
                 AnswerData selected = data.getAnswers().get(ddl.getSelectedItemPosition());
                 _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+                answer.add(_ans);
             }
 
-            answer.add(_ans);
+
 
             if(delegate.dataSubQuestion !=null){
                 //sub question mode

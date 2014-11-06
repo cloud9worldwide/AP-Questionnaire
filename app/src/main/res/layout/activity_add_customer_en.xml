@@ -214,7 +214,6 @@
                         android:lines="1"
                         android:singleLine="true"
                         android:paddingLeft="10dp"
-
                         android:hint="@string/add_customer_soi" />
                     <TextView
                         android:text="@string/add_customer_road"
