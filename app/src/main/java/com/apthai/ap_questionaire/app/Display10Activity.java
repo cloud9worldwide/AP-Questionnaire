@@ -185,10 +185,12 @@ public class Display10Activity extends Activity implements View.OnClickListener 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
         int column =4;
+        int lastRow = total/column;
 
-        for(int i =0 ,c=0; i < total; i++,c++){
+        for(int i =0 ,c=0, r = 0; i < total; i++,c++){
             if(c == column){
                 c = 0;
+                r++;
                 content_view.addView(linearLayout);
                 linearLayout = new LinearLayout(this);
             }
@@ -387,7 +389,19 @@ public class Display10Activity extends Activity implements View.OnClickListener 
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
             lp.gravity = Gravity.CENTER_VERTICAL;
 
-            lp.weight = 1;
+            if(r ==lastRow){
+                if(i==total-1){
+                    switch (total % column){
+                        case 2 : lp.weight = 1; break;
+                        case 3 : lp.weight = 2; break;
+                        default: lp.weight = 1;
+                    }
+                } else {
+                    lp.weight = 3;
+                }
+            } else {
+                lp.weight = 1;
+            }
             lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
 
             btn.setLayoutParams(lp);
@@ -397,22 +411,6 @@ public class Display10Activity extends Activity implements View.OnClickListener 
             }
             linearLayout.addView(btn);
 
-
-            //for beautiful
-            if(i==total-1  && total % column !=0){
-                Log.e("index i total colunm",i +"," + total +"," + column);
-                for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
-                    Log.e("addcolumn",addcolum +"");
-                    LinearLayout btn2 = new LinearLayout(this);
-                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
-                    lp.gravity = Gravity.CENTER_VERTICAL;
-
-                    lp.weight = 1;
-                    lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
-                    btn2.setLayoutParams(lp);
-                    linearLayout.addView(btn2);
-                }
-            }
         }
 
         content_view.addView(linearLayout);

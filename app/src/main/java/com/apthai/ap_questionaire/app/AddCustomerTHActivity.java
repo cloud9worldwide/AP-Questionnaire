@@ -190,12 +190,14 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
             lblBuilding.setTextSize(20);
+            lblRoom.setTextSize(20);
 
 //            lblMoo.setWidth(delegate.dpToPx(83));
         } else {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);
             lblBuilding.setTextSize(25);
+            lblRoom.setTextSize(25);
 
 //            lblMoo.setWidth(delegate.dpToPx(88));
         }

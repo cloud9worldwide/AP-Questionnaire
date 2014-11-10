@@ -387,23 +387,19 @@ public class Display02Activity extends Activity implements OnClickListener {
 
             lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(55));
             lp.gravity = Gravity.CENTER_VERTICAL;
+            //for beautiful
+//            if(i==total-1  && total % column !=0){
+//                for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
+//                    lp.weight = addcolum+1;
+//                }
+//            } else {
+//                lp.weight = 1;
+//            }
             lp.weight = 1;
             lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
             btn.setLayoutParams(lp);
             linearLayout.addView(btn);
-            //for beautiful
-            if(i==total-1  && total % column !=0){
-                for (int addcolum = 0;addcolum<column-(total % column);addcolum++){
-                    LinearLayout btn2 = new LinearLayout(this);
-                    lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, delegate.dpToPx(50));
-                    lp.gravity = Gravity.CENTER_VERTICAL;
 
-                    lp.weight = 1;
-                    lp.setMargins(delegate.dpToPx(20), delegate.dpToPx(10), 0, delegate.dpToPx(10));
-                    btn2.setLayoutParams(lp);
-                    linearLayout.addView(btn2);
-                }
-            }
         }
         content_view.addView(linearLayout);
     }

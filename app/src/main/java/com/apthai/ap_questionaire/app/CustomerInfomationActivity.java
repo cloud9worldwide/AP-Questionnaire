@@ -581,10 +581,78 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             startActivity(i);
             finish();
         } else {
-            if(loadready)
+
+            if(loadready){
                 changeLanguege();
+                loadData2();
+            }
+
+
         }
 
+    }
+
+    private synchronized void loadData2(){
+        loadready =false;
+        customerIndex = delegate.service.globals.getContactId();
+        ctx =this;
+
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Please wait");
+        progress.setMessage("Loading customer information.");
+        progress.show();
+
+        final Handler uiHandler = new Handler();
+
+
+        final  Runnable onUi = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                progress.dismiss();
+                setObject();
+//                setImage();
+                loadready = true;
+            }
+        };
+        final  Runnable onUi2 = new Runnable() {
+            @Override
+            public void run() {
+                // this will run on the main UI thread
+                progress.dismiss();
+                new AlertDialog.Builder(CustomerInfomationActivity.this)
+                        .setTitle("Offline mode")
+                        .setMessage("Cannot access since you are operating offline mode.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(1);
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        };
+        Runnable background = new Runnable() {
+            @Override
+            public void run() {
+                // This is the delay
+                customer_info =null;
+                customer_info = delegate.service.getContactInfo(customerIndex);
+                if(customer_info !=null){
+                    customer_info.setContactId(delegate.service.globals.getContactId());
+                    try {
+                        Thread.sleep(2000);
+                    }catch (Exception e){
+
+                    }
+                    uiHandler.post( onUi );
+                }else{
+                    uiHandler.post( onUi2 );
+                }
+            }
+        };
+        new Thread( background ).start();
     }
 
     public void onBackPressed() {

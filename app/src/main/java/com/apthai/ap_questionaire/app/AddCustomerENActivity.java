@@ -717,10 +717,11 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         } else {
             this.setResult(3);
         }
+        finish();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 2 || resultCode == 0 || resultCode == 1) {
+        if (resultCode == 2 || resultCode == 0 || resultCode == 1 || resultCode == 5) {
             this.setResult(resultCode);
             finish();
         }
