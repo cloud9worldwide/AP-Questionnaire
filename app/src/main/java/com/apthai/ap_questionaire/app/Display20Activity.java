@@ -215,8 +215,6 @@ public class Display20Activity extends Activity implements View.OnClickListener 
 //
 //        });
     }
-
-
     private void setPicture() {
         for(int i =0; i < total; i++){
             LinearLayout btn = new LinearLayout(this);

@@ -46,7 +46,6 @@ public class Display17Activity extends Activity implements View.OnClickListener 
     ImageButton btnNext,btnBack, btnEN, btnTH;
     static PopupWindow popup;
     ImageView img_background;
-    int heightLine;
 
     TextView navigatorBar;
     TextView txt_process;

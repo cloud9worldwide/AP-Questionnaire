@@ -45,7 +45,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
         Drawable imageDraw =  new BitmapDrawable(imageBitmap);
         rootView.setBackground(imageDraw);
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +52,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         setContentView(R.layout.activity_customer_finished_answer);
         delegate = (questionniare_delegate)getApplicationContext();
         ctx = this;
-//        setImage();
-
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -205,7 +202,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 btn_staff.setImageResource(R.drawable.btn_questionniare);
 
             } else {
-                thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
+                thanks1.setText("Thank you for taking the time to fill out this questionnaire");
                 thanks2.setText("");
                 btn_back_home.setImageResource(R.drawable.btn_en_projects);
                 btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
@@ -222,7 +219,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                     btn_staff.setImageResource(R.drawable.for_btn_);
 
                 } else {
-                    thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
+                    thanks1.setText("Thank you for taking the time to fill out this questionnaire");
                     thanks2.setText("");
                     btn_staff.setImageResource(R.drawable.btn_en_staff);
                 }

@@ -51,7 +51,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             delegate.setLocale("th");
         }
 
-setObject();
+        setObject();
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
         String nowDate = sdf.format(c.getTime());

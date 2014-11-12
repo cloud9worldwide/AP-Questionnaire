@@ -64,7 +64,7 @@
     <string name="cannot_back">This is first question, Cannot Back</string>
     <string name="Please_enter">Please enter answer</string>
     <string name="Please_enter_txtbox_in_question">Please enter answer</string>
-    <string name="answer_finish">You are complate your questionnaire</string>
+    <string name="answer_finish">You are complete your questionnaire</string>
     <string name="email_not_correct">E-MAIL IS INVALID</string>
 
     <!--<string name="save_complete">Complete information</string>-->

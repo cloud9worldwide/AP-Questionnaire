@@ -63,7 +63,6 @@ public class Display08Activity extends Activity implements View.OnClickListener 
 
     private Context ctx;
     private QuestionAnswerData checkAnswer = null;
-    boolean isBackgroud;
 
     private void setImage(){
         img_background = (ImageView) findViewById(R.id.img_background);

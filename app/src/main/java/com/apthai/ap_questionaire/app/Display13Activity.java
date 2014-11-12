@@ -181,9 +181,9 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
     private void setDropdownlist(){
         ArrayList<String> list = new ArrayList<String>();
-        if(answer.size()<1){
+//        if(answer.size()<1){
             list.add(getResources().getString(R.string.default_display_13));
-        }
+//        }
 
         for(int i =0; i < total; i++) {
             list.add(data.getAnswers().get(i).getTitle().toString());
@@ -197,7 +197,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
             for(int i =0; i < total; i++) {
                 if(answer.size() ==1){
                     if(Integer.parseInt(answer.get(0).getValue()) == data.getAnswers().get(i).getId()){
-                        ddl.setSelection(i);
+                        ddl.setSelection(i+1);
                     }
                 }
             }
@@ -233,7 +233,10 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
             if(ddl.getSelectedItemPosition()!=0){
                 SaveAnswerData _ans;
-                AnswerData selected = data.getAnswers().get(ddl.getSelectedItemPosition());
+                Log.e("data.getAnswers()",data.getAnswers().toString());
+                Log.e("my index",ddl.getSelectedItemPosition()-1+"");
+                Log.e("my value",data.getAnswers().get(ddl.getSelectedItemPosition()-1)+"");
+                AnswerData selected = data.getAnswers().get(ddl.getSelectedItemPosition()-1);
                 _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
                 answer.add(_ans);
             }

@@ -351,7 +351,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     private void changeLanguege(){
 
-        if(delegate.service.getLg().equals("en")){
+        if(delegate.service.getLg().equals("en")) {
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
             btnEdit.setImageResource(R.drawable.btn_en_edit_profile);
@@ -661,7 +661,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         } else {
             this.setResult(3);
         }
-
         finish();
     }
     @Override
