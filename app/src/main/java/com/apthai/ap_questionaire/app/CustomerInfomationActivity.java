@@ -195,14 +195,14 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(strAddress.length() >0){
                 strAddress = strAddress + " ";
             }
-            strAddress = strAddress + getResources().getString(R.string.add_customer_province) +" " + customer_info.getAddress().getProvince();
+            strAddress = strAddress + " " + customer_info.getAddress().getProvince();
         }
 
         if(customer_info.getAddress().getPostalcode().trim().length()!=0 && !customer_info.getAddress().getPostalcode().trim().equals("null")){
             if(strAddress.length() >0){
                 strAddress = strAddress + " ";
             }
-            strAddress = strAddress + getResources().getString(R.string.add_customer_postcode) +" " + customer_info.getAddress().getPostalcode();
+            strAddress = strAddress + " " + customer_info.getAddress().getPostalcode();
         }
 
         txtAddress.setText(strAddress);

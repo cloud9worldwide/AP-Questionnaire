@@ -262,13 +262,11 @@ public class Display15Activity extends Activity implements View.OnClickListener 
             btnNext.setEnabled(false);
             answer.clear();
             SaveAnswerData _ans;
-            if(indexChoich ==-1){
-                _ans = new SaveAnswerData("-1",null);
-            } else {
+            if(indexChoich !=-1){
                 AnswerData selected = data.getAnswers().get(indexChoich);
                 _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+                answer.add(_ans);
             }
-            answer.add(_ans);
 
             if(delegate.dataSubQuestion !=null){
                 //sub question mode

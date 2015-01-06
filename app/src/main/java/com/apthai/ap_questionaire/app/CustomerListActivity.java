@@ -228,7 +228,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
             unitnumber.setText(obj.getUnitNumber());
             unitnumber.setTypeface(delegate.font_type);
             unitnumber.setTextSize(20);
-            unitnumber.setGravity(Gravity.CENTER_VERTICAL);
+            unitnumber.setGravity(Gravity.CENTER);
             unitnumber.setLayoutParams(lp);
             btn.addView(unitnumber);
 

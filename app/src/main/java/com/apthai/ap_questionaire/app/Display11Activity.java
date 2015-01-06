@@ -433,7 +433,7 @@ public class Display11Activity extends Activity implements View.OnClickListener 
     }
     private void setImageQuestion(){
         img_question = (ImageView) findViewById(R.id.img_question);
-        img_question.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        img_question.setScaleType(ImageView.ScaleType.CENTER);
         if(data.getQuestion().getImageUrl().length()==0 || delegate.readImageFileOnSDFileName(data.getQuestion().getImageUrl())==null){
             img_question.setImageResource(delegate.imgDefaultQuestion);
         } else {

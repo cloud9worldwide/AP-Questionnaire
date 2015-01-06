@@ -70,7 +70,7 @@ public class questionniare_delegate extends Application {
     public QuestionManagement QM;
     public Context ctx;
 
-    public int sizeImage,sizeImage19;
+    public int sizeImage;
     public int isBack;
     public Locale myLocale;
 
@@ -177,7 +177,6 @@ public class questionniare_delegate extends Application {
         font_type = Typeface.createFromAsset(getAssets(),
                 "fonts/DB_Ozone_X.otf");
         sizeImage = dpToPx(120);
-        sizeImage19 = dpToPx(200);
         heightDescriptionUnderImage = dpToPx(100);
 
         ctx = this;
@@ -370,7 +369,7 @@ public class questionniare_delegate extends Application {
     public synchronized ArrayList<QuestionAnswerData> getQuestionnaireHistory() {
         ArrayList<QuestionAnswerData> questionnaireAnswer = new ArrayList<QuestionAnswerData>();
         if (service.isOnline() && !service.globals.getIsCustomerLocal()) {
-            questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()));
+            questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()),project.getId());
         }
         AllHistoryAnswer = questionnaireAnswer;
         Log.e("AllHistoryAnswer",AllHistoryAnswer.toString());

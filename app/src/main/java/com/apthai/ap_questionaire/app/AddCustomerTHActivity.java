@@ -716,7 +716,8 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         }else{
             lblDistrict.setText(getString(R.string.add_customer_district));
         }
-        if(ddlSubDistrict.getSelectedItem().toString().equals(txtPromp)){
+
+        if(ddlSubDistrict.getSelectedItem().toString().equals(txtPromp) && ddlSubDistrict.getCount() !=1){
             lblSubDistrict.setText(Html.fromHtml(getString(R.string.add_customer_sub_district) + "<font color=\"#FF0000\"> *</font>"));
             status = false;
         }else{

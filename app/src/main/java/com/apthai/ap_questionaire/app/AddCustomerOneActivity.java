@@ -132,6 +132,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     new_customer = delegate.customer_selected;
                     getCustomerInfoLong();
                     statusEditOffline =1;
+                } else {
+                    delegate.service.globals.setContactId("-1");
                 }
                 try {
                     Thread.sleep(1000);

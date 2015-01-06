@@ -181,9 +181,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
 
     private void setDropdownlist(){
         ArrayList<String> list = new ArrayList<String>();
-//        if(answer.size()<1){
-            list.add(getResources().getString(R.string.default_display_13));
-//        }
+        list.add(getResources().getString(R.string.default_display_13));
 
         for(int i =0; i < total; i++) {
             list.add(data.getAnswers().get(i).getTitle().toString());
@@ -195,7 +193,7 @@ public class Display13Activity extends Activity implements View.OnClickListener 
         ddl.setAdapter(dataAdapter);
         if(answer.size()>=1){
             for(int i =0; i < total; i++) {
-                if(answer.size() ==1){
+                if(answer.size() ==1) {
                     if(Integer.parseInt(answer.get(0).getValue()) == data.getAnswers().get(i).getId()){
                         ddl.setSelection(i+1);
                     }

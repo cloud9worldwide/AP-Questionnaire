@@ -65,38 +65,9 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 //            }
 //        });
 
-        if(delegate.service.isOnline()){
-            final ProgressDialog progress = new ProgressDialog(this);
-            progress.setTitle("Please wait");
-            progress.setMessage("Sync local data to server.");
-            progress.setCancelable(false);
-            progress.show();
 
-            final Handler uiHandler = new Handler();
-            final  Runnable onUi = new Runnable() {
-                @Override
-                public void run() {
-                    // this will run on the main UI thread
-                    progress.dismiss();
-                    list_projectdata = delegate.service.getProjects();
-                    total = list_projectdata.size();
-                    setObject();
-                }
-            };
-            Runnable background = new Runnable() {
-                @Override
-                public void run() {
-                    // This is the delay
-                    delegate.service.sync_save_questionnaire2(progress);
-                    uiHandler.post( onUi );
-                }
-            };
-            new Thread( background ).start();
-
-        } else {
-            list_projectdata = delegate.service.getProjects();
-            total = list_projectdata.size();
-        }
+        list_projectdata = delegate.service.getProjects();
+        total = list_projectdata.size();
         setObject();
 
     }
@@ -290,6 +261,32 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(delegate.service.isOnline()){
+            final ProgressDialog progress = new ProgressDialog(this);
+            progress.setTitle("Please wait");
+            progress.setMessage("Sync local data to server.");
+            progress.setCancelable(false);
+            progress.show();
+
+            final Handler uiHandler = new Handler();
+            final  Runnable onUi = new Runnable() {
+                @Override
+                public void run() {
+                    // this will run on the main UI thread
+                    progress.dismiss();
+                }
+            };
+            Runnable background = new Runnable() {
+                @Override
+                public void run() {
+                    // This is the delay
+                    delegate.service.sync_save_questionnaire2(progress);
+                    uiHandler.post( onUi );
+                }
+            };
+            new Thread( background ).start();
+        }
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd");

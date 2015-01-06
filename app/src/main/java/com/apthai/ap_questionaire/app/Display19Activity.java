@@ -46,6 +46,7 @@ public class Display19Activity extends Activity implements View.OnClickListener 
     static PopupWindow popup;
     ImageView img_background;
     int pictureWidth, pictureHeight;
+    int shadowWidth, shadowHeight;
 
     HorizontalScrollView scrollPicture;
 
@@ -179,8 +180,10 @@ public class Display19Activity extends Activity implements View.OnClickListener 
         content_view = (LinearLayout) findViewById(R.id.picture);
         content_view.removeAllViews();
 
-        pictureWidth = delegate.dpToPx(250);
-        pictureHeight =delegate.dpToPx(250);
+        pictureWidth = delegate.dpToPx(200);
+        pictureHeight =delegate.dpToPx(150);
+        shadowWidth = delegate.dpToPx(220);
+        shadowHeight =delegate.dpToPx(170);
 
 //        btn_left.setVisibility(View.INVISIBLE);
 //        if(total < 3){
@@ -236,18 +239,18 @@ public class Display19Activity extends Activity implements View.OnClickListener 
             } else {
                 image.setImageURI(delegate.readImageFileOnSDFileName(data.getAnswers().get(i).getImageUrl()));
             }
+            image.setBackgroundResource(R.color.WHITE);
 
             if(isSelected){
                 btn.setBackgroundResource(R.color.ORANGE);
             } else {
                 btn.setBackgroundColor(Color.TRANSPARENT);
             }
-            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(delegate.sizeImage19,delegate.sizeImage19);
+            LinearLayout.LayoutParams imageLayout = new LinearLayout.LayoutParams(pictureWidth,pictureHeight);
             image.setLayoutParams(imageLayout);
 
             btn.addView(image);
-//            btn.setPadding(delegate.dpToPx(10),delegate.dpToPx(10),delegate.dpToPx(10),delegate.dpToPx(10));
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(pictureWidth, pictureHeight);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(shadowWidth, shadowHeight);
             lp.setMargins(delegate.dpToPx(10), delegate.dpToPx(5), delegate.dpToPx(10), delegate.dpToPx(5));
             btn.setLayoutParams(lp);
             content_view.addView(btn);

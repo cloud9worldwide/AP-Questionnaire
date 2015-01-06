@@ -171,9 +171,8 @@ public class Display14Activity extends Activity implements View.OnClickListener 
         txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
 
         txtResult = (TextView) findViewById(R.id.txtResult);
-        txt_question.setTextSize(30);
-        txt_question.setTypeface(delegate.font_type);
-        txt_question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
+        txtResult.setTextSize(30);
+        txtResult.setTypeface(delegate.font_type);
 
         btn_plus = (ImageButton) findViewById(R.id.btn_plus);
         btn_plus.setOnClickListener(this);
@@ -215,10 +214,6 @@ public class Display14Activity extends Activity implements View.OnClickListener 
         }
 
 
-        txtResult.setTextSize(30);
-        txtResult.setTypeface(delegate.font_type);
-
-
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         LinearLayout layoutReal = (LinearLayout) findViewById(R.id.pack);
@@ -251,13 +246,11 @@ public class Display14Activity extends Activity implements View.OnClickListener 
             btnNext.setEnabled(false);
             answer.clear();
             SaveAnswerData _ans;
-            if(indexChoich ==-1){
-                _ans = new SaveAnswerData("-1",null);
-            } else {
+            if(indexChoich !=-1){
                 AnswerData selected = data.getAnswers().get(indexChoich);
                 _ans = new SaveAnswerData(String.valueOf(selected.getId()),null);
+                answer.add(_ans);
             }
-            answer.add(_ans);
 
             if(delegate.dataSubQuestion !=null){
                 //sub question mode
