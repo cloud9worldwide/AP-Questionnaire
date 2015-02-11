@@ -2488,12 +2488,12 @@ public class CoreEngine {
         return  data;
     }
 
-    public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id,String _province_id){
+    public ArrayList<ValTextData> getSubDistrictByDistrict(String _district_id, String _province_id){
         ArrayList<ValTextData> data = new ArrayList<ValTextData>();
         if (this.getLg().equals("en")){
-            data.add(0, new ValTextData(" ", "Please select"));
-        }else {
-            data.add(0, new ValTextData(" ", "กรุณาเลือก"));
+            data.add(0, new ValTextData(" ", "Please select","กรุณาเลือก" ));
+        } else {
+            data.add(0, new ValTextData(" ", "กรุณาเลือก", "Please select"));
         }
         MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
         _dbHelper.open();
@@ -2503,9 +2503,9 @@ public class CoreEngine {
         for (int i = 0; i < _cursor.getCount(); i++) {
             ValTextData val;
             if (this.getLg().equals("en")){
-                val = new ValTextData(_cursor.getString(0),_cursor.getString(2),_cursor.getString(1));
+                val = new ValTextData(_cursor.getString(3),_cursor.getString(2),_cursor.getString(1));
             } else {
-                val = new ValTextData(_cursor.getString(0),_cursor.getString(1),_cursor.getString(2));
+                val = new ValTextData(_cursor.getString(3),_cursor.getString(1),_cursor.getString(2));
             }
             data.add(val);
             _cursor.moveToNext();

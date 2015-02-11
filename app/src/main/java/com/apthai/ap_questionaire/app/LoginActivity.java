@@ -198,12 +198,9 @@ public class LoginActivity extends Activity implements OnClickListener {
             txtIP.setVisibility(View.VISIBLE);
             btnSyncGEO.setVisibility(View.VISIBLE);
             txtIP.setText(delegate.service.getWebserviceUrl());
-
     }
 
     private void hideConfig(){
-
-
         InputMethodManager imm = (InputMethodManager)getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtPassword.getWindowToken(), 0);

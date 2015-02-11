@@ -495,15 +495,16 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                         }
                     }
                 }
-                setddlSubDistrict(district.get(arg2).getValue());
+                setddlSubDistrict(district.get(arg2).getValue(), provinceID);
             }
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
     }
 
-    public synchronized void setddlSubDistrict(final String districtID) {
-        final ArrayList<ValTextData> subDistrict = delegate.service.getSubDistrictByDistrict(districtID);
+    public synchronized void setddlSubDistrict(final String districtID,final String provinceID) {
+        final ArrayList<ValTextData> subDistrict = delegate.service.getSubDistrictByDistrict(districtID, provinceID);
+//        final ArrayList<ValTextData> subDistrict = delegate.service.getSubDistrictByDistrict(districtID);
         provinceAdapter _provinceAdapter = new provinceAdapter(this, R.layout.dropdownlist, subDistrict);
         ddlSubDistrict.setAdapter(_provinceAdapter);
         ddlSubDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -511,7 +512,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
                 if(status==2){
                     status=3;
                     ArrayList<ValTextData> list;
-                    list= delegate.service.getSubDistrictByDistrict(districtID);
+                    list = delegate.service.getSubDistrictByDistrict(districtID, provinceID);
                     for (int i = 0; i < list.size(); i++) {
                         if (list.get(i).getText().equals(new_customer.getAddress().getSubdistrict())) {
                             ddlSubDistrict.setSelection(i);

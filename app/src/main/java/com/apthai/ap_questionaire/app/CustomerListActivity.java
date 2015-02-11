@@ -374,8 +374,6 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
                     };
                     new Thread(background).start();
                 }
-
-
             }
         }
     }
