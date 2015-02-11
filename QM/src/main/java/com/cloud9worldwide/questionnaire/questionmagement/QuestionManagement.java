@@ -145,7 +145,7 @@ public class QuestionManagement {
                     question_ans.setDefault(false);
                     this.AnsListData.set(i, question_ans);
                 }else{
-                    SaveAnswerData save_ans = new SaveAnswerData("-1","");
+                    SaveAnswerData save_ans = new SaveAnswerData("-99","");
                     ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
                     _ans_list.add(save_ans);
                     QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(curQuestion.getQuestion().getId()),_ans_list);
@@ -304,13 +304,12 @@ public class QuestionManagement {
     public synchronized boolean pack_question_ans_data(){
         if(!this.already_pack_question){
 
-
-
             //get all sub question ans , except default ans
+            //koy comment 2 Feb
             ArrayList<QuestionAnswerData> sub_ans_list = this.SubAnsListData;
             for (int i = 0; i < sub_ans_list.size(); i++) {
                 QuestionAnswerData tmp = sub_ans_list.get(i);
-                if(!tmp.isDefault()){
+//                if(!tmp.isDefault()){
                     ArrayList<SaveAnswerData> _ans_tmp = tmp.getAnswer();
                     ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
                     for (int j = 0; j < _ans_tmp.size(); j++) {
@@ -323,14 +322,13 @@ public class QuestionManagement {
                         tmp.setAnswer(_new_ans_tmp);
                         AnsListData.add(tmp);
                     }
-
-                }
+//                }
             }
 
             ArrayList<QuestionAnswerData> _newAnsListData = new ArrayList<QuestionAnswerData>();
             for (int i = 0; i < AnsListData.size(); i++) {
                 QuestionAnswerData tmp = AnsListData.get(i);
-                if(!tmp.isDefault()){
+//                if(!tmp.isDefault()){
                     ArrayList<SaveAnswerData> _ans_tmp = tmp.getAnswer();
                     ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
                     for (int j = 0; j < _ans_tmp.size(); j++) {
@@ -343,7 +341,7 @@ public class QuestionManagement {
                         tmp.setAnswer(_new_ans_tmp);
                         _newAnsListData.add(tmp);
                     }
-                }
+//                }
             }
 
             this.QnAnsData.setAnswers(_newAnsListData);

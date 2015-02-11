@@ -54,6 +54,9 @@ public class questionniare_delegate extends Application {
     public int index_question;
     public ArrayList<QuestionTypeData> questions;
 
+    public String tmpName, tmpSurname, tmpTel;
+    public boolean canRevisit;
+
     public QuestionTypeData dataSubQuestion;
     public boolean skip_save_subans = false;
 

@@ -340,6 +340,7 @@ public class CustomerListActivity extends Activity implements View.OnClickListen
                     delegate.service.globals.setContactId(obj.getContactId());
                     delegate.service.globals.setIsCustomerLocal(false);
                     Log.e(TAG , "customer index : "+obj.getContactId());
+                    delegate.canRevisit = obj.getIsOpporpunity();
 
                     final ProgressDialog progress = new ProgressDialog(this);
                     progress.setTitle("Please wait");

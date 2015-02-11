@@ -135,6 +135,12 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     private void setData(){
 
+        if (delegate.canRevisit) {
+            btn_reVisit.setVisibility(View.VISIBLE);
+        } else {
+            btn_reVisit.setVisibility(View.GONE);
+        }
+
         lbl_Fname.setText(R.string.add_customer_name);
         lbl_Lname.setText(R.string.add_customer_surname);
         lbl_address.setText(R.string.address);

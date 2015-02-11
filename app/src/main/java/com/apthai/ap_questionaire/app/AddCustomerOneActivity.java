@@ -173,10 +173,32 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         if(delegate.customer_selected ==null){
             AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "Thailand", "", "");
             AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
-            new_customer = new ContactData("คุณ", "", "", "", "", "", null, null,null);
+            new_customer = new ContactData("คุณ", delegate.tmpName, delegate.tmpSurname, "", "", "", null, null,null);
             new_customer.setAddress(home);
             new_customer.setNationality("Thailand");
             new_customer.setAddressWork(work);
+            mobile_list.set(0, delegate.tmpTel);
+            if (delegate.tmpTel.length() != 0) {
+                String mobile = delegate.tmpTel;
+                switch (mobile.length()) {
+                    case 10: mobile10.setText(mobile.substring(9, 10));
+                    case 9: mobile9.setText(mobile.substring(8, 9));
+                    case 8: mobile8.setText(mobile.substring(7, 8));
+                    case 7: mobile7.setText(mobile.substring(6, 7));
+                    case 6: mobile6.setText(mobile.substring(5, 6));
+                    case 5: mobile5.setText(mobile.substring(4, 5));
+                    case 4: mobile4.setText(mobile.substring(3, 4));
+                    case 3: mobile3.setText(mobile.substring(2, 3));
+                    case 2: mobile2.setText(mobile.substring(1, 2));
+                    case 1: mobile1.setText(mobile.substring(0, 1));
+                }
+            }
+            if(delegate.tmpName.length() != 0){
+                txtFirstName.setText(delegate.tmpName);
+            }
+            if(delegate.tmpSurname.length() != 0){
+                txtLastName.setText(delegate.tmpSurname);
+            }
         } else {
 
             txtPrefix.setText(new_customer.getPrefix_vip().toString());
@@ -214,7 +236,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 }
             }
 
-
             String mobile = mobile_list.get(0);
             mobile = mobile.replace("-", "");
 
@@ -237,7 +258,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     phone_list.set(i,"");
                 }
             }
-
 
             String tel = phone_list.get(0);
             tel = tel.replace("-", "");
@@ -1267,7 +1287,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         ddlPrefix.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if(arg2 == listfix.size()-1){
-                    //koy
                     lbl_prefix_extra2.setVisibility(View.VISIBLE);
                     txtPrefix.setVisibility(View.VISIBLE);
                 } else {

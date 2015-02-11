@@ -53,9 +53,7 @@ import java.util.Calendar;
  */
 public class CoreEngine {
     private static final String debugTag = "CoreEngine";
-    //private String webserviceUrl = "http://www.cloud9worldwide.com/webservices/ws_questionnaire.php";
-//    private String webserviceUrl = "http://www.siwapon.me/apquestionnaireth/service.aspx";
-    private String webserviceUrl = "http://103.13.31.148:8010/service.aspx";
+    private String webserviceUrl = "http://58.137.32.228/Questionnaire/Service.aspx";
 
     private static final String PARAM_USERNAME = "username";
     private static final String PARAM_PASSWORD = "password";
@@ -694,7 +692,7 @@ public class CoreEngine {
                             JSONObject _json = _arr_json.getJSONObject(i);
 
                             Boolean isOp = false;
-                            if(_json.getString("isOpporpunity").equals("YES")){
+                            if(_json.getString("isOpporpunity").equals("Yes")){
                                 isOp = true;
                             }
                             ContactSearchData _sData = new ContactSearchData(
@@ -2948,13 +2946,14 @@ public class CoreEngine {
             e.printStackTrace();
         }
     }
-    public synchronized ArrayList<QuestionAnswerData> getQuestionnaireAnswerHistory(String _questionnaire_id){
+    public synchronized ArrayList<QuestionAnswerData> getQuestionnaireAnswerHistory(String _questionnaire_id,String _project_id){
         ArrayList<QuestionAnswerData> _data = new ArrayList<QuestionAnswerData>();
         if(isOnline() && !globals.getIsCustomerLocal()) {
             try{
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.put("tokenaccess",globals.getLoginTokenAccess());
                 jsonObj.put("questionnaireid",_questionnaire_id);
+                jsonObj.put("projectid",_project_id);
                 jsonObj.put(PARAM_CUSTOMERID,String.valueOf(globals.getContactId()));
 
                 try{

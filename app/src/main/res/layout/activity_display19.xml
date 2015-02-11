@@ -59,7 +59,7 @@
                         android:layout_marginLeft="15dp"
                         android:id="@+id/scrollPicture"
                         android:layout_width="700dp"
-                        android:layout_height="300dp"
+                        android:layout_height="200dp"
                         android:orientation="horizontal"
                         android:fillViewport="true"
                         >

@@ -238,6 +238,9 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
+                delegate.tmpName = "";
+                delegate.tmpSurname = "";
+                delegate.tmpTel = "";
                 if (txtFirstName.getText().toString().trim().length() == 0 && txtLastName.getText().toString().trim().length() == 0 && txtTel.getText().toString().length() == 0) {
                     btn_send.setEnabled(true);
                     startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
@@ -261,6 +264,9 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
 
 //                                startActivityForResult(new Intent(ctx, CustomerListActivity.class), 0);
                             } else {
+                               delegate.tmpName = txtFirstName.getText().toString();
+                               delegate.tmpSurname = txtLastName.getText().toString();
+                               delegate.tmpTel = txtTel.getText().toString();
                                 Intent i = new Intent(ctx, NotFoundCustomerActivity.class);
 //                                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivityForResult(i,0);

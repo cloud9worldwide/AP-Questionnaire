@@ -53,13 +53,12 @@
             android:orientation="horizontal"
             >
             <ImageView
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
+                android:layout_margin="30dp"
+                android:layout_width="360dp"
                 android:gravity="center"
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter"
                 android:id="@+id/img_question"
-                android:layout_weight="1"
                 />
             <ScrollView
                 android:layout_alignBottom="@+id/lbl_line"

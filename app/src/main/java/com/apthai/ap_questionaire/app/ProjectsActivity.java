@@ -28,7 +28,6 @@ import java.util.Calendar;
 
 public class ProjectsActivity extends Activity implements OnClickListener {
 
-    final String TAG = "eiei";
     int total = 0;
     Button btn_settings, btn_home;
     LinearLayout linearLayout, content_view;
