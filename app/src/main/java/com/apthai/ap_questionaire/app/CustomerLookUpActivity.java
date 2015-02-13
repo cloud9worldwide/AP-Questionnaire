@@ -76,6 +76,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         setImage();
         ctx = this;
         delegate.service.globals.setContactId("-1");
+        delegate.canRevisit = false;
     }
 
     private void setObject(){

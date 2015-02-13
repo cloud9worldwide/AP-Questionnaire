@@ -62,6 +62,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     ArrayList<String> mobile_list, phone_list;
     int mYear, mMonth, mDay;
 
+    EditText activeField;
+
     EditText home1, home2, home3, home4, home5, home6, home7, home8, home9;
     EditText mobile1, mobile2, mobile3, mobile4, mobile5, mobile6, mobile7, mobile8, mobile9,mobile10;
 
@@ -368,6 +370,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         setBirthDay();
         setObjectTelephone();
         setFont();
+//        setActiveField();
 
         setKeyListener();
 
@@ -384,6 +387,14 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
 
+    }
+    protected void setActiveField() {
+        txtPrefix.setOnClickListener(this);
+        txtFirstName.setOnClickListener(this);
+        txtLastName.setOnClickListener(this);
+        txtNickname.setOnClickListener(this);
+        datePicker.setOnClickListener(this);
+        txtEmail.setOnClickListener(this);
     }
 
     protected void onResume() {
@@ -1286,7 +1297,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         ddlPrefix.setAdapter(dataAdapterfix);
         ddlPrefix.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                if(arg2 == listfix.size()-1){
+                if (arg2 == listfix.size() - 1) {
                     lbl_prefix_extra2.setVisibility(View.VISIBLE);
                     txtPrefix.setVisibility(View.VISIBLE);
                 } else {
@@ -1294,9 +1305,26 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     txtPrefix.setVisibility(View.GONE);
                 }
             }
+
             public void onNothingSelected(AdapterView<?> arg0) {
+
             }
         });
+//        ddlPrefix.setOnTouchListener(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (activeField != null) {
+//                    if (activeField.requestFocus()) {
+//                        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        mgr.hideSoftInputFromWindow(activeField.getWindowToken(), 0);
+//                        activeField = null;
+//                    }
+//                }
+//                return false;
+//            }
+//
+//        });
 
         //COUNTRY
         list = delegate.service.getCountry();
@@ -1347,6 +1375,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     + mobile4.getText().toString() + mobile5.getText().toString() + mobile6.getText().toString() +
                     mobile7.getText().toString() + mobile8.getText().toString() + mobile9.getText().toString()+ mobile10.getText().toString();
             mobile_list.set(0, txtMobileinPage);
+        } else {
+            mobile_list.set(0, "");
         }
         //home index0
         if (home1.getText().toString().length() > 0 && home2.getText().toString().length() > 0
@@ -1358,6 +1388,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     + home4.getText().toString() + home5.getText().toString() + home6.getText().toString() +
                     home7.getText().toString() + home8.getText().toString() + home9.getText().toString();
             phone_list.set(0, txtPhone);
+        } else {
+            phone_list.set(0, "");
         }
 
         home.setCountry(ddlCountry.getSelectedItem().toString());
@@ -1425,6 +1457,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
 
     public void onClick(View v) {
+
         if (popup.isShowing()) {
             popup.dismiss();
         }
@@ -1432,6 +1465,21 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             popupAddMobile.dismiss();
         }
 
+//        if(v.getId() == R.id.txt_FirstName) {
+//            activeField = txtFirstName;
+//            txtPrefix.setOnClickListener(this);
+//            txtFirstName.setOnClickListener(this);
+//            txtLastName.setOnClickListener(this);
+//            txtNickname.setOnClickListener(this);
+//            datePicker.setOnClickListener(this);
+//            txtEmail
+//                    txtPrefix = (EditText) findViewById(R.id.txt_Prefix);
+//            txtFirstName = (EditText) findViewById(R.id.txt_FirstName);
+//            txtLastName = (EditText) findViewById(R.id.txt_LastName);
+//            txtNickname = (EditText) findViewById(R.id.txtNickname);
+//            datePicker = (TextView) findViewById(R.id.datePicker);
+//            txtEmail = (EditText) findViewById(R.id.txt_Email);
+//        } else
         if (v.getId() == R.id.btnBack) {
             onBackPressed();
         } else if (v.getId() == R.id.btnMenu) {

@@ -34,7 +34,7 @@
     <string name="add_customer_soi">ซอย</string>
     <string name="add_customer_road">ถนน</string>
     <string name="add_customer_province">จังหวัด</string>
-    <string name="add_customer_sub_district">ตำบล</string>
+    <string name="add_customer_sub_district">แขวง/ตำบล</string>
     <string name="add_customer_postcode">รหัสไปรษณีย์</string>
     <string name="add_customer_other_country">ประเทศ</string>
     <string name="add_customer_nationality">สัญชาติ</string>
