@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,10 +66,44 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
 
         }
-        startAnimateLogo();
-//        txtUsername.setText("admin");
-//        txtPassword.setText("password");
+        final Handler uiHandler = new Handler();
+        final  Runnable onUi = new Runnable() {
+            @Override
+            public void run() {
+                startAnimateLogo();
 
+            }
+        };
+        Runnable background = new Runnable() {
+            @Override
+            public void run() {
+                isInit();
+            uiHandler.post( onUi );
+        }
+    };
+    new Thread( background ).start();
+
+
+    }
+    public void isInit(){
+        SharedPreferences preferences = LoginActivity.this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+
+        String isInit = preferences.getString("isInitProvince","NO");
+
+
+        if(isInit.equals("NO")){
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("isInitProvince", "YES");
+            editor.commit();
+
+            Log.e("Splash ","Init ja");
+            delegate.service.initProvincesData(LoginActivity.this);
+            delegate.service.initDistrictData(LoginActivity.this);
+            delegate.service.initSubDistrictData(LoginActivity.this);
+            delegate.service.initCountryData(LoginActivity.this);
+            delegate.service.initNationalityData(LoginActivity.this);
+
+        }
     }
 
     protected void onResume() {
@@ -299,7 +334,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
             @Override
             public void onAnimationStart(Animation animation) {
-                SystemClock.sleep(2000);
+                //SystemClock.sleep(2000);
             }
 
             @Override
@@ -311,7 +346,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 btnLogin.setVisibility(View.VISIBLE);
                 Animation fadeInAnimation = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.animate);
                 fadeInAnimation.setFillAfter(true);
-                fadeInAnimation.setDuration(2500);
+                fadeInAnimation.setDuration(200);
 
                 txtUsername.startAnimation(fadeInAnimation);
                 txtPassword.startAnimation(fadeInAnimation);

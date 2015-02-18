@@ -1270,7 +1270,6 @@ public class CoreEngine {
         if(isOnline()){
             MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
 
-
             if(_data.getIscustomerLocal() && (_data.getCustomerId().length() < 6)){
                 //move customer local to server
                 ContactData _contact = null;

@@ -13,12 +13,22 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.NoTitle" >
         <activity
+            android:name="com.apthai.ap_questionaire.app.SplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+
+        </activity>
+        <activity
             android:name="com.apthai.ap_questionaire.app.LoginActivity"
             android:clickable="true"
             android:focusableInTouchMode="true"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.ProjectsActivity"
@@ -161,16 +171,6 @@
             android:name="com.apthai.ap_questionaire.app.CustomerFinishedAnswerActivity"
             android:label="@string/title_activity_customer_finished_answer"
             android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name="com.apthai.ap_questionaire.app.SplashActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.apthai.ap_questionaire.app.MenuActivity"

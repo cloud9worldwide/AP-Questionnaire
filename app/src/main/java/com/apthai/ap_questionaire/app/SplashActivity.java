@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +36,7 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onAnimationStart(Animation animation) {
-                SystemClock.sleep(2000);
+                //SystemClock.sleep(2000);
             }
 
             @Override

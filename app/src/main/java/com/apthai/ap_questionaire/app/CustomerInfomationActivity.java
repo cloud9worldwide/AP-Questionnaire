@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.telephony.PhoneNumberUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,7 +57,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
 
     }
 
-    private synchronized void loadData(){
+    private synchronized void loadData() {
 
         delegate = (questionniare_delegate)getApplicationContext();
         setImage();
@@ -722,10 +721,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         phone = phone.trim();
         if(phone.length()==10){
             //mobile mode
-            return PhoneNumberUtils.formatNumber(phone);
+            return phone.substring(0,3) +"-"+phone.substring(3,6)+"-"+phone.substring(6,10);
         } else if(phone.length()==9){
             //home mode
-            return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+            if(phone.substring(0,2).equals("02")){
+                return phone.substring(0,2) +"-"+phone.substring(2,5)+"-"+phone.substring(5,9);
+            }
+            return phone.substring(0,3) +"-"+phone.substring(3,6)+"-"+phone.substring(6,9);
         }
         //do not anythings
         return phone;
