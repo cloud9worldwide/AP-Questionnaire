@@ -9,7 +9,6 @@ import org.json.JSONObject;
 public class SaveAnswerData {
     private String value;
     private String freetxt;
-    private String isRemove; // 1 = YES, 0 = NO
     private boolean hassubquestion = false;
 
     public SaveAnswerData(String value, String freetxt) {
@@ -17,9 +16,7 @@ public class SaveAnswerData {
         if(freetxt ==null){
             freetxt = "";
         }
-        if (isRemove == null) {
-            isRemove = "0";
-        }
+
         this.freetxt = freetxt;
     }
 
@@ -39,14 +36,11 @@ public class SaveAnswerData {
         return freetxt;
     }
 
-    public String getIsRemove() { return  isRemove;}
-
     public JSONObject toJsonObject(){
         JSONObject obj = new JSONObject();
         try {
             obj.put("value",this.value);
             obj.put("freetxt",this.freetxt);
-            obj.put("remove",this.isRemove);
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -58,7 +52,6 @@ public class SaveAnswerData {
         try {
             obj.put("value",this.value);
             obj.put("freetxt",this.freetxt);
-            obj.put("remove",this.isRemove);
         }catch (JSONException e){
             e.printStackTrace();
         }

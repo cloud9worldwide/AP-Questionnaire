@@ -1417,6 +1417,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
     }
     private boolean validate() {
         boolean status = true;
+        String error_msg = getString(R.string.error_customer_one);
 
         if(txtFirstName.getText().toString().length() ==0){
             lbl_add_customer_name.setText(Html.fromHtml(getString(R.string.add_customer_name) +"<font color=\"#FF0000\"> *</font>"));
@@ -1431,15 +1432,57 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             lbl_add_customer_surname.setText(getString(R.string.add_customer_surname));
         }
 
-        if (mobile1.getText().toString().length() > 0 && mobile2.getText().toString().length() > 0
-                && mobile3.getText().toString().length() > 0 && mobile4.getText().toString().length() > 0
-                && mobile5.getText().toString().length() > 0 && mobile6.getText().toString().length() > 0
-                && mobile7.getText().toString().length() > 0 && mobile8.getText().toString().length() > 0
-                && mobile9.getText().toString().length() > 0 && mobile10.getText().toString().length() > 0) {
-            lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
-        } else {
+//        if (mobile1.getText().toString().length() > 0 && mobile2.getText().toString().length() > 0
+//                && mobile3.getText().toString().length() > 0 && mobile4.getText().toString().length() > 0
+//                && mobile5.getText().toString().length() > 0 && mobile6.getText().toString().length() > 0
+//                && mobile7.getText().toString().length() > 0 && mobile8.getText().toString().length() > 0
+//                && mobile9.getText().toString().length() > 0 && mobile10.getText().toString().length() > 0) {
+//            lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
+//        } else {
+//            status = false;
+//            lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+//        }
+        int statusMobile = 0;
+        if (mobile1.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile2.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile3.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile4.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile5.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile6.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile7.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile8.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile9.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (mobile10.getText().toString().length() > 0){
+            statusMobile++;
+        }
+        if (statusMobile == 0 ){
             status = false;
+            error_msg = getString(R.string.error_customer_one);
             lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+        } else if (statusMobile != 10) {
+            status = false;
+            error_msg = getString(R.string.error_customer_one_mobileformat);
+            lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+        } else {
+            lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
         }
 
         if(txtEmail.getText().toString().length() !=0){
@@ -1448,9 +1491,48 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             } else {
                 lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email) +"<font color=\"#FF0000\"> *</font>"));
                 status = false;
+                error_msg = getString(R.string.error_customer_one_emailformat);
             }
         } else {
             lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email)));
+        }
+        int statusHome = 0;
+        if (home1.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home2.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home3.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home4.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home5.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home6.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home7.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home8.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (home9.getText().toString().length() > 0){
+            statusHome++;
+        }
+        if (statusHome > 0 && statusHome != 9){
+            status = false;
+            lbl_add_customer_tel_home_other_line1.setText(Html.fromHtml(getString(R.string.add_customer_tel_home_BKK_line1) +"<font color=\"#FF0000\"> *</font>"));
+            error_msg = getString(R.string.error_customer_one_telhomeformat);
+        } else {
+            lbl_add_customer_tel_home_other_line1.setText(getString(R.string.add_customer_tel_home_BKK_line1));
+        }
+        if (!status) {
+            delegate.showAlert(this, error_msg, getString(R.string.alert_warning));
         }
 
         return status;
@@ -1517,12 +1599,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     } else {
                         startActivityForResult(new Intent(this, AddCustomerENActivity.class),0);
                     }
-                } else {
-                    delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
                 }
-
+//                else {
+//                    delegate.showAlert(this, getString(R.string.error_customer_one), getString(R.string.alert_warning));
+//                }
             }
-
         } else if (v.getId() == R.id.btnAddMobiles){
 //            showPopupAddMobile(this,"mobile",99);
             showPopupAddMobile2(this,"mobile",99);

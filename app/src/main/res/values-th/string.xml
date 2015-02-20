@@ -80,7 +80,11 @@
     <string name="email_not_correct">E-MAIL ไม่ถูกต้อง</string>
 
     <string name="txtPromp">กรุณาเลือก</string>
+
     <string name="error_customer_one">โปรดกรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบถ้วน</string>
+    <string name="error_customer_one_emailformat">กรุณากรอก "อีเมล์" ให้ถูกต้อง</string>
+    <string name="error_customer_one_mobileformat">กรุณากรอก "เบอร์มือถือ" ให้ครบ 10 หลัก</string>
+    <string name="error_customer_one_telhomeformat">กรุณากรอก "เบอร์บ้าน" ให้ครบ 9 หลัก</string>
 
     <string name="error_add_phone">กรุณากรอกให้ครบ</string>
 
@@ -94,4 +98,7 @@
     <string name="title_flag">คุณต้องการทำแบบสอบถามในภาษาใด</string>
     <string name="flag_name_TH">ภาษาไทย</string>
     <string name="flag_name_EN">ภาษาอังกฤษ</string>
+    <string name="error_lookup_name">กรุณาใส่ ชื่อ อย่างน้อย 2 ตัวอักษร</string>
+    <string name="error_lookup_surname">กรุณาใส่ นามสกุล อย่างน้อย 2 ตัวอักษร</string>
+    <string name="error_lookup_tel">กรุณาใส่ เบอร์โทรศัพท์มือถือ อย่างน้อย 4 ตัว</string>
 </resources>

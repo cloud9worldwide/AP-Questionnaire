@@ -123,7 +123,12 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                 if(!data.isParent_question() && data.getParent_question_id() < 0){//not have sub question && not is sub question
                     checkAnswer = delegate.QM.get_answer();
                     if(checkAnswer == null){
-                        answer = delegate.getHistory();
+                        ArrayList<QuestionTypeData> tmp =  delegate.QM.get_all_questions_not_ans();
+                        if (tmp == null){
+                            answer = delegate.getHistory();
+                        } else {
+                            answer = new ArrayList<SaveAnswerData>();
+                        }
                     }else{
                         answer = checkAnswer.getAnswer();
                     }
@@ -142,6 +147,9 @@ public class Display18Activity extends Activity implements View.OnClickListener 
                         answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
                     } else {
                         answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
+                        for (int i = 0 ; i < answer.size() ; i++){
+                            Log.e("value",answer.get(i).getValue());
+                        }
                     }
                 }
 

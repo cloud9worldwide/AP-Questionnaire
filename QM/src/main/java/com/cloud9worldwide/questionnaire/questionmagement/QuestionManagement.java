@@ -100,7 +100,7 @@ public class QuestionManagement {
         //set default SaveAnswer data
         for (int i = 0; i < this.count_questions(); i++) {
             QuestionTypeData question = this.get_question_byIndex(i);
-            SaveAnswerData save_ans = new SaveAnswerData("-1","");
+            SaveAnswerData save_ans = new SaveAnswerData("-99","");
             ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
             _ans_list.add(save_ans);
             QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(question.getQuestion().getId()),_ans_list);
@@ -111,7 +111,7 @@ public class QuestionManagement {
         //set default sub question SaveAnswer data
         for (int i = 0; i < _tmp_sub_question_list.size(); i++) {
             QuestionTypeData question = _tmp_sub_question_list.get(i);
-            SaveAnswerData save_ans = new SaveAnswerData("-1","");
+            SaveAnswerData save_ans = new SaveAnswerData("-99","");
             ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
             _ans_list.add(save_ans);
             QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(question.getQuestion().getId()),_ans_list);

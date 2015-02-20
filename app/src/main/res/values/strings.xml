@@ -129,6 +129,9 @@ the data will be synced automatically when internet is connected."</string>
     <string name="title_activity_do_not_answer_list">DoNotAnswerListActivity</string>
     <string name="txtPromp">Please select</string>
     <string name="error_customer_one">Please enter required information</string>
+    <string name="error_customer_one_emailformat">Please enter valid email</string>
+    <string name="error_customer_one_mobileformat">Please complete "Mobile number"</string>
+    <string name="error_customer_one_telhomeformat">Please complete "Telephone number"</string>
     <string name="error_add_phone">Please input your phone number</string>
     <string name="error_textbox_number">Please fill answer in selected blank</string>
     <string name="error_textbox_freetext">Please fill answer in selected blank</string>
@@ -138,6 +141,9 @@ the data will be synced automatically when internet is connected."</string>
     <string name="title_flag">Please select your Questionnaire language</string>
     <string name="flag_name_TH">Thai</string>
     <string name="flag_name_EN">English</string>
+    <string name="error_lookup_name">Please enter "Name" minimum 2 characters</string>
+    <string name="error_lookup_surname">Please enter "Last Name" minimum 2 characters</string>
+    <string name="error_lookup_tel">Please enter "Mobile Number" minimum 4 digits</string>
 
     <string name="alert_warning">Warning</string>
 

@@ -234,7 +234,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     public void onClick(View v) {
 
         if(v.getId() == R.id.btnSend) {
-            btn_send.setEnabled(false);
+//            btn_send.setEnabled(false);
             hideKeyboard();
             if(popup.isShowing()){
                 popup.dismiss();
@@ -243,57 +243,65 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
                 delegate.tmpSurname = "";
                 delegate.tmpTel = "";
                 if (txtFirstName.getText().toString().trim().length() == 0 && txtLastName.getText().toString().trim().length() == 0 && txtTel.getText().toString().length() == 0) {
-                    btn_send.setEnabled(true);
+//                    btn_send.setEnabled(true);
                     startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
                 } else {
-                    final ProgressDialog progress = new ProgressDialog(this);
-                    progress.setTitle("Please wait");
-                    progress.setMessage("Searching....");
-                    progress.show();
+                    if (txtFirstName.getText().toString().trim().length() != 0 && txtFirstName.getText().toString().trim().length() < 2) {
+                        delegate.showAlert(this, getString(R.string.error_lookup_name), getString(R.string.alert_warning));
+                    } else if (txtLastName.getText().toString().trim().length() != 0 && txtLastName.getText().toString().trim().length() < 2) {
+                        delegate.showAlert(this, getString(R.string.error_lookup_surname), getString(R.string.alert_warning));
+                    } else if (txtTel.getText().toString().trim().length() != 0 && txtTel.getText().toString().trim().length() < 4) {
+                        delegate.showAlert(this, getString(R.string.error_lookup_tel), getString(R.string.alert_warning));
+                    } else {
+                        final ProgressDialog progress = new ProgressDialog(this);
+                        progress.setTitle("Please wait");
+                        progress.setMessage("Searching....");
+                        progress.show();
 
-                    final Handler uiHandler = new Handler();
-                    final Runnable onUi = new Runnable() {
-                        @Override
-                        public void run() {
-                            // this will run on the main UI thread
-                            progress.dismiss();
-                            btn_send.setEnabled(true);
-                            if (delegate.getCustomer_list().size() > 0) {
-                                Intent i = new Intent(ctx, CustomerListActivity.class);
+                        final Handler uiHandler = new Handler();
+                        final Runnable onUi = new Runnable() {
+                            @Override
+                            public void run() {
+                                // this will run on the main UI thread
+                                progress.dismiss();
+//                                btn_send.setEnabled(true);
+                                if (delegate.getCustomer_list().size() > 0) {
+                                    Intent i = new Intent(ctx, CustomerListActivity.class);
 //                                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivityForResult(i,0);
+                                    startActivityForResult(i,0);
 
 //                                startActivityForResult(new Intent(ctx, CustomerListActivity.class), 0);
-                            } else {
-                               delegate.tmpName = txtFirstName.getText().toString();
-                               delegate.tmpSurname = txtLastName.getText().toString();
-                               delegate.tmpTel = txtTel.getText().toString();
-                                Intent i = new Intent(ctx, NotFoundCustomerActivity.class);
+                                } else {
+                                    delegate.tmpName = txtFirstName.getText().toString();
+                                    delegate.tmpSurname = txtLastName.getText().toString();
+                                    delegate.tmpTel = txtTel.getText().toString();
+                                    Intent i = new Intent(ctx, NotFoundCustomerActivity.class);
 //                                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivityForResult(i,0);
+                                    startActivityForResult(i,0);
 //                                startActivityForResult(new Intent(ctx, NotFoundCustomerActivity.class), 0);
-                            }
-                        }
-                    };
-                    Runnable background = new Runnable() {
-                        @Override
-                        public void run() {
-                            ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString().trim(), txtLastName.getText().toString().trim(), txtTel.getText().toString(), delegate.project.getId());
-                            delegate.setCustomer_list(new ArrayList<ContactSearchData>());
-                            if (searchData != null) {
-                                if (searchData.size() != 0) {
-                                    delegate.setCustomer_list(searchData);
                                 }
                             }
-                            try {
-                                Thread.sleep(2000);
-                            } catch (Exception e) {
+                        };
+                        Runnable background = new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<ContactSearchData> searchData = delegate.service.searchContact(txtFirstName.getText().toString().trim(), txtLastName.getText().toString().trim(), txtTel.getText().toString(), delegate.project.getId());
+                                delegate.setCustomer_list(new ArrayList<ContactSearchData>());
+                                if (searchData != null) {
+                                    if (searchData.size() != 0) {
+                                        delegate.setCustomer_list(searchData);
+                                    }
+                                }
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (Exception e) {
 
+                                }
+                                uiHandler.post(onUi);
                             }
-                            uiHandler.post(onUi);
-                        }
-                    };
-                    new Thread(background).start();
+                        };
+                        new Thread(background).start();
+                    }
                 }
             }
         } else if(v.getId() == R.id.btnBack){
