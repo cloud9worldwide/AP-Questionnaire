@@ -167,7 +167,7 @@ public class QuestionManagement {
                 QuestionAnswerData tmp_sub_ans = this.SubAnsListData.get(i);
                 if(Integer.parseInt(tmp_sub_ans.getQuestionId()) == question_id ){
                     if(_save_ans_ist.size() == 0){
-                        SaveAnswerData save_ans = new SaveAnswerData("-1","");
+                        SaveAnswerData save_ans = new SaveAnswerData("-99","");
                         ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
                         _ans_list.add(save_ans);
                         tmp_sub_ans.setAnswer(_ans_list);
@@ -207,7 +207,7 @@ public class QuestionManagement {
         QuestionTypeData curQuestion = this.get_question();
         for (int i = 0; i < AnsListData.size(); i++) {
             if(curQuestion.getQuestion().getId() == Integer.parseInt(AnsListData.get(i).getQuestionId())){
-                SaveAnswerData save_ans = new SaveAnswerData("-1","");
+                SaveAnswerData save_ans = new SaveAnswerData("-99","");
                 ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
                 _ans_list.add(save_ans);
                 QuestionAnswerData question_ans = new QuestionAnswerData(String.valueOf(curQuestion.getQuestion().getId()),_ans_list);
@@ -223,7 +223,7 @@ public class QuestionManagement {
             for (int i = 0; i < this.SubAnsListData.size(); i++) {
                 QuestionAnswerData tmp_sub_ans = this.SubAnsListData.get(i);
                 if(Integer.parseInt(tmp_sub_ans.getQuestionId()) == question_id ){
-                    SaveAnswerData save_ans = new SaveAnswerData("-1","");
+                    SaveAnswerData save_ans = new SaveAnswerData("-99","");
                     ArrayList<SaveAnswerData> _ans_list = new ArrayList<SaveAnswerData>();
                     _ans_list.add(save_ans);
                     tmp_sub_ans.setAnswer(_ans_list);
@@ -314,7 +314,7 @@ public class QuestionManagement {
                     ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
                     for (int j = 0; j < _ans_tmp.size(); j++) {
                         SaveAnswerData t = _ans_tmp.get(j);
-                        if(!t.getValue().equals("-1")){
+                        if(!t.getValue().equals("-99")){
                             _new_ans_tmp.add(t);
                         }
                     }
@@ -333,7 +333,7 @@ public class QuestionManagement {
                     ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
                     for (int j = 0; j < _ans_tmp.size(); j++) {
                         SaveAnswerData t = _ans_tmp.get(j);
-                        if(!t.getValue().equals("-1")){
+                        if(!t.getValue().equals("-99")){
                             _new_ans_tmp.add(t);
                         }
                     }
@@ -422,8 +422,10 @@ public class QuestionManagement {
         for (int i = 0; i < this.SubAnsListData.size(); i++) {
             QuestionAnswerData tmp_sub_ans = this.SubAnsListData.get(i);
             if(Integer.parseInt(tmp_sub_ans.getQuestionId()) == question_id ){
-                if(!tmp_sub_ans.isDefault())
+                if(!tmp_sub_ans.isDefault()){
+                    Log.e("get_sub_answer", tmp_sub_ans.toString());
                     return tmp_sub_ans;
+                }
             }
         }
         return null;

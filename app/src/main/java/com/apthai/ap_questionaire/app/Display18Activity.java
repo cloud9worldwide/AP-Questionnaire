@@ -120,35 +120,60 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             @Override
             public void run() {
 
-                if(!data.isParent_question() && data.getParent_question_id() < 0){//not have sub question && not is sub question
+                if(!data.isParent_question() && data.getParent_question_id() < 0){
+                //not have sub question && not is sub question
                     checkAnswer = delegate.QM.get_answer();
                     if(checkAnswer == null){
-                        ArrayList<QuestionTypeData> tmp =  delegate.QM.get_all_questions_not_ans();
-                        if (tmp == null){
+                        if(delegate.QM.isStaffQustion()){
                             answer = delegate.getHistory();
                         } else {
-                            answer = new ArrayList<SaveAnswerData>();
+                            ArrayList<QuestionTypeData> tmp =  delegate.QM.get_all_questions_not_ans();
+                            if (tmp == null || delegate.QM.isStaffQustion()){
+                                answer = delegate.getHistory();
+                            } else {
+                                answer = new ArrayList<SaveAnswerData>();
+                            }
                         }
-                    }else{
+                    } else {
                         answer = checkAnswer.getAnswer();
                     }
 
-                }else {
+                } else {
                     //is parent question
                     if(data.getParent_question_id() > 0){
+                        Log.e("status", "is sub question");
                         // is sub question
                         checkAnswer = delegate.QM.get_sub_answer(data.getQuestion().getId());
                     } else {
                         // is parent question
+                        Log.e("status", "is parent question");
                         checkAnswer = delegate.QM.get_answer();
                     }
 
+
                     if(checkAnswer == null){
+                        Log.e("checkAnswer", "null and delegate.getHistory()");
                         answer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                        if (delegate.dataSubQuestion == null){
+                            for (int i = 0 ; i < answer.size() ; i++){
+                                QuestionAnswerData tmpcheckAnswer = delegate.QM.get_sub_answer(Integer.parseInt(answer.get(i).getValue()));
+                                if (tmpcheckAnswer == null) {
+                                    delegate.dataSubQuestion = delegate.QM.get_sub_question(Integer.parseInt(answer.get(i).getValue()));
+                                    ArrayList<SaveAnswerData> tmpanswer = (ArrayList<SaveAnswerData>) delegate.getHistory().clone();
+                                    if (tmpanswer != null){
+                                        delegate.RemoveQuestionHistory(delegate.dataSubQuestion.getQuestion().getId().toString());
+                                        delegate.QM.save_answer(tmpanswer, delegate.dataSubQuestion.getQuestion().getId());
+                                    }
+                                }
+                            }
+                            delegate.dataSubQuestion = null;
+                        }
+
                     } else {
+                        Log.e("checkAnswer", checkAnswer.toString());
                         answer = (ArrayList<SaveAnswerData>) checkAnswer.getAnswer().clone();
                         for (int i = 0 ; i < answer.size() ; i++){
-                            Log.e("value",answer.get(i).getValue());
+                            Log.e("checkAnswer != null",answer.get(i).getValue());
                         }
                     }
                 }
@@ -207,8 +232,6 @@ public class Display18Activity extends Activity implements View.OnClickListener 
             btn.setTag(i);
             btn.setOnClickListener(this);
             boolean isSelected = false;
-
-            Log.e(TAG, "answer : "+ answer.toString());
 
             for(int j=0;j<answer.size();j++) {
                 if(Integer.parseInt(answer.get(j).getValue()) == data.getAnswers().get(i).getId()){

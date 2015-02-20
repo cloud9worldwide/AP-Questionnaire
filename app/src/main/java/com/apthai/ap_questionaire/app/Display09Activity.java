@@ -131,16 +131,19 @@ public class Display09Activity extends Activity implements View.OnClickListener 
                 if(!data.isParent_question() && data.getParent_question_id() < 0){//not have sub question && not is sub question
                     checkAnswer = delegate.QM.get_answer();
                     if(checkAnswer == null){
-                        ArrayList<QuestionTypeData> tmp =  delegate.QM.get_all_questions_not_ans();
-                        if (tmp == null){
+                        if(delegate.QM.isStaffQustion()){
                             answer = delegate.getHistory();
                         } else {
-                            answer = new ArrayList<SaveAnswerData>();
+                            ArrayList<QuestionTypeData> tmp =  delegate.QM.get_all_questions_not_ans();
+                            if (tmp == null || delegate.QM.isStaffQustion()){
+                                answer = delegate.getHistory();
+                            } else {
+                                answer = new ArrayList<SaveAnswerData>();
+                            }
                         }
-                    }else{
+                    } else {
                         answer = checkAnswer.getAnswer();
                     }
-                    Log.e("Ans",answer.toString());
                 }else {
                     //is parent question
                     if(data.getParent_question_id() > 0){
