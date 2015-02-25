@@ -204,9 +204,10 @@ public class Display01Activity extends Activity implements OnClickListener {
         question.setText(data.getQuestion().getTitle());
         question.setTextSize(35);
         question.setTypeface(delegate.font_type);
+        question.setGravity(Gravity.CENTER_HORIZONTAL);
+        question.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         question.setPadding(0, delegate.dpToPx(20), 0, delegate.dpToPx(20));
-        question.setGravity(Gravity.CENTER);
-        question.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.1f));
+        question.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.1f));
         linearLayout.addView(question);
         content_view.addView(linearLayout);
 

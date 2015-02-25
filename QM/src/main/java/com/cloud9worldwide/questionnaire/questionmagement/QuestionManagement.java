@@ -314,9 +314,9 @@ public class QuestionManagement {
                     ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
                     for (int j = 0; j < _ans_tmp.size(); j++) {
                         SaveAnswerData t = _ans_tmp.get(j);
-                        if(!t.getValue().equals("-99")){
+//                        if(!t.getValue().equals("-99")){
                             _new_ans_tmp.add(t);
-                        }
+//                        }
                     }
                     if(_new_ans_tmp.size() > 0){
                         tmp.setAnswer(_new_ans_tmp);
@@ -333,9 +333,9 @@ public class QuestionManagement {
                     ArrayList<SaveAnswerData> _new_ans_tmp = new ArrayList<SaveAnswerData>();
                     for (int j = 0; j < _ans_tmp.size(); j++) {
                         SaveAnswerData t = _ans_tmp.get(j);
-                        if(!t.getValue().equals("-99")){
+//                        if(!t.getValue().equals("-99")){
                             _new_ans_tmp.add(t);
-                        }
+//                        }
                     }
                     if(_new_ans_tmp.size() > 0){
                         tmp.setAnswer(_new_ans_tmp);
