@@ -33,6 +33,7 @@ import com.cloud9worldwide.questionnaire.webservices.DownloadImages;
 import com.cloud9worldwide.questionnaire.webservices.DownloadQuestionnaire;
 import com.cloud9worldwide.questionnaire.webservices.ForgotpasswordMethod;
 import com.cloud9worldwide.questionnaire.webservices.LoginMethod;
+import com.cloud9worldwide.questionnaire.webservices.NewVersion;
 import com.cloud9worldwide.questionnaire.webservices.SaveCustomerMethod;
 import com.cloud9worldwide.questionnaire.webservices.SavequestionnaireMethod;
 import com.cloud9worldwide.questionnaire.webservices.UpdateCustomerMethod;
@@ -66,6 +67,8 @@ public class CoreEngine {
     private static final String PARAM_CUSTOMERID = "customerid";
 
     private static final String PARAM_PROJECTID = "projectid";
+    private static final String PARAM_VERSION = "version";
+
 
 
     private String lg = "th";
@@ -173,7 +176,6 @@ public class CoreEngine {
         }catch (VisitLogMethod.ApiException e){
             e.printStackTrace();
         }
-
     }
     public void setWebserviceUrl(String _url){
         this.webserviceUrl = _url;
@@ -198,6 +200,25 @@ public class CoreEngine {
      * @param params [0 - username, 1 - password, 2 - udid]
      * @return true / false
      */
+    public synchronized boolean newVersion(){
+        if(!isOnline()){
+            return false;
+        }
+        try {
+            String versionName = mCtx.getPackageManager()
+                    .getPackageInfo(mCtx.getPackageName(), 0).versionName;
+
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put(PARAM_VERSION,versionName);
+            String r = NewVersion.execute(this.mCtx, webserviceUrl, jsonObj.toString());
+            Log.e("newVersion",r.toString());
+
+        } catch (Exception e){
+
+            return false;
+        }
+        return true;
+    }
     public synchronized boolean Login(String... params){
 
         downloadImgUrl = new ArrayList<String>();

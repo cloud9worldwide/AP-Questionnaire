@@ -4,11 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Created by cloud9 on 3/11/14.
+ * Created by koy on 27/02/15.
  */
-
-public class LoginMethod {
-
+public class NewVersion {
     public static class ApiException extends Exception {
         private static final long serialVersionUID = 1L;
         public ApiException (String msg)
@@ -25,7 +23,7 @@ public class LoginMethod {
         Boolean _error = false;
         String _error_msg = null;
         String response = null;
-        final String command = "login";
+        final String command = "download";
         try {
             String _webserviceUrl = params[0];
             String _data = params[1];

@@ -125,6 +125,8 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
                 img_logo_project.setImageResource(R.drawable.logo_ap);
             }
             bmp = null;
+        }else {
+            img_logo_project.setImageResource(R.drawable.logo_ap);
         }
 
 
@@ -227,6 +229,8 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
                 lpImage.gravity = Gravity.CENTER;
                 image.setLayoutParams(lpImage);
                 bmp = null;
+            }else {
+                image.setImageResource(R.drawable.logo_ap);
             }
 
 

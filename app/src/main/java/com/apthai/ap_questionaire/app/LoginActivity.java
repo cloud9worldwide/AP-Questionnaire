@@ -105,6 +105,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         }
     }
+    public void checkUpdateApp(){
+        delegate.service.newVersion();
+//        String p = DistrictMethod.execute(mCtx, webserviceUrl, "province");
+    }
 
     protected void onResume() {
         super.onResume();
@@ -112,6 +116,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         txtUsername.setText("");
         txtError.setText("");
         txtPassword.setSelection(0);
+        checkUpdateApp();
+
 
 ////        txtUsername.setHint(R.string.username);
 ////        txtPassword.setHint(R.string.password);
