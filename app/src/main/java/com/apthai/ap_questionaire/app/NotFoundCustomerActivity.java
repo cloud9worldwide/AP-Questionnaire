@@ -40,10 +40,12 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
         delegate = (questionniare_delegate)getApplicationContext();
         setObject();
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,R.drawable.space);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0) {
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background, R.drawable.space);
+        }
     }
 
     @Override

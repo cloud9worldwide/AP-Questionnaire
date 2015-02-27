@@ -71,11 +71,13 @@ public class Display11Activity extends Activity implements View.OnClickListener 
     private void setImage(){
 
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,
-                delegate.imgDefault);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0){
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background,
+                    delegate.imgDefault);
+        }
 
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());

@@ -41,10 +41,13 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
 
     private void setImage(){
         setObject();
-        View rootView = getWindow().getDecorView().getRootView();
-        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-        rootView.setBackground(imageDraw);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0) {
+            View rootView = getWindow().getDecorView().getRootView();
+            Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl().trim(),0, 0);
+            Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+            rootView.setBackground(imageDraw);
+        }
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

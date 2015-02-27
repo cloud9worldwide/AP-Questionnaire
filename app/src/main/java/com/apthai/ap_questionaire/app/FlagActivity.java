@@ -41,11 +41,12 @@ public class FlagActivity extends Activity implements View.OnClickListener {
     private void setImage(){
         setObject();
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,
-                delegate.imgDefault);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0) {
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background, R.drawable.space);
+        }
 
     }
 

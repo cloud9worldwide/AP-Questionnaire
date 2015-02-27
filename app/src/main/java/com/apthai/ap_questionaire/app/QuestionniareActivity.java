@@ -60,10 +60,12 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         project_data = delegate.project;
         img_background = (ImageView) findViewById(R.id.img_background);
         img_logo_project = (ImageView)findViewById(R.id.img_logo_project);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,R.drawable.space);
+        if(delegate.project.getBackgroundUrl().length()!=0) {
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background, R.drawable.space);
+        }
         setObject();
     }
 
@@ -112,16 +114,19 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             btnTH.setImageResource(R.drawable.btn_th_);
         }
 
-        Bitmap bmp = delegate.readImageFileOnSD(delegate.project.getLogoUrl(), delegate.dpToPx(200), delegate.dpToPx(100));
-        if(bmp !=null) {
-            img_logo_project.setImageBitmap(bmp);
-            LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(delegate.dpToPx(200), delegate.dpToPx(100));
-            lpImage.gravity = Gravity.CENTER;
-            img_logo_project.setLayoutParams(lpImage);
-        } else {
-            img_logo_project.setImageResource(R.drawable.logo_ap);
+        if (delegate.project.getLogoUrl().trim().length() > 0){
+            Bitmap bmp = delegate.readImageFileOnSD(delegate.project.getLogoUrl().trim(), delegate.dpToPx(200), delegate.dpToPx(100));
+            if(bmp !=null) {
+                img_logo_project.setImageBitmap(bmp);
+                LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(delegate.dpToPx(200), delegate.dpToPx(100));
+                lpImage.gravity = Gravity.CENTER;
+                img_logo_project.setLayoutParams(lpImage);
+            } else {
+                img_logo_project.setImageResource(R.drawable.logo_ap);
+            }
+            bmp = null;
         }
-        bmp = null;
+
 
         project_name.setText(delegate.project.getName());
 
@@ -210,16 +215,20 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 //            Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(),imageWidth,imageHeight);
 //            image.setImageBitmap(bmp);
 //            bmp = null;
-            Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl(), imageWidth, imageHeight);
-            if(bmp !=null) {
-                image.setImageBitmap(bmp);
-            } else {
-                image.setImageResource(R.drawable.logo_ap);
+
+            if (obj.getLogoUrl().trim().length() > 0) {
+                Bitmap bmp = delegate.readImageFileOnSD(obj.getLogoUrl().trim(), imageWidth, imageHeight);
+                if(bmp !=null) {
+                    image.setImageBitmap(bmp);
+                } else {
+                    image.setImageResource(R.drawable.logo_ap);
+                }
+                LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
+                lpImage.gravity = Gravity.CENTER;
+                image.setLayoutParams(lpImage);
+                bmp = null;
             }
-            LinearLayout.LayoutParams lpImage =new LinearLayout.LayoutParams(imageWidth2,imageHeight2);
-            lpImage.gravity = Gravity.CENTER;
-            image.setLayoutParams(lpImage);
-            bmp = null;
+
 
             TextView name = new TextView(this);
 //            name.setText(obj.get);

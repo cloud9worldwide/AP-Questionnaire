@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -70,11 +69,14 @@ public class Display01Activity extends Activity implements OnClickListener {
 //        rootView.setBackground(imageDraw);
 
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,
-                delegate.imgDefault);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0){
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background,
+                    delegate.imgDefault);
+        }
+
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
         project_name.setTextSize(30);

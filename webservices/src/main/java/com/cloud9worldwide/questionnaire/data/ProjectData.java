@@ -27,10 +27,17 @@ public class ProjectData {
     }
 
     public void setBackgroundUrl(String backgroundUrl) {
-        this.backgroundUrl = backgroundUrl;
+        if (backgroundUrl.equals("null")){
+            this.backgroundUrl = "";
+        } else {
+            this.backgroundUrl = backgroundUrl;
+        }
     }
 
     public String getBackgroundUrl() {
+        if (backgroundUrl.equals("null")){
+            return "";
+        }
         return backgroundUrl;
     }
 

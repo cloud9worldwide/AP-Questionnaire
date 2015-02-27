@@ -297,8 +297,14 @@ public class CoreEngine {
                                 _projectData.getLogoUrl(),
                                 _projectData.getBackgroundUrl());
 
-                        this.downloadImgUrl.add(_projectData.getLogoUrl());
-                        this.downloadImgUrl.add(_projectData.getBackgroundUrl());
+                        if(_projectData.getLogoUrl().trim().length() > 0) {
+                            this.downloadImgUrl.add(_projectData.getLogoUrl().trim());
+                        }
+                        if(_projectData.getBackgroundUrl().trim().length() > 0) {
+                            this.downloadImgUrl.add(_projectData.getBackgroundUrl().trim());
+                        }
+
+
 
 
                         //Log.d(debugTag, rewId+" :: project row id");
@@ -319,7 +325,10 @@ public class CoreEngine {
                             );
                             tmp_questionids.add(_questionnareData.getId());
 
-                            this.downloadImgUrl.add(_questionnareData.getLogoUrl());
+                            if(_questionnareData.getLogoUrl().trim().length() > 0) {
+                                this.downloadImgUrl.add(_questionnareData.getLogoUrl().trim());
+                            }
+
 
                             try{
                                 Cursor _cursor = _dbHelper.getQuestionnaireById(_questionnareData.getId());
@@ -394,8 +403,12 @@ public class CoreEngine {
                                 _projectData.getLogoUrl(),
                                 _projectData.getBackgroundUrl());
 
-                        this.downloadImgUrl.add(_projectData.getLogoUrl());
-                        this.downloadImgUrl.add(_projectData.getBackgroundUrl());
+                        if(_projectData.getLogoUrl().trim().length() > 0) {
+                            this.downloadImgUrl.add(_projectData.getLogoUrl().trim());
+                        }
+                        if(_projectData.getBackgroundUrl().trim().length() > 0) {
+                            this.downloadImgUrl.add(_projectData.getBackgroundUrl().trim());
+                        }
 
 
                         //Log.d(debugTag, rewId+" :: project row id");
@@ -417,7 +430,9 @@ public class CoreEngine {
                             );
                             tmp_questionids.add(_questionnareData.getId());
 
-                            this.downloadImgUrl.add(_questionnareData.getLogoUrl());
+                            if(_questionnareData.getLogoUrl().trim().length() > 0) {
+                                this.downloadImgUrl.add(_questionnareData.getLogoUrl().trim());
+                            }
 
                             try{
                                 Cursor _cursor = _dbHelper.getQuestionnaire_ENById(_questionnareData.getId());

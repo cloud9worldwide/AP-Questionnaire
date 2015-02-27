@@ -71,14 +71,15 @@ public class Display21Activity extends Activity implements View.OnClickListener 
 //        rootView.setBackground(imageDraw);
 
 
-
-        View rootView = getWindow().getDecorView().getRootView();
-        Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
-        if (imageBitmap == null) {
-            imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0) {
+            View rootView = getWindow().getDecorView().getRootView();
+            Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl().trim());
+            if (imageBitmap == null) {
+                imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(), 0, 0);
+            }
+            Drawable imageDraw = new BitmapDrawable(imageBitmap);
+            rootView.setBackground(imageDraw);
         }
-        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-        rootView.setBackground(imageDraw);
         project_name = (TextView) findViewById(R.id.project_name);
         project_name.setText(delegate.project.getName());
         project_name.setTextSize(30);

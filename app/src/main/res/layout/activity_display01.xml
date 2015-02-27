@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:id="@+id/img_background"
         android:scaleType="fitXY"
-        android:background="@color/BLACK" />
+         />
     <TextView
         android:layout_width="match_parent"
         android:gravity="center"

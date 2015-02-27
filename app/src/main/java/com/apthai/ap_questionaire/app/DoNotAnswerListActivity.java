@@ -43,10 +43,12 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
     private void setImage(){
         setObject();
         img_background = (ImageView) findViewById(R.id.img_background);
-        delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                String.valueOf(img_background.getWidth()),
-                String.valueOf(img_background.getHeight()),
-                img_background,delegate.imgDefault);
+        if(delegate.project.getBackgroundUrl().trim().length()!=0) {
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background, R.drawable.space);
+        }
 //        View rootView = getWindow().getDecorView().getRootView();
 //        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
 //        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
