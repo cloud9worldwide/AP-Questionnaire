@@ -57,6 +57,21 @@ public class LoginActivity extends Activity implements OnClickListener {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
         String nowDate = sdf.format(c.getTime());
 
+
+
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    delegate.service.newVersion();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
         if(delegate.service.getLoginStatus() ){
             if(delegate.service.globals.getDateLastLogin().equals(nowDate)){
                 Intent i = new Intent(this, ProjectsActivity.class);
@@ -64,7 +79,6 @@ public class LoginActivity extends Activity implements OnClickListener {
             } else {
                 delegate.service.Logout();
             }
-
         }
         final Handler uiHandler = new Handler();
         final  Runnable onUi = new Runnable() {
@@ -105,10 +119,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         }
     }
-    public void checkUpdateApp(){
-        delegate.service.newVersion();
-//        String p = DistrictMethod.execute(mCtx, webserviceUrl, "province");
-    }
+
 
     protected void onResume() {
         super.onResume();
@@ -116,7 +127,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         txtUsername.setText("");
         txtError.setText("");
         txtPassword.setSelection(0);
-        checkUpdateApp();
 
 
 ////        txtUsername.setHint(R.string.username);

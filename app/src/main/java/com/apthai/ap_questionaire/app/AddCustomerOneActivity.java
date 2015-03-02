@@ -1482,7 +1482,13 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             error_msg = getString(R.string.error_customer_one_mobileformat);
             lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
         } else {
-            lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
+            if (mobile1.getText().toString().equals("0") && (mobile2.getText().toString().equals("8") || mobile2.getText().toString().equals("9")) || mobile2.getText().toString().equals("6")) {
+                lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
+            } else {
+                status = false;
+                error_msg = getString(R.string.error_customer_one_mobileformat2digit);
+                lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+            }
         }
 
         if(txtEmail.getText().toString().length() !=0){
@@ -2224,24 +2230,34 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             public void onClick(View v) {
 
                 if((type.equals("mobile") && txt_digit_mobile.getText().length()==34) || (type.equals("phone") && txt_digit_mobile.getText().length()==31)){
+                    String string_phone = txt_digit_mobile.getText().toString().replace(" ", "").replace("-","");
+
+                    Log.e("sub",string_phone.substring(0,2));
+                    if (string_phone.substring(0,2).equals("08") || string_phone.substring(0,2).equals("06") || string_phone.substring(0,2).equals("09") ) {
                         InputMethodManager imm = (InputMethodManager)getSystemService(
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(txt_digit_mobile.getWindowToken(), 0);
                         lbl_error.setVisibility(View.INVISIBLE);
-                        String string_phone = txt_digit_mobile.getText().toString().replace(" ", "").replace("-","");
-                    if(index !=99){
-                        //edit
-                        if(type.equals("mobile")){
-                            mobile_list.set(index, string_phone);
+
+
+                        if(index !=99){
+                            //edit
+                            if(type.equals("mobile")){
+                                mobile_list.set(index, string_phone);
+                            } else {
+                                phone_list.set(index, string_phone);
+                            }
                         } else {
-                            phone_list.set(index, string_phone);
+                            addMobileinPage(string_phone,type);
                         }
+
+                        updateMobile();
+                        popupAddMobile.dismiss();
                     } else {
-                        addMobileinPage(string_phone,type);
+                        lbl_error.setText(R.string.error_customer_one_mobileformat2digit);
+                        lbl_error.setVisibility(View.VISIBLE);
                     }
 
-                    updateMobile();
-                        popupAddMobile.dismiss();
 
 
                 } else {

@@ -144,6 +144,7 @@ the data will be synced automatically when internet is connected."</string>
     <string name="error_lookup_name">Please enter "Name" minimum 2 characters</string>
     <string name="error_lookup_surname">Please enter "Last Name" minimum 2 characters</string>
     <string name="error_lookup_tel">Please enter "Mobile Number" minimum 4 digits</string>
+    <string name="error_customer_one_mobileformat2digit">Please enter valid "Mobile number" at 2 digits first</string>
 
     <string name="alert_warning">Warning</string>
 

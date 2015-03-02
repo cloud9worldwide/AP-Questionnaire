@@ -208,10 +208,24 @@ public class CoreEngine {
             String versionName = mCtx.getPackageManager()
                     .getPackageInfo(mCtx.getPackageName(), 0).versionName;
 
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put(PARAM_VERSION,versionName);
-            String r = NewVersion.execute(this.mCtx, webserviceUrl, jsonObj.toString());
+            JSONObject jsonObj2 = new JSONObject();
+            jsonObj2.put(PARAM_VERSION, versionName);
+            String r = NewVersion.execute(this.mCtx, webserviceUrl, jsonObj2.toString());
             Log.e("newVersion",r.toString());
+            try {
+                JSONObject respObj = new JSONObject(r);
+                if (respObj.getBoolean("status")){
+                    String imagesURL = respObj.getString("part");
+                    ArrayList<String> imagelist = new ArrayList<String>();
+                    imagelist.add(imagesURL);
+                    DownloadImages.downloadAPK(null, imagelist);
+                }
+
+//                DownloadImages.download(null, response.);
+            }catch (JSONException er){
+
+                return false;
+            }
 
         } catch (Exception e){
 

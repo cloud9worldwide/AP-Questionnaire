@@ -123,4 +123,76 @@ public class DownloadImages {
         }
         return false;
     }
+    public static boolean saveAPK(String fullURL) {
+        final  String debugTag = "DownloadAPK";
+        try {
+
+            URL url = new URL(fullURL.toLowerCase());
+            try {
+                URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath().replace("//","/"), url.getQuery(), url.getRef());
+                url = uri.toURL();
+            }catch (URISyntaxException ee){
+                ee.printStackTrace();
+            }
+
+
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            c.setRequestMethod("GET");
+            //c.setDoOutput(true);
+            c.connect();
+
+            File root = new File(Environment.getExternalStorageDirectory(), "Questionnaire");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            File imgPath = new File(root,"apk");
+            if (!imgPath.exists()) {
+                imgPath.mkdirs();
+            }
+
+            String fileName = fullURL.substring(fullURL.length()-5,fullURL.length());
+            InputStream is = null;
+            if (c.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                is = c.getInputStream();
+                byte[] buffer = new byte[1024];
+                int len1 = 0;
+                File outputFile = new File(imgPath, fileName);
+                FileOutputStream fos = new FileOutputStream(outputFile);
+                while ((len1 = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len1);
+                }
+                fos.close();
+                is.close();
+            }else{
+                Log.e(debugTag, "GET FAIL : " + c.getResponseCode());
+            }
+
+            return true;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static synchronized void downloadAPK(ProgressDialog _pDailog,ArrayList<String> _imageUrls) throws ApiException {
+        ArrayList<String> imgUrls = _imageUrls;
+        int SIZE = imgUrls.size();
+        for (int i = 0; i < SIZE; i++) {
+            saveAPK(imgUrls.get(i));
+            String text = "Download APK ["+(i+1)+ "/" + SIZE + "]";
+            Log.d("Core", text);
+            //_pDailog.setMessage(text);
+        }
+        /*
+        DownloadImagesTask _task = new DownloadImagesTask(_pDailog);
+        try {
+            _task.execute(_imageUrls);
+            _task.get();
+        } catch (Exception e){
+            _task.cancel(true);
+            throw new ApiException("Problem connecting to the server " + e.getMessage(), e);
+        }
+        */
+    }
 }

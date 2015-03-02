@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">AP-Questionaire</string>
     <string name="YOUR_PROJECT">โครงการ</string>
     <string name="Please_select_questionnaire">เลือกแบบสอบถาม</string>
@@ -85,6 +86,7 @@
     <string name="error_customer_one_emailformat">กรุณากรอก "อีเมล์" ให้ถูกต้อง</string>
     <string name="error_customer_one_mobileformat">กรุณากรอก "เบอร์มือถือ" ให้ครบ 10 หลัก</string>
     <string name="error_customer_one_telhomeformat">กรุณากรอก "เบอร์บ้าน" ให้ครบ 9 หลัก</string>
+    <string name="error_customer_one_mobileformat2digit">กรุณากรอก "เบอร์มือถือ" 2 ตัวแรกให้ถูกต้อง</string>
 
     <string name="error_add_phone">กรุณากรอกให้ครบ</string>
 
