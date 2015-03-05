@@ -181,6 +181,11 @@ public class Display07Activity extends Activity implements View.OnClickListener 
 
         btn_back = (ImageButton) findViewById(R.id.btnBack);
         btn_back.setOnClickListener(this);
+        if (delegate.isShowBack()) {
+            btn_back.setVisibility(View.VISIBLE);
+        } else {
+            btn_back.setVisibility(View.INVISIBLE);
+        }
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();

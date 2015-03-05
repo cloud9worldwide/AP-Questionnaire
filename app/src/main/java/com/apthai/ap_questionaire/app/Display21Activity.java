@@ -188,6 +188,12 @@ public class Display21Activity extends Activity implements View.OnClickListener 
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
 
+        if (delegate.isShowBack()) {
+            btnBack.setVisibility(View.VISIBLE);
+        } else {
+            btnBack.setVisibility(View.INVISIBLE);
+        }
+
         txt_question = (TextView) findViewById(R.id.lbl_question);
         txt_question.setText(data.getQuestion().getTitle());
         txt_question.setTextSize(35);
@@ -278,7 +284,7 @@ public class Display21Activity extends Activity implements View.OnClickListener 
     public void onBackPressed() {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
-        }else{
+        } else {
             delegate.showAlert(this, getString(R.string.cannot_back), getString(R.string.alert_warning));
         }
     }

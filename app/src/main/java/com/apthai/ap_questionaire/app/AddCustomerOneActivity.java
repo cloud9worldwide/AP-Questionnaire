@@ -1406,7 +1406,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         new_customer.setLname(txtLastName.getText().toString());
         new_customer.setNickname(txtNickname.getText().toString());
 
-        new_customer.setEmail(txtEmail.getText().toString());
+        new_customer.setEmail(txtEmail.getText().toString().trim());
         new_customer.setTels(phone_list);
         new_customer.setMobiles(mobile_list);
         new_customer.setBirthdate(datePicker.getText().toString());
@@ -1482,7 +1482,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             error_msg = getString(R.string.error_customer_one_mobileformat);
             lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
         } else {
-            if (mobile1.getText().toString().equals("0") && (mobile2.getText().toString().equals("8") || mobile2.getText().toString().equals("9")) || mobile2.getText().toString().equals("6")) {
+            if (mobile1.getText().toString().equals("0")) {
                 lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
             } else {
                 status = false;
@@ -1491,8 +1491,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         }
 
-        if(txtEmail.getText().toString().length() !=0){
-            if(delegate.emailValidator(txtEmail.getText().toString())){
+        if(txtEmail.getText().toString().trim().length() !=0){
+            if(delegate.emailValidator(txtEmail.getText().toString().trim())){
                 lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email)));
             } else {
                 lblEmail.setText(Html.fromHtml(getString(R.string.add_customer_email) +"<font color=\"#FF0000\"> *</font>"));
@@ -2233,7 +2233,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     String string_phone = txt_digit_mobile.getText().toString().replace(" ", "").replace("-","");
 
                     Log.e("sub",string_phone.substring(0,2));
-                    if (string_phone.substring(0,2).equals("08") || string_phone.substring(0,2).equals("06") || string_phone.substring(0,2).equals("09") ) {
+                    if (string_phone.substring(0,1).equals("0")) {
                         InputMethodManager imm = (InputMethodManager)getSystemService(
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(txt_digit_mobile.getWindowToken(), 0);

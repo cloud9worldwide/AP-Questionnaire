@@ -172,6 +172,11 @@ public class Display19Activity extends Activity implements View.OnClickListener 
 
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
+        if (delegate.isShowBack()) {
+            btnBack.setVisibility(View.VISIBLE);
+        } else {
+            btnBack.setVisibility(View.INVISIBLE);
+        }
 
         total = data.getAnswers().size();
 

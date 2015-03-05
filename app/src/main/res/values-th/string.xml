@@ -86,7 +86,7 @@
     <string name="error_customer_one_emailformat">กรุณากรอก "อีเมล์" ให้ถูกต้อง</string>
     <string name="error_customer_one_mobileformat">กรุณากรอก "เบอร์มือถือ" ให้ครบ 10 หลัก</string>
     <string name="error_customer_one_telhomeformat">กรุณากรอก "เบอร์บ้าน" ให้ครบ 9 หลัก</string>
-    <string name="error_customer_one_mobileformat2digit">กรุณากรอก "เบอร์มือถือ" 2 ตัวแรกให้ถูกต้อง</string>
+    <string name="error_customer_one_mobileformat2digit">กรุณากรอก "เบอร์มือถือ" ให้ถูกต้อง</string>
 
     <string name="error_add_phone">กรุณากรอกให้ครบ</string>
 
