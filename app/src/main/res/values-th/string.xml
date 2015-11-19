@@ -46,7 +46,7 @@
     <string name="header_list_surname">นามสกุล</string>
     <string name="header_list_unitnumber">จำนวน Unit จอง</string>
     <string name="header_list_contactID">รหัสลูกค้า</string>
-    <string name="header_list_lastVisit">เยี่ยมชมล่าสุด</string>
+    <string name="header_list_lastVisit">วันที่เยี่ยมชมโครงการ AP ล่าสุด</string>
     <string name="header_list_opp">Opp.</string>
     <string name="title_activity_customer_list">ผลการค้นหา</string>
     <string name="address">ที่อยู่</string>
@@ -57,11 +57,14 @@
 
     <string name="save_complete">คุณสามารถกลับไปเลือกโครงการ หรือแบบสอบถามใหม่ได้ โดยการคลิกที่ปุ่มด้านล่าง</string>
 
-    <string name="msg_offline_not_found_customer">"ขณะนี้แอพพลิเคชั่นอยู่ในโหมดออฟไลน์"</string>
-    <string name="msg_offline">"ขณะนี้แอพพลิเคชั่นอยู่ในโหมดออฟไลน์ ข้อมูลจะถูกซิงค์อัตโนมัติเมื่อมีการเชื่อมต่ออินเตอร์เน็ต"</string>
-
-    <string name="is_offine_Revisit">ไม่สามารถบันทึกการเยี่ยมชมได้ เนื่องจากอยู่ใน offline mode</string>
-    <string name="is_offine_GotoQuestionnaire">คุณสามารถเพิ่มลูกค้าใหม่เพื่อทำแบบสอบถามได้ เนื่องจากอยู่ใน offline mode</string>
+    //Not found customer
+    <string name="msg_offline_not_found_customer">"ขณะนี้อยู่ในโหมดออฟไลน์ กรุณาเพิ่มชื่อลูกค้าใหม่"</string>
+    //Thanks you
+    <string name="msg_offline">"ขณะนี้อยู่ในโหมดออฟไลน์ ข้อมูลจะถูกอัพโหลดอัตโนมัติ เมื่อมีการเชื่อมต่ออินเตอร์เน็ต"</string>
+    //btn revisit
+    <string name="is_offine_Revisit">ขณะนี้อยู่ในโหมดออฟไลน์ ไม่สามารถใช้ปุ่ม Revisit ได้</string>
+    // scv id >6 and offline when click start Questionnaire
+    <string name="is_offine_GotoQuestionnaire">ขณะนี้อยู่ในโหมดออฟไลน์ กรุณาเพิ่มชื่อลูกค้าใหม่</string>
 
 
     <string name="username">ชื่อผู้ใช้</string>

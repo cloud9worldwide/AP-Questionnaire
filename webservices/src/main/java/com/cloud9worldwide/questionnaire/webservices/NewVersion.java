@@ -23,21 +23,11 @@ public class NewVersion {
         Boolean _error = false;
         String _error_msg = null;
         String response = null;
-        final String command = "download";
         try {
             String _webserviceUrl = params[0];
-            String _data = params[1];
             WebserviceHelper client = new WebserviceHelper(_webserviceUrl);
-            client.AddParam("cmd", command);
-
-            String str1 = "\\\"";
-            String str2 = "\"";
-            _data = _data.replaceAll(str1,str2);
-
-            client.AddParam("data", _data);
-            Log.e("_data",_data);
             try {
-                client.Execute(WebserviceHelper.RequestMethod.POST);
+                client.Execute(WebserviceHelper.RequestMethod.GET);
             } catch (Exception e) {
                 _error = true;
                 _error_msg = e.getMessage();
@@ -46,23 +36,16 @@ public class NewVersion {
         } catch (Exception e) {
             _error_msg = e.getMessage();
         }
-        if(!_error && response != null){
-            return response;
+
+        if(!_error ){
+            if(response != null) {
+                Log.e("YES",response);
+                return response;
+            } else {
+                return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
+            }
         } else {
             return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
         }
-
-
-
-        /*
-        LoginAPITask loginTask = new LoginAPITask(_context);
-        try {
-            loginTask.execute(params);
-            return loginTask.get();
-        } catch (Exception e){
-            loginTask.cancel(true);
-            throw new ApiException("Problem connecting to the server " + e.getMessage(), e);
-        }
-        */
     }
 }

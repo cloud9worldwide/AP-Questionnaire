@@ -7,15 +7,15 @@ import android.os.AsyncTask;
 import com.cloud9worldwide.questionnaire.webservices.WebserviceHelper;
 
 /**
- * Created by cloud9 on 7/29/14.
+ * Created by koy on 20/11/15.
  */
-public class VisitLogTask extends AsyncTask<String, Integer, String> {
+public class StartQuestionnaireTask extends AsyncTask<String, Integer, String> {
     private Context context;
     private ProgressDialog progDialog;
-    private static final String debugTag    = "VisitLogTask";
-    private static final String command     = "visitlog";
+    private static final String debugTag    = "StartQuestionnaireTask";
+    private static final String command     = "startquestionnaire";
 
-    public VisitLogTask(Context _context) {
+    public StartQuestionnaireTask(Context _context) {
         super();
         this.context = _context;
     }

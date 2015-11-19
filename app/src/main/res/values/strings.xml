@@ -43,7 +43,7 @@
     <string name="header_list_surname">SURNAME</string>
     <string name="header_list_unitnumber">UNIT NUMBER</string>
     <string name="header_list_contactID">CONTACT ID</string>
-    <string name="header_list_lastVisit">LAST VISIT</string>
+    <string name="header_list_lastVisit">LAST VISIT AP</string>
     <string name="header_list_opp">Opp.</string>
     <string name="title_activity_customer_list">RESULTS</string>
     <string name="address">Address</string>
@@ -58,7 +58,7 @@
     <string name="default_display_16">Please select answer</string>
 
     <string name="is_offine">The application is operating offline mode.</string>
-    <string name="is_offine_Revisit">Cannot stamp re-visit because the application is operating offline mode.</string>
+    <string name="is_offine_Revisit">ขณะนี้อยู่ในโหมดออฟไลน์ ไม่สามารถใช้ปุ่ม Revisit ได้</string>
 
     <string name="add_mobile">+ add mobile</string>
     <string name="cannot_back">This is first question, Cannot Back</string>
@@ -70,9 +70,9 @@
     <!--<string name="save_complete">Complete information</string>-->
     <string name="save_complete">You can select new Project or Questionnaire by clicking at button below</string>
 
-    <string name="msg_offline_not_found_customer">"The application is operating offline mode."</string>
-    <string name="msg_offline">"The application is operating offline mode.
-the data will be synced automatically when internet is connected."</string>
+    <string name="msg_offline_not_found_customer">"ขณะนี้อยู่ในโหมดออฟไลน์ กรุณาเพิ่มชื่อลูกค้าใหม่"</string>
+    <string name="msg_offline">"ขณะนี้อยู่ในโหมดออฟไลน์ ข้อมูลจะถูกอัพโหลดอัตโนมัติ เมื่อมีการเชื่อมต่ออินเตอร์เน็ต"</string>
+    <string name="is_offine_GotoQuestionnaire">ขณะนี้อยู่ในโหมดออฟไลน์ กรุณาเพิ่มชื่อลูกค้าใหม่</string>
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="app_name">AP-Questionaire</string>

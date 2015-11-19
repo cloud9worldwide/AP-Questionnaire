@@ -87,6 +87,9 @@ public class FlagActivity extends Activity implements View.OnClickListener {
         popup = new PopupWindow(this);
         changeLanguege();
 
+
+        delegate.service.StartQuestionnaire(delegate.customer_selected.getContactId(), Boolean.toString(delegate.opp));
+
     }
 
     private void changeLanguege() {

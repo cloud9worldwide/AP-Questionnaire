@@ -142,6 +142,31 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:background="@null" />
+            <EditText
+                android:id="@+id/txt_passwordStaff"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_large"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:paddingLeft="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:layout_marginRight="200dp"
+                android:hint="@string/password" />
+            <TextView
+                android:id="@+id/lbl_wrongpassword"
+                android:layout_width="wrap_content"
+                android:text="*"
+                android:textColor="@color/RED"
+                android:visibility="gone"
+                android:layout_marginRight="460dp"
+                android:textSize="@dimen/txt_size_XL"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content" />
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

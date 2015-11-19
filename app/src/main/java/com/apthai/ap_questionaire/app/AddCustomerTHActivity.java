@@ -423,6 +423,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
         });
 //        ddlProvinceWork, ddlDistrictWork
     }
+
     private synchronized void setItemSpinnerWork(){
 
         ddlProvinceWork.setAdapter(null);
@@ -445,6 +446,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             }
         });
     }
+
     public synchronized void setddlDistrictWork(final String provinceID) {
         final ArrayList<ValTextData> district = delegate.service.getDistrictByProvince(provinceID);
         provinceAdapter _provinceAdapter = new provinceAdapter(this, R.layout.dropdownlist, district);
@@ -854,7 +856,7 @@ public class AddCustomerTHActivity extends Activity implements View.OnClickListe
             public void run() {
                 // This is the delay
                 if (delegate.service.globals.getContactId() == "-1") {
-                    delegate.service.saveContact(new_customer);
+                    delegate.service.saveContact(new_customer,delegate.project.getId());
                 } else {
                     delegate.service.updateContact(new_customer);
                 }

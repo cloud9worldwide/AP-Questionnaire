@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apthai.ap_questionaire.app"
-    android:versionCode="2">
+    android:versionCode="1">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,6 +12,7 @@
         android:name="com.apthai.ap_questionaire.app.questionniare_delegate"
         android:icon="@drawable/logo_ap"
         android:label="@string/app_name"
+
         android:theme="@style/Theme.NoTitle" >
         <activity
             android:name="com.apthai.ap_questionaire.app.SplashActivity"
@@ -171,6 +172,7 @@
         <activity
             android:name="com.apthai.ap_questionaire.app.CustomerFinishedAnswerActivity"
             android:label="@string/title_activity_customer_finished_answer"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape" >
         </activity>
         <activity

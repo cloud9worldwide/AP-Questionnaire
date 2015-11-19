@@ -55,7 +55,7 @@ public class questionniare_delegate extends Application {
     public ArrayList<QuestionTypeData> questions;
 
     public String tmpName, tmpSurname, tmpTel;
-    public boolean canRevisit;
+    public boolean opp;
 
     public QuestionTypeData dataSubQuestion;
     public boolean skip_save_subans = false;
@@ -93,6 +93,7 @@ public class questionniare_delegate extends Application {
         Log.e("p id",project.getId());
         service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId());
     }
+
 
 
     public void sendAnswer() {

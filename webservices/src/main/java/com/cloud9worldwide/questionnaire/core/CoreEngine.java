@@ -54,7 +54,10 @@ import java.util.Calendar;
  */
 public class CoreEngine {
     private static final String debugTag = "CoreEngine";
-    private String webserviceUrl = "http://58.137.32.228/Questionnaire/Service.aspx";
+//    private String webserviceUrl = "http://questionnaire.apthai.com/service.aspx";
+    private String webserviceUrl = "http://questionnairetest.apthai.com/service.aspx";
+    private String apkUrl = "http://appstore.apthai.com/Android/update-apqn.json";
+    public String currentAPK = "1.0";
 
     private static final String PARAM_USERNAME = "username";
     private static final String PARAM_PASSWORD = "password";
@@ -65,11 +68,12 @@ public class CoreEngine {
     private static final String PARAM_CONTACTID = "contactid";
     private static final String PARAM_QUESTIONID = "questionid";
     private static final String PARAM_CUSTOMERID = "customerid";
+    private static final String PARAM_QUESTIONNAIREID = "questionnaireid";
 
     private static final String PARAM_PROJECTID = "projectid";
     private static final String PARAM_VERSION = "version";
 
-
+    private String __projectID; //koy add projectid for add newcustomer 11/11/2015
 
     private String lg = "th";
 
@@ -91,6 +95,8 @@ public class CoreEngine {
     private ArrayList<ProjectData> projects;
     private ArrayList<QuestionnaireData> questionnaireUpdate;
     private String fullName;
+
+    public Boolean IsDisplayStart;
 
     //Logout variables
     private String logoutMessage;
@@ -141,9 +147,11 @@ public class CoreEngine {
             globals.setLoginTokenAccess(tokenAccess);
             this.loginStatus = isLogin;
             this.staffId = settings.getString(Globals.STAFF_ID,null);
+            Log.e("staff id", this.staffId);
             globals.setStaffId(this.staffId);
             globals.setDateLastLogin(settings.getString(Globals.DATE_LAST_LOGIN,null));
             this.fullName = settings.getString("fullName",null);
+            globals.setPassword(settings.getString(Globals.PASSWORD, null));
         } else {
             globals.setIsLogin(false);
             globals.setLoginTokenAccess(null);
@@ -152,6 +160,7 @@ public class CoreEngine {
             this.staffId = null;
             globals.setStaffId(this.staffId);
             this.fullName = null;
+            globals.setPassword(null);
         }
     }
 
@@ -177,6 +186,25 @@ public class CoreEngine {
             e.printStackTrace();
         }
     }
+    public void StartQuestionnaire(String... params){
+        try {
+            JSONObject jsonObj = new JSONObject();
+            try {
+                jsonObj.put("contact_id",params[0]);
+                jsonObj.put("opp",params[1]);
+                jsonObj.put("project_id",params[2]);
+                jsonObj.put("staff_id",params[3]);
+                jsonObj.put("questionnaire_id",params[4]);
+
+            }catch (JSONException ee){
+                ee.printStackTrace();
+            }
+            VisitLogMethod.execute(this.mCtx,webserviceUrl, jsonObj.toString());
+        }catch (VisitLogMethod.ApiException e){
+            e.printStackTrace();
+        }
+    }
+
     public void setWebserviceUrl(String _url){
         this.webserviceUrl = _url;
     }
@@ -200,35 +228,52 @@ public class CoreEngine {
      * @param params [0 - username, 1 - password, 2 - udid]
      * @return true / false
      */
-    public synchronized boolean newVersion(){
+    public synchronized boolean newVersion(ProgressDialog _pDialog){
         if(!isOnline()){
+            this.loginMessage = "กรุณาทำการเชื่อมต่ออินเตอร์เน็ต เพื่อทำการ Login เข้าสู่ระบบ";
+            this.tokenAccess = "";
+            this.loginStatus = false;
+
             return false;
         }
         try {
-            String versionName = mCtx.getPackageManager()
-                    .getPackageInfo(mCtx.getPackageName(), 0).versionName;
-
-            JSONObject jsonObj2 = new JSONObject();
-            jsonObj2.put(PARAM_VERSION, versionName);
-            String r = NewVersion.execute(this.mCtx, webserviceUrl, jsonObj2.toString());
-            Log.e("newVersion",r.toString());
+            String r = NewVersion.execute(this.mCtx, apkUrl, null);
             try {
                 JSONObject respObj = new JSONObject(r);
-                if (respObj.getBoolean("status")){
-                    String imagesURL = respObj.getString("part");
+                Log.e("json Version",respObj.getString("version"));
+                Log.e("my Version",currentAPK);
+                Log.e("path update file", respObj.getString("update_file"));
+                if(currentAPK.equals(respObj.getString("version"))) {
+                    return false;
+                } else {
+                    JSONArray json_notes = respObj.getJSONArray("update_notes");
+                    String notes = new String();
+
+                    if (json_notes != null) {
+                        for (int i=0;i< json_notes.length();i++){
+                            notes = notes + " " + json_notes.get(i).toString();
+                        }
+                    }
+
                     ArrayList<String> imagelist = new ArrayList<String>();
-                    imagelist.add(imagesURL);
-                    DownloadImages.downloadAPK(null, imagelist);
+                    imagelist.add(respObj.getString("update_file"));
+                    DownloadImages.downloadAPK(_pDialog, imagelist);
+
+                    this.loginMessage = "กรุณาทำการ update app เนื่องจากได้มีการปรับแก้ " + notes;
+                    this.tokenAccess = "";
+                    this.loginStatus = false;
                 }
-
-//                DownloadImages.download(null, response.);
-            }catch (JSONException er){
-
+            } catch (JSONException er){
+                this.loginMessage = "ไม่สามารถ download apk ใหม่ได้ กรุณาติดต่อเจ้าหน้าที่";
+                this.tokenAccess = "";
+                this.loginStatus = false;
                 return false;
             }
 
         } catch (Exception e){
-
+            this.loginMessage = "ไม่สามารถเชื่อมต่อระบบตรวจสอบความล่าสุดของ app version ได้ กรุณาติดต่อเจ้าหน้าที่";
+            this.tokenAccess = "";
+            this.loginStatus = false;
             return false;
         }
         return true;
@@ -239,7 +284,7 @@ public class CoreEngine {
         questionnaireUpdate = new ArrayList<QuestionnaireData>();
 
         if(!isOnline()){
-            this.loginMessage = "There's no internet connection.";
+            this.loginMessage = "กรุณาทำการเชื่อมต่ออินเตอร์เน็ต เพื่อทำการ Login เข้าสู่ระบบ";
             this.tokenAccess = "";
             this.loginStatus = false;
             return false;
@@ -249,7 +294,6 @@ public class CoreEngine {
             this.tokenAccess = "";
             this.loginMessage = "";
             this.loginStatus = false;
-
 
             JSONObject jsonObj = new JSONObject();
             jsonObj.put(PARAM_USERNAME,params[0]);
@@ -268,17 +312,9 @@ public class CoreEngine {
                 return false;
             }
 
-
-
-
             try{
                 JSONObject respObj = new JSONObject(r);
                 if(respObj.getBoolean("status")){
-
-                    //JSONArray pkgArr = respObj.getJSONArray("result");
-
-                    //Log.d(debugTag, respObj.getJSONObject("result").getString("message"));
-
 
                     this.loginMessage = respObj.getJSONObject("result").getString("message");
                     this.tokenAccess = respObj.getJSONObject("result").getString("tokenaccess");
@@ -296,6 +332,7 @@ public class CoreEngine {
                     globals.setLoginTokenAccess(this.tokenAccess);
                     globals.setUsername(params[0]);
                     globals.setStaffId(this.staffId);
+                    globals.setPassword(params[1]);
 
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean(Globals.IS_LOGIN, true);
@@ -303,6 +340,7 @@ public class CoreEngine {
                     editor.putString(Globals.USER_NAME,params[0]);
                     editor.putString(Globals.STAFF_ID,this.staffId);
                     editor.putString(Globals.DATE_LAST_LOGIN, globals.getDateLastLogin());
+                    editor.putString(Globals.PASSWORD ,params[1]);
                     editor.putString("fullName",fullName);
 
                     // Commit the edits!
@@ -310,9 +348,6 @@ public class CoreEngine {
 
                     MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
                     _dbHelper.open();
-
-                    //Log.d(debugTag, this.tokenAccess);
-
 
                     JSONArray projectlist = respObj.getJSONObject("result").getJSONArray("projectlistth");
                     _dbHelper.deleteAll(_dbHelper.DATABASE_TABLE_PROJECT);
@@ -550,11 +585,13 @@ public class CoreEngine {
             globals.setUsername(null);
             globals.setLoginTokenAccess(null);
             globals.setDateLastLogin(null);
+            globals.setPassword(null);
 
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean(Globals.IS_LOGIN, false);
             editor.putString(Globals.TOKEN_ACCESS,null);
             editor.putString(Globals.USER_NAME,null);
+            editor.putString(Globals.PASSWORD,null);
 
 
             // Commit the edits!
@@ -778,13 +815,17 @@ public class CoreEngine {
         }
 
     }
-    public synchronized ContactData getContactInfo(String _contact_id){
+//    public synchronized ContactData getContactInfo(String _contact_id){
+        public synchronized ContactData getContactInfo(String... params){
+//koy
         ContactData _data;
         //globals.getIsCustomerLocal()
         if(isOnline()){
             try {
                 JSONObject jsonObj = new JSONObject();
-                jsonObj.put(PARAM_CONTACTID,_contact_id);
+                jsonObj.put(PARAM_CONTACTID,params[0]);
+                jsonObj.put(PARAM_PROJECTID,params[1]);
+                jsonObj.put(PARAM_QUESTIONNAIREID,params[2]);
                 try
                 {
                     String r = CustomerInfoMethod.execute(this.mCtx,webserviceUrl,jsonObj.toString());
@@ -794,7 +835,14 @@ public class CoreEngine {
                     }
                     JSONObject respObj = new JSONObject(r);
                     if(respObj.getBoolean("status")) {
+
+
+
                         JSONObject contactObj = respObj.getJSONObject("result");
+
+
+                        IsDisplayStart = contactObj.getBoolean("isdisplaystart");
+
                         AddressData _address_work;
                         AddressData _address;
 
@@ -920,8 +968,9 @@ public class CoreEngine {
             if(globals.getIsCustomerLocal()){
                 //move customer local to server
                 ContactData _contact = null;
+                IsDisplayStart = true;
                 //long _contact_id = Long.getLong(_contact_id);
-                long contact_id = Long.parseLong(_contact_id);
+                long contact_id = Long.parseLong(params[0]);
                 try {
                     _dbHelper.open();
 
@@ -1039,7 +1088,8 @@ public class CoreEngine {
             }
         }
     }
-    public synchronized boolean saveContact(ContactData _data){
+    public synchronized boolean saveContact(ContactData _data, String _projectID){
+        __projectID = _projectID;
         if(isOnline()){
             //online
             this.globals.setIsCustomerLocal(false);
@@ -1127,6 +1177,10 @@ public class CoreEngine {
 
             jsonObj.put("address_work",_address_work_js_obj);
             jsonObj.put("address",_address_js_obj);
+
+//            Log.e("staff id", globals.getStaffId())
+            jsonObj.put("staffid",globals.getStaffId());
+            jsonObj.put("projectid", __projectID);
 
             Log.e(debugTag,jsonObj.toString());
 
@@ -1652,7 +1706,7 @@ public class CoreEngine {
             }
 
             return true;
-        }else{
+        } else {
             MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
             _dbHelper.open();
 
@@ -2007,13 +2061,13 @@ public class CoreEngine {
             return "-1";
         }
     }
+
     public synchronized boolean sync_save_questionnaire(ProgressDialog _pDialog){
         if(isOnline()){
             MySQLiteHelper _dbHelper = new MySQLiteHelper(this.mCtx);
             _dbHelper.open();
 
             ArrayList<QuestionnaireAnswerData> _questionnaire_answer_all = new ArrayList<QuestionnaireAnswerData>();
-
 
             //Get all questionnaire in local
             Cursor _questionnaire_answer_cursor_all = _dbHelper.getAllQuestionnaireAnswers();
@@ -2026,13 +2080,11 @@ public class CoreEngine {
                     int isCustomerLocal = _questionnaire_answer_cursor_all.getInt(
                             _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.OFFLINE_CUSTOMER));
 
-
                     if(isCustomerLocal == 1){
                         //save local customer to online customer
                         String new_contact_id = save_contact_online(_data.getCustomerId());
                         _data.setCustomerId(new_contact_id);
                     }
-
 
                     boolean isLocal = (isCustomerLocal == 1);
                     _data.setIscustomerLocal(isLocal);

@@ -9,11 +9,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -30,7 +32,8 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
 
     final String TAG = this.getClass().getSimpleName();
     ImageButton btn_staff,btn_menu, btn_back_home, btnEN, btnTH ;
-    TextView customerName,thanks1, thanks2, project_name, lblgreen;
+    TextView customerName,thanks1, thanks2, project_name, lblgreen, wrongpassword;
+    EditText password;
     ImageView img_icon;
     TextView lbl_line1,lbl_line2;
     questionniare_delegate delegate;
@@ -85,7 +88,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             public void run() {
                 try {
                     Thread.sleep(delegate.timesleep);
-                }catch (Exception e){
+                } catch (Exception e){
                 }
                 uiHandler.post( onUi );
             }
@@ -134,45 +137,16 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
         btn_back_home.setOnClickListener(this);
         btn_menu.setVisibility(View.GONE);
 
+        password = (EditText) findViewById(R.id.txt_passwordStaff);
+        password.setTypeface(delegate.font_type);
+        password.setTextSize(25);
+        password.setVisibility(View.INVISIBLE);
 
+        wrongpassword = (TextView) findViewById(R.id.lbl_wrongpassword);
+        wrongpassword.setTypeface(delegate.font_type);
+        wrongpassword.setTextSize(25);
+        wrongpassword.setVisibility(View.INVISIBLE);
 
-
-//        if(!delegate.QM.isStaffQustion()){
-//            if(delegate.service.getLg().equals("th")){
-//                thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
-//                thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
-//                btn_staff.setImageResource(R.drawable.for_btn_);
-//
-//            } else {
-//                thanks1.setText("Thanks you for taking the time to fill out this questionnaire");
-//                thanks2.setText("");
-//                btn_staff.setImageResource(R.drawable.btn_en_staff);
-//
-//            }
-//            customerName.setText(delegate.customer_selected.getFname()+ " " + delegate.customer_selected.getLname());
-//            btn_back_home.setEnabled(false);
-//            btn_back_home.setVisibility(View.GONE);
-//
-//        } else {
-//            if(delegate.service.getLg().equals("th")){
-//                btn_back_home.setImageResource(R.drawable.btn_projects);
-//                btn_staff.setImageResource(R.drawable.btn_questionniare);
-//            } else {
-//                btn_back_home.setImageResource(R.drawable.btn_en_projects);
-//                btn_staff.setImageResource(R.drawable.btn_en_questionnaires);
-//            }
-//            btn_back_home.setVisibility(View.VISIBLE);
-//            thanks1.setText("");
-//            thanks2.setText("");
-//            if (delegate.service.isOnline()) {
-//                customerName.setText(R.string.save_complete);
-//                customerName.setTextColor(getResources().getColor(R.color.GREEN));
-//            } else {
-//                customerName.setText(R.string.msg_offline);
-//                customerName.setTextColor(getResources().getColor(R.color.ORANGE));
-//            }
-//            delegate.sendAnswer();
-//        }
     }
 
     protected void onResume() {
@@ -197,7 +171,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
     private void changeLanguege(){
         lblgreen.setText(R.string.answer_finish);
 
-        if(delegate.QM ==null){
+        if(delegate.QM == null){
             if(delegate.service.getLg().equals("th")){
                 thanks1.setText("โครงการ "+ delegate.project.getName() +" ขอขอบคุณ");
                 thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
@@ -280,14 +254,16 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             if (popup.isShowing()) {
                 popup.dismiss();
             } else {
-                if(delegate.QM ==null){
+                //next to staff question and show textbox
+
+
+                if(delegate.QM == null){
                     Intent i = new Intent(this, QuestionniareActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
                 } else {
                     if (delegate.QM.isStaffQustion()) {
-//                    delegate.sendAnswer();
                         if (delegate.service.isOnline()) {
                             final ProgressDialog progress = new ProgressDialog(this);
                             progress.setTitle("Please wait");
@@ -323,14 +299,26 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                             finish();
                         }
                     } else {
-                        if(delegate.QM.CheckQuestionNotAns().size()!=0){
-                            Intent newPage = new Intent(this, DoNotAnswerListActivity.class);
-                            delegate.nextQuestionPage(newPage);
-                            startActivityForResult(newPage,0);
+                        Log.e("password", password.getText().toString());
+                        Log.e("real password", delegate.service.globals.getPassword());
+                        if(password.getText().toString().equals(delegate.service.globals.getPassword())) {
+                            if(delegate.QM.CheckQuestionNotAns().size()!=0){
+                                Intent newPage = new Intent(this, DoNotAnswerListActivity.class);
+                                delegate.nextQuestionPage(newPage);
+                                startActivityForResult(newPage,0);
+                            } else {
+                                delegate.initQuestionsStaff();
+                                nextPage();
+                            }
                         } else {
-                            delegate.initQuestionsStaff();
-                            nextPage();
+                            if (password.getVisibility() == View.VISIBLE) {
+                                wrongpassword.setText("Password ของ "+ delegate.service.getfullName() + " ไม่ถูกต้อง");
+                                wrongpassword.setVisibility(View.VISIBLE);
+                            } else {
+                                password.setVisibility(View.VISIBLE);
+                            }
                         }
+
                     }
                 }
 

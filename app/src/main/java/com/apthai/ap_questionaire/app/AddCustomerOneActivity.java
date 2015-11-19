@@ -130,7 +130,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             @Override
             public void run() {
                 // This is the delay
-                if(delegate.customer_selected !=null){
+                if(delegate.customer_selected != null){
                     new_customer = delegate.customer_selected;
                     getCustomerInfoLong();
                     statusEditOffline =1;
@@ -148,6 +148,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         new Thread( background ).start();
 
     }
+
     private void getCustomerInfoLong(){
         for (int i = 0; i < listfix.size(); i++) {
             if (listfix.get(i).equals(new_customer.getPrefix())) {
@@ -171,8 +172,9 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         }
     }
+
     private void getCustomerInfo(){
-        if(delegate.customer_selected ==null){
+        if(delegate.customer_selected == null){
             AddressData home = new AddressData("", "", "", "", "", "", "", "", "", "Thailand", "", "");
             AddressData work = new AddressData("", "", "", "", "", "", "", "", "", "", "", "");
             new_customer = new ContactData("คุณ", delegate.tmpName, delegate.tmpSurname, "", "", "", null, null,null);
@@ -365,6 +367,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lbl_add_customer_phone4.setText("");
 
         lbl_prefix_extra2 = (TextView) findViewById(R.id.lbl_prefix_extra2);
+        btnAddMobile.setVisibility(View.INVISIBLE);
+        btnAddPhone.setVisibility(View.INVISIBLE);
 
         setItemSpinner();
         setBirthDay();
@@ -388,6 +392,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         });
 
     }
+
     protected void setActiveField() {
         txtPrefix.setOnClickListener(this);
         txtFirstName.setOnClickListener(this);
@@ -449,6 +454,29 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lblCountry.setText(R.string.add_customer_other_country);
         lblNationality.setText(R.string.add_customer_nationality);
 
+    }
+
+    private void changebtnAddMobile() {
+        if (mobile1.getText().toString().length() > 0 && mobile2.getText().toString().length() > 0
+                && mobile3.getText().toString().length() > 0 && mobile4.getText().toString().length() > 0
+                && mobile5.getText().toString().length() > 0 && mobile6.getText().toString().length() > 0
+                && mobile7.getText().toString().length() > 0 && mobile8.getText().toString().length() > 0
+                && mobile9.getText().toString().length() > 0 && mobile10.getText().toString().length() > 0) {
+            btnAddMobile.setVisibility(View.VISIBLE);
+        } else {
+            btnAddMobile.setVisibility(View.INVISIBLE);
+        }
+    }
+    private void changebtnAddPhone() {
+        if (home1.getText().toString().length() > 0 && home2.getText().toString().length() > 0
+                && home3.getText().toString().length() > 0 && home4.getText().toString().length() > 0
+                && home5.getText().toString().length() > 0 && home6.getText().toString().length() > 0
+                && home7.getText().toString().length() > 0 && home8.getText().toString().length() > 0
+                && home9.getText().toString().length() > 0) {
+            btnAddPhone.setVisibility(View.VISIBLE);
+        } else {
+            btnAddPhone.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setKeyListener(){
@@ -548,6 +576,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile1.clearFocus();
                     mobile2.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
 
@@ -566,6 +595,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile2.clearFocus();
                     mobile3.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile3.addTextChangedListener(new TextWatcher() {
@@ -583,6 +613,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile3.clearFocus();
                     mobile4.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile4.addTextChangedListener(new TextWatcher() {
@@ -600,6 +631,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile4.clearFocus();
                     mobile5.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile5.addTextChangedListener(new TextWatcher() {
@@ -617,6 +649,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile5.clearFocus();
                     mobile6.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile6.addTextChangedListener(new TextWatcher() {
@@ -634,6 +667,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile6.clearFocus();
                     mobile7.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile7.addTextChangedListener(new TextWatcher() {
@@ -651,6 +685,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile7.clearFocus();
                     mobile8.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile8.addTextChangedListener(new TextWatcher() {
@@ -668,6 +703,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile8.clearFocus();
                     mobile9.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile9.addTextChangedListener(new TextWatcher() {
@@ -685,6 +721,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     mobile9.clearFocus();
                     mobile10.requestFocus();
                 }
+                changebtnAddMobile();
             }
         });
         mobile10.addTextChangedListener(new TextWatcher() {
@@ -703,6 +740,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mobile10.getWindowToken(), 0);
                 }
+                changebtnAddMobile();
             }
         });
 
@@ -724,6 +762,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     home1.clearFocus();
                     home2.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home2.addTextChangedListener(new TextWatcher() {
@@ -741,6 +780,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     home2.clearFocus();
                     home3.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home3.addTextChangedListener(new TextWatcher() {
@@ -758,6 +798,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     home3.clearFocus();
                     home4.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home4.addTextChangedListener(new TextWatcher() {
@@ -771,10 +812,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 if(s.length()==0){
                     home3.requestFocus();
                     home4.clearFocus();
-                } else{
+                } else {
                     home4.clearFocus();
                     home5.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home5.addTextChangedListener(new TextWatcher() {
@@ -788,10 +830,11 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 if(s.length()==0){
                     home4.requestFocus();
                     home5.clearFocus();
-                } else{
+                } else {
                     home5.clearFocus();
                     home6.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home6.addTextChangedListener(new TextWatcher() {
@@ -809,6 +852,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     home6.clearFocus();
                     home7.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home7.addTextChangedListener(new TextWatcher() {
@@ -826,6 +870,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     home7.clearFocus();
                     home8.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home8.addTextChangedListener(new TextWatcher() {
@@ -843,6 +888,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                     home8.clearFocus();
                     home9.requestFocus();
                 }
+                changebtnAddPhone();
             }
         });
         home9.addTextChangedListener(new TextWatcher() {
@@ -861,10 +907,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(home9.getWindowToken(), 0);
                 }
+                changebtnAddPhone();
             }
         });
         setKeyListener2();
     }
+
     private void setKeyListener2(){
 
         mobile2.setOnKeyListener(new View.OnKeyListener() {
@@ -1173,6 +1221,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
     }
+
     private void setFont(){
         txtPrefix = (EditText) findViewById(R.id.txt_Prefix);
         txtFirstName = (EditText) findViewById(R.id.txt_FirstName);
@@ -1235,8 +1284,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         lblNationality.setTypeface(delegate.font_type);
         lblNationality.setTextSize(25);
     }
-    private void setObjectTelephone(){
 
+    private void setObjectTelephone(){
         home1 = (EditText) findViewById(R.id.txt_digit_tel_home1);
         home2 = (EditText) findViewById(R.id.txt_digit_tel_home2);
         home3 = (EditText) findViewById(R.id.txt_digit_tel_home3);
@@ -1257,8 +1306,8 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         mobile8 = (EditText) findViewById(R.id.txt_digit_mobile8);
         mobile9 = (EditText) findViewById(R.id.txt_digit_mobile9);
         mobile10 = (EditText) findViewById(R.id.txt_digit_mobile10);
-
     }
+
     private void setBirthDay(){
         datePicker.setOnClickListener(new View.OnClickListener() {
 
@@ -1360,6 +1409,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void packData(){
 
         AddressData home = new_customer.getAddress();
@@ -1415,6 +1465,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
         delegate.customer_selected = new_customer;
     }
+
     private boolean validate() {
         boolean status = true;
         String error_msg = getString(R.string.error_customer_one);
@@ -1481,15 +1532,16 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             status = false;
             error_msg = getString(R.string.error_customer_one_mobileformat);
             lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
-        } else {
-            if (mobile1.getText().toString().equals("0")) {
-                lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
-            } else {
-                status = false;
-                error_msg = getString(R.string.error_customer_one_mobileformat2digit);
-                lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
-            }
         }
+//        else {
+//            if (mobile1.getText().toString().equals("0")) {
+//                lbl_add_customer_mobile_line1.setText(getString(R.string.add_customer_mobile_line1));
+//            } else {
+//                status = false;
+//                error_msg = getString(R.string.error_customer_one_mobileformat2digit);
+//                lbl_add_customer_mobile_line1.setText(Html.fromHtml(getString(R.string.add_customer_mobile_line1) +"<font color=\"#FF0000\"> *</font>"));
+//            }
+//        }
 
         if(txtEmail.getText().toString().trim().length() !=0){
             if(delegate.emailValidator(txtEmail.getText().toString().trim())){
@@ -1730,6 +1782,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
     }
+
     public void showPopupAddMobile(final Activity context, final String type, final int index) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup_mobile);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1777,7 +1830,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         } else {
             btn_delete.setVisibility(View.GONE);
         }
-
 
         //add on condition
         if(type.equals("mobile")){
@@ -2034,6 +2086,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         });
     }
+
     public void addMobileinPage(String mobile_number , String type){
         boolean statusAdd =false;
         if(type.equals("mobile")){
@@ -2065,6 +2118,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         updateMobile();
 
     }
+
     public void updateMobile(){
         boolean statusAdd =false;
         Log.e("mobile_list", mobile_list.toString());
@@ -2124,6 +2178,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             lbl_add_customer_phone4.setOnClickListener(this);
         }
     }
+
     public String numberformat(String phone){
         if(phone.length()==10){
             //mobile mode
@@ -2138,6 +2193,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
         //do not anythings
         return phone;
     }
+
     public void showPopupAddMobile2(final Activity context, final String type, final int index) {
         RelativeLayout viewGroup = (RelativeLayout) context.findViewById(R.id.popup_mobile);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -2232,12 +2288,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
                 if((type.equals("mobile") && txt_digit_mobile.getText().length()==34) || (type.equals("phone") && txt_digit_mobile.getText().length()==31)){
                     String string_phone = txt_digit_mobile.getText().toString().replace(" ", "").replace("-","");
 
-                    Log.e("sub",string_phone.substring(0,2));
-                    if (string_phone.substring(0,1).equals("0")) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txt_digit_mobile.getWindowToken(), 0);
-                        lbl_error.setVisibility(View.INVISIBLE);
+//                    Log.e("sub",string_phone.substring(0,2));
+//                    if (string_phone.substring(0,1).equals("0")) {
+//                        InputMethodManager imm = (InputMethodManager)getSystemService(
+//                                Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(txt_digit_mobile.getWindowToken(), 0);
+//                        lbl_error.setVisibility(View.INVISIBLE);
 
 
                         if(index !=99){
@@ -2253,10 +2309,12 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
                         updateMobile();
                         popupAddMobile.dismiss();
-                    } else {
-                        lbl_error.setText(R.string.error_customer_one_mobileformat2digit);
-                        lbl_error.setVisibility(View.VISIBLE);
-                    }
+//                    }
+
+//                    else {
+//                        lbl_error.setText(R.string.error_customer_one_mobileformat2digit);
+//                        lbl_error.setVisibility(View.VISIBLE);
+//                    }
 
 
 

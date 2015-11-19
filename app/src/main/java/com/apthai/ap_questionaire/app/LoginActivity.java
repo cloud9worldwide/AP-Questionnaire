@@ -32,10 +32,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     ImageView imgLogo;
     EditText txtUsername, txtPassword,txtIP;
     ImageButton btnLogin;
-    TextView btnForgot,txtError,btnSyncGEO;
+    TextView lblVersion,txtError,btnSyncGEO;
     questionniare_delegate delegate;
     private static Context ctx;
-    private static boolean txtfocus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +55,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
         String nowDate = sdf.format(c.getTime());
-
-
-
-        Thread thread = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                try {
-                    delegate.service.newVersion();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
 
         if(delegate.service.getLoginStatus() ){
             if(delegate.service.globals.getDateLastLogin().equals(nowDate)){
@@ -93,17 +77,13 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void run() {
                 isInit();
             uiHandler.post( onUi );
-        }
+            }
     };
-    new Thread( background ).start();
-
-
+        new Thread( background ).start();
     }
     public void isInit(){
         SharedPreferences preferences = LoginActivity.this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-
         String isInit = preferences.getString("isInitProvince","NO");
-
 
         if(isInit.equals("NO")){
             SharedPreferences.Editor editor = preferences.edit();
@@ -120,22 +100,12 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     }
 
-
     protected void onResume() {
         super.onResume();
         txtPassword.setText("");
         txtUsername.setText("");
         txtError.setText("");
         txtPassword.setSelection(0);
-
-
-////        txtUsername.setHint(R.string.username);
-////        txtPassword.setHint(R.string.password);
-////        if(delegate.service.getLg().equals("en")){
-////            btnLogin.setImageResource(R.drawable.login_btn_);
-////        } else {
-////            btnLogin.setImageResource(R.drawable.btn_th_login);
-////        }
     }
 
     private void setObject(){
@@ -143,7 +113,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         txtUsername = (EditText) findViewById(R.id.txtUsername);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
-        btnForgot = (TextView) findViewById(R.id.btnForgot);
+        lblVersion = (TextView) findViewById(R.id.lblVersion);
         txtIP = (EditText) findViewById(R.id.txtIP);
         btnSyncGEO = (TextView) findViewById(R.id.btnSyncGEO);
 
@@ -167,8 +137,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         txtUsername.setHint(R.string.username);
         txtPassword.setHint(R.string.password);
 
-        btnForgot.setTypeface(delegate.font_type);
-        btnForgot.setTextSize(30);
+        lblVersion.setTypeface(delegate.font_type);
+        lblVersion.setTextSize(30);
 
         txtPassword.setAlpha(0);
         txtUsername.setAlpha(0);
@@ -176,19 +146,9 @@ public class LoginActivity extends Activity implements OnClickListener {
         btnLogin.setVisibility(View.INVISIBLE);
         btnLogin.setOnClickListener(this);
 
-        btnForgot.setAlpha(0);
-        btnForgot.setOnClickListener(this);
+        lblVersion.setAlpha(0);
+        lblVersion.setText("Version " + delegate.service.currentAPK);
 
-        /*
-        txtUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
-            }
-        });
-        */
         txtPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -295,35 +255,40 @@ public class LoginActivity extends Activity implements OnClickListener {
             Runnable background = new Runnable() {
                 @Override
                 public void run() {
-                    if (delegate.service.Login(txtUsername.getText().toString() , txtPassword.getText().toString()) == true) {
-                        if (delegate.service.checkUpdateQuestionnaire()) {
-                            //ringProgressDialog.setMessage("Downloading...Questionnaire Data");
-                            delegate.service.updateQuestionnaire(ringProgressDialog);
-                            delegate.service.startDownloadImages(ringProgressDialog);
-                            //ringProgressDialog.setMessage("Downloading...All images Data");
 
-                            try {
-                                Thread.sleep(3000);
-                            }catch (Exception e) {
-                            }
-                            ringProgressDialog.dismiss();
+                   if(delegate.service.newVersion(ringProgressDialog)){
+                       Log.e("if newVersion", "new version");
+                       ringProgressDialog.dismiss();
+                       uiHandler.post( onUi );
+                   } else {
+                       Log.e("if newVersion", "same version");
+                       if (delegate.service.Login(txtUsername.getText().toString() , txtPassword.getText().toString()) == true) {
+                           if (delegate.service.checkUpdateQuestionnaire()) {
+                               delegate.service.updateQuestionnaire(ringProgressDialog);
+                               delegate.service.startDownloadImages(ringProgressDialog);
+                               try {
+                                   Thread.sleep(3000);
+                               }catch (Exception e) {
+                               }
+                               ringProgressDialog.dismiss();
+                               startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
+                           } else {
+                               delegate.service.startDownloadImages(ringProgressDialog);
+                               try {
+                                   Thread.sleep(3000);
+                               }catch (Exception e){
 
-                            startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
-                        } else {
+                               }
+                               ringProgressDialog.dismiss();
+                               startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
+                           }
+                       } else {
+                           ringProgressDialog.dismiss();
+                           uiHandler.post( onUi );
+                       }
+                   }
 
-                            delegate.service.startDownloadImages(ringProgressDialog);
-                            try {
-                                Thread.sleep(3000);
-                            }catch (Exception e){
 
-                            }
-                            ringProgressDialog.dismiss();
-                            startActivityForResult(new Intent(LoginActivity.this , ProjectsActivity.class),0);
-                        }
-                    } else {
-                        ringProgressDialog.dismiss();
-                        uiHandler.post( onUi );
-                    }
                 }
             };
 
@@ -331,12 +296,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 
         }
-        else if(v.getId() == R.id.btnForgot){
-            startActivityForResult(new Intent(this, ResetPasswordActivity.class),0);
+        else if(v.getId() == R.id.lblVersion){
+//            startActivityForResult(new Intent(this, ResetPasswordActivity.class),0);
         } else if(v.getId() == R.id.btnSyncGEO){
             hideConfig();
             delegate.service.sync_geo_data(this);
 
+        } if (v.getId() == R.id.btnLogin && txtUsername.getText().length() == 0 || txtPassword.getText().length() == 0) {
+            txtError.setText("กรุณากรอก Username หรือ Password ให้ครบถ้วน");
         }
     }
 
@@ -358,7 +325,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                 txtPassword.setAlpha(1);
                 txtUsername.setAlpha(1);
-                btnForgot.setAlpha(1);
+                lblVersion.setAlpha(1);
                 btnLogin.setVisibility(View.VISIBLE);
                 Animation fadeInAnimation = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.animate);
                 fadeInAnimation.setFillAfter(true);
@@ -367,7 +334,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 txtUsername.startAnimation(fadeInAnimation);
                 txtPassword.startAnimation(fadeInAnimation);
                 btnLogin.startAnimation(fadeInAnimation);
-                btnForgot.startAnimation(fadeInAnimation);
+                lblVersion.startAnimation(fadeInAnimation);
 
             }
 

@@ -630,7 +630,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             public void run() {
                 // This is the delay
                 if (delegate.service.globals.getContactId() == "-1") {
-                    delegate.service.saveContact(new_customer);
+                    delegate.service.saveContact(new_customer, delegate.project.getId());
                 }else{
                     delegate.service.updateContact(new_customer);
                 }

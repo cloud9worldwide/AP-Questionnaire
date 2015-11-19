@@ -40,18 +40,7 @@ public class DownloadImages {
             saveImage(imgUrls.get(i));
             String text = "Download image ["+(i+1)+ "/" + SIZE + "]";
             Log.d("Core", text);
-            //_pDailog.setMessage(text);
         }
-        /*
-        DownloadImagesTask _task = new DownloadImagesTask(_pDailog);
-        try {
-            _task.execute(_imageUrls);
-            _task.get();
-        } catch (Exception e){
-            _task.cancel(true);
-            throw new ApiException("Problem connecting to the server " + e.getMessage(), e);
-        }
-        */
     }
 
     public static String md5(String s) {
@@ -150,7 +139,7 @@ public class DownloadImages {
                 imgPath.mkdirs();
             }
 
-            String fileName = fullURL.substring(fullURL.length()-5,fullURL.length());
+            String fileName = fullURL.substring(fullURL.length()-12,fullURL.length());
             InputStream is = null;
             if (c.getResponseCode() == HttpURLConnection.HTTP_OK)
             {
@@ -179,20 +168,11 @@ public class DownloadImages {
         ArrayList<String> imgUrls = _imageUrls;
         int SIZE = imgUrls.size();
         for (int i = 0; i < SIZE; i++) {
-            saveAPK(imgUrls.get(i));
-            String text = "Download APK ["+(i+1)+ "/" + SIZE + "]";
-            Log.d("Core", text);
-            //_pDailog.setMessage(text);
+            if( saveAPK(imgUrls.get(i))){
+                Log.e("save APK","success");
+            } else {
+                Log.e("save APK","no success");
+            }
         }
-        /*
-        DownloadImagesTask _task = new DownloadImagesTask(_pDailog);
-        try {
-            _task.execute(_imageUrls);
-            _task.get();
-        } catch (Exception e){
-            _task.cancel(true);
-            throw new ApiException("Problem connecting to the server " + e.getMessage(), e);
-        }
-        */
     }
 }

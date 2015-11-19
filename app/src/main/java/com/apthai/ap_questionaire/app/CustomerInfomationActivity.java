@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,12 +42,14 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     RelativeLayout root_view;
     ImageView img_background;
 
-    TextView question_title,title;
+    TextView question_title,title, lbl_offline;
     TextView lbl_Fname , lbl_Lname, lbl_address, lbl_mobile, lbl_tel, lbl_email;
     Context ctx;
+
     int statusRevisitOffline;
 
     boolean loadready = false;
+
     private void setImage(){
         img_background = (ImageView) findViewById(R.id.img_background);
         if(delegate.project.getBackgroundUrl().trim().length()!=0) {
@@ -55,7 +58,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                     String.valueOf(img_background.getHeight()),
                     img_background, R.drawable.space);
         }
-
     }
 
     private synchronized void loadData() {
@@ -63,7 +65,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         delegate = (questionniare_delegate)getApplicationContext();
         setImage();
         customerIndex = delegate.service.globals.getContactId();
-        ctx =this;
+        ctx = this;
 
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
@@ -71,7 +73,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         progress.show();
 
         final Handler uiHandler = new Handler();
-
 
         final  Runnable onUi = new Runnable() {
             @Override
@@ -90,7 +91,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 progress.dismiss();
                 new AlertDialog.Builder(CustomerInfomationActivity.this)
                         .setTitle("Offline mode")
-                        .setMessage("Cannot access since you are operating offline mode.")
+                        .setMessage("ขณะนี้อยู่ในโหมดออฟไลน์ กรุณาเพิ่มชื่อลูกค้าใหม่")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 setResult(1);
@@ -105,13 +106,13 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             @Override
             public void run() {
                 // This is the delay
-                customer_info =null;
-                customer_info = delegate.service.getContactInfo(customerIndex);
+                customer_info = null;
+                customer_info = delegate.service.getContactInfo(customerIndex, delegate.project.getId(), delegate.questionnaire_selected.getId());
                 if(customer_info !=null){
                     customer_info.setContactId(delegate.service.globals.getContactId());
                     try {
                         Thread.sleep(2000);
-                    }catch (Exception e){
+                    } catch (Exception e){
 
                     }
                     uiHandler.post( onUi );
@@ -322,6 +323,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             lbl_mobile = (TextView) findViewById(R.id.lbl_mobile);
             lbl_tel = (TextView) findViewById(R.id.lbl_tel);
             lbl_email = (TextView) findViewById(R.id.lbl_email);
+            lbl_offline = (TextView) findViewById(R.id.lbl_offline);
 
             lbl_Fname.setTypeface(delegate.font_type);
             lbl_Lname.setTypeface(delegate.font_type);
@@ -329,6 +331,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             lbl_mobile.setTypeface(delegate.font_type);
             lbl_tel.setTypeface(delegate.font_type);
             lbl_email.setTypeface(delegate.font_type);
+            lbl_offline.setTypeface(delegate.font_type);
 
             lbl_Fname.setTextSize(25);
             lbl_Lname.setTextSize(25);
@@ -336,11 +339,26 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             lbl_mobile.setTextSize(25);
             lbl_tel.setTextSize(25);
             lbl_email.setTextSize(25);
+            lbl_offline.setTextSize(25);
+
+            lbl_offline.setTextColor(getResources().getColor(R.color.RED));
+            lbl_offline.setText("Offline Mode กรุณาตอบแบบสอบถาม");
+            if(delegate.service.isOnline()){
+                lbl_offline.setVisibility(View.INVISIBLE);
+            } else {
+                lbl_offline.setVisibility(View.VISIBLE);
+            }
+
         }
 
         if(delegate.service.isOnline()) {
-            btnEdit.setVisibility(View.VISIBLE);
-            btn_reVisit.setVisibility(View.VISIBLE);
+            if(delegate.service.IsDisplayStart){
+                btnEdit.setVisibility(View.VISIBLE);
+                btn_reVisit.setVisibility(View.VISIBLE);
+            } else {
+                btnEdit.setVisibility(View.VISIBLE);
+                btn_reVisit.setVisibility(View.INVISIBLE);
+            }
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
             btn_reVisit.setVisibility(View.INVISIBLE);
@@ -396,10 +414,9 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
-
                 if(customer_info.getContactId().length() >6 && !delegate.service.isOnline()){
                     delegate.customer_selected = null;
-                    statusRevisitOffline =1;
+                    statusRevisitOffline = 1;
                     AlertDialog alertDialog1 = new AlertDialog.Builder(
                             ctx).create();
                     alertDialog1.setTitle(getString(R.string.alert_warning));
@@ -441,7 +458,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                     new Thread( background ).start();
                 }
             }
-        } else if(v.getId() == R.id.btnBack){
+        } else if(v.getId() == R.id.btnBack) {
             if(popup.isShowing()){
                 popup.dismiss();
             } else {
@@ -452,49 +469,62 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 popup.dismiss();
             } else {
                 //method revisit
-                if(delegate.service.isOnline()){
-                    final ProgressDialog progress = new ProgressDialog(this);
-                    progress.setTitle("Please wait");
-                    progress.setMessage("Loading....");
-                    progress.setCancelable(false);
-                    progress.show();
 
-                    final Handler uiHandler = new Handler();
-                    final  Runnable onUi11 = new Runnable() {
-                        @Override
-                        public void run() {
-                            // this will run on the main UI thread
-                            progress.dismiss();
-                            delegate.customer_selected = customer_info;
-                            delegate.StampVisitLog();
-                            startActivityForResult(new Intent(ctx, CustomerFinishedAnswerActivity.class),0);
+                AlertDialog alertDialog1 = new AlertDialog.Builder(
+                        ctx).create();
+                alertDialog1.setTitle(" ");
+                alertDialog1.setMessage("ต้องการ Stamp ลูกค้าให้เป็น Revisit กดปุ่ม OK");
+                alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+//                        onBackPressed();
+                        Log.e("s","s");
+                    }
+                });
+                alertDialog1.show();
 
-                        }
-                    };
-                    Runnable background = new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(delegate.timesleep);
-                            }catch (Exception e){
-                            }
-                            uiHandler.post( onUi11 );
-                        }
-                    };
-                    new Thread( background ).start();
-                } else {
-                    statusRevisitOffline =1;
-                    AlertDialog alertDialog1 = new AlertDialog.Builder(
-                            ctx).create();
-                    alertDialog1.setTitle(getString(R.string.alert_warning));
-                    alertDialog1.setMessage(getString(R.string.is_offine_Revisit));
-                    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            onBackPressed();
-                        }
-                    });
-                    alertDialog1.show();
-                }
+
+//                if(delegate.service.isOnline()){
+//                    final ProgressDialog progress = new ProgressDialog(this);
+//                    progress.setTitle("Please wait");
+//                    progress.setMessage("Loading....");
+//                    progress.setCancelable(false);
+//                    progress.show();
+//
+//                    final Handler uiHandler = new Handler();
+//                    final  Runnable onUi11 = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // this will run on the main UI thread
+//                            progress.dismiss();
+//                            delegate.customer_selected = customer_info;
+//                            delegate.StampVisitLog();
+//                            startActivityForResult(new Intent(ctx, CustomerFinishedAnswerActivity.class),0);
+//                        }
+//                    };
+//                    Runnable background = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                Thread.sleep(delegate.timesleep);
+//                            }catch (Exception e){
+//                            }
+//                            uiHandler.post( onUi11 );
+//                        }
+//                    };
+//                    new Thread( background ).start();
+//                } else {
+//                    statusRevisitOffline =1;
+//                    AlertDialog alertDialog1 = new AlertDialog.Builder(
+//                            ctx).create();
+//                    alertDialog1.setTitle(getString(R.string.alert_warning));
+//                    alertDialog1.setMessage(getString(R.string.is_offine_Revisit));
+//                    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            onBackPressed();
+//                        }
+//                    });
+//                    alertDialog1.show();
+//                }
 
 
             }
@@ -628,7 +658,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 progress.dismiss();
                 new AlertDialog.Builder(CustomerInfomationActivity.this)
                         .setTitle("Offline mode")
-                        .setMessage("Cannot access since you are operating offline mode.")
+                        .setMessage("ขณะนี้อยู่ในโหมดออฟไลน์ กรุณาเพิ่มชื่อลูกค้าใหม่")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 setResult(1);

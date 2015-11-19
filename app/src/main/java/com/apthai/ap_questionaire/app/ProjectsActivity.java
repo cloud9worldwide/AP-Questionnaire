@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,8 +95,9 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
         lblFullName= (TextView) findViewById(R.id.lblFullName);
         lblFullName.setTypeface(delegate.font_type);
-        lblFullName.setTextSize(20);
+        lblFullName.setTextSize(25);
         lblFullName.setText("User : " + delegate.service.getfullName());
+        lblFullName.setTextColor(getResources().getColor(R.color.staffname));
 
         btnEN = (ImageButton) findViewById(R.id.btnEN);
         btnTH = (ImageButton) findViewById(R.id.btnTH);
@@ -268,7 +268,8 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             progress.setCancelable(false);
             progress.show();
 
-            final Handler uiHandler = new Handler();
+            
+            final android.os.Handler uiHandler = new android.os.Handler();
             final  Runnable onUi = new Runnable() {
                 @Override
                 public void run() {

@@ -25,7 +25,6 @@ public class QuestionlistJSON2DATA {
                     _qTypeData.setQuestionOrder(k);
                     k++;
                 }
-
                 if(_qTypeData.getQuestion() != null && _qTypeData.getAnswers() != null)
                     _result.add(_qTypeData);
             }

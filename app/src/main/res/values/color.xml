@@ -15,4 +15,5 @@
     <color name="WHITE">#FFFFFF</color>
     <color name="BLACK">#000000</color>
     <color name="TITLE">#F9F9F9</color>
+    <color name="staffname">#0019d7</color>
 </resources>

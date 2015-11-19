@@ -514,7 +514,6 @@ public class Display01Activity extends Activity implements OnClickListener {
                         }
                     } else {
                         image.setImageResource(R.drawable.checkbox_unselect);
-                        Log.e("alekdebug",index+"");
                         answer.remove(index);
                         content_view.removeAllViews();
                         setTableLayout();
@@ -545,7 +544,7 @@ public class Display01Activity extends Activity implements OnClickListener {
     public void onBackPressed() {
         if(delegate.checkPressBack(answer)){
             delegate.backQuestionpage(this);
-        }else{
+        } else {
             delegate.showAlert(this, getString(R.string.cannot_back), getString(R.string.alert_warning));
         }
     }

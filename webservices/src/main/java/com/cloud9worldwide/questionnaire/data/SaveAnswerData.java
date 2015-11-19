@@ -13,7 +13,7 @@ public class SaveAnswerData {
 
     public SaveAnswerData(String value, String freetxt) {
         this.value = value;
-        if(freetxt ==null){
+        if(freetxt == null){
             freetxt = "";
         }
 

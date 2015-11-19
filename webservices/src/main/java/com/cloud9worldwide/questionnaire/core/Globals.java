@@ -10,12 +10,14 @@ public class Globals {
     public static final String IS_LOGIN = "isLogin";
     public static final String STAFF_ID = "staffId";
     public static final String DATE_LAST_LOGIN = "lastDate";
+    public static final String PASSWORD = "password";
 
 
     private Boolean isLogin = false;
     private String loginTokenAccess = null;
     private String UDID = null;
     private String username = null;
+    private String password = null;
     private String staffId;
     private String contactId = "-1";
     private Boolean isCustomerLocal = false;
@@ -90,6 +92,12 @@ public class Globals {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setPassword(String password) { this.password = password; }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setStaffId(String staffId) {

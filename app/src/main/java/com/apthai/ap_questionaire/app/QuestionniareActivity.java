@@ -93,8 +93,9 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 
         lblFullName= (TextView) findViewById(R.id.lblFullName);
         lblFullName.setTypeface(delegate.font_type);
-        lblFullName.setTextSize(20);
+        lblFullName.setTextSize(25);
         lblFullName.setText("User : " + delegate.service.getfullName());
+        lblFullName.setTextColor(getResources().getColor(R.color.staffname));
 
         btnEN = (ImageButton) findViewById(R.id.btnEN);
         btnTH = (ImageButton) findViewById(R.id.btnTH);
