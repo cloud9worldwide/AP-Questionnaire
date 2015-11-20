@@ -245,7 +245,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 public void run() {
                     // this will run on the main UI thread
                     if(delegate.service.getLoginMessage().equals("null")){
-                        txtError.setText("Please check internet connection.");
+                        txtError.setText("กรุณาทำการเชื่อมต่ออินเตอร์เน็ต เพื่อทำการ Login เข้าสู่ระบบ");
                     } else {
                         txtError.setText(delegate.service.getLoginMessage());
                     }

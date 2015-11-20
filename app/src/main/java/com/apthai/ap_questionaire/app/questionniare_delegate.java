@@ -49,7 +49,7 @@ public class questionniare_delegate extends Application {
     public CoreEngine service;
     private ArrayList<ContactSearchData> customer_list = new ArrayList<ContactSearchData>();
     public ContactData customer_selected;
-    private String questionnaire_selected_id, questionnaire_time;
+    private String  questionnaire_time;
     public ProjectData project;
     public int index_question;
     public ArrayList<QuestionTypeData> questions;
@@ -83,15 +83,12 @@ public class questionniare_delegate extends Application {
         editor.commit();
     }
 
-//    contact_id",params[0]);
-//            jsonObj.put("staff_id",params[1]);
-//    jsonObj.put("project_id",params[2]);
-
     public void StampVisitLog(){
-        Log.e("id",customer_selected.getContactId());
-        Log.e("s id",service.globals.getStaffId());
-        Log.e("p id",project.getId());
-        service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId());
+        Log.e("scv",customer_selected.getContactId());
+        Log.e("staff",service.globals.getStaffId());
+        Log.e("project",project.getId());
+        Log.e("questionnaire",questionnaire_selected.getId());
+        service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId(), questionnaire_selected.getId());
     }
 
 
@@ -108,13 +105,13 @@ public class questionniare_delegate extends Application {
     public void initQuestions() {
         AllHistoryAnswer = new ArrayList<QuestionAnswerData>();
         QM = new QuestionManagement(service, project, questionnaire_selected);
-        questions = service.getQuestionnaireData(questionnaire_selected_id, questionnaire_time);
+        questions = service.getQuestionnaireData(questionnaire_selected.getId(), questionnaire_time);
         QM.InitQuestionListData(questions);
     }
 
     public void initQuestionsStaff() {
         QM.pack_question_ans_data();
-        questions = service.getStaffQuestionnaireData(questionnaire_selected_id, questionnaire_time);
+        questions = service.getStaffQuestionnaireData(questionnaire_selected.getId(), questionnaire_time);
         QM.InitStaffQuestionListData(questions);
     }
 
@@ -141,15 +138,6 @@ public class questionniare_delegate extends Application {
             return null;
         }
         return questions.get(index_question);
-    }
-
-
-    public void setQuestionnaire_selected_id(String id) {
-        questionnaire_selected_id = id;
-    }
-
-    public String getQuestionnaire_selected_id() {
-        return questionnaire_selected_id;
     }
 
     public void setQuestionnaire_time(String time) {
@@ -373,7 +361,7 @@ public class questionniare_delegate extends Application {
     public synchronized ArrayList<QuestionAnswerData> getQuestionnaireHistory() {
         ArrayList<QuestionAnswerData> questionnaireAnswer = new ArrayList<QuestionAnswerData>();
         if (service.isOnline() && !service.globals.getIsCustomerLocal()) {
-            questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(this.getQuestionnaire_selected_id()),project.getId());
+            questionnaireAnswer = service.getQuestionnaireAnswerHistory(String.valueOf(questionnaire_selected.getId()),project.getId());
         }
         AllHistoryAnswer = questionnaireAnswer;
         Log.e("AllHistoryAnswer",AllHistoryAnswer.toString());

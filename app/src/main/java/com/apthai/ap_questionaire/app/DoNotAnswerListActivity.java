@@ -49,10 +49,6 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
                     String.valueOf(img_background.getHeight()),
                     img_background, R.drawable.space);
         }
-//        View rootView = getWindow().getDecorView().getRootView();
-//        Bitmap imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-//        Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-//        rootView.setBackground(imageDraw);
     }
     private void setObject(){
         delegate = (questionniare_delegate)getApplicationContext();
@@ -92,8 +88,6 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_not_answer_list);
         delegate = (questionniare_delegate)getApplicationContext();
-//        setImage();
-//        setTableLayout();
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Please wait");
         progress.setMessage("Loading....");
@@ -125,6 +119,7 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
         };
         new Thread( background ).start();
     }
+
     private void setTableLayout(){
 
         for(int i =0, c = 0; i < total; i++, c++) {
@@ -202,7 +197,6 @@ public class DoNotAnswerListActivity extends Activity implements View.OnClickLis
 
         else {
             final int indexSelected =Integer.parseInt(v.getTag().toString());
-//            Log.e("indexSelected", data.get(indexSelected).getQuestionOrder()-1 + "");
             Log.e("indexSelected", indexSelected +"");
             delegate.QM.redo_question_not_ansAtIndex(indexSelected);
             QuestionTypeData Test = delegate.QM.get_question();

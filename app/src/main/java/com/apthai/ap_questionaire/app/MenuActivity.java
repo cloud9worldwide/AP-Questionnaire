@@ -25,11 +25,4 @@ public class MenuActivity extends Activity {
 //        menu_settings.setOnClickListener(parentView);
     }
 
-//    @Override
-//    public void onClick(View v) {
-//
-//    }
-
-
-
 }

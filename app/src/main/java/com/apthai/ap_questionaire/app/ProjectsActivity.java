@@ -123,20 +123,11 @@ public class ProjectsActivity extends Activity implements OnClickListener {
 
     private void setTableLayout(){
         linearLayout = new LinearLayout(this);
-//        int icon_size = delegate.pxToDp(400);
         int icon_size = 0;
         int icon_size_for_demo = delegate.pxToDp(150);
 
         int column =4 ;
-//        if(total >10){
-//            column = 4;
-//        } else if (total >4){
-//            column = 3;
-//        } else if(total >1){
-//            column =2;
-//        } else {
-//            column =1;
-//        }
+
         int row = (total / column);
         if(total%column != 0){
             row++;

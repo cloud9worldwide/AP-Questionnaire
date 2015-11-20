@@ -39,15 +39,12 @@ public class FlagActivity extends Activity implements View.OnClickListener {
     ArrayList<QuestionTypeData> data;
 
     private void setImage(){
-        setObject();
-        img_background = (ImageView) findViewById(R.id.img_background);
         if(delegate.project.getBackgroundUrl().trim().length()!=0) {
             delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
                     String.valueOf(img_background.getWidth()),
                     String.valueOf(img_background.getHeight()),
                     img_background, R.drawable.space);
         }
-
     }
 
     private void setObject(){
@@ -84,12 +81,14 @@ public class FlagActivity extends Activity implements View.OnClickListener {
 
         root_view = (RelativeLayout) findViewById(R.id.root_view);
         root_view.setOnClickListener(this);
+
+        img_background = (ImageView) findViewById(R.id.img_background);
         popup = new PopupWindow(this);
         changeLanguege();
 
-
-        delegate.service.StartQuestionnaire(delegate.customer_selected.getContactId(), Boolean.toString(delegate.opp));
-
+        if (delegate.service.IsDisplayStart){
+            delegate.service.StartQuestionnaire(delegate.customer_selected.getContactId(), Boolean.toString(delegate.opp), delegate.project.getId(), delegate.service.globals.getStaffId(), delegate.questionnaire_selected.getId());
+        }
     }
 
     private void changeLanguege() {
@@ -104,12 +103,14 @@ public class FlagActivity extends Activity implements View.OnClickListener {
         question_title.setText(R.string.title_flag);
         lblFlagTH.setText(R.string.flag_name_TH);
         lblFlagEN.setText(R.string.flag_name_EN);
+        setImage();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flag);
+        setObject();
         setImage();
     }
 

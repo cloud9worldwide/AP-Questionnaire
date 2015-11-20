@@ -60,18 +60,11 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         project_data = delegate.project;
         img_background = (ImageView) findViewById(R.id.img_background);
         img_logo_project = (ImageView)findViewById(R.id.img_logo_project);
-        if(delegate.project.getBackgroundUrl().length()!=0) {
-            delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
-                    String.valueOf(img_background.getWidth()),
-                    String.valueOf(img_background.getHeight()),
-                    img_background, R.drawable.space);
-        }
         setObject();
     }
 
     private void setObject(){
         popup = new PopupWindow(this);
-
 
         content_view = (LinearLayout)this.findViewById(R.id.AP_content);
         content_view.removeAllViews();
@@ -105,6 +98,13 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
     }
 
     private void changeLanguege(){
+
+        if(delegate.project.getBackgroundUrl().length()!=0) {
+            delegate.imageLoader.display(delegate.project.getBackgroundUrl(),
+                    String.valueOf(img_background.getWidth()),
+                    String.valueOf(img_background.getHeight()),
+                    img_background, R.drawable.space);
+        }
 
         lbl_title.setText(R.string.Please_select_questionnaire);
         if(delegate.service.getLg().equals("en")){
@@ -183,15 +183,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
         int icon_size = delegate.dpToPx(0);
 
         int column =4 ;
-//        if(total >10){
-//            column = 4;
-//        } else if (total >4){
-//            column = 3;
-//        } else if(total >1){
-//            column =2;
-//        } else {
-//            column =1;
-//        }
+
         int row = (total / column);
         if(total%column != 0){
             row++;
@@ -199,7 +191,6 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
 
         for(int i =0, c = 0, r = 0; i < total; i++, c++){
             QuestionnaireData obj = questionList.get(i);
-//            int imageWidth = delegate.dpToPx(200), imageHeight = delegate.dpToPx(100);
             int imageWidth = 0, imageHeight = 0;
             int imageWidth2 = delegate.dpToPx(200), imageHeight2 = delegate.dpToPx(100);
             if(c == column){
@@ -296,11 +287,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
             } else {
                 Intent i = new Intent(this, CustomerLookUpActivity.class);
                 delegate.questionnaire_selected = questionList.get(Integer.parseInt(v.getTag().toString()));
-                delegate.setQuestionnaire_selected_id(questionList.get(Integer.parseInt(v.getTag().toString())).getId());
                 delegate.setQuestionnaire_time(questionList.get(Integer.parseInt(v.getTag().toString())).getTimeStamp());
-
-
-//                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                 startActivityForResult(i, 0);
             }

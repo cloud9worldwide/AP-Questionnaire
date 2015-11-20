@@ -49,21 +49,10 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     private void setImage(){
         setObject();
 
-        View rootView = getWindow().getDecorView().getRootView();
+
 
         img_background = (ImageView) findViewById(R.id.img_background);
         img_background.setVisibility(View.GONE);
-        if(delegate.project.getBackgroundUrl().length()!=0){
-            Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
-            if (imageBitmap == null) {
-                imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
-            }
-            Drawable imageDraw =  new BitmapDrawable(imageBitmap);
-
-            rootView.setBackground(imageDraw);
-        }
-
-
 
     }
 
@@ -76,7 +65,7 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         setImage();
         ctx = this;
         delegate.service.globals.setContactId("-1");
-        delegate.canRevisit = false;
+        delegate.opp = false;
     }
 
     private void setObject(){
@@ -168,6 +157,15 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
     }
 
     private void changeLanguege(){
+        View rootView = getWindow().getDecorView().getRootView();
+        if(delegate.project.getBackgroundUrl().length()!=0){
+            Bitmap imageBitmap = delegate.imageLoader.display2(delegate.project.getBackgroundUrl());
+            if (imageBitmap == null) {
+                imageBitmap = delegate.readImageFileOnSD(delegate.project.getBackgroundUrl(),0, 0);
+            }
+            Drawable imageDraw =  new BitmapDrawable(imageBitmap);
+            rootView.setBackground(imageDraw);
+        }
 
         question_title.setText(R.string.title_activity_customer_look_up);
         project_name.setText(delegate.project.getName());

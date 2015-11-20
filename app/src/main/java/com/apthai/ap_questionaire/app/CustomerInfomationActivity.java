@@ -51,7 +51,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     boolean loadready = false;
 
     private void setImage(){
-        img_background = (ImageView) findViewById(R.id.img_background);
+
         if(delegate.project.getBackgroundUrl().trim().length()!=0) {
             delegate.imageLoader.display(delegate.project.getBackgroundUrl().trim(),
                     String.valueOf(img_background.getWidth()),
@@ -63,6 +63,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     private synchronized void loadData() {
 
         delegate = (questionniare_delegate)getApplicationContext();
+        img_background = (ImageView) findViewById(R.id.img_background);
         setImage();
         customerIndex = delegate.service.globals.getContactId();
         ctx = this;
@@ -135,12 +136,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
     }
 
     private void setData(){
-
-        if (delegate.canRevisit) {
-            btn_reVisit.setVisibility(View.VISIBLE);
-        } else {
-            btn_reVisit.setVisibility(View.GONE);
-        }
 
         lbl_Fname.setText(R.string.add_customer_name);
         lbl_Lname.setText(R.string.add_customer_surname);
@@ -354,10 +349,10 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         if(delegate.service.isOnline()) {
             if(delegate.service.IsDisplayStart){
                 btnEdit.setVisibility(View.VISIBLE);
-                btn_reVisit.setVisibility(View.VISIBLE);
+                btn_reVisit.setVisibility(View.INVISIBLE);
             } else {
                 btnEdit.setVisibility(View.VISIBLE);
-                btn_reVisit.setVisibility(View.INVISIBLE);
+                btn_reVisit.setVisibility(View.VISIBLE);
             }
         } else {
             btnEdit.setVisibility(View.INVISIBLE);
@@ -387,6 +382,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
         question_title.setText(R.string.title_activity_customer_list);
         title.setText(R.string.title_customer_info);
         setData();
+        setImage();
     }
 
     @Override
@@ -470,61 +466,74 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             } else {
                 //method revisit
 
-                AlertDialog alertDialog1 = new AlertDialog.Builder(
-                        ctx).create();
-                alertDialog1.setTitle(" ");
-                alertDialog1.setMessage("ต้องการ Stamp ลูกค้าให้เป็น Revisit กดปุ่ม OK");
-                alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder alertRevisit = new AlertDialog.Builder(ctx);
+                alertRevisit.setTitle("Stamp Re-Visit");
+                alertRevisit.setMessage("ต้องการ Stamp ลูกค้าให้เป็น Revisit กดปุ่ม OK");
+                alertRevisit.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-//                        onBackPressed();
-                        Log.e("s","s");
-                    }
-                });
-                alertDialog1.show();
+                        Log.e("Button","OK");
+                        if(delegate.service.isOnline()){
+                            final ProgressDialog progress = new ProgressDialog(ctx);
+                            progress.setTitle("Please wait");
+                            progress.setMessage("Loading....");
+                            progress.setCancelable(false);
+                            progress.show();
+
+                            final Handler uiHandler = new Handler();
+                            final  Runnable onUi11 = new Runnable() {
+                                @Override
+                                public void run() {
+                                    // this will run on the main UI thread
+                                    progress.dismiss();
+                                    AlertDialog.Builder alertRevisit = new AlertDialog.Builder(ctx);
+                                    alertRevisit.setTitle("Stamp Re-Visit");
+                                    if(delegate.service.getLoginMessage().equals("null")){
+                                        alertRevisit.setMessage("การส่งข้อมูลผิดพลาด กรุณาติดต่อเจ้าหน้าที่");
+                                    } else {
+                                        alertRevisit.setMessage(delegate.service.getLoginMessage());
+                                    }
+                                    alertRevisit.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    });
+                                    alertRevisit.show();
+                                }
+                            };
+                            Runnable background = new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(delegate.timesleep);
+                                        delegate.customer_selected = customer_info;
+                                        delegate.StampVisitLog();
+                                    }catch (Exception e){
+                                    }
+                                    uiHandler.post( onUi11 );
+                                }
+                            };
+                            new Thread( background ).start();
+                        } else {
+                            statusRevisitOffline =1;
+                            AlertDialog alertDialog1 = new AlertDialog.Builder(
+                                    ctx).create();
+                            alertDialog1.setTitle(getString(R.string.alert_warning));
+                            alertDialog1.setMessage(getString(R.string.is_offine_Revisit));
+                            alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    onBackPressed();
+                                }
+                            });
+                            alertDialog1.show();
+                        }
+                    } });
+                alertRevisit.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.e("Button","Cancel");
+                    } });
+                alertRevisit.show();
 
 
-//                if(delegate.service.isOnline()){
-//                    final ProgressDialog progress = new ProgressDialog(this);
-//                    progress.setTitle("Please wait");
-//                    progress.setMessage("Loading....");
-//                    progress.setCancelable(false);
-//                    progress.show();
-//
-//                    final Handler uiHandler = new Handler();
-//                    final  Runnable onUi11 = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // this will run on the main UI thread
-//                            progress.dismiss();
-//                            delegate.customer_selected = customer_info;
-//                            delegate.StampVisitLog();
-//                            startActivityForResult(new Intent(ctx, CustomerFinishedAnswerActivity.class),0);
-//                        }
-//                    };
-//                    Runnable background = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                Thread.sleep(delegate.timesleep);
-//                            }catch (Exception e){
-//                            }
-//                            uiHandler.post( onUi11 );
-//                        }
-//                    };
-//                    new Thread( background ).start();
-//                } else {
-//                    statusRevisitOffline =1;
-//                    AlertDialog alertDialog1 = new AlertDialog.Builder(
-//                            ctx).create();
-//                    alertDialog1.setTitle(getString(R.string.alert_warning));
-//                    alertDialog1.setMessage(getString(R.string.is_offine_Revisit));
-//                    alertDialog1.setButton("OK", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            onBackPressed();
-//                        }
-//                    });
-//                    alertDialog1.show();
-//                }
+
 
 
             }
@@ -555,7 +564,6 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                         progress.dismiss();
                         delegate.customer_selected = customer_info;
                         startActivityForResult(new Intent(ctx, AddCustomerOneActivity.class),0);
-
                     }
                 };
                 Runnable background = new Runnable() {
@@ -674,7 +682,7 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
             public void run() {
                 // This is the delay
                 customer_info =null;
-                customer_info = delegate.service.getContactInfo(customerIndex);
+                customer_info = delegate.service.getContactInfo(customerIndex, delegate.project.getId(), delegate.questionnaire_selected.getId());
                 if(customer_info !=null){
                     customer_info.setContactId(delegate.service.globals.getContactId());
                     try {
