@@ -36,6 +36,7 @@ import com.cloud9worldwide.questionnaire.webservices.LoginMethod;
 import com.cloud9worldwide.questionnaire.webservices.NewVersion;
 import com.cloud9worldwide.questionnaire.webservices.SaveCustomerMethod;
 import com.cloud9worldwide.questionnaire.webservices.SavequestionnaireMethod;
+import com.cloud9worldwide.questionnaire.webservices.StartQuestionnaire;
 import com.cloud9worldwide.questionnaire.webservices.UpdateCustomerMethod;
 import com.cloud9worldwide.questionnaire.webservices.VisitLogMethod;
 
@@ -74,6 +75,7 @@ public class CoreEngine {
     private static final String PARAM_VERSION = "version";
 
     private String __projectID; //koy add projectid for add newcustomer 11/11/2015
+    private String __questionnaireID;
 
     private String lg = "th";
 
@@ -137,7 +139,6 @@ public class CoreEngine {
                 Secure.ANDROID_ID);
         globals.setUDID(device_id);
 
-
         //Check Session Login
         boolean isLogin = settings.getBoolean(Globals.IS_LOGIN, false);
         if(isLogin){
@@ -175,13 +176,25 @@ public class CoreEngine {
         try {
             JSONObject jsonObj = new JSONObject();
             try {
-                jsonObj.put("contact_id",params[0]);
-                jsonObj.put("staff_id",params[1]);
-                jsonObj.put("project_id",params[2]);
+                jsonObj.put("contactid",params[0]);
+                jsonObj.put("staffid",params[1]);
+                jsonObj.put("projectid",params[2]);
+                jsonObj.put("questionnaireid",params[3]);
             }catch (JSONException ee){
                 ee.printStackTrace();
             }
-            VisitLogMethod.execute(this.mCtx,webserviceUrl, jsonObj.toString());
+            String r = VisitLogMethod.execute(this.mCtx,webserviceUrl, jsonObj.toString());
+
+            try {
+                JSONObject respObj = new JSONObject(r);
+                if(respObj.getBoolean("status")) {
+                    this.loginMessage = respObj.getJSONObject("result").getString("message");
+                    Log.e("msg loginMessage", this.loginMessage);
+                }
+            } catch (JSONException ee){
+                ee.printStackTrace();
+            }
+
         }catch (VisitLogMethod.ApiException e){
             e.printStackTrace();
         }
@@ -190,17 +203,17 @@ public class CoreEngine {
         try {
             JSONObject jsonObj = new JSONObject();
             try {
-                jsonObj.put("contact_id",params[0]);
+                jsonObj.put("contactid",params[0]);
                 jsonObj.put("opp",params[1]);
-                jsonObj.put("project_id",params[2]);
-                jsonObj.put("staff_id",params[3]);
-                jsonObj.put("questionnaire_id",params[4]);
+                jsonObj.put("projectid",params[2]);
+                jsonObj.put("staffid",params[3]);
+                jsonObj.put("questionnaireid",params[4]);
 
             }catch (JSONException ee){
                 ee.printStackTrace();
             }
-            VisitLogMethod.execute(this.mCtx,webserviceUrl, jsonObj.toString());
-        }catch (VisitLogMethod.ApiException e){
+            StartQuestionnaire.execute(this.mCtx, webserviceUrl, jsonObj.toString());
+        }catch (StartQuestionnaire.ApiException e){
             e.printStackTrace();
         }
     }
@@ -225,7 +238,7 @@ public class CoreEngine {
     }
     /**
      * Login Method
-     * @param params [0 - username, 1 - password, 2 - udid]
+     * @param params [0 - username, 1 - password, 2 - udid
      * @return true / false
      */
     public synchronized boolean newVersion(ProgressDialog _pDialog){
@@ -255,9 +268,7 @@ public class CoreEngine {
                         }
                     }
 
-                    ArrayList<String> imagelist = new ArrayList<String>();
-                    imagelist.add(respObj.getString("update_file"));
-                    DownloadImages.downloadAPK(_pDialog, imagelist);
+                    DownloadImages.downloadAPK(_pDialog, respObj);
 
                     this.loginMessage = "กรุณาทำการ update app เนื่องจากได้มีการปรับแก้ " + notes;
                     this.tokenAccess = "";
@@ -765,9 +776,11 @@ public class CoreEngine {
                 jsonObj.put(PARAM_MOBILE,params[2]);
                 jsonObj.put(PARAM_PROJECTID,params[3]);
                 try {
+                    Log.e("searchContact", jsonObj.toString());
                     String r = CustomerSearchMethod.execute(this.mCtx, webserviceUrl, jsonObj.toString());
                     //Log.e(debugTag,r);
                     if(r == null) {
+                        isModeOnline = false;
                         this.responseMessage = "Server error";
                         return null;
                     }
@@ -794,6 +807,11 @@ public class CoreEngine {
                         }
                         return _data;
                     }else{
+
+                        if(respObj.getJSONObject("result").getString("message").equals("null")){
+                            isModeOnline = false;
+                            this.responseMessage = "Cannot access server";
+                        }
                         this.responseMessage = "Contact not found";
                     }
                 }
@@ -810,16 +828,17 @@ public class CoreEngine {
             }
             return null;
         }else{
+            isModeOnline = false;
             this.responseMessage = "There's no internet connection";
             return null;
         }
 
     }
-//    public synchronized ContactData getContactInfo(String _contact_id){
-        public synchronized ContactData getContactInfo(String... params){
-//koy
+
+    public synchronized ContactData getContactInfo(String... params){
+
         ContactData _data;
-        //globals.getIsCustomerLocal()
+            //koy
         if(isOnline()){
             try {
                 JSONObject jsonObj = new JSONObject();
@@ -828,6 +847,7 @@ public class CoreEngine {
                 jsonObj.put(PARAM_QUESTIONNAIREID,params[2]);
                 try
                 {
+                    Log.e("getContactInfo", jsonObj.toString());
                     String r = CustomerInfoMethod.execute(this.mCtx,webserviceUrl,jsonObj.toString());
                     if(r == null) {
                         this.responseMessage = "Server error";
@@ -835,8 +855,6 @@ public class CoreEngine {
                     }
                     JSONObject respObj = new JSONObject(r);
                     if(respObj.getBoolean("status")) {
-
-
 
                         JSONObject contactObj = respObj.getJSONObject("result");
 
@@ -1088,8 +1106,9 @@ public class CoreEngine {
             }
         }
     }
-    public synchronized boolean saveContact(ContactData _data, String _projectID){
+    public synchronized boolean saveContact(ContactData _data, String _projectID, String _questionnaireID){
         __projectID = _projectID;
+        __questionnaireID = _questionnaireID;
         if(isOnline()){
             //online
             this.globals.setIsCustomerLocal(false);
@@ -1181,11 +1200,13 @@ public class CoreEngine {
 //            Log.e("staff id", globals.getStaffId())
             jsonObj.put("staffid",globals.getStaffId());
             jsonObj.put("projectid", __projectID);
+            jsonObj.put("questionnaireid", __questionnaireID);
 
             Log.e(debugTag,jsonObj.toString());
 
             try {
                 String r = SaveCustomerMethod.execute(this.mCtx,webserviceUrl,jsonObj.toString());
+                Log.e("SaveCustomerMethod", r.toString());
                 if(r == null) {
                     this.responseMessage = "Server error";
                     return false;
@@ -1547,6 +1568,7 @@ public class CoreEngine {
 
             //save staff question answer data
             ArrayList<QuestionAnswerData> _staff_question_ans_all = _data.getStaffanswers();
+            Log.e("_staff_question_ans_all",_staff_question_ans_all.toString());
             for (int i = 0; i < _staff_question_ans_all.size(); i++) {
                 QuestionAnswerData _question = _staff_question_ans_all.get(i);
                 ArrayList<SaveAnswerData> _ans_all = _question.getAnswer();
@@ -1645,7 +1667,7 @@ public class CoreEngine {
                         String _room = _address_cursor.getString(_address_cursor.getColumnIndex(_dbHelper.ROOM));
                         _address = new AddressData(_house_id,_moo,_village,_soi,_road,_subdistrict,
                                 _district,_province,_postalcode,_country,_tel,_tel_ext,_floor,_room);
-                    }else{
+                    } else {
                         _address = new AddressData("","","","","","","","","","","","","","");
                     }
 
@@ -1674,6 +1696,12 @@ public class CoreEngine {
 
                 if(_contact != null){
                     //save local data to server
+                    //koy
+
+                    __projectID = _data.getProjectId();
+                    __questionnaireID = _data.getQuestionnaireId();
+                    Log.e("__projectID",__projectID );
+                    Log.e("__questionnaireID",__questionnaireID );
                     if(this.save_contact_online(_contact)){
                         String local_customer_id = _data.getCustomerId();
                         _data.setCustomerId(String.valueOf(globals.getContactId()));
@@ -1816,6 +1844,7 @@ public class CoreEngine {
                 //staff answer data all
                 jsonObj.put("staffanswers",_staff_answers_all_json);
 
+
                 Log.d(debugTag,jsonObj.toString());
                 String r = "";
                 try {
@@ -1890,7 +1919,6 @@ public class CoreEngine {
             JSONArray _staff_answers_all_json = new JSONArray();
             for (int i = 0; i < _staff_answers_all.size(); i++) {
                 QuestionAnswerData _answer = _staff_answers_all.get(i);
-
                 JSONObject _question_answer_json = new JSONObject();
 
                 JSONArray _ans_all_json = new JSONArray();
@@ -1917,7 +1945,6 @@ public class CoreEngine {
                 r = SavequestionnaireMethod.execute2(this.mCtx,webserviceUrl,jsonObj.toString());
             }catch (SavequestionnaireMethod.ApiException je){
                 je.printStackTrace();
-
             }
 
 
@@ -1930,18 +1957,11 @@ public class CoreEngine {
                 this.responseMessage = respObj.getJSONObject("result").getString("message");
                 return false;
             }
-
         }
         catch (JSONException e){
             e.printStackTrace();
             this.responseMessage = e.getMessage();
         }
-        //}
-        //catch (SavequestionnaireMethod.ApiException je)
-        // {
-        //     je.printStackTrace();
-        //     this.responseMessage = je.getMessage();
-        //}
 
         return false;
     }
@@ -2052,6 +2072,7 @@ public class CoreEngine {
 
         if(_contact != null){
             //save local data to server
+
             if(this.save_contact_online(_contact)){
                 return String.valueOf(globals.getContactId());
             }else{
@@ -2079,9 +2100,18 @@ public class CoreEngine {
                             _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.CUSTOMER_ID)));
                     int isCustomerLocal = _questionnaire_answer_cursor_all.getInt(
                             _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.OFFLINE_CUSTOMER));
+                    _data.setProjectId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.PROJECT_ID)));
+                    _data.setQuestionnaireId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.QUESTIONNAIRE_ID)));
 
                     if(isCustomerLocal == 1){
                         //save local customer to online customer
+                        __projectID = _data.getProjectId();
+                        __questionnaireID = _data.getQuestionnaireId();
+                        Log.e("__projectID",__projectID );
+                        Log.e("__questionnaireID",__questionnaireID );
+                        //koy
                         String new_contact_id = save_contact_online(_data.getCustomerId());
                         _data.setCustomerId(new_contact_id);
                     }
@@ -2116,7 +2146,6 @@ public class CoreEngine {
 
                                 ArrayList<SaveAnswerData> _save_ans_all = new ArrayList<SaveAnswerData>();
                                 for (int k = 0; k < _answers_cursor_all.getCount(); k++) {
-
                                     _save_ans_all.add(new SaveAnswerData(
                                             _answers_cursor_all.getString(_answers_cursor_all.getColumnIndex(_dbHelper.ANS_VALUE)),
                                             _answers_cursor_all.getString(_answers_cursor_all.getColumnIndex(_dbHelper.ANS_FREETXT))
@@ -2157,7 +2186,7 @@ public class CoreEngine {
                                 QuestionAnswerData _question_answer = new QuestionAnswerData(_question_id,_save_ans_all);
                                 _staff_question_answer_all.add(_question_answer);
                             }
-                            _questions_cursor_all.moveToNext();
+                            _staff_questions_cursor_all.moveToNext();
                         }
                     }
                     _data.setStaffanswers(_staff_question_answer_all);
@@ -2183,6 +2212,7 @@ public class CoreEngine {
             _dbHelper.close();
             return true;
         }else{
+            isModeOnline = false;
             this.responseMessage = "Not have internet connection";
             return false;
         }
@@ -2195,7 +2225,6 @@ public class CoreEngine {
 
             ArrayList<QuestionnaireAnswerData> _questionnaire_answer_all = new ArrayList<QuestionnaireAnswerData>();
 
-
             //Get all questionnaire in local
             Cursor _questionnaire_answer_cursor_all = _dbHelper.getAllQuestionnaireAnswers();
             if(_questionnaire_answer_cursor_all != null){
@@ -2206,10 +2235,18 @@ public class CoreEngine {
                             _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.CUSTOMER_ID)));
                     int isCustomerLocal = _questionnaire_answer_cursor_all.getInt(
                             _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.OFFLINE_CUSTOMER));
+                    _data.setProjectId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.PROJECT_ID)));
+                    _data.setQuestionnaireId(_questionnaire_answer_cursor_all.getString(
+                            _questionnaire_answer_cursor_all.getColumnIndex(_dbHelper.QUESTIONNAIRE_ID)));
 
 
                     if(isCustomerLocal == 1){
                         //save local customer to online customer
+                        __projectID = _data.getProjectId();
+                        __questionnaireID = _data.getQuestionnaireId();
+                        Log.e("__projectID",__projectID );
+                        Log.e("__questionnaireID",__questionnaireID );
                         String new_contact_id = save_contact_online(_data.getCustomerId());
                         _data.setCustomerId(new_contact_id);
                     }
@@ -2345,6 +2382,7 @@ public class CoreEngine {
         }
         return _data;
     }
+
     public ArrayList<QuestionTypeData> getStaffQuestionnaireData(String _questionnaire_id, String _timestamp){
         ArrayList<QuestionTypeData> _data = new ArrayList<QuestionTypeData>();
         String _fileName = _questionnaire_id+"_"+_timestamp+"_"+this.getLg()+".json";

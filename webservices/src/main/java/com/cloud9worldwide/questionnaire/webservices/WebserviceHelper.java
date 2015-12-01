@@ -129,13 +129,14 @@ public class WebserviceHelper {
     private void executeRequest(HttpUriRequest request, String url)
     {
         HttpClient client = new DefaultHttpClient();
-
         HttpResponse httpResponse;
-
+        Log.e("executeRequest", "before try");
         try {
             httpResponse = client.execute(request);
+            Log.e("executeRequest", "after execute");
             responseCode = httpResponse.getStatusLine().getStatusCode();
             Log.e("code",String.valueOf(responseCode));
+            Log.e("url",url);
             message = httpResponse.getStatusLine().getReasonPhrase();
 
             HttpEntity entity = httpResponse.getEntity();

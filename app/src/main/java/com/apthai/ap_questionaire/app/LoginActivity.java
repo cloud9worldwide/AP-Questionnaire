@@ -96,7 +96,6 @@ public class LoginActivity extends Activity implements OnClickListener {
             delegate.service.initSubDistrictData(LoginActivity.this);
             delegate.service.initCountryData(LoginActivity.this);
             delegate.service.initNationalityData(LoginActivity.this);
-
         }
     }
 

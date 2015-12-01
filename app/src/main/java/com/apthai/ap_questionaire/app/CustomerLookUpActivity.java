@@ -173,7 +173,6 @@ public class CustomerLookUpActivity extends Activity implements OnClickListener 
         if(delegate.service.getLg().equals("en")){
             btnEN.setImageResource(R.drawable.btn_en_);
             btnTH.setImageResource(R.drawable.btn_th);
-
         } else {
             btnEN.setImageResource(R.drawable.btn_en);
             btnTH.setImageResource(R.drawable.btn_th_);

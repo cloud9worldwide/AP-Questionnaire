@@ -3,6 +3,7 @@ package com.cloud9worldwide.questionnaire.task;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.cloud9worldwide.questionnaire.webservices.WebserviceHelper;
 
@@ -38,6 +39,7 @@ public class StartQuestionnaireTask extends AsyncTask<String, Integer, String> {
             _data = _data.replaceAll(str1,str2);
 
             client.AddParam("data", _data);
+            Log.e(command, _data.toString());
             try {
                 client.Execute(WebserviceHelper.RequestMethod.POST);
             } catch (Exception e) {

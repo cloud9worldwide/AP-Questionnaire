@@ -583,8 +583,8 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
         }else{
             work.setVillage("");
         }
-        if(txtRoadWork.getText().toString().trim().length() > 0 && txtRoadWork.getText().equals("null")){
-            work.setRoad(txtRoadWork.getText().toString().trim());
+        if(txtRoadWork.getText().toString().length() > 0 && !txtRoadWork.getText().equals("null")){
+            work.setRoad(txtRoadWork.getText().toString());
         } else {
             work.setRoad("");
         }
@@ -629,7 +629,7 @@ public class AddCustomerENActivity extends Activity implements View.OnClickListe
             @Override
             public void run() {
                 // This is the delay
-                if (delegate.service.globals.getContactId() == "-1") {
+                if (delegate.service.globals.getContactId().equals("-1")) {
                     delegate.service.saveContact(new_customer, delegate.project.getId(),delegate.questionnaire_selected.getId());
                     delegate.opp = true;
                 }else{

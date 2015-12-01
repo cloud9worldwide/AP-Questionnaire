@@ -1723,6 +1723,7 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
             }
         }
     }
+
     public void onBackPressed() {
         if(!delegate.service.isOnline() && statusEditOffline ==1){
             this.setResult(5);
@@ -1735,7 +1736,6 @@ public class AddCustomerOneActivity extends Activity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(resultCode ==2 || resultCode == 0 || resultCode == 1 || resultCode ==4 || resultCode ==5){
             this.setResult(resultCode);
             finish();

@@ -1,6 +1,7 @@
 package com.cloud9worldwide.questionnaire.webservices;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by cloud9 on 4/9/14.
@@ -33,22 +34,26 @@ public class SaveCustomerMethod {
             String str2 = "\"";
             _data = _data.replaceAll(str1,str2);
 
-            //Log.e("test",_data);
+            Log.e("savecustomer", _data);
             client.AddParam("data", _data);
+            Log.e("savecustomer", "before Execute");
             try {
                 client.Execute(WebserviceHelper.RequestMethod.POST);
+                Log.e("savecustomer", "after Execute");
             } catch (Exception e) {
+                Log.e("savecustomer", "catch try 1");
                 _error = true;
                 _error_msg = e.getMessage();
             }
             response = client.getResponse();
         } catch (Exception e) {
+            Log.e("savecustomer", "catch try 2");
             _error_msg = e.getMessage();
         }
         if(!_error && response != null){
             return response;
         }else {
-            return "{\"status\":false,\"result\":{\"message\":\""+_error_msg+"\"}}";
+            return "{\"status\":\"False\",\"result\":{\"message\":\""+_error_msg+"\"}}";
         }
 
         /*

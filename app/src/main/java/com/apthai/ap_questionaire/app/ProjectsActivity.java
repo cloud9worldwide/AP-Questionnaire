@@ -251,14 +251,13 @@ public class ProjectsActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-
+        delegate.service.setIsModeOnline(true);
         if(delegate.service.isOnline()){
             final ProgressDialog progress = new ProgressDialog(this);
             progress.setTitle("Please wait");
             progress.setMessage("Sync local data to server.");
             progress.setCancelable(false);
             progress.show();
-
             
             final android.os.Handler uiHandler = new android.os.Handler();
             final  Runnable onUi = new Runnable() {
@@ -271,8 +270,8 @@ public class ProjectsActivity extends Activity implements OnClickListener {
             Runnable background = new Runnable() {
                 @Override
                 public void run() {
-                    // This is the delay
-                    delegate.service.sync_save_questionnaire2(progress);
+                    // This is the delay old version is sync_save_questionnaire 2
+                    delegate.service.sync_save_questionnaire(progress);
                     uiHandler.post( onUi );
                 }
             };

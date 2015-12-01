@@ -352,7 +352,12 @@ public class CustomerInfomationActivity extends Activity implements View.OnClick
                 btn_reVisit.setVisibility(View.INVISIBLE);
             } else {
                 btnEdit.setVisibility(View.VISIBLE);
-                btn_reVisit.setVisibility(View.VISIBLE);
+                Log.e("type",delegate.questionnaire_selected.getType());
+                if (delegate.questionnaire_selected.getType().equals("1")){
+                    btn_reVisit.setVisibility(View.VISIBLE);
+                } else {
+                    btn_reVisit.setVisibility(View.INVISIBLE);
+                }
             }
         } else {
             btnEdit.setVisibility(View.INVISIBLE);

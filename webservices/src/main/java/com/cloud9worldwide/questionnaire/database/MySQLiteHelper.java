@@ -506,7 +506,7 @@ public class MySQLiteHelper {
         };
 
         return this.db.query(DATABASE_TABLE_QUESTIONNAIRE, new String[] { ROW_ID,QUESTIONNAIRE_ID,PROJECT_ID,
-                TYPE, LOGO, TIMESTAMP }, whereClause ,whereArgs, null, null, null, null);
+                TYPE, LOGO, TIMESTAMP }, whereClause ,whereArgs, null, null, TYPE, null);
     }
     public Cursor getAllQuestionnaire_ENByProject(String projectid) throws SQLException {
         String whereClause = PROJECT_ID + "= ? ";

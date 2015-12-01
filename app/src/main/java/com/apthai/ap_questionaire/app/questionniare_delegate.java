@@ -88,13 +88,17 @@ public class questionniare_delegate extends Application {
         Log.e("staff",service.globals.getStaffId());
         Log.e("project",project.getId());
         Log.e("questionnaire",questionnaire_selected.getId());
-        service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId(), questionnaire_selected.getId());
+        if (service.isOnline()){
+            service.StampVisitLog(customer_selected.getContactId(),service.globals.getStaffId(),project.getId(), questionnaire_selected.getId());
+        }
+
     }
 
 
 
     public void sendAnswer() {
         if (QM.pack_staff_question_ans_data()) {
+            Log.e("delegate sendAnswer", QM.get_questionnaire_ans_data().toString());
             service.saveQuestionnaireData(QM.get_questionnaire_ans_data());
         } else {
             //cannot pack staff
@@ -397,17 +401,6 @@ public class questionniare_delegate extends Application {
         //QuestionTypeData question = this.QM.get_question();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-
-
-
-        /*
-        if(!question.isParent_question()) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        }
-        */
         startActivity(intent);
     }
 

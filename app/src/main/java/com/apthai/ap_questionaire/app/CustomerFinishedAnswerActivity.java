@@ -50,8 +50,8 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             Drawable imageDraw =  new BitmapDrawable(imageBitmap);
             rootView.setBackground(imageDraw);
         }
-
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,7 +177,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                 thanks2.setText("ที่ท่านได้สละเวลาการตอบแบบสอบถามครั้งนี้");
                 btn_back_home.setImageResource(R.drawable.btn_projects);
                 btn_staff.setImageResource(R.drawable.btn_questionniare);
-
             } else {
                 thanks1.setText("Thank you for taking the time to fill out this questionnaire");
                 thanks2.setText("");
@@ -256,7 +255,6 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
             } else {
                 //next to staff question and show textbox
 
-
                 if(delegate.QM == null){
                     Intent i = new Intent(this, QuestionniareActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -264,7 +262,9 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                     finish();
                 } else {
                     if (delegate.QM.isStaffQustion()) {
+                        delegate.service.setIsModeOnline(true);
                         if (delegate.service.isOnline()) {
+                            btn_staff.setVisibility(View.INVISIBLE);
                             final ProgressDialog progress = new ProgressDialog(this);
                             progress.setTitle("Please wait");
                             progress.setMessage("Sync local data to server.");
@@ -276,6 +276,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                                 @Override
                                 public void run() {
                                     // this will run on the main UI thread
+                                    btn_staff.setVisibility(View.VISIBLE);
                                     progress.dismiss();
                                     Intent i = new Intent(CustomerFinishedAnswerActivity.this, QuestionniareActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -293,6 +294,7 @@ public class CustomerFinishedAnswerActivity extends Activity implements View.OnC
                             };
                             new Thread(background).start();
                         } else {
+                            delegate.service.setIsModeOnline(false);
                             Intent i = new Intent(this, QuestionniareActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);

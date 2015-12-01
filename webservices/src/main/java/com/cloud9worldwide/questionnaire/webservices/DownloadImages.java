@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Environment;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
  * Created by cloud9 on 4/4/14.
  */
 public class DownloadImages {
+    public static String version = "1.0";
     private final  String debugTag = "DownloadImages";
     public static class ApiException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -139,7 +142,8 @@ public class DownloadImages {
                 imgPath.mkdirs();
             }
 
-            String fileName = fullURL.substring(fullURL.length()-12,fullURL.length());
+            String fileName = "Questionnaire " + version + ".apk";
+
             InputStream is = null;
             if (c.getResponseCode() == HttpURLConnection.HTTP_OK)
             {
@@ -164,15 +168,18 @@ public class DownloadImages {
         }
         return false;
     }
-    public static synchronized void downloadAPK(ProgressDialog _pDailog,ArrayList<String> _imageUrls) throws ApiException {
-        ArrayList<String> imgUrls = _imageUrls;
-        int SIZE = imgUrls.size();
-        for (int i = 0; i < SIZE; i++) {
-            if( saveAPK(imgUrls.get(i))){
-                Log.e("save APK","success");
+    public static synchronized void downloadAPK(ProgressDialog _pDailog, JSONObject data) throws ApiException {
+        try {
+            version = data.getString("version");
+            if (saveAPK(data.getString("update_file"))) {
+                Log.e("save APK", "success");
             } else {
-                Log.e("save APK","no success");
+                Log.e("save APK", "no success");
             }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+
     }
 }

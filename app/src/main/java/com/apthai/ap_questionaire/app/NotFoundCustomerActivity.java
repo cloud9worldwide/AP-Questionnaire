@@ -101,7 +101,6 @@ public class NotFoundCustomerActivity extends Activity implements View.OnClickLi
             btnTH.setImageResource(R.drawable.btn_th_);
             btnAdd.setImageResource(R.drawable.btn_th_add_customer);
         }
-
         if(delegate.service.isOnline()){
             lblRed.setText(R.string.not_found_customer_header);
         } else {

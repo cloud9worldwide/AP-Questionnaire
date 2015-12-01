@@ -55,7 +55,7 @@ public class QuestionniareActivity extends Activity implements OnClickListener {
     }
 
 
-    private void setImage(){
+    private void setImage() {
         delegate = (questionniare_delegate)getApplicationContext();
         project_data = delegate.project;
         img_background = (ImageView) findViewById(R.id.img_background);

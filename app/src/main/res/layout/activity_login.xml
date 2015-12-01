@@ -74,10 +74,9 @@
         android:layout_height="50dp"
         android:layout_below="@+id/btnLogin"
         android:layout_marginTop="20dp"
-        android:text="Version 2"
+        android:text="Version"
         android:layout_centerHorizontal="true"
         android:textColor="@color/ORANGE"
-
         android:gravity="center" />
     <EditText
         android:layout_below="@+id/btnLogin"
